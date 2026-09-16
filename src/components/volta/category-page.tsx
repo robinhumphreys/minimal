@@ -2,7 +2,6 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { CaretRightIcon } from "@phosphor-icons/react/ssr"
 
 import { getCategory, getProductsInCategory } from "@/lib/catalog"
 import {
@@ -14,6 +13,7 @@ import {
 import { categoryBanner } from "@/lib/volta/editorial"
 import type { FacetKey } from "@/lib/volta/types"
 
+import { Breadcrumbs } from "./breadcrumbs"
 import { CategoryFilters } from "./category-filters"
 import { ProductCard } from "./product-card"
 import { ProductRail } from "./product-rail"
@@ -123,22 +123,9 @@ function Banner({
       <div className="absolute inset-0 bg-gradient-to-t from-volta-void via-volta-void/60 to-volta-void/30" />
 
       <div className="volta-gutter relative mx-auto flex w-full max-w-7xl flex-col gap-3 pt-10 pb-8">
-        <nav aria-label="Breadcrumb">
-          <ol className="flex items-center gap-1.5">
-            <li>
-              <Link
-                href="/volta"
-                className="volta-wide text-volta-micro text-volta-ash hover:text-volta-volt"
-              >
-                Volta
-              </Link>
-            </li>
-            <CaretRightIcon className="size-3 text-volta-smoke" />
-            <li className="volta-wide text-volta-micro text-volta-chalk">
-              {name}
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          trail={[{ label: "Volta", href: "/volta" }, { label: name }]}
+        />
 
         <div className="flex flex-wrap items-baseline gap-4">
           <h1 className="volta-display text-volta-display text-volta-chalk">
