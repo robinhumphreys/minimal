@@ -269,6 +269,20 @@ export function Agent({ config }: { config: AgentConfig }) {
     })
   }, [config.id, open, messages, busy])
 
+  // A link followed out of a full-screen window: the page is about to go, so
+  // the session is written closed here and now rather than left to the effect
+  // above, which the navigation may or may not wait for. The conversation
+  // itself stays; the launcher brings it back on the next page.
+  const leave = () => {
+    setOpen(false)
+    writeSession(config.id, {
+      open: false,
+      messages,
+      touched: true,
+      pending: busy,
+    })
+  }
+
   // Picked up mid-answer: the shopper asked, followed a card before the
   // reply had finished, and is now on the next page waiting for it. Ask
   // again on their behalf, once.
@@ -335,6 +349,7 @@ export function Agent({ config }: { config: AgentConfig }) {
           chat={chat}
           open={open}
           onOpenChange={setOpen}
+          onLeave={leave}
           hidden={host.dialogOpen}
         />
       ) : null}
@@ -404,6 +419,7 @@ export function Agent({ config }: { config: AgentConfig }) {
           chat={chat}
           open={open}
           onOpenChange={setOpen}
+          onLeave={leave}
           hidden={host.dialogOpen}
         />
       ) : null}

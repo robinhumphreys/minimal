@@ -47,7 +47,7 @@ export function InstallSnippets({
             </div>
             <pre
               className={cn(
-                "overflow-x-auto rounded-md bg-muted px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-foreground/80",
+                "rounded-md bg-muted px-3 py-2.5 font-mono text-xs leading-relaxed [overflow-wrap:anywhere] whitespace-pre-wrap text-foreground/80",
                 state ? "ml-8" : undefined,
               )}
             >

@@ -35,7 +35,12 @@ export function ProductRail({
         )}
       </div>
 
-      <div className="noord-gutter -mx-px flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible">
+      {/*
+        The scroll padding tracks the gutter: a snap point is measured from
+        the scrollport, not the padding, so without it every tile after the
+        first would snap flush to the screen edge.
+      */}
+      <div className="noord-gutter -mx-px flex snap-x snap-mandatory scroll-pl-noord-gutter gap-3 overflow-x-auto pb-2 md:scroll-pl-8 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible xl:scroll-pl-12">
         {products.map((product) => (
           <ProductCard
             key={product.slug}

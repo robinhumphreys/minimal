@@ -12,6 +12,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { AgentConfig } from "@/lib/config/schema"
 import { useOrg } from "@/app/admin/_components/use-org"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { useAdminStore } from "@/lib/store/admin"
 
 import { CustomisePane } from "./customise-pane"
@@ -71,6 +72,12 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
   // Shared across surfaces: a merchant checking their phone wants to see
   // every surface on it, not re-choose it per tab.
   const [device, setDevice] = React.useState<Device>("desktop")
+  // Two halves side by side need a width a phone has not got, so there the
+  // preview goes above the chat instead. The group is keyed on it so a
+  // change of orientation starts the panels afresh rather than carrying
+  // sizes measured along the other axis.
+  const isMobile = useIsMobile()
+  const orientation = isMobile ? "vertical" : "horizontal"
 
   // The settings are a view of the draft, not a copy of it: every change goes
   // straight into the store, so the install step publishes exactly this.
@@ -79,8 +86,9 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
     editDraft(config.id, (current) => applySettings(current, next))
 
   return (
-    <div className="flex h-full flex-col gap-4 p-6">
-      <div className="flex items-center gap-4">
+    <div className="flex h-full flex-col gap-4 p-4 md:p-6">
+      {/* Wraps on a phone: the tabs on one line, Next under them. */}
+      <div className="flex flex-wrap items-center gap-3 md:gap-4">
         {/* One surface is a title, not a menu of one. */}
         {tabs.length > 1 ? (
           <Tabs
@@ -112,8 +120,12 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
           height of whatever ends up inside them, and `overflow-hidden` so the
           message list's own intrinsic sizing cannot push past that. */}
       <div className="min-h-0 flex-1 overflow-hidden">
-        <ResizablePanelGroup orientation="horizontal">
-          <ResizablePanel defaultSize="62" minSize="35" className="pr-4">
+        <ResizablePanelGroup key={orientation} orientation={orientation}>
+          <ResizablePanel
+            defaultSize="62"
+            minSize="35"
+            className={isMobile ? "pb-3" : "pr-4"}
+          >
             {surface === "site-chat" ? (
               <SiteChatPreview
                 config={config}
@@ -140,7 +152,11 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
               so the bar is made transparent and the grip left to stand for it. */}
           <ResizableHandle withHandle className="bg-transparent" />
 
-          <ResizablePanel defaultSize="38" minSize="25" className="pl-4">
+          <ResizablePanel
+            defaultSize="38"
+            minSize="25"
+            className={isMobile ? "pt-3" : "pl-4"}
+          >
             <CustomisePane
               brand={config.id}
               surface={surface}
