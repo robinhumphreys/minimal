@@ -114,7 +114,7 @@ export function SiteChatOptions(props: OptionsProps) {
             />
           </Field>
           <Field>
-            <FieldLabel>Voice</FieldLabel>
+            <FieldLabel>Tone of voice</FieldLabel>
             <Choices
               options={VOICES}
               value={settings.voice}
