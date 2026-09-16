@@ -151,8 +151,6 @@ export async function ProductTemplate({
 
         <p>{product.description}</p>
       </div>
-
-      <minimal-agent-recommendations data-product={product.slug} />
     </div>
   )
 }

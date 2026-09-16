@@ -157,9 +157,6 @@ export function ProductPage({ slug }: { slug: string }) {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
-          {/* Filled by the embed with agent-driven recommendations. */}
-          <minimal-agent-recommendations data-product={product.slug} />
         </div>
       </div>
 
