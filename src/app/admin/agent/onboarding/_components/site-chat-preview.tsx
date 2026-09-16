@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { useChat } from "@ai-sdk/react"
+import { DefaultChatTransport } from "ai"
 import {
   ChatCircleIcon,
   QuestionIcon,
@@ -40,6 +42,7 @@ import {
 
 import { DotField } from "./dot-field"
 import { readableOn } from "@/lib/config/contrast"
+import type { AgentConfig } from "@/lib/config/schema"
 
 import type { LauncherIcon, SiteChatSettings } from "./site-chat"
 
@@ -63,13 +66,51 @@ const ANCHORS: Record<SiteChatSettings["placement"], string> = {
   "bottom-left": "left-6 bottom-6 items-start",
 }
 
+type Chat = ReturnType<typeof useChat>
+
 /**
  * The left half: the widget as a shopper would meet it, on a stand-in for the
- * merchant's page. Live rather than a picture — the launcher opens, so the
- * merchant can check the thing they are about to embed actually behaves.
+ * merchant's page. Live rather than a picture — the launcher opens and the
+ * agent answers, so the merchant can check the thing they are about to embed
+ * actually behaves.
+ *
+ * The conversation is held here rather than in the window so that closing
+ * and reopening the launcher does not lose it, the same as the real embed.
  */
-export function SiteChatPreview({ settings }: { settings: SiteChatSettings }) {
+export function SiteChatPreview({
+  agent,
+  settings,
+}: {
+  agent: AgentConfig
+  settings: SiteChatSettings
+}) {
   const [open, setOpen] = React.useState(false)
+
+  const transport = React.useMemo(
+    () => new DefaultChatTransport({ api: `/api/agents/${agent.id}/chat` }),
+    [agent.id],
+  )
+  const chat = useChat({ transport })
+
+  // The same route the embed posts to, with the same body: the draft's prompt
+  // and model, plus whatever the merchant has just typed into the greeting
+  // and starters, so the preview answers as the published agent would.
+  const behaviour = React.useMemo(
+    () => ({
+      ...agent.behaviour,
+      greeting: settings.greeting,
+      starterPrompts: settings.starters,
+    }),
+    [agent.behaviour, settings.greeting, settings.starters],
+  )
+  const send = React.useCallback(
+    (text: string) => {
+      const trimmed = text.trim()
+      if (!trimmed) return
+      void chat.sendMessage({ text: trimmed }, { body: { behaviour } })
+    },
+    [chat, behaviour],
+  )
 
   return (
     <div className="relative h-full overflow-hidden rounded-lg">
@@ -83,7 +124,12 @@ export function SiteChatPreview({ settings }: { settings: SiteChatSettings }) {
       >
         <AnimatePresence>
           {open ? (
-            <ChatWindow settings={settings} onClose={() => setOpen(false)} />
+            <ChatWindow
+              settings={settings}
+              chat={chat}
+              onSend={send}
+              onClose={() => setOpen(false)}
+            />
           ) : null}
         </AnimatePresence>
 
@@ -149,11 +195,25 @@ function Launcher({
  */
 function ChatWindow({
   settings,
+  chat,
+  onSend,
   onClose,
 }: {
   settings: SiteChatSettings
+  chat: Chat
+  onSend: (text: string) => void
   onClose: () => void
 }) {
+  const { messages, status, error } = chat
+  const [draft, setDraft] = React.useState("")
+  const busy = status === "submitted" || status === "streaming"
+
+  const submit = () => {
+    if (busy || draft.trim().length === 0) return
+    onSend(draft)
+    setDraft("")
+  }
+
   return (
     <MessageScrollerProvider>
       <motion.div
@@ -219,7 +279,9 @@ function ChatWindow({
                     </MessageGroup>
                   </MessageScrollerItem>
 
-                  {settings.starters.length > 0 ? (
+                  {/* Starters go once the shopper has said something, the
+                      way the embed does it: they are a way in, not a menu. */}
+                  {settings.starters.length > 0 && messages.length === 0 ? (
                     <MessageScrollerItem>
                       {/* Aligned to the shopper's side: these are things they
                           would say, not things the agent has said. */}
@@ -233,13 +295,82 @@ function ChatWindow({
                                 variant="outline"
                               >
                                 <BubbleContent
-                                  render={<button type="button" />}
+                                  render={
+                                    <button
+                                      type="button"
+                                      onClick={() => onSend(starter)}
+                                    />
+                                  }
                                 >
                                   {starter}
                                 </BubbleContent>
                               </Bubble>
                             ))}
                           </BubbleGroup>
+                        </MessageContent>
+                      </Message>
+                    </MessageScrollerItem>
+                  ) : null}
+
+                  {messages.map((message) => {
+                    const text = message.parts
+                      .filter((part) => part.type === "text")
+                      .map((part) => part.text)
+                      .join("")
+                    if (!text) return null
+                    const mine = message.role === "user"
+
+                    return (
+                      <MessageScrollerItem key={message.id} scrollAnchor={mine}>
+                        <MessageGroup>
+                          <Message align={mine ? "end" : "start"}>
+                            <MessageContent>
+                              <Bubble
+                                align={mine ? "end" : "start"}
+                                variant={mine ? "default" : "muted"}
+                                style={
+                                  mine
+                                    ? {
+                                        backgroundColor: settings.accent,
+                                        color: readableOn(settings.accent),
+                                      }
+                                    : undefined
+                                }
+                              >
+                                <BubbleContent className="whitespace-pre-wrap">
+                                  {text}
+                                </BubbleContent>
+                              </Bubble>
+                            </MessageContent>
+                          </Message>
+                        </MessageGroup>
+                      </MessageScrollerItem>
+                    )
+                  })}
+
+                  {status === "submitted" ? (
+                    <MessageScrollerItem>
+                      <Message>
+                        <MessageContent>
+                          <Bubble variant="ghost">
+                            <BubbleContent className="shimmer text-muted-foreground">
+                              Thinking
+                            </BubbleContent>
+                          </Bubble>
+                        </MessageContent>
+                      </Message>
+                    </MessageScrollerItem>
+                  ) : null}
+
+                  {error ? (
+                    <MessageScrollerItem>
+                      <Message>
+                        <MessageContent>
+                          <Bubble variant="muted">
+                            <BubbleContent className="text-destructive">
+                              {error.message}
+                            </BubbleContent>
+                          </Bubble>
                         </MessageContent>
                       </Message>
                     </MessageScrollerItem>
@@ -251,29 +382,47 @@ function ChatWindow({
           </CardContent>
 
           <CardFooter className="flex-col gap-2">
-            <InputGroup className="rounded-2xl border-transparent bg-muted ring-inset">
-              <InputGroupTextarea
-                placeholder="Ask anything…"
-                rows={1}
-                // Its own block above the control row, the way the native
-                // composer is laid out.
-                className="max-h-28 min-h-14 px-3 py-2.5"
-              />
-              <InputGroupAddon align="block-end" className="px-2 pb-2">
-                <InputGroupButton
-                  variant="default"
-                  size="icon-sm"
-                  style={{
-                    backgroundColor: settings.accent,
-                    color: readableOn(settings.accent),
+            <form
+              className="w-full"
+              onSubmit={(event) => {
+                event.preventDefault()
+                submit()
+              }}
+            >
+              <InputGroup className="rounded-2xl border-transparent bg-muted ring-inset">
+                <InputGroupTextarea
+                  placeholder="Ask anything…"
+                  rows={1}
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault()
+                      submit()
+                    }
                   }}
-                  className="ml-auto"
-                >
-                  <ArrowUpIcon />
-                  <span className="sr-only">Send</span>
-                </InputGroupButton>
-              </InputGroupAddon>
-            </InputGroup>
+                  // Its own block above the control row, the way the native
+                  // composer is laid out.
+                  className="max-h-28 min-h-14 px-3 py-2.5"
+                />
+                <InputGroupAddon align="block-end" className="px-2 pb-2">
+                  <InputGroupButton
+                    type="submit"
+                    variant="default"
+                    size="icon-sm"
+                    disabled={busy || draft.trim().length === 0}
+                    style={{
+                      backgroundColor: settings.accent,
+                      color: readableOn(settings.accent),
+                    }}
+                    className="ml-auto"
+                  >
+                    <ArrowUpIcon />
+                    <span className="sr-only">Send</span>
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+            </form>
           </CardFooter>
         </Card>
       </motion.div>

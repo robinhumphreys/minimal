@@ -1,7 +1,7 @@
 import type { BrandId } from "@/lib/catalog/types"
 import { agentConfigSchema, type AgentConfig } from "./schema"
 
-const DEFAULT_MODEL = "anthropic/claude-sonnet-4.5"
+export const DEFAULT_MODEL = "anthropic/claude-sonnet-5"
 
 export const defaults: Record<BrandId, AgentConfig> = {
   noord: {
