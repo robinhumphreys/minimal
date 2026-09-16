@@ -170,50 +170,88 @@ function Thumb({
   )
 }
 
-/** A page with a small window open above a round button, bottom right. */
+/**
+ * The chat window itself, as it is on the site: a dark header with an avatar
+ * and two lines, an incoming bubble, an outgoing one, and the composer; the
+ * round button under its corner.
+ */
 function SiteChatThumb() {
   return (
-    <Thumb className="border-sky-200 bg-sky-50">
-      <span className="absolute inset-x-2 top-2 h-1 rounded-full bg-sky-200" />
-      <span className="absolute top-5 left-2 h-1 w-6 rounded-full bg-sky-200" />
-      <span className="absolute top-7 left-2 h-1 w-9 rounded-full bg-sky-200" />
-      <span className="absolute top-4 right-2 flex h-6 w-8 flex-col gap-0.5 rounded-sm border border-sky-200 bg-white p-1 shadow-sm">
-        <span className="h-1 w-4 rounded-full bg-sky-200" />
-        <span className="ml-auto h-1 w-3 rounded-full bg-sky-500" />
+    <Thumb className="bg-muted/50">
+      <span className="absolute top-2 right-4 bottom-4 left-4 flex flex-col overflow-hidden rounded-[3px] border border-black/10 bg-white shadow-md">
+        <span className="flex h-3 items-center gap-1 bg-foreground px-1">
+          <span className="size-1.5 rounded-full bg-white/40" />
+          <span className="flex flex-col gap-px">
+            <span className="h-[3px] w-4 rounded-full bg-white/80" />
+            <span className="h-[2px] w-6 rounded-full bg-white/30" />
+          </span>
+        </span>
+        <span className="flex flex-1 flex-col gap-1 p-1">
+          <span className="h-2 w-7 rounded-[2px] bg-muted" />
+          <span className="ml-auto h-2 w-5 rounded-[2px] bg-foreground" />
+          <span className="h-2 w-8 rounded-[2px] bg-muted" />
+        </span>
+        <span className="mx-1 mb-1 flex h-2.5 items-center justify-end rounded-[2px] bg-muted px-0.5">
+          <span className="size-1.5 rounded-full bg-foreground" />
+        </span>
       </span>
-      <span className="absolute right-2 bottom-2 size-3 rounded-full bg-sky-600 shadow-sm" />
+      <span className="absolute right-1.5 bottom-1.5 size-3.5 rounded-full bg-foreground shadow-md ring-2 ring-white" />
     </Thumb>
   )
 }
 
-/** A search box, two chips, and two product tiles under it. */
+/**
+ * A search with an answer under it: the query in the box, one line from the
+ * agent, and two product cards with an image, a name and a price.
+ */
 function SearchAssistThumb() {
   return (
-    <Thumb className="border-violet-200 bg-violet-50">
-      <span className="absolute inset-x-2 top-2 flex h-3 items-center gap-1 rounded-sm border border-violet-300 bg-white px-1">
-        <span className="size-1 rounded-full border border-violet-500" />
-        <span className="h-0.5 w-6 rounded-full bg-violet-300" />
+    <Thumb className="bg-white">
+      <span className="absolute inset-x-2 top-2 flex h-3.5 items-center gap-1 rounded-[3px] border border-black/15 px-1">
+        <span className="size-1 rounded-full border border-foreground/70" />
+        <span className="h-[3px] w-8 rounded-full bg-foreground/70" />
+        <span className="ml-0.5 h-2 w-px bg-foreground/60" />
       </span>
-      <span className="absolute top-6 left-2 flex gap-1">
-        <span className="h-1.5 w-5 rounded-full bg-violet-600" />
-        <span className="h-1.5 w-4 rounded-full border border-violet-300 bg-white" />
+      <span className="absolute top-7 left-2 h-2 w-11 rounded-[2px] bg-muted" />
+      <span className="absolute bottom-1.5 left-2 flex h-6 w-7 flex-col overflow-hidden rounded-[2px] border border-black/10">
+        <span className="h-3 w-full bg-linear-to-br from-neutral-200 to-neutral-300" />
+        <span className="flex flex-col gap-px p-0.5">
+          <span className="h-[2px] w-4 rounded-full bg-foreground/60" />
+          <span className="h-[2px] w-2 rounded-full bg-foreground/30" />
+        </span>
       </span>
-      <span className="absolute bottom-2 left-2 h-4 w-7 rounded-sm bg-violet-200" />
-      <span className="absolute right-2 bottom-2 h-4 w-7 rounded-sm bg-violet-200" />
+      <span className="absolute right-2 bottom-1.5 flex h-6 w-7 flex-col overflow-hidden rounded-[2px] border border-black/10">
+        <span className="h-3 w-full bg-linear-to-br from-neutral-300 to-neutral-400" />
+        <span className="flex flex-col gap-px p-0.5">
+          <span className="h-[2px] w-5 rounded-full bg-foreground/60" />
+          <span className="h-[2px] w-2 rounded-full bg-foreground/30" />
+        </span>
+      </span>
     </Thumb>
   )
 }
 
-/** A product image beside its title, with a question answered under it. */
+/**
+ * A product page with a question answered on it: the image, the title and
+ * price beside it, and under them a question mark and an answer.
+ */
 function ProductHelpThumb() {
   return (
-    <Thumb className="border-amber-200 bg-amber-50">
-      <span className="absolute top-2 left-2 h-6 w-6 rounded-sm bg-amber-200" />
-      <span className="absolute top-2 left-10 h-1 w-7 rounded-full bg-amber-400" />
-      <span className="absolute top-4 left-10 h-1 w-4 rounded-full bg-amber-200" />
-      <span className="absolute inset-x-2 bottom-2 flex h-4 flex-col justify-center gap-0.5 rounded-sm bg-white px-1 shadow-sm">
-        <span className="h-0.5 w-8 rounded-full bg-amber-500" />
-        <span className="h-0.5 w-11 rounded-full bg-amber-200" />
+    <Thumb className="bg-white">
+      <span className="absolute top-2 left-2 h-7 w-6 rounded-[2px] bg-linear-to-b from-neutral-200 to-neutral-300" />
+      <span className="absolute top-2 left-9.5 flex flex-col gap-1">
+        <span className="h-[3px] w-8 rounded-full bg-foreground/70" />
+        <span className="h-[3px] w-5 rounded-full bg-foreground/30" />
+        <span className="mt-0.5 h-[3px] w-3 rounded-full bg-foreground/70" />
+      </span>
+      <span className="absolute inset-x-2 bottom-1.5 flex h-4 items-center gap-1 rounded-[2px] border border-black/10 bg-muted/60 px-1">
+        <span className="flex size-2 shrink-0 items-center justify-center rounded-full bg-foreground text-[5px] leading-none text-white">
+          ?
+        </span>
+        <span className="flex flex-col gap-px">
+          <span className="h-[2px] w-8 rounded-full bg-foreground/60" />
+          <span className="h-[2px] w-11 rounded-full bg-foreground/25" />
+        </span>
       </span>
     </Thumb>
   )

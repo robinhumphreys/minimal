@@ -28,7 +28,7 @@ export function IntroStep({ next }: { next: string }) {
       </Fade>
       <Fade>
         <h1 className="mt-6 max-w-lg text-3xl tracking-tight text-balance">
-          Let&rsquo;s set up your agentic storefront
+          Hi! Let&rsquo;s set up your agentic storefront
         </h1>
       </Fade>
       <Fade>
