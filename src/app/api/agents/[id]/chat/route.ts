@@ -1,12 +1,13 @@
 import {
   convertToModelMessages,
-  createUIMessageStreamResponse,
+  stepCountIs,
   streamText,
-  toUIMessageStream,
   type UIMessage,
 } from "ai"
 
-import { catalogAsText, isBrandId } from "@/lib/catalog"
+import { agentTools } from "@/lib/agent/tools"
+import { instructionsFor } from "@/lib/agent/prompt"
+import { isBrandId } from "@/lib/catalog"
 import { behaviourSchema } from "@/lib/config/schema"
 
 export const maxDuration = 30
@@ -33,16 +34,16 @@ export async function POST(
 
   const result = streamText({
     model: parsed.data.model,
-    instructions: [
-      parsed.data.systemPrompt,
-      "",
-      "Catalog (name | price | category | attributes | tags):",
-      catalogAsText(id),
-    ].join("\n"),
+    instructions: instructionsFor(id, parsed.data),
     messages: await convertToModelMessages(messages),
+    tools: agentTools(id),
+    // One call to show products, one to correct an unknown slug, and the
+    // sentence that goes with them. Anything longer is the model wandering.
+    stopWhen: stepCountIs(3),
+    onError: ({ error }) => {
+      console.error("[agent:chat]", error)
+    },
   })
 
-  return createUIMessageStreamResponse({
-    stream: toUIMessageStream({ stream: result.stream }),
-  })
+  return result.toUIMessageStreamResponse()
 }

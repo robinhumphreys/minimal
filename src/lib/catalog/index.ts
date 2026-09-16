@@ -118,7 +118,11 @@ export function getReviews(id: BrandId, slug?: string) {
     .sort((a, b) => b.date.localeCompare(a.date))
 }
 
-/** One line per product, for stuffing into the chat system prompt. */
+/**
+ * One line per product, for the chat system prompt. Leads with the slug: it is
+ * the handle the model has to pass back to `showProducts`, so it has to be
+ * something the model has actually seen.
+ */
 export function catalogAsText(id: BrandId): string {
   return catalogs[id].products
     .map((product) => {
@@ -126,11 +130,13 @@ export function catalogAsText(id: BrandId): string {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ")
       return [
+        product.slug,
         product.name,
         formatPrice(product.price),
         product.category,
         attributes,
         product.tags.join(", "),
+        product.description,
       ].join(" | ")
     })
     .join("\n")

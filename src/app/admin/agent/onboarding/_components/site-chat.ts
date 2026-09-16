@@ -1,16 +1,19 @@
-import type { BrandId } from "@/lib/catalog/types"
-import type { AgentConfig } from "@/lib/config/schema"
+import type {
+  AgentConfig,
+  IconStyle,
+  LauncherIcon,
+  Position,
+} from "@/lib/config/schema"
 
-export type Placement = "bottom-right" | "bottom-center" | "bottom-left"
-export type LauncherIcon = "chat" | "sparkles" | "help"
-export type IconStyle = "solid" | "outline"
+export type Placement = Position
+export type { IconStyle, LauncherIcon }
 
 /**
  * Everything the merchant can change about the Site chat surface.
  *
  * Deliberately a flat object rather than the nested `AgentConfig`: these are
- * the knobs one surface exposes, and the chat on the right edits them by name.
- * Reconciling them back into the published config is a later problem.
+ * the knobs one surface exposes, and the options form edits them by name.
+ * `settingsFrom` and `applySettings` are the two directions of the same map.
  */
 export type SiteChatSettings = {
   greeting: string
@@ -41,29 +44,46 @@ export const LAUNCHER_ICONS: { value: LauncherIcon; label: string }[] = [
   { value: "help", label: "Question" },
 ]
 
-/**
- * How each brand draws its marks. Noord's storefront is hairlines and thin
- * rules; Volta's is filled blocks of volt. The launcher follows whichever the
- * site already does rather than picking one for both.
- */
-const ICON_STYLE_BY_BRAND: Record<BrandId, IconStyle> = {
-  noord: "outline",
-  volta: "solid",
-}
-
-/**
- * Seeds the surface from what onboarding said it had matched off the site, so
- * the merchant lands on something already theirs rather than on defaults.
- */
 export function settingsFrom(config: AgentConfig): SiteChatSettings {
   return {
     greeting: config.behaviour.greeting,
     starters: config.behaviour.starterPrompts,
     placement: config.surface.position ?? "bottom-right",
-    icon: "chat",
-    iconStyle: ICON_STYLE_BY_BRAND[config.id],
-    label: "",
+    icon: config.surface.icon,
+    iconStyle: config.surface.iconStyle,
+    label: config.surface.label,
     accent: config.theme.accent,
     radius: config.theme.radius,
+  }
+}
+
+/**
+ * Writes the surface's settings back into the draft. Choosing to set up Site
+ * chat is choosing the launcher entry: the two are the same decision.
+ */
+export function applySettings(
+  config: AgentConfig,
+  settings: SiteChatSettings,
+): AgentConfig {
+  return {
+    ...config,
+    theme: {
+      ...config.theme,
+      accent: settings.accent,
+      radius: settings.radius,
+    },
+    behaviour: {
+      ...config.behaviour,
+      greeting: settings.greeting,
+      starterPrompts: settings.starters,
+    },
+    surface: {
+      ...config.surface,
+      entry: "launcher",
+      position: settings.placement,
+      icon: settings.icon,
+      iconStyle: settings.iconStyle,
+      label: settings.label,
+    },
   }
 }

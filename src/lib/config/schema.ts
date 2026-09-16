@@ -25,10 +25,26 @@ export const positionSchema = z.enum([
   "bottom-left",
 ])
 
+export const launcherIconSchema = z.enum(["chat", "sparkles", "help"])
+export const iconStyleSchema = z.enum(["solid", "outline"])
+
+/**
+ * The launcher fields default rather than require so a config published
+ * before they existed still parses; the defaults match what the onboarding
+ * preview showed before they were configurable.
+ */
 export const surfaceSchema = z.object({
   entry: entrySchema,
   /** Launcher only. */
   position: positionSchema.optional(),
+  /** Launcher only. */
+  icon: launcherIconSchema.default("chat"),
+  /** Launcher only. Filled or stroked glyph, matching how the site draws its marks. */
+  iconStyle: iconStyleSchema.default("solid"),
+  /** Launcher only. Empty renders a bare circle. */
+  label: z.string().default(""),
+  /** Whether the agent takes over the site's own search box. */
+  searchAssist: z.boolean().default(true),
 })
 
 export const agentConfigSchema = z.object({
@@ -44,4 +60,6 @@ export type Behaviour = z.infer<typeof behaviourSchema>
 export type Surface = z.infer<typeof surfaceSchema>
 export type Entry = z.infer<typeof entrySchema>
 export type Position = z.infer<typeof positionSchema>
+export type LauncherIcon = z.infer<typeof launcherIconSchema>
+export type IconStyle = z.infer<typeof iconStyleSchema>
 export type AgentConfig = z.infer<typeof agentConfigSchema>

@@ -27,7 +27,15 @@ export const defaults: Record<BrandId, AgentConfig> = {
       ],
       model: DEFAULT_MODEL,
     },
-    surface: { entry: "bar" },
+    // Outline glyph: Noord's storefront is hairlines and thin rules.
+    surface: {
+      entry: "launcher",
+      position: "bottom-right",
+      icon: "chat",
+      iconStyle: "outline",
+      label: "",
+      searchAssist: true,
+    },
   },
   volta: {
     id: "volta",
@@ -37,10 +45,15 @@ export const defaults: Record<BrandId, AgentConfig> = {
       // Bright enough that anything on it has to be black, which is what the
       // storefront does with it too.
       accent: "#d7ff00",
-      surface: "#ffffff",
-      radius: "0.75rem",
-      fontBody: "system-ui, sans-serif",
-      fontDisplay: "system-ui, sans-serif",
+      // Volta's ground is charcoal (`--color-volta-void`), so the window is
+      // dark too; a white panel on that storefront would be the bolted-on look.
+      surface: "#212121",
+      // `--radius-volta`: Volta's controls are near-square blocks, not pills.
+      radius: "0.125rem",
+      fontBody:
+        'var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial, sans-serif',
+      fontDisplay:
+        'var(--font-volta-display-sans), "Helvetica Neue", Helvetica, Arial, sans-serif',
       density: "comfortable",
     },
     behaviour: {
@@ -53,7 +66,15 @@ export const defaults: Record<BrandId, AgentConfig> = {
       ],
       model: DEFAULT_MODEL,
     },
-    surface: { entry: "launcher", position: "bottom-right" },
+    // Solid glyph: Volta's marks are filled blocks of volt.
+    surface: {
+      entry: "launcher",
+      position: "bottom-right",
+      icon: "chat",
+      iconStyle: "solid",
+      label: "",
+      searchAssist: true,
+    },
   },
 }
 

@@ -2,21 +2,22 @@
 
 import * as React from "react"
 
-import { SlidersHorizontalIcon } from "lucide-react"
+import { CheckIcon, SlidersHorizontalIcon, UploadIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { AgentConfig } from "@/lib/config/schema"
+import { agentConfigSchema, type AgentConfig } from "@/lib/config/schema"
 import { useAdminStore } from "@/lib/store/admin"
 
 import { CustomisePane } from "./customise-pane"
-import { settingsFrom, type SiteChatSettings } from "./site-chat"
+import type { Device } from "./device-toggle"
+import { SearchAssistPreview } from "./search-assist-preview"
+import { applySettings, settingsFrom, type SiteChatSettings } from "./site-chat"
 import { SiteChatPreview } from "./site-chat-preview"
 
 const SURFACES = [
@@ -27,6 +28,9 @@ const SURFACES = [
 
 type SurfaceId = (typeof SURFACES)[number]["value"]
 
+/** How long the Publish button says it has done so. */
+const PUBLISHED_MS = 2000
+
 /**
  * Step three: the merchant meets what was built for them and adjusts it.
  *
@@ -36,19 +40,44 @@ type SurfaceId = (typeof SURFACES)[number]["value"]
 export function SurfaceStudio() {
   const config = useAdminStore((state) => state.drafts[state.active])
 
+  // Whatever was last published is where the merchant left off.
+  React.useEffect(() => {
+    useAdminStore.getState().hydrate()
+  }, [])
+
   return (
     // Keyed on the brand: switching accounts mid-flow should start the surface
-    // over from that merchant's own matched settings, not carry the last one's.
+    // over from that merchant's own draft, not carry the last one's.
     <Studio key={config.id} config={config} />
   )
 }
 
 function Studio({ config }: { config: AgentConfig }) {
+  const editDraft = useAdminStore((state) => state.editDraft)
+  const publish = useAdminStore((state) => state.publish)
   const [surface, setSurface] = React.useState<SurfaceId>("site-chat")
   const [showing, setShowing] = React.useState<"chat" | "options">("chat")
-  const [settings, setSettings] = React.useState<SiteChatSettings>(() =>
-    settingsFrom(config),
-  )
+  const [published, setPublished] = React.useState(false)
+  // Shared across surfaces: a merchant checking their phone wants to see
+  // every surface on it, not re-choose it per tab.
+  const [device, setDevice] = React.useState<Device>("desktop")
+
+  // The settings are a view of the draft, not a copy of it: every change goes
+  // straight into the store, so Publish here and Publish on the agent page
+  // ship the same thing.
+  const settings = settingsFrom(config)
+  const onChange = (next: SiteChatSettings) =>
+    editDraft(config.id, (current) => applySettings(current, next))
+
+  // An emptied greeting is the one thing the form lets through that the
+  // schema does not; hold Publish rather than throw on it.
+  const valid = agentConfigSchema.safeParse(config).success
+
+  React.useEffect(() => {
+    if (!published) return
+    const timer = window.setTimeout(() => setPublished(false), PUBLISHED_MS)
+    return () => window.clearTimeout(timer)
+  }, [published])
 
   return (
     <div className="flex h-full flex-col gap-4 p-6">
@@ -67,8 +96,7 @@ function Studio({ config }: { config: AgentConfig }) {
         </Tabs>
 
         {/* The tray. Sits on the tabs' own line because what it holds acts on
-            the whole screen, not on either half of it — and it is empty until
-            a surface has something to put there. */}
+            the whole screen, not on either half of it. */}
         <div className="ml-auto flex items-center gap-1">
           <Button
             size="sm"
@@ -84,6 +112,17 @@ function Studio({ config }: { config: AgentConfig }) {
             <SlidersHorizontalIcon />
             Options
           </Button>
+          <Button
+            size="sm"
+            disabled={!valid}
+            onClick={() => {
+              publish(config.id)
+              setPublished(true)
+            }}
+          >
+            {published ? <CheckIcon /> : <UploadIcon />}
+            {published ? "Published" : "Publish"}
+          </Button>
         </div>
       </div>
 
@@ -94,7 +133,17 @@ function Studio({ config }: { config: AgentConfig }) {
         <ResizablePanelGroup orientation="horizontal">
           <ResizablePanel defaultSize="62" minSize="35" className="pr-4">
             {surface === "site-chat" ? (
-              <SiteChatPreview settings={settings} />
+              <SiteChatPreview
+                config={config}
+                device={device}
+                onDeviceChange={setDevice}
+              />
+            ) : surface === "search-assist" ? (
+              <SearchAssistPreview
+                config={config}
+                device={device}
+                onDeviceChange={setDevice}
+              />
             ) : (
               <NotBuiltYet />
             )}
@@ -106,11 +155,23 @@ function Studio({ config }: { config: AgentConfig }) {
           <ResizableHandle withHandle className="bg-transparent" />
 
           <ResizablePanel defaultSize="38" minSize="25" className="pl-4">
-            <CustomisePane
-              showing={showing}
-              settings={settings}
-              onChange={setSettings}
-            />
+            {surface === "search-assist" ? (
+              <SearchAssistOptions
+                enabled={config.surface.searchAssist}
+                onChange={(enabled) =>
+                  editDraft(config.id, (current) => ({
+                    ...current,
+                    surface: { ...current.surface, searchAssist: enabled },
+                  }))
+                }
+              />
+            ) : (
+              <CustomisePane
+                showing={showing}
+                settings={settings}
+                onChange={onChange}
+              />
+            )}
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
@@ -118,7 +179,52 @@ function Studio({ config }: { config: AgentConfig }) {
   )
 }
 
-/** The other two surfaces exist as tabs before they exist as screens. */
+/**
+ * Search assist has one decision so far: whether the agent takes the search
+ * box over at all. Everything it shows is read from the same voice and
+ * catalogue as the chat, so there is nothing else to set yet.
+ */
+function SearchAssistOptions({
+  enabled,
+  onChange,
+}: {
+  enabled: boolean
+  onChange: (enabled: boolean) => void
+}) {
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1.5">
+        <p className="text-sm text-muted-foreground">Search box</p>
+        <div className="flex gap-1.5">
+          {[
+            { value: true, label: "Agent reads it" },
+            { value: false, label: "Leave it alone" },
+          ].map((option) => (
+            <button
+              key={option.label}
+              type="button"
+              onClick={() => onChange(option.value)}
+              className={
+                option.value === enabled
+                  ? "rounded-full border border-transparent bg-primary px-3 py-1 text-sm text-primary-foreground"
+                  : "rounded-full border border-input px-3 py-1 text-sm text-muted-foreground hover:text-foreground"
+              }
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          When on, the shop&rsquo;s own search box stays where it is. What
+          appears under it is the agent&rsquo;s reading of the search: what it
+          took the words to mean, the products, one line, and a way to refine.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/** The other surface exists as a tab before it exists as a screen. */
 function NotBuiltYet() {
   return (
     <div className="flex h-full items-center justify-center rounded-lg border border-dashed">
