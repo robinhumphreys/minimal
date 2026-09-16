@@ -33,7 +33,7 @@ export function ProductHelpPreview({
   const stage = (
     <>
       <div
-        className="absolute inset-0 flex items-start justify-center p-6"
+        className="absolute inset-0 flex items-center justify-center p-6"
         style={{ color: ink }}
       >
         {/* Just the button: the band it sits in is the merchant's, and the
