@@ -29,7 +29,9 @@ export function ProductHelpPreview({
   const [open, setOpen] = React.useState(false)
   // The drawer mounts into the preview rather than the document; the
   // preview box is transformed so the drawer's fixed layers stay inside it.
-  const box = React.useRef<HTMLDivElement>(null)
+  // Held as state, not a ref: the portal needs the element itself, and it
+  // needs to re-render once the element exists.
+  const [box, setBox] = React.useState<HTMLDivElement | null>(null)
   const ink = readableOn(config.theme.surface)
   const ground = groundFor(config.theme.surface, ink)
 
@@ -41,23 +43,33 @@ export function ProductHelpPreview({
       >
         {/* Just the button: the band it sits in is the merchant's, and the
             guide it opens is what is being judged. */}
-        <GuideTrigger config={config} onOpen={() => setOpen(true)} />
+        <GuideTrigger
+          config={config}
+          // Opened a tick later: a drawer mounted during the click that opens
+          // it takes that same click for one outside itself and closes.
+          onOpen={() => window.setTimeout(() => setOpen(true), 0)}
+        />
       </div>
-      <GuideOverlay
-        key={config.surface.productHelp.greeting}
-        config={config}
-        topic={TOPIC}
-        open={open}
-        onClose={() => setOpen(false)}
-        placement={device === "mobile" ? "sheet" : "side"}
-        container={box}
-      />
+      {/* Mounted only while open, as on the site: a drawer that is already
+          on the page when the button is pressed takes that press for one
+          outside itself and closes before it has opened. */}
+      {open ? (
+        <GuideOverlay
+          key={config.surface.productHelp.greeting}
+          config={config}
+          topic={TOPIC}
+          open
+          onClose={() => setOpen(false)}
+          placement={device === "mobile" ? "sheet" : "side"}
+          container={box}
+        />
+      ) : null}
     </>
   )
 
   return (
     <div
-      ref={box}
+      ref={setBox}
       className="relative h-full [transform:translateZ(0)] overflow-hidden rounded-lg"
     >
       <DotField

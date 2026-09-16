@@ -65,7 +65,7 @@ export function GuideOverlay({
   onClose: () => void
   placement: GuidePlacement
   /** Where the drawer mounts: the document on a site, the preview in the admin. */
-  container?: React.RefObject<HTMLElement | null>
+  container?: HTMLElement | React.RefObject<HTMLElement | null> | null
 }) {
   const transport = React.useMemo(
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
