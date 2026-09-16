@@ -91,7 +91,13 @@ export function AccountSwitcher() {
   )
 }
 
-/** Stand-in for a merchant's logo: the initial in a rounded square. */
+/**
+ * Stand-in for a merchant's logo: the initial in a rounded square.
+ *
+ * The foreground is forced because `DropdownMenuItem` repaints *every*
+ * descendant `text-accent-foreground` while highlighted, which would otherwise
+ * turn the initial the same near-black as the square it sits on.
+ */
 function AccountMark({
   name,
   className,
@@ -103,7 +109,7 @@ function AccountMark({
     <div
       aria-hidden="true"
       className={cn(
-        "flex aspect-square shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-xs font-medium text-sidebar-primary-foreground",
+        "flex aspect-square shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-xs font-medium text-sidebar-primary-foreground!",
         className,
       )}
     >

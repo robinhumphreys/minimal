@@ -43,7 +43,7 @@ export function Admin() {
   )
 
   return (
-    <div className="flex flex-col gap-6 p-8 lg:flex-row">
+    <div className="flex h-full flex-col gap-6 overflow-y-auto p-8 lg:flex-row">
       <div className="flex w-full max-w-xl flex-col gap-6">
         {/* The sidebar's account switcher owns `active`. */}
         <div className="flex items-center gap-3">

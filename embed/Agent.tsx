@@ -3,6 +3,7 @@ import { createPortal } from "react-dom"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
 
+import { readableOn } from "@/lib/config/contrast"
 import type { AgentConfig, Theme } from "@/lib/config/schema"
 
 import { Button } from "./components/ui/button"
@@ -22,6 +23,9 @@ export const bus: { open: (options?: OpenOptions) => void } = {
 function themeStyle(theme: Theme): React.CSSProperties {
   return {
     "--primary": theme.accent,
+    // Derived, not fixed: a bright accent cannot carry the white that
+    // `--primary-foreground` otherwise defaults to.
+    "--primary-foreground": readableOn(theme.accent),
     "--ring": theme.accent,
     "--background": theme.surface,
     "--radius": theme.radius,
