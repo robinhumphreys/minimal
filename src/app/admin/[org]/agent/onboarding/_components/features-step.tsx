@@ -171,8 +171,9 @@ function Thumb({
 }
 
 /*
- * Three shapes each, two greys and one accent. The accent is the one thing
- * in each picture that the agent adds to the page.
+ * Three shapes each, in stops of one colour: Minimal's blue at full strength
+ * for the thing the agent adds to the page, and two tints of it for the page
+ * around it.
  */
 const ACCENT = "bg-brand"
 
@@ -180,10 +181,10 @@ const ACCENT = "bg-brand"
 function SiteChatThumb() {
   return (
     <Thumb>
-      <span className="absolute top-2 right-4 bottom-4 left-3 flex flex-col gap-1 rounded-[3px] border border-black/10 bg-white p-1.5">
-        <span className="h-2 w-7 rounded-[2px] bg-neutral-200" />
+      <span className="absolute top-2 right-4 bottom-4 left-3 flex flex-col gap-1 rounded-[3px] border border-brand/25 bg-white p-1.5">
+        <span className="h-2 w-7 rounded-[2px] bg-brand/15" />
         <span className={cn("ml-auto h-2 w-5 rounded-[2px]", ACCENT)} />
-        <span className="h-2 w-9 rounded-[2px] bg-neutral-200" />
+        <span className="h-2 w-9 rounded-[2px] bg-brand/15" />
       </span>
       <span
         className={cn(
@@ -199,17 +200,17 @@ function SiteChatThumb() {
 function SearchAssistThumb() {
   return (
     <Thumb>
-      <span className="absolute inset-x-2 top-2 flex h-3.5 items-center gap-1 rounded-[3px] border border-black/15 bg-white px-1">
-        <span className="h-[3px] w-8 rounded-full bg-neutral-400" />
+      <span className="absolute inset-x-2 top-2 flex h-3.5 items-center gap-1 rounded-[3px] border border-brand/30 bg-white px-1">
+        <span className="h-[3px] w-8 rounded-full bg-brand/45" />
         <span className={cn("ml-0.5 h-2 w-[2px]", ACCENT)} />
       </span>
       <span className="absolute bottom-2 left-2 flex h-6 w-7 flex-col gap-0.5">
-        <span className="flex-1 rounded-[2px] bg-neutral-200" />
-        <span className="h-[3px] w-4 rounded-full bg-neutral-400" />
+        <span className="flex-1 rounded-[2px] bg-brand/15" />
+        <span className="h-[3px] w-4 rounded-full bg-brand/45" />
       </span>
       <span className="absolute right-2 bottom-2 flex h-6 w-7 flex-col gap-0.5">
-        <span className="flex-1 rounded-[2px] bg-neutral-200" />
-        <span className="h-[3px] w-5 rounded-full bg-neutral-400" />
+        <span className="flex-1 rounded-[2px] bg-brand/15" />
+        <span className="h-[3px] w-5 rounded-full bg-brand/45" />
       </span>
     </Thumb>
   )
@@ -219,9 +220,9 @@ function SearchAssistThumb() {
 function ProductHelpThumb() {
   return (
     <Thumb>
-      <span className="absolute top-2 bottom-2 left-2 w-7 rounded-[2px] bg-neutral-200" />
-      <span className="absolute top-2.5 left-10.5 h-[3px] w-7 rounded-full bg-neutral-400" />
-      <span className="absolute top-5 left-10.5 h-[3px] w-4 rounded-full bg-neutral-300" />
+      <span className="absolute top-2 bottom-2 left-2 w-7 rounded-[2px] bg-brand/15" />
+      <span className="absolute top-2.5 left-10.5 h-[3px] w-7 rounded-full bg-brand/45" />
+      <span className="absolute top-5 left-10.5 h-[3px] w-4 rounded-full bg-brand/25" />
       <span className="absolute bottom-2 left-10.5 flex items-center gap-1">
         <span
           className={cn(
@@ -231,7 +232,7 @@ function ProductHelpThumb() {
         >
           ?
         </span>
-        <span className="h-[3px] w-5 rounded-full bg-neutral-400" />
+        <span className="h-[3px] w-5 rounded-full bg-brand/45" />
       </span>
     </Thumb>
   )
