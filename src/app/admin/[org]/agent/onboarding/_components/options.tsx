@@ -24,6 +24,7 @@ import {
   AVATARS,
   DENSITIES,
   FONTS,
+  GUIDE_SIDES,
   HEADERS,
   ICON_STYLES,
   LAUNCHER_ICONS,
@@ -73,7 +74,9 @@ export function SiteChatOptions(props: OptionsProps) {
       ) : null}
 
       <FieldSet>
-        <FieldLegend variant="label">What it says</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          What it says
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="greeting">Opening message</FieldLabel>
@@ -143,7 +146,9 @@ export function SiteChatOptions(props: OptionsProps) {
       </FieldSet>
 
       <FieldSet>
-        <FieldLegend variant="label">Who it is</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          Who it is
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="assistant-name">Name</FieldLabel>
@@ -177,7 +182,9 @@ export function SiteChatOptions(props: OptionsProps) {
       </FieldSet>
 
       <FieldSet>
-        <FieldLegend variant="label">The button</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          The button
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel>Placement</FieldLabel>
@@ -233,7 +240,9 @@ export function SiteChatOptions(props: OptionsProps) {
       </FieldSet>
 
       <FieldSet>
-        <FieldLegend variant="label">The window</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          The window
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="accent">Accent</FieldLabel>
@@ -307,7 +316,9 @@ export function SiteChatOptions(props: OptionsProps) {
       </FieldSet>
 
       <FieldSet>
-        <FieldLegend variant="label">Products</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          Products
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel>Image shape</FieldLabel>
@@ -348,7 +359,9 @@ export function SiteChatOptions(props: OptionsProps) {
       </FieldSet>
 
       <FieldSet>
-        <FieldLegend variant="label">When it appears</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          When it appears
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel>Nudge</FieldLabel>
@@ -411,7 +424,9 @@ export function SearchAssistOptions(props: OptionsProps) {
         />
       ) : null}
       <FieldSet>
-        <FieldLegend variant="label">The search box</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          The search box
+        </FieldLegend>
         <FieldDescription>
           The shop&rsquo;s own search box stays where it is. What appears under
           it is the agent&rsquo;s reading of the search: what it took the words
@@ -437,7 +452,9 @@ export function ProductHelpOptions(props: OptionsProps) {
         />
       ) : null}
       <FieldSet>
-        <FieldLegend variant="label">The guide</FieldLegend>
+        <FieldLegend className="font-heading text-base font-semibold tracking-tight">
+          The guide
+        </FieldLegend>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="guide-label">Button text</FieldLabel>
@@ -460,6 +477,17 @@ export function ProductHelpOptions(props: OptionsProps) {
               className="ring-inset"
               value={settings.guideGreeting}
               onChange={(event) => set("guideGreeting", event.target.value)}
+            />
+          </Field>
+          <Field>
+            <FieldLabel>Panel side</FieldLabel>
+            <FieldDescription>
+              On a wide screen. Phones get a sheet from the bottom.
+            </FieldDescription>
+            <Choices
+              options={GUIDE_SIDES}
+              value={settings.guideSide}
+              onSelect={(value) => set("guideSide", value)}
             />
           </Field>
           <Field>

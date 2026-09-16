@@ -27,6 +27,9 @@ export function ProductHelpPreview({
   onDeviceChange: (device: Device) => void
 }) {
   const [open, setOpen] = React.useState(false)
+  // The drawer mounts into the preview rather than the document; the
+  // preview box is transformed so the drawer's fixed layers stay inside it.
+  const box = React.useRef<HTMLDivElement>(null)
   const ink = readableOn(config.theme.surface)
   const ground = groundFor(config.theme.surface, ink)
 
@@ -42,17 +45,21 @@ export function ProductHelpPreview({
       </div>
       <GuideOverlay
         key={config.surface.productHelp.greeting}
-        mode="absolute"
         config={config}
         topic={TOPIC}
         open={open}
         onClose={() => setOpen(false)}
+        placement={device === "mobile" ? "sheet" : "side"}
+        container={box}
       />
     </>
   )
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg">
+    <div
+      ref={box}
+      className="relative h-full [transform:translateZ(0)] overflow-hidden rounded-lg"
+    >
       <DotField
         className="absolute inset-0"
         back={ground.back}

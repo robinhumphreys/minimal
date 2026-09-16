@@ -44,7 +44,7 @@ export function SiteChatPreview({
   )
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg">
+    <div className="relative h-full overflow-hidden rounded-xl">
       <DotField className="absolute inset-0" />
       {/* On a phone the layer is its own container, so the window fills the
           frame the way it fills a real screen. */}

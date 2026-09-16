@@ -168,6 +168,12 @@ export const siteChatPatchSchema = z.object({
     .min(1)
     .optional()
     .describe("Product help's first line, before its first question."),
+  guideSide: z
+    .enum(["right", "left"])
+    .optional()
+    .describe(
+      "Which edge Product help's panel comes in from on a wide screen.",
+    ),
   chatPlaceholder: z
     .string()
     .min(1)

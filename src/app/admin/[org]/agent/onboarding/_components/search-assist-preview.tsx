@@ -109,7 +109,7 @@ export function SearchAssistPreview({
   )
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg">
+    <div className="relative h-full overflow-hidden rounded-xl">
       <DotField
         className="absolute inset-0"
         back={ground.back}

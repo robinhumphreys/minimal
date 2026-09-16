@@ -94,6 +94,8 @@ export const productHelpSchema = z.object({
     .string()
     .min(1)
     .default("Hi! A few quick questions and I will find you the right one."),
+  /** Which edge the panel comes in from on a wide screen. Phones get a sheet from the bottom. */
+  side: z.enum(["right", "left"]).default("right"),
 })
 
 export const cardsSchema = z.object({
@@ -130,6 +132,7 @@ export const surfaceSchema = z.object({
     enabled: false,
     label: "Help me choose",
     greeting: "Hi! A few quick questions and I will find you the right one.",
+    side: "right",
   }),
 })
 
@@ -161,6 +164,7 @@ export type Surface = z.infer<typeof surfaceSchema>
 export type Cards = z.infer<typeof cardsSchema>
 export type Identity = z.infer<typeof identitySchema>
 export type ProductHelp = z.infer<typeof productHelpSchema>
+export type GuideSide = ProductHelp["side"]
 export type Entry = z.infer<typeof entrySchema>
 export type Position = z.infer<typeof positionSchema>
 export type LauncherIcon = z.infer<typeof launcherIconSchema>

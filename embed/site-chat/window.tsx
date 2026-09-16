@@ -174,7 +174,12 @@ export function ChatWindow({
                   </MessageScrollerItem>
                 ))}
 
-                {chat.status === "submitted" ? (
+                {/* One waiting state from the send to the first visible
+                    part: the reply exists, empty, before anything arrives. */}
+                {chat.status === "submitted" ||
+                (chat.status === "streaming" &&
+                  chat.messages.at(-1)?.role === "assistant" &&
+                  !hasVisibleParts(chat.messages.at(-1))) ? (
                   <MessageScrollerItem>
                     <Thinking style={config.theme.thinking} />
                   </MessageScrollerItem>
@@ -297,6 +302,17 @@ function Composer({
         </InputGroupAddon>
       </InputGroup>
     </form>
+  )
+}
+
+/** Whether a reply has anything on screen yet. */
+function hasVisibleParts(message: AgentUIMessage | undefined): boolean {
+  return (
+    message?.parts.some(
+      (part) =>
+        (part.type === "text" && part.text.trim().length > 0) ||
+        part.type === "tool-showProducts",
+    ) ?? false
   )
 }
 

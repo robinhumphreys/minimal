@@ -1,2 +1,2 @@
-export { GuideOverlay } from "./overlay"
+export { GuideOverlay, type GuidePlacement } from "./overlay"
 export { GuideTrigger } from "./trigger"

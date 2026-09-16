@@ -1,12 +1,19 @@
 import * as React from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { RotateCcwIcon, XIcon, ArrowUpIcon } from "lucide-react"
+import { ArrowUpIcon, RotateCcwIcon, XIcon } from "lucide-react"
 import { cn } from "cn"
 
 import type { AgentUIMessage } from "@/lib/agent/types"
 import { Bubble, BubbleContent } from "@/components/ui/bubble"
 import { Button } from "@/components/ui/button"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer"
 import {
   InputGroup,
   InputGroupAddon,
@@ -32,26 +39,33 @@ import { themeStyle } from "../theme"
 /** What the guide opens with. Never shown; it only gets the first question asked. */
 const KICKOFF = "Begin."
 
+/** A side panel on a wide screen, a sheet from the bottom on a phone. */
+export type GuidePlacement = "side" | "sheet"
+
 /**
- * Product help: the guide itself, in a panel over the page.
+ * Product help: the guide itself, in a drawer over the page.
  *
  * Not the site chat in a different place. There is no launcher, no small
  * talk and no open question: the agent asks, the shopper taps, and the guide
- * ends on a product. The panel slides in from the side on a wide screen and
- * takes the whole screen on a phone; Start over clears it and asks again.
+ * ends on a product. The drawer is the shadcn one on Base UI: it slides in
+ * from the side on a wide screen and up from the bottom on a phone, and can
+ * be swiped away either way. Start over clears it and asks again.
  */
 export function GuideOverlay({
   config,
   topic,
   open,
   onClose,
-  mode,
+  placement,
+  container,
 }: {
   config: AgentConfig
   topic: string
   open: boolean
   onClose: () => void
-  mode: "fixed" | "absolute"
+  placement: GuidePlacement
+  /** Where the drawer mounts: the document on a site, the preview in the admin. */
+  container?: React.RefObject<HTMLElement | null>
 }) {
   const transport = React.useMemo(
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
@@ -96,52 +110,43 @@ export function GuideOverlay({
     kicked.current = false
   }
 
-  React.useEffect(() => {
-    if (!open) return
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [open, onClose])
-
-  if (!open) return null
-
   const busy = status === "submitted" || status === "streaming"
   const name = config.identity.assistantName.trim() || config.name
   const shown = messages.filter((message) => !message.metadata?.hidden)
   const last = messages.at(-1)
 
   return (
-    <div
-      data-slot="product-help"
-      className={cn(
-        "minimal-agent-root @container inset-0 font-sans text-foreground",
-        mode === "fixed" ? "fixed z-[2147483000]" : "absolute",
-      )}
-      style={themeStyle(config.theme)}
+    <Drawer
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose()
+      }}
+      swipeDirection={placement === "sheet" ? "down" : productHelp.side}
+      showSwipeHandle={placement === "sheet"}
     >
-      <button
-        type="button"
-        aria-label="Close"
-        onClick={onClose}
-        className="absolute inset-0 animate-in cursor-default bg-black/40 duration-200 fade-in"
-      />
-
-      <MessageScrollerProvider>
-        <FollowEnd count={messages.length} status={status} />
-        <div
-          role="dialog"
-          aria-label={`${name} guide`}
-          className="absolute inset-y-0 right-0 flex w-[30rem] max-w-full animate-in flex-col bg-background shadow-2xl duration-300 slide-in-from-right @max-md:w-full"
-        >
-          <div className="flex h-14 shrink-0 items-center justify-between border-b border-border px-4">
-            <span
-              className="text-sm font-medium"
+      <DrawerContent
+        container={container}
+        data-slot="product-help"
+        aria-label={`${name} guide`}
+        // The drawer mounts outside the embed's own root, so the theme has to
+        // travel with it: this is the root for everything inside.
+        className={cn(
+          "minimal-agent-root font-sans text-foreground",
+          placement === "side"
+            ? "sm:[--drawer-content-width:30rem]!"
+            : "[--drawer-content-height:calc(100dvh-3rem)] [--drawer-content-max-height:calc(100dvh-3rem)]",
+        )}
+        style={themeStyle(config.theme)}
+      >
+        <MessageScrollerProvider>
+          <FollowEnd count={messages.length} status={status} />
+          <DrawerHeader className="flex-row items-center justify-between border-b border-border p-4 text-left">
+            <DrawerTitle
+              className="text-sm"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {name}
-            </span>
+            </DrawerTitle>
             <div className="flex items-center gap-1">
               <Button
                 size="sm"
@@ -152,16 +157,14 @@ export function GuideOverlay({
                 <RotateCcwIcon />
                 Start over
               </Button>
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                onClick={onClose}
+              <DrawerClose
+                render={<Button size="icon-sm" variant="ghost" />}
                 aria-label="Close"
               >
                 <XIcon />
-              </Button>
+              </DrawerClose>
             </div>
-          </div>
+          </DrawerHeader>
 
           <MessageScroller className="flex-1">
             <MessageScrollerViewport>
@@ -181,7 +184,13 @@ export function GuideOverlay({
                   </MessageScrollerItem>
                 ))}
 
-                {status === "submitted" ? (
+                {/* Waiting is one state from the send to the first thing
+                    worth showing. The reply exists, empty, before its first
+                    part has arrived; the dots stay until it has. */}
+                {status === "submitted" ||
+                (status === "streaming" &&
+                  last?.role === "assistant" &&
+                  !hasVisibleParts(last)) ? (
                   <MessageScrollerItem>
                     <Message>
                       <MessageContent>
@@ -235,9 +244,21 @@ export function GuideOverlay({
             onSend={(text) => send(text)}
             onStop={() => void stop()}
           />
-        </div>
-      </MessageScrollerProvider>
-    </div>
+        </MessageScrollerProvider>
+      </DrawerContent>
+    </Drawer>
+  )
+}
+
+/** Whether a reply has anything on screen yet. */
+function hasVisibleParts(message: AgentUIMessage): boolean {
+  return message.parts.some(
+    (part) =>
+      (part.type === "text" && part.text.trim().length > 0) ||
+      (part.type === "tool-askChoice" &&
+        (part.state === "input-available" ||
+          part.state === "output-available")) ||
+      part.type === "tool-showProducts",
   )
 }
 

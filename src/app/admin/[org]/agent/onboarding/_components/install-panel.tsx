@@ -10,7 +10,7 @@ import { CopyButton, InstallSnippets } from "./install-snippets"
 /** The install, as a tab of the management screen: what is on the site now. */
 export function InstallPanel({ config }: { config: AgentConfig }) {
   return (
-    <div className="flex h-full flex-col gap-5 overflow-y-auto rounded-lg border p-6">
+    <div className="flex h-full flex-col gap-5 overflow-y-auto rounded-xl border p-6">
       <div className="flex items-start justify-between gap-4">
         <p className="max-w-md text-sm text-muted-foreground">
           What is pasted into the site. Publishing changes what these load; the

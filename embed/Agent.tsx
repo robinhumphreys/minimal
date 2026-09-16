@@ -147,6 +147,22 @@ function useHostDom() {
   return host
 }
 
+/** A phone-sized viewport: the guide comes up from the bottom rather than the side. */
+function usePhone() {
+  const [phone, setPhone] = React.useState(() =>
+    typeof window === "undefined"
+      ? false
+      : window.matchMedia("(max-width: 640px)").matches,
+  )
+  React.useEffect(() => {
+    const query = window.matchMedia("(max-width: 640px)")
+    const onChange = () => setPhone(query.matches)
+    query.addEventListener("change", onChange)
+    return () => query.removeEventListener("change", onChange)
+  }, [])
+  return phone
+}
+
 /** Whether the launcher belongs on this page at all. */
 function offPage(config: AgentConfig): boolean {
   const path = window.location.pathname
@@ -207,6 +223,7 @@ export function Agent({ config }: { config: AgentConfig }) {
   // Product help: which guide is open, if any. A merchant's own button can
   // open it too, with `data-minimal-guide="Topic"` on any element.
   const [guide, setGuide] = React.useState<string | null>(null)
+  const phone = usePhone()
   React.useEffect(() => {
     const onClick = (event: MouseEvent) => {
       const target = (event.target as HTMLElement | null)?.closest<HTMLElement>(
@@ -289,11 +306,11 @@ export function Agent({ config }: { config: AgentConfig }) {
       {config.surface.productHelp.enabled && guide !== null ? (
         <GuideOverlay
           key={guide}
-          mode="fixed"
           config={config}
           topic={guide}
           open
           onClose={() => setGuide(null)}
+          placement={phone ? "sheet" : "side"}
         />
       ) : null}
 

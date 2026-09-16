@@ -1,6 +1,7 @@
 import type {
   AgentConfig,
   Avatar,
+  GuideSide,
   Density,
   FontChoice,
   HeaderStyle,
@@ -63,6 +64,7 @@ export type SiteChatSettings = {
   /** Product help's trigger text and first line. */
   guideLabel: string
   guideGreeting: string
+  guideSide: GuideSide
   // What each composer says while empty
   chatPlaceholder: string
   searchPlaceholder: string
@@ -138,6 +140,10 @@ export const VOICES: Option<Voice>[] = [
   { value: "direct", label: "Direct" },
   { value: "playful", label: "Playful" },
 ]
+export const GUIDE_SIDES: Option<GuideSide>[] = [
+  { value: "right", label: "Right" },
+  { value: "left", label: "Left" },
+]
 export const SPELLINGS: Option<Spelling>[] = [
   { value: "british", label: "British" },
   { value: "american", label: "American" },
@@ -173,6 +179,7 @@ export function settingsFrom(config: AgentConfig): SiteChatSettings {
     productHelp: config.surface.productHelp.enabled,
     guideLabel: config.surface.productHelp.label,
     guideGreeting: config.surface.productHelp.greeting,
+    guideSide: config.surface.productHelp.side,
     chatPlaceholder: config.behaviour.placeholders.chat,
     searchPlaceholder: config.behaviour.placeholders.search,
     guidePlaceholder: config.behaviour.placeholders.guide,
@@ -235,6 +242,7 @@ export function applySettings(
         enabled: settings.productHelp,
         label: settings.guideLabel,
         greeting: settings.guideGreeting,
+        side: settings.guideSide,
       },
     },
     identity: {

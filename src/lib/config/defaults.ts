@@ -60,6 +60,7 @@ export const defaults: Record<BrandId, AgentConfig> = {
         label: "Help me choose",
         greeting:
           "Hi! A few quick questions and I will find you the right one.",
+        side: "right",
       },
     },
     identity: {
