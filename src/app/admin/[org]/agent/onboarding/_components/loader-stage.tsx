@@ -142,7 +142,7 @@ export function LoaderStage({
       </div>
 
       <div className="relative flex flex-col items-center gap-6">
-        <p className="text-lg tracking-tight">{title}</p>
+        <p className="text-xl font-semibold tracking-tight">{title}</p>
 
         {children}
       </div>

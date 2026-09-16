@@ -101,7 +101,7 @@ export function PlacementStep({ next }: { next: string }) {
       frameRef={frame}
       fetched={pong !== null}
       finished={finished}
-      title={finished ? "It's on your site" : "Checking your site"}
+      title={finished ? "Your agent is live" : "Checking your site"}
       next={next}
       nextLabel="Go to your agent"
     >
