@@ -34,11 +34,11 @@ export function PromoStripe({ className }: { className?: string }) {
       {/* Tablet and up: everything visible, pushed out to the page gutter and
           spaced apart, still. */}
       <ul className="volta-gutter hidden h-full w-full items-center justify-between gap-8 md:flex">
-        {VIOLATORS.map((item) => (
-          <li key={item} className="flex items-center gap-2">
+        {VIOLATORS.map((violator) => (
+          <li key={violator.id} className="flex items-center gap-2">
             <Bolt />
             <span className="volta-wide text-volta-micro whitespace-nowrap text-volta-void">
-              {item}
+              {violator.label}
             </span>
           </li>
         ))}
@@ -50,11 +50,11 @@ export function PromoStripe({ className }: { className?: string }) {
 function Items({ ariaHidden = false }: { ariaHidden?: boolean }) {
   return (
     <ul className="flex items-center" aria-hidden={ariaHidden || undefined}>
-      {VIOLATORS.map((item) => (
-        <li key={item} className="flex items-center gap-2 px-4">
+      {VIOLATORS.map((violator) => (
+        <li key={violator.id} className="flex items-center gap-2 px-4">
           <Bolt />
           <span className="volta-wide text-volta-micro whitespace-nowrap text-volta-void">
-            {item}
+            {violator.label}
           </span>
         </li>
       ))}
@@ -62,8 +62,8 @@ function Items({ ariaHidden = false }: { ariaHidden?: boolean }) {
   )
 }
 
-/** The brand mark at glyph scale. Exported so the footer can repeat the beat. */
-export function Bolt({ className }: { className?: string }) {
+/** The brand mark at glyph scale, for the stripe's own rows. */
+function Bolt({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 12 20"

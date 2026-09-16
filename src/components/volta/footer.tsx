@@ -1,9 +1,14 @@
 import Link from "next/link"
+import {
+  ArrowCounterClockwiseIcon,
+  LightningIcon,
+  ShieldCheckIcon,
+  TruckIcon,
+} from "@phosphor-icons/react/ssr"
 
 import { FOOTER_COLUMNS, LEGAL_LINKS } from "@/lib/volta/footer-links"
-import { VIOLATORS } from "@/lib/volta/promotions"
+import { VIOLATORS, type ViolatorId } from "@/lib/volta/promotions"
 
-import { Bolt } from "./promo-stripe"
 import { Wordmark } from "./wordmark"
 
 /**
@@ -69,14 +74,34 @@ export function Footer() {
 }
 
 /**
+ * One icon per violator rather than the bolt four times.
+ *
+ * The bolt is the brand mark — repeating it down a row says "Volta" four times
+ * and says nothing about the four different promises underneath it. These do
+ * the labelling the mark cannot: a shopper skimming the row can tell delivery
+ * from returns before reading either.
+ */
+const VIOLATOR_ICONS: Record<ViolatorId, typeof TruckIcon> = {
+  delivery: TruckIcon,
+  dispatch: LightningIcon,
+  returns: ArrowCounterClockwiseIcon,
+  testing: ShieldCheckIcon,
+}
+
+/**
  * The violator stripe again, played slow: the same four promises in the same
  * order, on the same volt ground, sized to be read rather than glanced at.
  *
- * Set at title rather than heading scale. At heading scale the four longest
- * promises in the catalogue had to wrap two and three lines inside a quarter of
- * the page, which left every cell a different depth and broke "Batch-tested"
- * across a hyphen — a wall of volt with a ragged edge. One line each, the bolt
- * on the same baseline as the text, is the same claim without the shouting.
+ * Cards at 3:2 from `sm` up, icon at the top and the promise sitting on the
+ * floor of the cell. The fixed ratio is what keeps the row even — the labels
+ * run from two to four words, so cells sized by their content came out at four
+ * different depths, and "Free delivery over €40" wrapping to a second line
+ * dragged the whole row down with it. Set the box and the text can wrap where
+ * it likes.
+ *
+ * Below `sm` the grid is one column, where a 3:2 card is a near-empty
+ * full-width block and four of them stack into a very long slab of volt. The
+ * ratio is dropped there and each promise sets as a compact row instead.
  *
  * The hairline grid is the void showing through a `gap-px` on the `<ul>`, which
  * gives real rules at every breakpoint without per-cell border arithmetic — the
@@ -87,17 +112,24 @@ function ViolatorRow() {
     <section aria-label="Why Volta">
       <div className="volta-gutter mx-auto max-w-7xl py-10">
         <ul className="grid gap-px bg-volta-void sm:grid-cols-2 lg:grid-cols-4">
-          {VIOLATORS.map((item) => (
-            <li
-              key={item}
-              className="flex items-center gap-3 bg-volta-volt px-5 py-5"
-            >
-              <Bolt className="h-4 shrink-0 text-volta-void" />
-              <span className="volta-title text-volta-title text-volta-void">
-                {item}
-              </span>
-            </li>
-          ))}
+          {VIOLATORS.map((violator) => {
+            const Icon = VIOLATOR_ICONS[violator.id]
+            return (
+              <li
+                key={violator.id}
+                className="flex items-center gap-3 bg-volta-volt p-5 text-volta-void sm:aspect-3/2 sm:flex-col sm:items-start sm:justify-between sm:gap-0 sm:p-6"
+              >
+                <Icon
+                  aria-hidden
+                  weight="bold"
+                  className="size-6 shrink-0 sm:size-8"
+                />
+                <span className="volta-title text-volta-title text-balance">
+                  {violator.label}
+                </span>
+              </li>
+            )
+          })}
         </ul>
       </div>
     </section>

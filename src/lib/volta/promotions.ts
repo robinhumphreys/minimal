@@ -25,11 +25,16 @@ export const CUTOFF = "22:00"
  * and the footer repeats them as a four-column grid, so an odd count leaves a
  * hole in both. Anything added here has to displace one of these.
  */
-export const VIOLATORS: string[] = [
-  `Free delivery over €${FREE_DELIVERY_THRESHOLD / 100}`,
-  "Shipped same day",
-  "30-day returns",
-  "Batch-tested",
+export type ViolatorId = "delivery" | "dispatch" | "returns" | "testing"
+
+export const VIOLATORS: { id: ViolatorId; label: string }[] = [
+  {
+    id: "delivery",
+    label: `Free delivery over €${FREE_DELIVERY_THRESHOLD / 100}`,
+  },
+  { id: "dispatch", label: "Shipped same day" },
+  { id: "returns", label: "30-day returns" },
+  { id: "testing", label: "Batch-tested" },
 ]
 
 /** The three promises repeated under the fold and in the bag. */
