@@ -9,7 +9,9 @@ import type { Cards } from "@/lib/config/schema"
  *
  * One pick lies down as a row so it reads as the answer; two or more stand up
  * as a rail the shopper can swipe, bled to the window's edges so the rail
- * reads as continuing past them.
+ * reads as continuing past them. The scroll padding matches the inline
+ * padding: a snap point is measured from the scrollport, not the content
+ * box, so without it every card after the first would snap flush to the edge.
  */
 export function ProductCards({
   products,
@@ -25,7 +27,7 @@ export function ProductCards({
   }
 
   return (
-    <div className="ma:-mx-(--card-spacing) ma:flex ma:snap-x ma:snap-mandatory ma:[scrollbar-width:none] ma:gap-2 ma:overflow-x-auto ma:px-(--card-spacing) ma:pb-1">
+    <div className="ma:-mx-(--card-spacing) ma:flex ma:snap-x ma:snap-mandatory ma:scroll-px-(--card-spacing) ma:[scrollbar-width:none] ma:gap-2 ma:overflow-x-auto ma:px-(--card-spacing) ma:pb-1">
       {products.map((product) => (
         <ProductCard
           key={product.slug}

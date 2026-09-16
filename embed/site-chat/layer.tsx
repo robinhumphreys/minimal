@@ -17,6 +17,9 @@ const ANCHORS: Record<Position, string> = {
   "bottom-left": "ma:items-start",
 }
 
+/** Under this many pixels across, the window fills the layer. Matches `@max-md`. */
+const PHONE_MAX_PX = 448
+
 /**
  * The Site chat surface: a launcher, and the window it opens.
  *
@@ -33,6 +36,7 @@ export function SiteChatLayer({
   onOpenChange,
   mode,
   hidden = false,
+  onLeave,
 }: {
   config: AgentConfig
   chat: ChatDriver
@@ -41,6 +45,13 @@ export function SiteChatLayer({
   mode: "fixed" | "absolute"
   /** The host has a modal of its own open; step out of its way. */
   hidden?: boolean
+  /**
+   * The shopper followed a link out of the window while it filled the
+   * screen. Called before the browser leaves, so whatever remembers the
+   * window as open can forget it: on a phone the window is the whole page,
+   * and a product page that loads under it is a product page nobody sees.
+   */
+  onLeave?: () => void
 }) {
   const position = config.surface.position ?? "bottom-right"
   const nudge = useNudge(config, open, mode)
@@ -54,6 +65,12 @@ export function SiteChatLayer({
         hidden && "ma:hidden",
       )}
       style={themeStyle(config.theme)}
+      onClick={(event) => {
+        if (!open || !onLeave) return
+        const link = (event.target as HTMLElement | null)?.closest("a[href]")
+        if (!link || event.currentTarget.clientWidth >= PHONE_MAX_PX) return
+        onLeave()
+      }}
     >
       <div
         className={cn(
