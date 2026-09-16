@@ -75,7 +75,7 @@ export function SiteChatOptions(props: OptionsProps) {
 
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          What it says
+          Conversation
         </FieldLegend>
         <FieldGroup>
           <Field>
@@ -147,7 +147,7 @@ export function SiteChatOptions(props: OptionsProps) {
 
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          Who it is
+          Identity
         </FieldLegend>
         <FieldGroup>
           <Field>
@@ -183,7 +183,7 @@ export function SiteChatOptions(props: OptionsProps) {
 
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          The button
+          Chat button
         </FieldLegend>
         <FieldGroup>
           <Field>
@@ -241,7 +241,7 @@ export function SiteChatOptions(props: OptionsProps) {
 
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          The window
+          Chat window
         </FieldLegend>
         <FieldGroup>
           <Field>
@@ -317,7 +317,7 @@ export function SiteChatOptions(props: OptionsProps) {
 
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          Products
+          Product cards
         </FieldLegend>
         <FieldGroup>
           <Field>
@@ -360,7 +360,7 @@ export function SiteChatOptions(props: OptionsProps) {
 
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          When it appears
+          Behaviour
         </FieldLegend>
         <FieldGroup>
           <Field>
@@ -425,7 +425,7 @@ export function SearchAssistOptions(props: OptionsProps) {
       ) : null}
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          The search box
+          Search box
         </FieldLegend>
         <FieldDescription>
           The shop&rsquo;s own search box stays where it is. What appears under
