@@ -1,3 +1,5 @@
+import { Pane } from "@/app/admin/_components/pane"
+
 import { SurfaceStudio } from "./onboarding/_components/surface-studio"
 
 /**
@@ -6,5 +8,9 @@ import { SurfaceStudio } from "./onboarding/_components/surface-studio"
  * until then.
  */
 export default function Page() {
-  return <SurfaceStudio mode="manage" />
+  return (
+    <Pane>
+      <SurfaceStudio mode="manage" />
+    </Pane>
+  )
 }

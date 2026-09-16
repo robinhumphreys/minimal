@@ -38,11 +38,9 @@ export default async function OrgLayout({
         <SidebarProvider defaultOpen={false} className="h-svh overflow-hidden">
           <AppSidebar org={org} />
           <SidebarInset className="min-h-0 bg-muted/40">
-            <div className="flex min-h-0 flex-1 flex-col p-4">
-              <div className="min-h-0 flex-1 overflow-hidden rounded-xl border bg-card shadow-xs">
-                {children}
-              </div>
-            </div>
+            {/* Each screen brings its own pane — see `Pane` — so a flow can
+                put something above the pane without losing its corners. */}
+            <div className="flex min-h-0 flex-1 flex-col p-4">{children}</div>
           </SidebarInset>
         </SidebarProvider>
       </TooltipProvider>
