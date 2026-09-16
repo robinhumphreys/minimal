@@ -99,6 +99,18 @@ export function SiteChatOptions(props: OptionsProps) {
             />
           </Field>
           <Field>
+            <FieldLabel htmlFor="chat-placeholder">Empty composer</FieldLabel>
+            <FieldDescription>
+              What the box says before they type.
+            </FieldDescription>
+            <Input
+              id="chat-placeholder"
+              className="ring-inset"
+              value={settings.chatPlaceholder}
+              onChange={(event) => set("chatPlaceholder", event.target.value)}
+            />
+          </Field>
+          <Field>
             <FieldLabel>Voice</FieldLabel>
             <Choices
               options={VOICES}
@@ -448,6 +460,16 @@ export function ProductHelpOptions(props: OptionsProps) {
               className="ring-inset"
               value={settings.guideGreeting}
               onChange={(event) => set("guideGreeting", event.target.value)}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="guide-placeholder">Answer box</FieldLabel>
+            <FieldDescription>For typing instead of tapping.</FieldDescription>
+            <Input
+              id="guide-placeholder"
+              className="ring-inset"
+              value={settings.guidePlaceholder}
+              onChange={(event) => set("guidePlaceholder", event.target.value)}
             />
           </Field>
         </FieldGroup>

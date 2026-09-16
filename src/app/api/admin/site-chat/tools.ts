@@ -168,6 +168,21 @@ export const siteChatPatchSchema = z.object({
     .min(1)
     .optional()
     .describe("Product help's first line, before its first question."),
+  chatPlaceholder: z
+    .string()
+    .min(1)
+    .optional()
+    .describe("What the site chat's composer says while empty."),
+  searchPlaceholder: z
+    .string()
+    .min(1)
+    .optional()
+    .describe("What Search assist's refine box says while empty."),
+  guidePlaceholder: z
+    .string()
+    .min(1)
+    .optional()
+    .describe("What Product help's answer box says while empty."),
 })
 
 export type SiteChatPatch = z.infer<typeof siteChatPatchSchema>

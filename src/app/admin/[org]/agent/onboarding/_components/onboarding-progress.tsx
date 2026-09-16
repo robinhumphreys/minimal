@@ -6,10 +6,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { cn } from "cn"
 
 import { useOrg } from "@/app/admin/_components/use-org"
+import { useAdminStore } from "@/lib/store/admin"
 
 /** The steps that count: the start screen is a door, not a step. */
 const FIRST = 2
-const LAST = 6
+const LAST = 5
 
 /**
  * Where the merchant is in the flow, with a way back and forward. Read off
@@ -18,11 +19,21 @@ const LAST = 6
 export function OnboardingProgress() {
   const org = useOrg()
   const pathname = usePathname()
+  // Step three's rule holds here too: no surface, no way forward.
+  const chosen = useAdminStore((state) => {
+    const surface = state.drafts[org].surface
+    return (
+      surface.entry === "launcher" ||
+      surface.searchAssist ||
+      surface.productHelp.enabled
+    )
+  })
   const match = pathname.match(/\/step-(\d)$/)
   const step = match ? Number(match[1]) : null
   if (step === null || step < FIRST) return null
 
   const href = (n: number) => `/admin/${org}/agent/onboarding/step-${n}`
+  const canAdvance = step < LAST && (step !== 3 || chosen)
 
   return (
     <nav
@@ -35,7 +46,7 @@ export function OnboardingProgress() {
       <span className="tabular-nums">
         {step - FIRST + 1}/{LAST - FIRST + 1}
       </span>
-      <Arrow href={step < LAST ? href(step + 1) : null} label="Next step">
+      <Arrow href={canAdvance ? href(step + 1) : null} label="Next step">
         <ChevronRightIcon className="size-4" />
       </Arrow>
     </nav>

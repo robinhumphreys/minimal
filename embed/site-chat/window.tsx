@@ -212,7 +212,12 @@ export function ChatWindow({
         </CardContent>
 
         <CardFooter className="flex-col gap-2 rounded-b-[inherit]">
-          <Composer busy={busy} onSend={chat.send} onStop={chat.stop} />
+          <Composer
+            busy={busy}
+            placeholder={config.behaviour.placeholders.chat}
+            onSend={chat.send}
+            onStop={chat.stop}
+          />
         </CardFooter>
       </Card>
     </MessageScrollerProvider>
@@ -221,10 +226,12 @@ export function ChatWindow({
 
 function Composer({
   busy,
+  placeholder,
   onSend,
   onStop,
 }: {
   busy: boolean
+  placeholder: string
   onSend: (text: string) => void
   onStop: () => void
 }) {
@@ -247,7 +254,7 @@ function Composer({
     >
       <InputGroup className="rounded-[calc(var(--radius)+0.25rem)] border-transparent bg-muted ring-inset">
         <InputGroupTextarea
-          placeholder="Ask anything…"
+          placeholder={placeholder}
           rows={1}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}

@@ -231,6 +231,7 @@ export function GuideOverlay({
 
           <Composer
             busy={busy}
+            placeholder={behaviour.placeholders.guide}
             onSend={(text) => send(text)}
             onStop={() => void stop()}
           />
@@ -361,10 +362,12 @@ function AgentBubble({ children }: { children: React.ReactNode }) {
 
 function Composer({
   busy,
+  placeholder,
   onSend,
   onStop,
 }: {
   busy: boolean
+  placeholder: string
   onSend: (text: string) => void
   onStop: () => void
 }) {
@@ -385,7 +388,7 @@ function Composer({
     >
       <InputGroup className="rounded-[calc(var(--radius)+0.25rem)] border-transparent bg-muted ring-inset">
         <InputGroupTextarea
-          placeholder="Or type your answer…"
+          placeholder={placeholder}
           rows={1}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}

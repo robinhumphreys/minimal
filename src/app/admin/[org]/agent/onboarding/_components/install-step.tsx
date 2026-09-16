@@ -3,26 +3,52 @@
 import * as React from "react"
 
 import { useRouter } from "next/navigation"
-import { SparklesIcon } from "lucide-react"
+import { CheckIcon, RotateCcwIcon, SparklesIcon } from "lucide-react"
 
 import { NextButton } from "@/app/admin/_components/next-button"
 import { useOrg } from "@/app/admin/_components/use-org"
-import { agentInstructionsFor } from "@/lib/install"
+import {
+  agentInstructionsFor,
+  snippetsFor,
+  type SnippetKey,
+} from "@/lib/install"
 import { useAdminStore } from "@/lib/store/admin"
 
-import { CopyButton, InstallSnippets } from "./install-snippets"
+import {
+  CopyButton,
+  InstallSnippets,
+  type SnippetState,
+} from "./install-snippets"
+import { SITES } from "./loader-stage"
+
+/** What the site says back when asked whether the agent is on it. */
+type Pong = {
+  type: "minimal:pong"
+  id: string
+  launcher: boolean
+  searchAssist: boolean
+  productHelp?: boolean
+  published: boolean
+}
+
+/** The rows tick one after another, once the site has answered. */
+const TICK_MS = 500
 
 /**
- * Step five: the merchant takes the agent to their site. One card per surface
- * they switched on, or the whole install written for a coding agent.
+ * The last step: the merchant takes the agent to their site, and this same
+ * screen checks that it arrived. One row per surface that is on, with the
+ * code to paste; Check now publishes the draft and asks the site, and each
+ * row's circle becomes a tick as the site confirms it. Check again until
+ * every row is in place; then Finish.
  *
- * Check now is the one moment the draft goes live: everything before this
- * was a rehearsal on the studio's ground, and a snippet that loads an
- * unpublished agent would load nothing. The check itself is the next step.
+ * The site is loaded in a hidden frame and pinged; the embed answers from
+ * its own DOM, so a tick means a shopper would see it too. In this demo the
+ * site is ours and the snippets are already in it.
  */
 export function InstallStep({ next }: { next: string }) {
   const org = useOrg()
   const router = useRouter()
+  const site = SITES[org]
   const config = useAdminStore((state) => state.drafts[org])
   const publish = useAdminStore((state) => state.publish)
   const completeOnboarding = useAdminStore((state) => state.completeOnboarding)
@@ -31,14 +57,92 @@ export function InstallStep({ next }: { next: string }) {
     useAdminStore.getState().hydrate()
   }, [])
 
+  // `attempt` is 0 until Check now; each check loads the site afresh.
+  const [attempt, setAttempt] = React.useState(0)
+  const [pong, setPong] = React.useState<Pong | null>(null)
+  const [ticked, setTicked] = React.useState(0)
+  const frame = React.useRef<HTMLIFrameElement>(null)
+
+  const check = () => {
+    publish(org)
+    setPong(null)
+    setTicked(0)
+    setAttempt((n) => n + 1)
+  }
+
+  // Ask until answered: the frame may still be loading when the first ping
+  // goes out, and a ping into a page without the embed is simply ignored.
+  React.useEffect(() => {
+    if (attempt === 0 || pong) return
+    const onMessage = (event: MessageEvent) => {
+      const data = event.data as Partial<Pong> | null
+      if (data?.type === "minimal:pong" && data.id === org) {
+        setPong(data as Pong)
+      }
+    }
+    window.addEventListener("message", onMessage)
+    const timer = window.setInterval(() => {
+      frame.current?.contentWindow?.postMessage(
+        { type: "minimal:ping" },
+        window.location.origin,
+      )
+    }, 700)
+    return () => {
+      window.removeEventListener("message", onMessage)
+      window.clearInterval(timer)
+    }
+  }, [org, attempt, pong])
+
+  const snippets = snippetsFor(config)
+  const found: Record<SnippetKey, boolean> = {
+    script: pong !== null,
+    search: pong?.searchAssist ?? false,
+    guide: pong?.productHelp ?? false,
+  }
+
+  // Tick the rows one at a time once the answer is in.
+  React.useEffect(() => {
+    if (!pong || ticked >= snippets.length) return
+    const timer = window.setTimeout(() => setTicked((n) => n + 1), TICK_MS)
+    return () => window.clearTimeout(timer)
+  }, [pong, ticked, snippets.length])
+
+  const checking = attempt > 0 && (pong === null || ticked < snippets.length)
+  const status = Object.fromEntries(
+    snippets.map((snippet, index) => [
+      snippet.key,
+      attempt === 0
+        ? "idle"
+        : pong === null || index >= ticked
+          ? "checking"
+          : found[snippet.key]
+            ? "pass"
+            : "fail",
+    ]),
+  ) as Partial<Record<SnippetKey, SnippetState>>
+  const allFound =
+    attempt > 0 && !checking && snippets.every((s) => found[s.key])
+
   return (
     <div className="relative flex h-full flex-col items-center justify-center gap-10 overflow-y-auto px-8 py-16">
+      {attempt > 0 ? (
+        <iframe
+          key={attempt}
+          ref={frame}
+          src={`${site.path}?check=${attempt}`}
+          title={site.domain}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="pointer-events-none absolute size-px opacity-0"
+        />
+      ) : null}
+
       <h1 className="font-heading text-3xl tracking-tight text-balance">
-        Embed the agent on your site
+        {allFound ? "Your agent is live" : "Embed the agent on your site"}
       </h1>
 
       <div className="w-full max-w-lg">
-        <InstallSnippets config={config} />
+        <InstallSnippets config={config} status={status} />
       </div>
 
       <div className="absolute right-8 bottom-8 flex items-center gap-2">
@@ -49,15 +153,25 @@ export function InstallStep({ next }: { next: string }) {
           size="lg"
           icon={<SparklesIcon />}
         />
-        <NextButton
-          onClick={() => {
-            publish(org)
-            completeOnboarding(org)
-            router.push(next)
-          }}
-        >
-          Check now
-        </NextButton>
+        {allFound ? (
+          <NextButton
+            onClick={() => {
+              completeOnboarding(org)
+              router.push(next)
+            }}
+            icon={<CheckIcon />}
+          >
+            Finish
+          </NextButton>
+        ) : (
+          <NextButton
+            onClick={check}
+            disabled={checking}
+            icon={attempt > 0 ? <RotateCcwIcon /> : undefined}
+          >
+            {checking ? "Checking…" : attempt > 0 ? "Check again" : "Check now"}
+          </NextButton>
+        )}
       </div>
     </div>
   )

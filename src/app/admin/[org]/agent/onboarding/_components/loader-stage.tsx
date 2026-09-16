@@ -7,8 +7,6 @@ import { CheckIcon, CompassIcon, LoaderCircleIcon } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 
 import { BrandMark } from "@/components/brand/brand-mark"
-import { RotateCcwIcon } from "lucide-react"
-
 import { NextButton } from "@/app/admin/_components/next-button"
 import type { BrandId } from "@/lib/catalog/types"
 
@@ -71,7 +69,6 @@ export function LoaderStage({
   title,
   next,
   nextLabel = "Next",
-  retry,
   children,
 }: {
   brand: BrandId
@@ -85,8 +82,6 @@ export function LoaderStage({
   title: string
   next: string
   nextLabel?: string
-  /** Offered while not finished, for a check that can be run again. */
-  retry?: { label: string; onClick: () => void }
   /** The checklist. */
   children: React.ReactNode
 }) {
@@ -160,19 +155,6 @@ export function LoaderStage({
             className="absolute right-8 bottom-8"
           >
             <NextButton href={next}>{nextLabel}</NextButton>
-          </motion.div>
-        ) : retry ? (
-          <motion.div
-            key="retry"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-            className="absolute right-8 bottom-8"
-          >
-            <NextButton onClick={retry.onClick} icon={<RotateCcwIcon />}>
-              {retry.label}
-            </NextButton>
           </motion.div>
         ) : null}
       </AnimatePresence>

@@ -25,11 +25,13 @@ export function NextButton({
   icon?: React.ReactNode
   className?: string
 }) {
+  // The same size as whatever sits beside it; only the colour is its own.
   const classes = cn(
-    "h-11 gap-2 bg-brand px-6 text-base text-white hover:bg-brand/90 focus-visible:ring-brand/40",
+    "gap-2 bg-brand px-5 text-white hover:bg-brand/90 focus-visible:ring-brand/40",
     className,
   )
-  if (href) {
+  // A disabled link is still a link; a disabled button is a wall.
+  if (href && !disabled) {
     return (
       <Button
         size="lg"

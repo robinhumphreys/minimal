@@ -63,6 +63,10 @@ export type SiteChatSettings = {
   /** Product help's trigger text and first line. */
   guideLabel: string
   guideGreeting: string
+  // What each composer says while empty
+  chatPlaceholder: string
+  searchPlaceholder: string
+  guidePlaceholder: string
   // When it appears
   nudge: number
   openOnProductPages: boolean
@@ -169,6 +173,9 @@ export function settingsFrom(config: AgentConfig): SiteChatSettings {
     productHelp: config.surface.productHelp.enabled,
     guideLabel: config.surface.productHelp.label,
     guideGreeting: config.surface.productHelp.greeting,
+    chatPlaceholder: config.behaviour.placeholders.chat,
+    searchPlaceholder: config.behaviour.placeholders.search,
+    guidePlaceholder: config.behaviour.placeholders.guide,
     nudge: config.surface.nudge,
     openOnProductPages: config.surface.openOnProductPages,
     hiddenPaths: config.surface.hiddenPaths,
@@ -200,6 +207,11 @@ export function applySettings(
       spelling: settings.spelling,
       language: settings.language,
       picks: settings.picks,
+      placeholders: {
+        chat: settings.chatPlaceholder,
+        search: settings.searchPlaceholder,
+        guide: settings.guidePlaceholder,
+      },
     },
     surface: {
       ...config.surface,

@@ -30,7 +30,7 @@ AI_GATEWAY_API_KEY=vck_...
 | `src/app/admin`                                                 | Admin, one organisation per slug: onboarding first, then `/admin/{org}/agent` to change and publish                                   |
 | `src/app/admin/_components`                                     | The admin's own components, colocated with the route                                                                                  |
 | `src/app/noord`, `src/app/volta`                                | Storefronts: home, category, product                                                                                                  |
-| `src/app/admin/[org]/agent/onboarding`                          | Merchant onboarding, six steps: start, sync styles, choose surfaces, preview and tweak, install, confirm placement                    |
+| `src/app/admin/[org]/agent/onboarding`                          | Merchant onboarding, five steps: start, sync styles, choose surfaces, preview and tweak, embed and check                              |
 | `src/app/api/agents/[id]/chat`                                  | Streaming chat route: catalog in the prompt, `showProducts` as a tool                                                                 |
 | `src/lib/agent`                                                 | The agent's tool, its job description, and the message types it emits                                                                 |
 | `src/components/volta`, `src/lib/volta`, `src/styles/volta.css` | The Volta storefront: components, view models, `volta-*` design tokens                                                                |

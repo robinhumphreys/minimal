@@ -48,6 +48,18 @@ export const behaviourSchema = z.object({
   language: z.string().min(1).default("English"),
   /** How many products a recommendation puts on the screen at most. */
   picks: z.number().int().min(2).max(4).default(3),
+  /** What each composer says while empty. */
+  placeholders: z
+    .object({
+      chat: z.string().min(1).default("Ask anything…"),
+      search: z.string().min(1).default("Tell the assistant more…"),
+      guide: z.string().min(1).default("Or type your answer…"),
+    })
+    .default({
+      chat: "Ask anything…",
+      search: "Tell the assistant more…",
+      guide: "Or type your answer…",
+    }),
 })
 
 /** `none` is the site chat switched off; the other surfaces have their own flags. */

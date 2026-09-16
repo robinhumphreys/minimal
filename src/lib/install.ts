@@ -18,12 +18,20 @@ export function searchMount(): string {
   return `<minimal-agent-search data-query="{{ query }}"></minimal-agent-search>`
 }
 
-export type Snippet = { title: string; where: string; code: string }
+export type SnippetKey = "script" | "search" | "guide"
+
+export type Snippet = {
+  key: SnippetKey
+  title: string
+  where: string
+  code: string
+}
 
 /** What to paste, one block per thing the merchant switched on. */
 export function snippetsFor(config: AgentConfig): Snippet[] {
   const snippets: Snippet[] = [
     {
+      key: "script",
       title: "Body tag",
       where:
         "Copy this line of code into the <body> of every page, or add it to your tag manager.",
@@ -32,6 +40,7 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
   ]
   if (config.surface.searchAssist) {
     snippets.push({
+      key: "search",
       title: "Search template",
       where:
         "Copy this into your search results template, directly under the search input. Keep data-query equal to what the shopper has typed.",
@@ -40,6 +49,7 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
   }
   if (config.surface.productHelp.enabled) {
     snippets.push({
+      key: "guide",
       title: "Category or product page",
       where:
         "Copy this wherever you want the button, for example above a category grid. Set data-topic to what the page is about.",

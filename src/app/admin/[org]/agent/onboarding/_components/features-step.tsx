@@ -92,7 +92,9 @@ export function FeaturesStep({ next }: { next: string }) {
           ? { entry: on ? "launcher" : "none" }
           : key === "searchAssist"
             ? { searchAssist: on }
-            : {}),
+            : {
+                productHelp: { ...current.surface.productHelp, enabled: on },
+              }),
       },
     }))
 

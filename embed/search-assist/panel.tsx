@@ -235,7 +235,7 @@ export function SearchPanel({
           <input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            placeholder="Tell the assistant more…"
+            placeholder={behaviour.placeholders.search}
             aria-label="Refine the search"
             className="h-10 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm"
           />

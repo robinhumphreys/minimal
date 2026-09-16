@@ -34,6 +34,11 @@ export const defaults: Record<BrandId, AgentConfig> = {
       spelling: "british",
       language: "English",
       picks: 3,
+      placeholders: {
+        chat: "Ask anything…",
+        search: "Tell the assistant more…",
+        guide: "Or type your answer…",
+      },
     },
     // Outline glyph: Noord's storefront is hairlines and thin rules.
     surface: {
@@ -98,6 +103,11 @@ export const defaults: Record<BrandId, AgentConfig> = {
       spelling: "british",
       language: "English",
       picks: 3,
+      placeholders: {
+        chat: "Ask anything…",
+        search: "Tell the assistant more…",
+        guide: "Or type your answer…",
+      },
     },
     // Solid glyph: Volta's marks are filled blocks of volt.
     surface: {

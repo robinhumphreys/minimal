@@ -137,7 +137,7 @@ export function SearchAssistPreview({
           className="absolute inset-0 overflow-y-auto overscroll-contain px-6 pt-6"
           style={{ color: ink }}
         >
-          <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col">
+          <div className="mx-auto flex min-h-full w-full max-w-lg flex-col">
             {box}
             {panel}
           </div>
