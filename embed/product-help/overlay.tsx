@@ -130,11 +130,17 @@ export function GuideOverlay({
         aria-label={`${name} guide`}
         // The drawer mounts outside the embed's own root, so the theme has to
         // travel with it: this is the root for everything inside.
+        // Floating, not flush: a margin all round and every corner rounded,
+        // the way the shadcn drawer is shown. `--drawer-inset` is the
+        // primitive's own knob for the margin; the corners it rounds only on
+        // the leading edge, so they are set here for all four.
         className={cn(
-          "minimal-agent-root font-sans text-foreground",
+          // The primitive paints a "bleed" past its leading edge for overscroll;
+          // inset from the edge, that bleed would show in the margin.
+          "minimal-agent-root rounded-2xl! border! font-sans text-foreground shadow-2xl after:hidden!",
           placement === "side"
-            ? "sm:[--drawer-content-width:30rem]!"
-            : "[--drawer-content-height:calc(100dvh-3rem)] [--drawer-content-max-height:calc(100dvh-3rem)]",
+            ? "[--drawer-inset:1rem] sm:[--drawer-content-width:30rem]!"
+            : "[--drawer-content-height:calc(100dvh-4.5rem)] [--drawer-content-max-height:calc(100dvh-4.5rem)] [--drawer-inset:0.75rem]",
         )}
         style={themeStyle(config.theme)}
       >

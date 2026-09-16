@@ -468,9 +468,7 @@ export function ProductHelpOptions(props: OptionsProps) {
           </Field>
           <Field>
             <FieldLabel htmlFor="guide-greeting">First line</FieldLabel>
-            <FieldDescription>
-              Before the guide&rsquo;s first question.
-            </FieldDescription>
+            <FieldDescription>Before the first question.</FieldDescription>
             <Textarea
               id="guide-greeting"
               rows={2}
