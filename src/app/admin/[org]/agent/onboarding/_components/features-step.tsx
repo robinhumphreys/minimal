@@ -101,53 +101,59 @@ export function FeaturesStep({ next }: { next: string }) {
   const anyOn = enabled.siteChat || enabled.searchAssist || enabled.productHelp
 
   return (
-    <div className="relative flex h-full flex-col items-center justify-center gap-10 px-8 py-16">
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="font-heading text-3xl tracking-tight text-balance">
-          Where should the agent work?
-        </h1>
-      </div>
+    // Scrolls rather than centres when the cards are taller than the screen:
+    // `m-auto` on the column centres it when there is room and lets it start
+    // at the top when there is not, which `justify-center` would clip.
+    <div className="relative flex h-full flex-col overflow-y-auto px-4 py-10 sm:px-8 md:py-16">
+      <div className="m-auto flex w-full max-w-lg flex-col items-center gap-8 md:gap-10">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="font-heading text-3xl tracking-tight text-balance">
+            Where should the agent work?
+          </h1>
+        </div>
 
-      <FieldGroup className="w-full max-w-lg gap-3">
-        {FEATURES.map((feature) => {
-          const id = `feature-${feature.key}`
-          return (
-            <FieldLabel
-              key={feature.key}
-              htmlFor={id}
-              // Chosen cards take the brand's own colour, not the admin's
-              // neutral primary.
-              className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5 has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:has-data-checked:hover:bg-brand/10"
-            >
-              <Field
-                orientation="horizontal"
-                data-disabled={feature.soon || undefined}
-                className="items-center gap-4 p-4!"
+        <FieldGroup className="w-full gap-3">
+          {FEATURES.map((feature) => {
+            const id = `feature-${feature.key}`
+            return (
+              <FieldLabel
+                key={feature.key}
+                htmlFor={id}
+                // Chosen cards take the brand's own colour, not the admin's
+                // neutral primary.
+                className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5 has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:has-data-checked:hover:bg-brand/10"
               >
-                <Checkbox
-                  id={id}
-                  className="data-checked:border-brand data-checked:bg-brand"
-                  checked={enabled[feature.key]}
-                  disabled={feature.soon}
-                  onCheckedChange={(checked) =>
-                    set(feature.key, checked === true)
-                  }
-                />
-                <FieldContent>
-                  <FieldTitle>{feature.title}</FieldTitle>
-                  <FieldDescription>{feature.description}</FieldDescription>
-                </FieldContent>
-                {feature.thumb}
-              </Field>
-            </FieldLabel>
-          )
-        })}
-      </FieldGroup>
+                <Field
+                  orientation="horizontal"
+                  data-disabled={feature.soon || undefined}
+                  className="items-center gap-4 p-4!"
+                >
+                  <Checkbox
+                    id={id}
+                    className="data-checked:border-brand data-checked:bg-brand"
+                    checked={enabled[feature.key]}
+                    disabled={feature.soon}
+                    onCheckedChange={(checked) =>
+                      set(feature.key, checked === true)
+                    }
+                  />
+                  <FieldContent>
+                    <FieldTitle>{feature.title}</FieldTitle>
+                    <FieldDescription>{feature.description}</FieldDescription>
+                  </FieldContent>
+                  {feature.thumb}
+                </Field>
+              </FieldLabel>
+            )
+          })}
+        </FieldGroup>
 
-      <div className="absolute right-8 bottom-8">
-        <NextButton href={next} disabled={!anyOn}>
-          Next
-        </NextButton>
+        {/* Under the cards on a phone, in the corner where there is one. */}
+        <div className="self-end md:absolute md:right-8 md:bottom-8">
+          <NextButton href={next} disabled={!anyOn}>
+            Next
+          </NextButton>
+        </div>
       </div>
     </div>
   )
@@ -165,8 +171,9 @@ function Thumb({ children }: { children: React.ReactNode }) {
     <svg
       aria-hidden="true"
       viewBox="0 0 120 84"
-      // Grey until the card is chosen; then the brand's blue.
-      className="h-21 w-30 shrink-0 text-muted-foreground/70 group-has-data-checked/field-label:text-brand"
+      // Grey until the card is chosen; then the brand's blue. Dropped on a
+      // phone, where the row has room for the words or the picture, not both.
+      className="h-21 w-30 shrink-0 text-muted-foreground/70 group-has-data-checked/field-label:text-brand max-sm:hidden"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"

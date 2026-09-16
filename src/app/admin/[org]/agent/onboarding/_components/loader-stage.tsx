@@ -87,11 +87,12 @@ export function LoaderStage({
 }) {
   const site = SITES[brand]
   const { root, viewport, offset } = useGridAlignment()
+  const { stage, scale } = useFrameScale()
 
   return (
     <div
       ref={root}
-      className="relative flex h-full flex-col items-center justify-center gap-10 overflow-hidden rounded-xl px-8 py-16"
+      className="relative flex h-full flex-col items-center justify-center gap-6 overflow-hidden rounded-xl px-4 py-10 md:gap-10 md:px-8 md:py-16"
     >
       {/* Bled a whole cell past every edge so the field still covers the
           corners once it has been nudged into alignment. */}
@@ -118,20 +119,33 @@ export function LoaderStage({
         />
       </div>
 
-      {/* Shrinks as one piece below `md`: scaling the frame keeps the
-          storefront inside it undistorted, which re-flowing would not. Three
-          quarters of a 32px cell is 24px, so the frame stays a whole number of
-          pixels and its edges stay crisp. */}
-      <div className="relative max-md:scale-75">
-        <BrowserFrame
-          brand={brand}
-          domain={site.domain}
-          src={frameSrc}
-          frameRef={frameRef}
-          fetched={fetched}
-          finished={finished}
-          viewportRef={viewport}
-        />
+      {/* Shrinks as one piece when the column is narrower than the window:
+          scaling the frame keeps the storefront inside it undistorted, which
+          re-flowing would not. The box around it takes the scaled size, so
+          the column lays out around what is drawn rather than around the
+          unscaled frame. */}
+      <div ref={stage} className="relative flex w-full justify-center">
+        <div
+          style={{
+            width: FRAME_WIDTH * scale,
+            height: (FRAME_HEIGHT + GAP) * scale,
+          }}
+        >
+          <div
+            className="w-max origin-top-left"
+            style={{ transform: `scale(${scale})` }}
+          >
+            <BrowserFrame
+              brand={brand}
+              domain={site.domain}
+              src={frameSrc}
+              frameRef={frameRef}
+              fetched={fetched}
+              finished={finished}
+              viewportRef={viewport}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="relative flex flex-col items-center gap-6">
@@ -152,7 +166,7 @@ export function LoaderStage({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="absolute right-8 bottom-8"
+            className="absolute right-4 bottom-4 md:right-8 md:bottom-8"
           >
             <NextButton href={next}>{nextLabel}</NextButton>
           </motion.div>
@@ -160,6 +174,34 @@ export function LoaderStage({
       </AnimatePresence>
     </div>
   )
+}
+
+/**
+ * How far the browser window has to shrink to fit its column: one when there
+ * is room, else the largest scale at which the frame is still an even number
+ * of whole cells wide, so its side edges keep landing on dots. Measured off
+ * the stage rather than a breakpoint: the column's width depends on the rail
+ * as much as on the screen.
+ */
+function useFrameScale() {
+  const stage = React.useRef<HTMLDivElement>(null)
+  const [scale, setScale] = React.useState(1)
+
+  React.useLayoutEffect(() => {
+    const element = stage.current
+    if (!element) return
+    const fit = () => {
+      const cells = Math.floor(element.clientWidth / (GAP * 2)) * 2
+      const width = Math.max(GAP * 2, Math.min(FRAME_WIDTH, cells * GAP))
+      setScale(width / FRAME_WIDTH)
+    }
+    fit()
+    const observer = new ResizeObserver(fit)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+
+  return { stage, scale }
 }
 
 /**

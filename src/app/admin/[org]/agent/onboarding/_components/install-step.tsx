@@ -139,7 +139,7 @@ export function InstallStep({ next }: { next: string }) {
   const missing = attempt > 0 && !checking && !allFound
 
   return (
-    <div className="relative flex h-full flex-col items-center justify-center gap-10 overflow-y-auto px-8 py-16">
+    <div className="relative flex h-full flex-col overflow-y-auto px-4 py-10 sm:px-8 md:py-16">
       {attempt > 0 ? (
         <iframe
           key={attempt}
@@ -152,42 +152,51 @@ export function InstallStep({ next }: { next: string }) {
         />
       ) : null}
 
-      <h1 className="font-heading text-3xl tracking-tight text-balance">
-        {allFound ? "Your agent is live" : "Embed the agent on your site"}
-      </h1>
+      {/* See the features step for why the column centres itself. */}
+      <div className="m-auto flex w-full max-w-lg flex-col items-center gap-8 md:gap-10">
+        <h1 className="text-center font-heading text-3xl tracking-tight text-balance">
+          {allFound ? "Your agent is live" : "Embed the agent on your site"}
+        </h1>
 
-      <div className="flex w-full max-w-lg flex-col gap-4">
-        <InstallSnippets config={config} status={status} />
-        {missing ? (
-          <p role="status" className="text-sm text-muted-foreground">
-            {timedOut
-              ? `${site.domain} did not answer. Make sure the body tag is on the page, then check again.`
-              : `Some of the code is not on ${site.domain} yet. Paste what is missing, then check again.`}
-          </p>
-        ) : null}
-      </div>
+        <div className="flex w-full flex-col gap-4">
+          <InstallSnippets config={config} status={status} />
+          {missing ? (
+            <p role="status" className="text-sm text-muted-foreground">
+              {timedOut
+                ? `${site.domain} did not answer. Make sure the body tag is on the page, then check again.`
+                : `Some of the code is not on ${site.domain} yet. Paste what is missing, then check again.`}
+            </p>
+          ) : null}
+        </div>
 
-      <div className="absolute right-8 bottom-8 flex items-center gap-2">
-        <CopyButton
-          text={agentInstructionsFor(config)}
-          label="Copy agent instructions"
-          variant="outline"
-          size="lg"
-          icon={<SparklesIcon />}
-        />
-        {allFound ? (
-          <NextButton onClick={() => router.push(next)} icon={<CheckIcon />}>
-            Finish
-          </NextButton>
-        ) : (
-          <NextButton
-            onClick={check}
-            disabled={checking}
-            icon={attempt > 0 ? <RotateCcwIcon /> : undefined}
-          >
-            {checking ? "Checking…" : attempt > 0 ? "Check again" : "Check now"}
-          </NextButton>
-        )}
+        {/* Under the cards on a phone, wrapping if the two will not share a
+            line; in the corner where there is one. */}
+        <div className="flex flex-wrap items-center justify-end gap-2 self-end md:absolute md:right-8 md:bottom-8">
+          <CopyButton
+            text={agentInstructionsFor(config)}
+            label="Copy agent instructions"
+            variant="outline"
+            size="lg"
+            icon={<SparklesIcon />}
+          />
+          {allFound ? (
+            <NextButton onClick={() => router.push(next)} icon={<CheckIcon />}>
+              Finish
+            </NextButton>
+          ) : (
+            <NextButton
+              onClick={check}
+              disabled={checking}
+              icon={attempt > 0 ? <RotateCcwIcon /> : undefined}
+            >
+              {checking
+                ? "Checking…"
+                : attempt > 0
+                  ? "Check again"
+                  : "Check now"}
+            </NextButton>
+          )}
+        </div>
       </div>
     </div>
   )
