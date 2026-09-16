@@ -68,6 +68,22 @@ export const launcherShapeSchema = z.enum(["circle", "square", "pill"])
 export const launcherSizeSchema = z.enum(["sm", "md", "lg"])
 export const imageRatioSchema = z.enum(["portrait", "square"])
 
+/**
+ * Product help: a guided choice ("keuzehulp") opened from a trigger the
+ * merchant places on a page. The agent asks one question at a time with
+ * answers to tap, and ends on a product.
+ */
+export const productHelpSchema = z.object({
+  enabled: z.boolean().default(false),
+  /** Text on the trigger the embed draws into `minimal-agent-guide`. */
+  label: z.string().min(1).default("Help me choose"),
+  /** The guide's first line, before its first question. */
+  greeting: z
+    .string()
+    .min(1)
+    .default("Hi! A few quick questions and I will find you the right one."),
+})
+
 export const cardsSchema = z.object({
   /** How the catalogue is shot: tall for clothes, square for products. */
   ratio: imageRatioSchema.default("portrait"),
@@ -98,6 +114,11 @@ export const surfaceSchema = z.object({
   hiddenPaths: z.array(z.string().min(1)).default([]),
   /** Whether the agent takes over the site's own search box. */
   searchAssist: z.boolean().default(true),
+  productHelp: productHelpSchema.default({
+    enabled: false,
+    label: "Help me choose",
+    greeting: "Hi! A few quick questions and I will find you the right one.",
+  }),
 })
 
 export const avatarSchema = z.enum(["initial", "mark"])
@@ -127,6 +148,7 @@ export type Behaviour = z.infer<typeof behaviourSchema>
 export type Surface = z.infer<typeof surfaceSchema>
 export type Cards = z.infer<typeof cardsSchema>
 export type Identity = z.infer<typeof identitySchema>
+export type ProductHelp = z.infer<typeof productHelpSchema>
 export type Entry = z.infer<typeof entrySchema>
 export type Position = z.infer<typeof positionSchema>
 export type LauncherIcon = z.infer<typeof launcherIconSchema>

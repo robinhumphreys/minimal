@@ -26,6 +26,7 @@ import { readPublishedOrDefault } from "@/lib/config/storage"
 import { CustomisePane } from "./customise-pane"
 import type { Device } from "./device-toggle"
 import { InstallPanel } from "./install-panel"
+import { ProductHelpPreview } from "./product-help-preview"
 import { SearchAssistPreview } from "./search-assist-preview"
 import { applySettings, settingsFrom, type SiteChatSettings } from "./site-chat"
 import { SiteChatPreview } from "./site-chat-preview"
@@ -33,6 +34,7 @@ import { SiteChatPreview } from "./site-chat-preview"
 const SURFACES = [
   { value: "site-chat", label: "Site chat" },
   { value: "search-assist", label: "Search assist" },
+  { value: "product-help", label: "Product help" },
   { value: "install", label: "Install" },
 ] as const
 
@@ -91,6 +93,7 @@ function Studio({
   const enabled: Record<SurfaceId, boolean> = {
     "site-chat": config.surface.entry === "launcher",
     "search-assist": config.surface.searchAssist,
+    "product-help": config.surface.productHelp.enabled,
     install: mode === "manage",
   }
   const tabs = SURFACES.filter(
@@ -217,6 +220,12 @@ function Studio({
               />
             ) : surface === "search-assist" ? (
               <SearchAssistPreview
+                config={config}
+                device={device}
+                onDeviceChange={setDevice}
+              />
+            ) : surface === "product-help" ? (
+              <ProductHelpPreview
                 config={config}
                 device={device}
                 onDeviceChange={setDevice}

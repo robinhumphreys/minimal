@@ -50,6 +50,12 @@ export const defaults: Record<BrandId, AgentConfig> = {
       openOnProductPages: false,
       hiddenPaths: [],
       searchAssist: true,
+      productHelp: {
+        enabled: true,
+        label: "Help me choose",
+        greeting:
+          "Hi! A few quick questions and I will find you the right one.",
+      },
     },
     identity: {
       assistantName: "",
@@ -108,6 +114,12 @@ export const defaults: Record<BrandId, AgentConfig> = {
       openOnProductPages: false,
       hiddenPaths: [],
       searchAssist: true,
+      productHelp: {
+        enabled: true,
+        label: "Find your fuel",
+        greeting:
+          "Tell me how you train and I will point you at the right one.",
+      },
     },
     identity: {
       assistantName: "",

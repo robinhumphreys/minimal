@@ -9,7 +9,10 @@ import { Agent, bus, type OpenOptions } from "./Agent"
 
 declare global {
   interface Window {
-    MinimalAgent?: { open: (options?: OpenOptions) => void }
+    MinimalAgent?: {
+      open: (options?: OpenOptions) => void
+      guide: (topic: string) => void
+    }
   }
 }
 
@@ -95,12 +98,16 @@ function start() {
       id: agentId,
       launcher: document.querySelector('[data-slot="launcher"]') !== null,
       searchAssist: readPublishedOrDefault(agentId).surface.searchAssist,
+      productHelp: readPublishedOrDefault(agentId).surface.productHelp.enabled,
       published: window.localStorage.getItem(publishedKey(agentId)) !== null,
     }
     ;(event.source as Window).postMessage(reply, event.origin)
   })
 
-  window.MinimalAgent = { open: (options) => bus.open(options) }
+  window.MinimalAgent = {
+    open: (options) => bus.open(options),
+    guide: (topic) => bus.guide(topic),
+  }
 }
 
 try {

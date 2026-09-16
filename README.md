@@ -38,6 +38,7 @@ AI_GATEWAY_API_KEY=vck_...
 | `src/lib/catalog`                                               | Flat TypeScript catalog per brand, validated at import                                                                                |
 | `src/lib/config`                                                | Zod config schema, per-brand defaults, `published:{id}` storage                                                                       |
 | `embed/`                                                        | Standalone embed bundle (never imported by the storefronts)                                                                           |
+| `embed/product-help`                                            | Product help: a trigger the page places and the guided choice it opens, one tappable question at a time to a product                  |
 | `embed/site-chat`                                               | The Site chat surface: launcher, window, product cards. Aliased as `@embed/*` so the admin's preview renders the very same components |
 
 Each brand owns its own tokens, primitives and components. Nothing under

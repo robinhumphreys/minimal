@@ -59,6 +59,10 @@ export type SiteChatSettings = {
   picks: number
   // Which surfaces are on
   siteChat: boolean
+  productHelp: boolean
+  /** Product help's trigger text and first line. */
+  guideLabel: string
+  guideGreeting: string
   // When it appears
   nudge: number
   openOnProductPages: boolean
@@ -162,6 +166,9 @@ export function settingsFrom(config: AgentConfig): SiteChatSettings {
     rating: config.surface.cards.rating,
     picks: config.behaviour.picks,
     siteChat: config.surface.entry === "launcher",
+    productHelp: config.surface.productHelp.enabled,
+    guideLabel: config.surface.productHelp.label,
+    guideGreeting: config.surface.productHelp.greeting,
     nudge: config.surface.nudge,
     openOnProductPages: config.surface.openOnProductPages,
     hiddenPaths: config.surface.hiddenPaths,
@@ -212,6 +219,11 @@ export function applySettings(
       openOnProductPages: settings.openOnProductPages,
       hiddenPaths: settings.hiddenPaths,
       searchAssist: settings.searchAssist,
+      productHelp: {
+        enabled: settings.productHelp,
+        label: settings.guideLabel,
+        greeting: settings.guideGreeting,
+      },
     },
     identity: {
       assistantName: settings.assistantName,

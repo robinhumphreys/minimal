@@ -97,7 +97,7 @@ const OPENER: SiteChatUIMessage[] = SCRIPT.map((line, index) => ({
  * spinner: the first covers the round trip to the model, the second the
  * moment its tool call lands and the preview redraws.
  */
-const WORKING = ["Reading the site chat settings", "Updating the chat button"]
+const WORKING = ["Reading the settings", "Updating the preview"]
 
 /**
  * The right half: the merchant changes the surface by asking, and the preview
@@ -383,7 +383,30 @@ function OptionsForm({
             on={settings.searchAssist}
             onToggle={() => set("searchAssist", !settings.searchAssist)}
           />
+          <Toggle
+            label="Product help"
+            on={settings.productHelp}
+            onToggle={() => set("productHelp", !settings.productHelp)}
+          />
         </div>
+      </Group>
+
+      <Group title="Product help">
+        <Field label="Button text" hint="On the trigger the site places.">
+          <Input
+            className="ring-inset"
+            value={settings.guideLabel}
+            onChange={(event) => set("guideLabel", event.target.value)}
+          />
+        </Field>
+        <Field label="First line" hint="Before the guide's first question.">
+          <Textarea
+            rows={2}
+            className="ring-inset"
+            value={settings.guideGreeting}
+            onChange={(event) => set("guideGreeting", event.target.value)}
+          />
+        </Field>
       </Group>
 
       <Group title="What it says">

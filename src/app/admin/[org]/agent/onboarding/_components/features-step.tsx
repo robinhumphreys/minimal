@@ -42,9 +42,8 @@ const FEATURES: {
   {
     key: "productHelp",
     title: "Product help",
-    description: "Answers on product pages. Coming soon.",
+    description: "A guided choice, from a button on the page.",
     thumb: <ProductHelpThumb />,
-    soon: true,
   },
 ]
 
@@ -70,7 +69,12 @@ export function FeaturesStep({ next }: { next: string }) {
     if (!store.surfacesOffered[org]) {
       store.editDraft(org, (current) => ({
         ...current,
-        surface: { ...current.surface, entry: "none", searchAssist: false },
+        surface: {
+          ...current.surface,
+          entry: "none",
+          searchAssist: false,
+          productHelp: { ...current.surface.productHelp, enabled: false },
+        },
       }))
       store.markSurfacesOffered(org)
     }
@@ -79,7 +83,7 @@ export function FeaturesStep({ next }: { next: string }) {
   const enabled: Record<FeatureKey, boolean> = {
     siteChat: config.surface.entry === "launcher",
     searchAssist: config.surface.searchAssist,
-    productHelp: false,
+    productHelp: config.surface.productHelp.enabled,
   }
 
   const set = (key: FeatureKey, on: boolean) =>
@@ -95,7 +99,7 @@ export function FeaturesStep({ next }: { next: string }) {
       },
     }))
 
-  const anyOn = enabled.siteChat || enabled.searchAssist
+  const anyOn = enabled.siteChat || enabled.searchAssist || enabled.productHelp
 
   return (
     <div className="relative flex h-full flex-col items-center justify-center gap-10 px-8 py-16">

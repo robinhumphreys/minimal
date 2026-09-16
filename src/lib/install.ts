@@ -8,6 +8,11 @@ export function scriptTag(config: AgentConfig): string {
   return `<script src="${EMBED_ORIGIN}/embed.js" data-agent="${config.id}" async></script>`
 }
 
+/** The mount Product help needs: wherever the page wants the button. */
+export function guideMount(topic = "Suits"): string {
+  return `<minimal-agent-guide data-topic="${topic}"></minimal-agent-guide>`
+}
+
 /** The mount the search takeover needs, under the site's own search input. */
 export function searchMount(): string {
   return `<minimal-agent-search data-query="{{ query }}"></minimal-agent-search>`
@@ -30,6 +35,14 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
       where:
         "In your search template, directly under the search input. Keep data-query equal to what the shopper has typed.",
       code: searchMount(),
+    })
+  }
+  if (config.surface.productHelp.enabled) {
+    snippets.push({
+      title: "Product help",
+      where:
+        "Wherever the page wants the button, e.g. above a category grid. data-topic is what the guide is about.",
+      code: guideMount(),
     })
   }
   return snippets
@@ -59,9 +72,24 @@ export function agentInstructionsFor(config: AgentConfig): string {
       "   and keep the data-query attribute equal to the current value of the search input as the shopper types (an input event handler is enough). Leave the site's own results in place; the agent hides them while it has an answer, and they return if the script is absent.",
     )
   }
+  if (config.surface.productHelp.enabled) {
+    lines.push(
+      "",
+      `${config.surface.searchAssist ? "3" : "2"}. Product help: wherever the page should offer a guided choice (above a category grid, on a product page), add`,
+      "",
+      `   ${guideMount()}`,
+      "",
+      "   with data-topic set to what that page is about. The script draws the button into it; leave the element empty.",
+    )
+  }
+  const verifyStep =
+    1 +
+    (config.surface.searchAssist ? 1 : 0) +
+    (config.surface.productHelp.enabled ? 1 : 0) +
+    1
   lines.push(
     "",
-    `${config.surface.searchAssist ? "3" : "2"}. Verify: open the site, confirm the chat button appears bottom ${(config.surface.position ?? "bottom-right").replace("bottom-", "")}, and that no console errors mention [minimal-agent].`,
+    `${verifyStep}. Verify: open the site, confirm the chat button appears bottom ${(config.surface.position ?? "bottom-right").replace("bottom-", "")}, and that no console errors mention [minimal-agent].`,
     "",
     "Do not change the site's own styles for the agent; it carries its own.",
   )

@@ -99,3 +99,7 @@ minimal-agent-recommendations,
 minimal-agent-search {
   display: block;
 }
+
+minimal-agent-guide {
+  display: inline-block;
+}

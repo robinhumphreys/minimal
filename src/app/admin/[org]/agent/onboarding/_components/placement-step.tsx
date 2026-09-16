@@ -13,6 +13,7 @@ type Pong = {
   id: string
   launcher: boolean
   searchAssist: boolean
+  productHelp?: boolean
   published: boolean
 }
 
@@ -75,6 +76,9 @@ export function PlacementStep({ next }: { next: string }) {
       : []),
     ...(config.surface.searchAssist
       ? [{ label: "Search assist enabled", ok: pong?.searchAssist ?? false }]
+      : []),
+    ...(config.surface.productHelp.enabled
+      ? [{ label: "Product help enabled", ok: pong?.productHelp ?? false }]
       : []),
     { label: "Set up complete", ok: pong?.published ?? false },
   ]

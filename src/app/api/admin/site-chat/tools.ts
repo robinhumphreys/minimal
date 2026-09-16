@@ -152,6 +152,22 @@ export const siteChatPatchSchema = z.object({
     .boolean()
     .optional()
     .describe("Whether the chat button is on the site at all."),
+  productHelp: z
+    .boolean()
+    .optional()
+    .describe(
+      "Whether Product help is on: a guided choice opened from a button the site places, asking one question at a time and ending on a product.",
+    ),
+  guideLabel: z
+    .string()
+    .min(1)
+    .optional()
+    .describe("Text on Product help's button, e.g. 'Help me choose'."),
+  guideGreeting: z
+    .string()
+    .min(1)
+    .optional()
+    .describe("Product help's first line, before its first question."),
 })
 
 export type SiteChatPatch = z.infer<typeof siteChatPatchSchema>

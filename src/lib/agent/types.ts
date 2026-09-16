@@ -55,9 +55,19 @@ export type SearchResult = {
   followUps: string[]
 }
 
+/** A question with answers to tap, in the choice guide. */
+export type AskChoiceInput = { question: string; options: string[] }
+
 /** The tool set as the client sees it: names to input/output pairs. */
 export type AgentTools = {
   showProducts: { input: ShowProductsInput; output: ShowProductsOutput }
+  askChoice: { input: AskChoiceInput; output: { asked: true } }
 }
 
-export type AgentUIMessage = UIMessage<never, UIDataTypes, AgentTools>
+/**
+ * The guide opens with a message the shopper never typed, to get the first
+ * question asked. It is marked so the transcript can leave it out.
+ */
+export type AgentMetadata = { hidden?: boolean }
+
+export type AgentUIMessage = UIMessage<AgentMetadata, UIDataTypes, AgentTools>

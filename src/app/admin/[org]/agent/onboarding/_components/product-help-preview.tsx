@@ -1,0 +1,79 @@
+"use client"
+
+import * as React from "react"
+
+import { GuideOverlay, GuideTrigger } from "@embed/product-help"
+import { readableOn } from "@/lib/config/contrast"
+import type { AgentConfig } from "@/lib/config/schema"
+
+import { DeviceToggle, PhoneFrame, type Device } from "./device-toggle"
+import { DotField, groundFor } from "./dot-field"
+
+/** What the guide is about in the preview; on the site it is the page's category. */
+const TOPIC = "Suits"
+
+/**
+ * The left half for Product help: a stand-in for the merchant's band with
+ * the embed's own button in it, and the guide it opens, over the ground.
+ * The guide talks to the real route, so the questions are real ones.
+ */
+export function ProductHelpPreview({
+  config,
+  device,
+  onDeviceChange,
+}: {
+  config: AgentConfig
+  device: Device
+  onDeviceChange: (device: Device) => void
+}) {
+  const [open, setOpen] = React.useState(false)
+  const ink = readableOn(config.theme.surface)
+  const ground = groundFor(config.theme.surface, ink)
+
+  const stage = (
+    <>
+      <div
+        className="absolute inset-0 flex items-start justify-center p-6"
+        style={{ color: ink }}
+      >
+        <div className="flex w-full max-w-md flex-col items-center gap-3 rounded-lg border border-current/15 px-6 py-6 text-center">
+          <p className="text-sm font-medium">Not sure which one is yours?</p>
+          <GuideTrigger config={config} onOpen={() => setOpen(true)} />
+        </div>
+      </div>
+      <GuideOverlay
+        key={config.surface.productHelp.greeting}
+        mode="absolute"
+        config={config}
+        topic={TOPIC}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+    </>
+  )
+
+  return (
+    <div className="relative h-full overflow-hidden rounded-lg">
+      <DotField
+        className="absolute inset-0"
+        back={ground.back}
+        fill={ground.fill}
+      />
+      {device === "mobile" ? (
+        <div className="absolute inset-0 flex items-center justify-center p-6">
+          <PhoneFrame>{stage}</PhoneFrame>
+        </div>
+      ) : (
+        stage
+      )}
+      {/* The guide's own header sits where the toggle does; one at a time. */}
+      {open ? null : (
+        <DeviceToggle
+          value={device}
+          onChange={onDeviceChange}
+          className="absolute top-3 right-3 z-20"
+        />
+      )}
+    </div>
+  )
+}

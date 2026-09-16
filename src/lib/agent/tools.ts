@@ -33,10 +33,31 @@ const showProductsInput = (max: number) =>
  * Unknown slugs are reported back rather than silently dropped, so the model
  * can correct itself in the same turn.
  */
-export function agentTools(brand: BrandId, maxPicks = 3) {
+const askChoiceInput = z.object({
+  question: z
+    .string()
+    .describe("One short question, addressed to the shopper."),
+  options: z
+    .array(z.string())
+    .min(2)
+    .max(4)
+    .describe(
+      "Two to four short answers the shopper can tap. Answers, not product names.",
+    ),
+})
+
+export function agentTools(brand: BrandId, maxPicks = 3, guide = false) {
   const catalog = getCatalog(brand)
 
+  const askChoice = tool({
+    description:
+      "Ask the shopper one question with answers they can tap. Call it once per turn and then stop; the shopper's tap comes back as their next message.",
+    inputSchema: askChoiceInput,
+    execute: async () => ({ asked: true as const }),
+  })
+
   return {
+    ...(guide ? { askChoice } : {}),
     showProducts: tool({
       description: `Show the shopper up to ${maxPicks} products from the catalog as cards, each with your one-line reason. Use it whenever you recommend something; never describe a product you could show instead.`,
       inputSchema: showProductsInput(maxPicks),

@@ -22,6 +22,11 @@ declare module "react" {
        * The storefront mirrors what the shopper typed onto `data-query`.
        */
       "minimal-agent-search": CustomElement<{ "data-query": string }>
+      /**
+       * Filled by the embed with the button that opens Product help, for
+       * whatever the page says it is about.
+       */
+      "minimal-agent-guide": CustomElement<{ "data-topic": string }>
     }
   }
 }
