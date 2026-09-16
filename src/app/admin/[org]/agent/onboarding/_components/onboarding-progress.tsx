@@ -19,7 +19,9 @@ const LAST = 5
 export function OnboardingProgress() {
   const org = useOrg()
   const pathname = usePathname()
-  // Step three's rule holds here too: no surface, no way forward.
+  // Each step's own rule for its Next button holds for the arrow too: the
+  // pager is a shortcut through the flow, not a way around it.
+  const matched = useAdminStore((state) => state.matched[org])
   const chosen = useAdminStore((state) => {
     const surface = state.drafts[org].surface
     return (
@@ -33,7 +35,15 @@ export function OnboardingProgress() {
   if (step === null || step < FIRST) return null
 
   const href = (n: number) => `/admin/${org}/agent/onboarding/step-${n}`
-  const canAdvance = step < LAST && (step !== 3 || chosen)
+  const complete: Record<number, boolean> = {
+    // Step two is done when its loader has run to the end.
+    2: matched,
+    // Step three when at least one surface is on.
+    3: chosen,
+    // Step four has nothing to finish: the surfaces are set up as built.
+    4: true,
+  }
+  const canAdvance = step < LAST && complete[step] === true
 
   return (
     <nav

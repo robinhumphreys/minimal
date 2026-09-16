@@ -8,13 +8,14 @@ and a script-tag embed that mounts the agent into either storefront.
 ```bash
 bun install
 bun run placeholders   # generate the catalog placeholder images (once)
-bun run dev:embed      # watch-build public/embed.js and public/embed.css
-bun run dev            # in a second terminal
+bun run dev            # builds the embed once, then starts Next
+bun run dev:embed      # optional, in a second terminal: rebuild the embed on change
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The embed bundle is gitignored,
-so `dev:embed` (or a one-off `node scripts/build-embed.mjs`) has to run at least
-once before the storefronts can load `/embed.js`.
+Open [http://localhost:3000](http://localhost:3000). The embed bundle is gitignored;
+`dev` builds it before starting so the storefronts can load `/embed.js`. Run
+`dev:embed` alongside it if you are editing `embed/`; without it the bundle is
+the one built when `dev` started.
 
 The chat route talks to the [Vercel AI Gateway](https://vercel.com/ai-gateway).
 Put a key in `.env.local` before sending a message:
@@ -31,7 +32,7 @@ AI_GATEWAY_API_KEY=vck_...
 | `src/app/admin/_components`                                     | The admin's own components, colocated with the route                                                                                  |
 | `src/app/noord`, `src/app/volta`                                | Storefronts: home, category, product                                                                                                  |
 | `src/app/admin/[org]/agent/onboarding`                          | Merchant onboarding, five steps: start, sync styles, choose surfaces, preview and tweak, embed and check                              |
-| `src/app/api/agents/[id]/chat`                                  | Streaming chat route: catalog in the prompt, `showProducts` as a tool                                                                 |
+| `src/app/api/agents/[id]/chat`                                  | Streaming chat route: catalog in the prompt, `showProducts` as a tool, `viewCart` answered by the page                                |
 | `src/lib/agent`                                                 | The agent's tool, its job description, and the message types it emits                                                                 |
 | `src/components/volta`, `src/lib/volta`, `src/styles/volta.css` | The Volta storefront: components, view models, `volta-*` design tokens                                                                |
 | `src/components/volta/ui`                                       | Volta's own shadcn primitives, spending `volta-*` tokens only                                                                         |

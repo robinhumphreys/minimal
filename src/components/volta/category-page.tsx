@@ -3,7 +3,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { getCategory, getProductsInCategory } from "@/lib/catalog"
+import { ProductHelpBand } from "@/components/product-help-band"
+import { getCategory } from "@/lib/catalog"
 import {
   categoryHref,
   facetGroups,
@@ -42,59 +43,58 @@ export async function CategoryPage({
     ]),
   ) as Partial<Record<FacetKey, string>>
 
-  const total = getProductsInCategory("volta", slug).length
   const products = filterProducts(slug, filters)
   const groups = facetGroups(slug)
 
   return (
-    <div className="flex flex-col gap-6 pb-16">
+    <div className="flex flex-col pb-16">
       <Banner
         slug={slug}
         name={category.name}
         description={category.description}
-        count={total}
       />
 
-      {/* Product help: the storefront's band, the embed's button in it. */}
-      <div className="volta-gutter mx-auto w-full max-w-7xl">
-        <div className="flex flex-col items-start justify-between gap-4 rounded-volta bg-volta-carbon px-6 py-5 sm:flex-row sm:items-center">
-          <div className="flex flex-col gap-1">
-            <p className="volta-title text-volta-title text-volta-chalk">
-              Not sure which {category.name.toLowerCase()} you need?
-            </p>
-            <p className="text-volta-body text-volta-ash">
-              Three questions and we point you at the right one.
-            </p>
+      {/*
+        Product help: the storefront's band, the embed's button in it. Full
+        bleed and flush to the banner above and the shelf below — a boxed card
+        floating in a strip of black read as an ad slot.
+      */}
+      <ProductHelpBand brand="volta">
+        <div className="bg-volta-carbon">
+          <div className="volta-gutter mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-4 py-10 sm:flex-row sm:items-center">
+            <div className="flex flex-col gap-1">
+              <p className="volta-title text-volta-title text-volta-chalk">
+                Not sure which {category.name.toLowerCase()} you need?
+              </p>
+              <p className="text-volta-body text-volta-ash">
+                Three questions and we point you at the right one.
+              </p>
+            </div>
+            <minimal-agent-guide data-topic={category.name} />
           </div>
-          <minimal-agent-guide data-topic={category.name} />
         </div>
-      </div>
-
-      <div className="volta-gutter mx-auto w-full max-w-7xl">
-        {/*
-          `useSearchParams` in the filters suspends on the server, and the
-          fallback is the same height as the real thing so the grid below it
-          does not jump when it resolves.
-        */}
-        <React.Suspense fallback={<div className="h-32" />}>
-          <CategoryFilters
-            groups={groups}
-            total={total}
-            shown={products.length}
-          />
-        </React.Suspense>
-      </div>
+      </ProductHelpBand>
 
       {/*
         The grid and the rail below it are one shelf: everything on this page
-        that is product sits on the same slab of white.
+        that is product sits on the same slab of white. The filters share it,
+        in a column down the left from `lg` up and stacked over the grid below.
       */}
       <Shelf>
-        <div className="volta-gutter mx-auto w-full max-w-7xl">
+        <div className="volta-gutter mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-14">
+          {/*
+            `useSearchParams` in the filters suspends on the server, and the
+            fallback holds the column's width so the grid does not shift when
+            it resolves.
+          */}
+          <React.Suspense fallback={<div className="hidden lg:block" />}>
+            <CategoryFilters groups={groups} />
+          </React.Suspense>
+
           {products.length === 0 ? (
             <EmptyResult slug={slug} name={category.name} />
           ) : (
-            <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+            <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3">
               {products.map((product, index) => (
                 <li key={product.slug}>
                   <ProductCard product={product} preload={index < 4} />
@@ -118,12 +118,10 @@ function Banner({
   slug,
   name,
   description,
-  count,
 }: {
   slug: string
   name: string
   description: string
-  count: number
 }) {
   return (
     <section className="relative isolate flex min-h-64 items-end overflow-hidden md:min-h-80">
@@ -142,14 +140,9 @@ function Banner({
           trail={[{ label: "Volta", href: "/volta" }, { label: name }]}
         />
 
-        <div className="flex flex-wrap items-baseline gap-4">
-          <h1 className="volta-display text-volta-display text-volta-chalk">
-            {name}
-          </h1>
-          <span className="volta-wide text-volta-label text-volta-volt tabular-nums">
-            {count}
-          </span>
-        </div>
+        <h1 className="volta-display text-volta-display text-volta-chalk">
+          {name}
+        </h1>
 
         <p className="max-w-lg text-volta-lead text-volta-ash">{description}</p>
       </div>
@@ -160,7 +153,7 @@ function Banner({
 function EmptyResult({ slug, name }: { slug: string; name: string }) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-volta border border-volta-mist px-6 py-20 text-center">
-      <p className="volta-display text-3xl text-volta-mist">No matches</p>
+      <p className="volta-display text-3xl text-volta-void">No matches</p>
       <p className="max-w-sm text-volta-body text-volta-slate">
         Nothing in {name} fits that combination of filters.
       </p>

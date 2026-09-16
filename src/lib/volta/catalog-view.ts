@@ -9,13 +9,10 @@ import {
   type Review,
 } from "@/lib/catalog"
 
-import { categoryImage } from "@/lib/volta/editorial"
 import type {
   FacetGroup,
   FacetKey,
-  NavColumn,
   NavModel,
-  NavPromo,
   ProductCardModel,
   RatingBreakdown,
   ReviewModel,
@@ -170,36 +167,10 @@ const SERVICE = [
 export function navModel(): NavModel {
   const catalog = getCatalog(BRAND)
 
-  const categories = catalog.categories.map((category) => {
-    const products = getProductsInCategory(BRAND, category.slug)
-
-    const columns: NavColumn[] = (["form", "goal", "flavour"] as FacetKey[])
-      .map((facet) => ({
-        title: `Shop by ${FACET_LABELS[facet].toLowerCase()}`,
-        links: facetOptions(products, facet, 6).map(({ value }) => ({
-          label: value,
-          href: facetHref(category.slug, facet, value),
-        })),
-      }))
-      .filter((column) => column.links.length > 1)
-
-    const promo: NavPromo | undefined =
-      columns.length > 0
-        ? {
-            image: categoryImage(category.slug),
-            eyebrow: "Best sellers",
-            title: `All ${category.name.toLowerCase()}`,
-            href: categoryHref(category.slug),
-          }
-        : undefined
-
-    return {
-      label: category.name,
-      href: categoryHref(category.slug),
-      columns,
-      promo,
-    }
-  })
+  const categories = catalog.categories.map((category) => ({
+    label: category.name,
+    href: categoryHref(category.slug),
+  }))
 
   return {
     categories,

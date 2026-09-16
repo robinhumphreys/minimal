@@ -1,14 +1,21 @@
-@import "tailwindcss";
+/*
+ * Tailwind without its preflight: the reset would land on the host page's
+ * <h1>s and <button>s. A scoped one lives further down instead.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(ma);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(ma);
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
 /*
- * The embed lives outside src/, so point Tailwind at its own sources — and at
- * the shared shadcn primitives the window is built from, which are the same
- * files the admin's preview renders.
+ * Every utility in the bundle carries the `ma:` prefix, so the stylesheet can
+ * sit in a host page next to that page's own Tailwind without either one
+ * restyling the other. The shadcn primitives the window is built from are
+ * copied into `./ui` for the same reason: their classes have to carry the
+ * prefix too, and the admin's copies must not.
  */
 @source "./";
-@source "../src/components/ui";
 
 @theme inline {
   --color-background: var(--background);
@@ -71,10 +78,107 @@
   font-family: var(--font-sans);
 }
 
-.minimal-agent-root *,
-.minimal-agent-root *::before,
-.minimal-agent-root *::after {
-  border-color: var(--border);
+/*
+ * The preflight, scoped: what Tailwind's global reset would do, done only
+ * inside the embed's own roots. Every surface — the launcher layer, the
+ * search panel, the guide's drawer — carries `.minimal-agent-root`, portals
+ * included, so nothing of the host page is touched.
+ */
+@layer base {
+  .minimal-agent-root {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    tab-size: 4;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+  }
+
+  .minimal-agent-root *,
+  .minimal-agent-root *::before,
+  .minimal-agent-root *::after,
+  .minimal-agent-root ::backdrop {
+    box-sizing: border-box;
+    border: 0 solid var(--border);
+    margin: 0;
+    padding: 0;
+  }
+
+  .minimal-agent-root :is(h1, h2, h3, h4, h5, h6) {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .minimal-agent-root a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  .minimal-agent-root :is(b, strong) {
+    font-weight: bolder;
+  }
+
+  .minimal-agent-root :is(code, kbd, samp, pre) {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1em;
+  }
+
+  .minimal-agent-root small {
+    font-size: 80%;
+  }
+
+  .minimal-agent-root :is(ol, ul, menu) {
+    list-style: none;
+  }
+
+  .minimal-agent-root
+    :is(img, svg, video, canvas, audio, iframe, embed, object) {
+    display: block;
+    vertical-align: middle;
+  }
+
+  .minimal-agent-root :is(img, video) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .minimal-agent-root :is(button, input, select, optgroup, textarea) {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  .minimal-agent-root ::placeholder {
+    opacity: 1;
+    color: color-mix(in oklab, currentcolor 50%, transparent);
+  }
+
+  .minimal-agent-root textarea {
+    resize: vertical;
+  }
+
+  .minimal-agent-root
+    :is(button, input:where([type="button"], [type="reset"], [type="submit"])) {
+    appearance: button;
+  }
+
+  .minimal-agent-root ::-webkit-search-decoration,
+  .minimal-agent-root ::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  .minimal-agent-root :disabled {
+    cursor: default;
+  }
+
+  .minimal-agent-root [hidden]:not([hidden="until-found"]) {
+    display: none !important;
+  }
 }
 
 /*
@@ -98,6 +202,16 @@ minimal-agent-bar,
 minimal-agent-recommendations,
 minimal-agent-search {
   display: block;
+}
+
+/*
+ * While the search panel has a search to answer, the site's own input and
+ * results step aside: the box has become the first bubble, and the panel's
+ * composer is the one input. The site marks what should go with
+ * `data-native-search`; the panel sets the attribute (see `ACTIVE_ATTR`).
+ */
+html[data-minimal-search] [data-native-search] {
+  display: none !important;
 }
 
 minimal-agent-guide {

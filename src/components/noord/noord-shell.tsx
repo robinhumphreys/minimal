@@ -3,7 +3,10 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 
-import { useBag } from "@/lib/noord/bag"
+import { provideCart } from "@/lib/agent/cart"
+import { useSearchAssist } from "@/lib/config/use-surface"
+import { bagCount, bagSubtotal, useBag } from "@/lib/noord/bag"
+import { formatPrice } from "@/lib/noord/format"
 import { useOverlays } from "@/lib/noord/overlays"
 import type { NavModel, SearchEntry } from "@/lib/noord/types"
 
@@ -32,6 +35,7 @@ export function NoordShell({
 }) {
   const pathname = usePathname()
   const close = useOverlays((state) => state.close)
+  const searchAssist = useSearchAssist("noord")
 
   // The bag persists to localStorage with `skipHydration`, so the read happens
   // here rather than at import time — otherwise the server render and the first
@@ -39,6 +43,29 @@ export function NoordShell({
   React.useEffect(() => {
     void useBag.persist.rehydrate()
   }, [])
+
+  // The agent can ask what is in the cart. Read live at call time, so it
+  // sees the cart as it is then, not as it was when the page loaded.
+  React.useEffect(
+    () =>
+      provideCart(() => {
+        const lines = useBag.getState().lines
+        return {
+          lines: lines.map((line) => ({
+            slug: line.slug,
+            name: line.name,
+            variant: line.size ? `Size ${line.size}` : undefined,
+            quantity: line.quantity,
+            price: formatPrice(line.price),
+            lineTotal: formatPrice(line.price * line.quantity),
+            url: line.href,
+          })),
+          count: bagCount(lines),
+          subtotal: formatPrice(bagSubtotal(lines)),
+        }
+      }),
+    [],
+  )
 
   // An overlay left open across a route change would cover the page the shopper
   // just asked for.
@@ -56,7 +83,7 @@ export function NoordShell({
       <Footer />
 
       <NavOverlay nav={nav} />
-      <SearchOverlay index={searchIndex} />
+      {searchAssist && <SearchOverlay index={searchIndex} />}
       <BagOverlay />
     </div>
   )

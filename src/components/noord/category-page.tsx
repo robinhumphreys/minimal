@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { notFound } from "next/navigation"
 
 import { CategoryGrid } from "@/components/noord/category-grid"
+import { ProductHelpBand } from "@/components/product-help-band"
 import { Skeleton } from "@/components/noord/ui/skeleton"
 import { getCategory, getProductsInCategory } from "@/lib/catalog"
 import { toSearchEntry } from "@/lib/noord/catalog-view"
@@ -17,14 +18,16 @@ export function CategoryPage({ slug }: { slug: string }) {
       {/* Product help, where a shopper stands before a wall of one kind of
           thing. The band is the storefront's; the button in it is the
           embed's, drawn into the mount when the agent is on the page. */}
-      <section className="noord-gutter border-b border-noord-line bg-noord-wash">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 py-8 text-center">
-          <p className="text-noord-title">
-            Not sure which of our {category.name.toLowerCase()} is yours?
-          </p>
-          <minimal-agent-guide data-topic={category.name} />
-        </div>
-      </section>
+      <ProductHelpBand brand="noord">
+        <section className="noord-gutter border-b border-noord-line bg-noord-wash">
+          <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 py-8 text-center">
+            <p className="text-noord-title">
+              Not sure which of our {category.name.toLowerCase()} is yours?
+            </p>
+            <minimal-agent-guide data-topic={category.name} />
+          </div>
+        </section>
+      </ProductHelpBand>
 
       {/* The grid reads `?fit=…` and friends off the URL. `useSearchParams`
           needs a boundary for the page shell to stay statically prerendered. */}

@@ -1,11 +1,15 @@
 import * as React from "react"
 import { createPortal } from "react-dom"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from "ai"
 
+import { answerViewCart } from "@/lib/agent/cart"
 import type { AgentUIMessage } from "@/lib/agent/types"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 import type { AgentConfig } from "@/lib/config/schema"
 
 import { GuideOverlay, GuideTrigger } from "./product-help"
@@ -32,6 +36,11 @@ type Session = {
   messages: AgentUIMessage[]
   /** Whether anything has been stored yet: a session that exists is a shopper who has decided. */
   touched: boolean
+  /**
+   * An answer was still arriving when this was written. A page that loads
+   * from such a session has a question with no complete answer behind it.
+   */
+  pending: boolean
 }
 
 /**
@@ -39,24 +48,43 @@ type Session = {
  * link to a real page, and the embed remounts on every one, so the transcript
  * lives in `sessionStorage` for the tab — gone when the tab is, which is the
  * lifetime a shop visit has anyway.
+ *
+ * Written on every change, mid-answer included: the cards arrive before the
+ * sentence that goes with them, and a shopper who clicks one straight away
+ * is the common case, not the edge.
  */
 function sessionKey(id: string) {
   return `minimal-agent:${id}`
 }
 
+const EMPTY_SESSION: Session = {
+  open: false,
+  messages: [],
+  touched: false,
+  pending: false,
+}
+
 function readSession(id: string): Session {
   try {
     const raw = window.sessionStorage.getItem(sessionKey(id))
-    if (!raw) return { open: false, messages: [], touched: false }
+    if (!raw) return EMPTY_SESSION
     const parsed = JSON.parse(raw) as Partial<Session>
     const messages = Array.isArray(parsed.messages) ? parsed.messages : []
-    // A question that never got its answer — the tab was left mid-request, or
-    // the request failed — would come back as a loose end with no retry
-    // behind it. Drop it; the shopper can ask again.
-    while (messages.at(-1)?.role === "user") messages.pop()
-    return { open: parsed.open === true, messages, touched: true }
+    const pending = parsed.pending === true
+    // A reply the page left in the middle of — a sentence cut short, a tool
+    // call with no result — is not worth keeping and cannot be sent back to
+    // the model as it is. Drop it; the question stays, and gets asked again.
+    if (pending) {
+      while (messages.at(-1)?.role === "assistant") messages.pop()
+    }
+    return {
+      open: parsed.open === true,
+      messages,
+      touched: true,
+      pending: pending && messages.at(-1)?.role === "user",
+    }
   } catch {
-    return { open: false, messages: [], touched: false }
+    return EMPTY_SESSION
   }
 }
 
@@ -191,26 +219,61 @@ export function Agent({ config }: { config: AgentConfig }) {
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
     [config.id],
   )
-  const { messages, sendMessage, status, error, stop, regenerate } =
-    useChat<AgentUIMessage>({
-      id: sessionKey(config.id),
-      transport,
-      messages: session.messages,
-    })
-
   // Sent per request rather than per transport so edits in the admin preview
   // take effect without tearing down the conversation.
   const behaviour = config.behaviour
+  // Read when the cart tool answers, which is after the render the latest
+  // behaviour arrived in, so an effect is early enough.
+  const bodyRef = React.useRef({ behaviour })
+  React.useEffect(() => {
+    bodyRef.current = { behaviour }
+  }, [behaviour])
+
+  const {
+    messages,
+    sendMessage,
+    addToolOutput,
+    status,
+    error,
+    stop,
+    regenerate,
+  } = useChat<AgentUIMessage>({
+    id: sessionKey(config.id),
+    transport,
+    messages: session.messages,
+    // The cart is read from the page, then the answer carries on by itself.
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    onToolCall({ toolCall }) {
+      answerViewCart(toolCall, addToolOutput, bodyRef.current)
+    },
+  })
+
   const send = React.useCallback(
     (text: string) => void sendMessage({ text }, { body: { behaviour } }),
     [sendMessage, behaviour],
   )
 
+  const busy = status === "submitted" || status === "streaming"
   React.useEffect(() => {
-    // Mid-stream transcripts are not worth keeping; the next settled one is.
-    if (status === "submitted" || status === "streaming") return
-    writeSession(config.id, { open, messages, touched: true })
-  }, [config.id, open, messages, status])
+    writeSession(config.id, {
+      open,
+      messages,
+      touched: true,
+      pending: busy,
+    })
+  }, [config.id, open, messages, busy])
+
+  // Picked up mid-answer: the shopper asked, followed a card before the
+  // reply had finished, and is now on the next page waiting for it. Ask
+  // again on their behalf, once.
+  const resumed = React.useRef(false)
+  React.useEffect(() => {
+    if (!session.pending || resumed.current) return
+    resumed.current = true
+    void regenerate({ body: { behaviour } })
+    // Once, on mount: the session is read then, and nothing after changes it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const openWith = React.useCallback(
     (options?: OpenOptions) => {
@@ -353,7 +416,7 @@ function Bar({
 
   return (
     <form
-      className="minimal-agent-root flex gap-2 p-4"
+      className="minimal-agent-root ma:flex ma:gap-2 ma:p-4"
       style={style}
       onSubmit={(event) => {
         event.preventDefault()
@@ -383,10 +446,10 @@ function Recommendations({
 }) {
   return (
     <div
-      className="minimal-agent-root flex flex-col gap-2 border p-4"
+      className="minimal-agent-root ma:flex ma:flex-col ma:gap-2 ma:border ma:p-4"
       style={style}
     >
-      <p className="text-sm">Not sure this is the one?</p>
+      <p className="ma:text-sm">Not sure this is the one?</p>
       <Button onClick={() => onOpen(`What goes well with ${product}?`)}>
         Find something similar
       </Button>

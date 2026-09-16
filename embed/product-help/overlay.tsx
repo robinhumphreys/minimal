@@ -1,26 +1,30 @@
 import * as React from "react"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from "ai"
 import { ArrowUpIcon, RotateCcwIcon, XIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
+import { answerViewCart } from "@/lib/agent/cart"
 import type { AgentUIMessage } from "@/lib/agent/types"
-import { Bubble, BubbleContent } from "@/components/ui/bubble"
-import { Button } from "@/components/ui/button"
+import { Bubble, BubbleContent } from "../ui/bubble"
+import { Button } from "../ui/button"
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
+} from "../ui/drawer"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "@/components/ui/input-group"
-import { Message, MessageContent } from "@/components/ui/message"
+} from "../ui/input-group"
+import { Message, MessageContent } from "../ui/message"
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -29,7 +33,7 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
   useMessageScroller,
-} from "@/components/ui/message-scroller"
+} from "../ui/message-scroller"
 import type { AgentConfig } from "@/lib/config/schema"
 
 import { ProductCard } from "../site-chat/products"
@@ -71,22 +75,36 @@ export function GuideOverlay({
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
     [config.id],
   )
-  const {
-    messages,
-    sendMessage,
-    setMessages,
-    status,
-    error,
-    stop,
-    regenerate,
-  } = useChat<AgentUIMessage>({ transport })
-
   const behaviour = config.behaviour
   const productHelp = config.surface.productHelp
   const body = React.useMemo(
     () => ({ behaviour, mode: "guide", topic, productHelp }),
     [behaviour, topic, productHelp],
   )
+  // Read when the cart tool answers, which is after the render the latest
+  // body arrived in, so an effect is early enough.
+  const bodyRef = React.useRef(body)
+  React.useEffect(() => {
+    bodyRef.current = body
+  }, [body])
+
+  const {
+    messages,
+    sendMessage,
+    setMessages,
+    addToolOutput,
+    status,
+    error,
+    stop,
+    regenerate,
+  } = useChat<AgentUIMessage>({
+    transport,
+    // The cart is read from the page, then the guide carries on by itself.
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    onToolCall({ toolCall }) {
+      answerViewCart(toolCall, addToolOutput, bodyRef.current)
+    },
+  })
   const send = React.useCallback(
     (text: string, hidden = false) =>
       void sendMessage(
@@ -137,28 +155,28 @@ export function GuideOverlay({
         className={cn(
           // The primitive paints a "bleed" past its leading edge for overscroll;
           // inset from the edge, that bleed would show in the margin.
-          "minimal-agent-root rounded-2xl! border! font-sans text-foreground shadow-2xl after:hidden!",
+          "minimal-agent-root ma:rounded-2xl! ma:border! ma:font-sans ma:text-foreground ma:shadow-2xl ma:after:hidden!",
           placement === "side"
-            ? "[--drawer-inset:1rem] sm:[--drawer-content-width:30rem]!"
-            : "[--drawer-content-height:calc(100dvh-4.5rem)] [--drawer-content-max-height:calc(100dvh-4.5rem)] [--drawer-inset:0.75rem]",
+            ? "ma:[--drawer-inset:1rem] ma:sm:[--drawer-content-width:30rem]!"
+            : "ma:[--drawer-content-height:calc(100dvh-4.5rem)] ma:[--drawer-content-max-height:calc(100dvh-4.5rem)] ma:[--drawer-inset:0.75rem]",
         )}
         style={themeStyle(config.theme)}
       >
         <MessageScrollerProvider>
           <FollowEnd count={messages.length} status={status} />
-          <DrawerHeader className="flex-row items-center justify-between border-b border-border p-4 text-left">
+          <DrawerHeader className="ma:flex-row ma:items-center ma:justify-between ma:border-b ma:border-border ma:p-4 ma:text-left">
             <DrawerTitle
-              className="text-sm"
+              className="ma:text-sm"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {name}
             </DrawerTitle>
-            <div className="flex items-center gap-1">
+            <div className="ma:flex ma:items-center ma:gap-1">
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={startOver}
-                className="text-muted-foreground"
+                className="ma:text-muted-foreground"
               >
                 <RotateCcwIcon />
                 Start over
@@ -172,9 +190,9 @@ export function GuideOverlay({
             </div>
           </DrawerHeader>
 
-          <MessageScroller className="flex-1">
+          <MessageScroller className="ma:flex-1">
             <MessageScrollerViewport>
-              <MessageScrollerContent className="gap-4 p-4">
+              <MessageScrollerContent className="ma:gap-4 ma:p-4">
                 <MessageScrollerItem>
                   <AgentBubble>{productHelp.greeting}</AgentBubble>
                 </MessageScrollerItem>
@@ -201,7 +219,7 @@ export function GuideOverlay({
                     <Message>
                       <MessageContent>
                         <Bubble variant="muted">
-                          <BubbleContent className="flex h-9 items-center px-3.5 text-muted-foreground">
+                          <BubbleContent className="ma:flex ma:h-9 ma:items-center ma:px-3.5 ma:text-muted-foreground">
                             <Working
                               style={config.theme.thinking}
                               label="Thinking"
@@ -218,7 +236,7 @@ export function GuideOverlay({
                     <Message>
                       <MessageContent>
                         <Bubble variant="muted">
-                          <BubbleContent className="text-muted-foreground">
+                          <BubbleContent className="ma:text-muted-foreground">
                             {error?.message?.trim() ||
                               "That didn’t go through."}
                           </BubbleContent>
@@ -289,7 +307,7 @@ function Turn({
       <Message align="end">
         <MessageContent>
           <Bubble align="end" variant="default">
-            <BubbleContent className="whitespace-pre-wrap">
+            <BubbleContent className="ma:whitespace-pre-wrap">
               {text}
             </BubbleContent>
           </Bubble>
@@ -306,7 +324,7 @@ function Turn({
             if (part.text.trim().length === 0) return null
             return (
               <Bubble key={index} variant="muted">
-                <BubbleContent className="whitespace-pre-wrap">
+                <BubbleContent className="ma:whitespace-pre-wrap">
                   {part.text}
                 </BubbleContent>
               </Bubble>
@@ -325,13 +343,13 @@ function Turn({
                   <BubbleContent>{part.input.question}</BubbleContent>
                 </Bubble>
                 {current ? (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="ma:flex ma:flex-wrap ma:gap-2">
                     {part.input.options.map((option) => (
                       <button
                         key={option}
                         type="button"
                         onClick={() => onChoose(option)}
-                        className="cursor-pointer rounded-(--radius) border border-border bg-card px-3 py-2 text-sm text-foreground outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
+                        className="ma:cursor-pointer ma:rounded-(--radius) ma:border ma:border-border ma:bg-card ma:px-3 ma:py-2 ma:text-sm ma:text-foreground ma:outline-none ma:hover:bg-muted ma:focus-visible:ring-3 ma:focus-visible:ring-ring/50"
                       >
                         {option}
                       </button>
@@ -344,7 +362,7 @@ function Turn({
           if (part.type === "tool-showProducts") {
             if (part.state === "output-available") {
               return (
-                <div key={index} className="grid grid-cols-2 gap-2">
+                <div key={index} className="ma:grid ma:grid-cols-2 ma:gap-2">
                   {part.output.products.map((product) => (
                     <ProductCard
                       key={product.slug}
@@ -359,7 +377,7 @@ function Turn({
             if (part.state === "output-error") return null
             return (
               <Bubble key={index} variant="ghost">
-                <BubbleContent className="text-muted-foreground">
+                <BubbleContent className="ma:text-muted-foreground">
                   <Working
                     style={config.theme.thinking}
                     label="Finding products"
@@ -407,13 +425,13 @@ function Composer({
   }
   return (
     <form
-      className="shrink-0 border-t border-border p-3"
+      className="ma:shrink-0 ma:border-t ma:border-border ma:p-3"
       onSubmit={(event) => {
         event.preventDefault()
         submit()
       }}
     >
-      <InputGroup className="rounded-[calc(var(--radius)+0.25rem)] border-transparent bg-muted ring-inset">
+      <InputGroup className="ma:rounded-[calc(var(--radius)+0.25rem)] ma:border-transparent ma:bg-muted ma:ring-inset">
         <InputGroupTextarea
           placeholder={placeholder}
           rows={1}
@@ -425,9 +443,9 @@ function Composer({
               submit()
             }
           }}
-          className="max-h-28 min-h-12 px-3 py-2.5 text-base md:text-sm"
+          className="ma:max-h-28 ma:min-h-12 ma:px-3 ma:py-2.5 ma:text-base ma:md:text-sm"
         />
-        <InputGroupAddon align="block-end" className="px-2 pb-2">
+        <InputGroupAddon align="block-end" className="ma:px-2 ma:pb-2">
           {busy ? (
             <InputGroupButton
               type="button"
@@ -435,9 +453,9 @@ function Composer({
               size="icon-sm"
               onClick={onStop}
               aria-label="Stop"
-              className="ml-auto"
+              className="ma:ml-auto"
             >
-              <span className="size-3 rounded-[2px] bg-current" />
+              <span className="ma:size-3 ma:rounded-[2px] ma:bg-current" />
             </InputGroupButton>
           ) : (
             <InputGroupButton
@@ -446,7 +464,7 @@ function Composer({
               size="icon-sm"
               disabled={draft.trim().length === 0}
               aria-label="Send"
-              className="ml-auto"
+              className="ma:ml-auto"
             >
               <ArrowUpIcon />
             </InputGroupButton>

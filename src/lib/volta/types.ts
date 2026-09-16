@@ -54,28 +54,8 @@ export type NavLink = {
   href: string
 }
 
-/** One column of links inside a nav panel. */
-export type NavColumn = {
-  title: string
-  links: NavLink[]
-}
-
-/** The image card pinned to the right of a desktop nav panel. */
-export type NavPromo = {
-  image: string
-  eyebrow: string
-  title: string
-  href: string
-}
-
-export type NavCategory = NavLink & {
-  /** Populated from catalog attributes; empty when a category has no facets. */
-  columns: NavColumn[]
-  promo?: NavPromo
-}
-
 export type NavModel = {
-  categories: NavCategory[]
+  categories: NavLink[]
   /** "Shop by goal" — the entry point most nutrition shoppers actually use. */
   goals: NavLink[]
   service: NavLink[]

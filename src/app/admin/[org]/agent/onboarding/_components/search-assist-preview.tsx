@@ -50,8 +50,10 @@ export function SearchAssistPreview({
   onDeviceChange: (device: Device) => void
 }) {
   // Empty until the merchant types: the preview is their search box as a
-  // shopper meets it, and a search box does not search by itself.
+  // shopper meets it, and a search box does not search by itself. Nothing is
+  // read until it is submitted, as on the site.
   const [query, setQuery] = React.useState("")
+  const [submitted, setSubmitted] = React.useState("")
   const [focused, setFocused] = React.useState(false)
   const prompts = focused && query.trim().length === 0 ? PROMPTS[config.id] : []
   const ink = readableOn(config.theme.surface)
@@ -64,8 +66,15 @@ export function SearchAssistPreview({
     [config, ground.back],
   )
 
+  const submit = (text: string) => {
+    const next = text.trim()
+    if (next.length < 2) return
+    setQuery(next)
+    setSubmitted(next)
+  }
+
   const panel = config.surface.searchAssist ? (
-    <SearchPanel config={grounded} query={query} />
+    <SearchPanel config={grounded} query={submitted} />
   ) : (
     <p className="pt-4 text-sm opacity-60">
       The search box is the site&rsquo;s own. Switch the agent on to have it
@@ -73,8 +82,18 @@ export function SearchAssistPreview({
     </p>
   )
 
+  // The box carries `data-native-search`, so once the panel has a search it
+  // steps aside exactly as the site's would: the words become the first
+  // bubble and the panel's composer is the one input.
   const box = (
-    <div className="flex shrink-0 flex-col gap-2">
+    <form
+      data-native-search
+      className="flex shrink-0 flex-col gap-2"
+      onSubmit={(event) => {
+        event.preventDefault()
+        submit(query)
+      }}
+    >
       <label className="flex h-11 items-center gap-2 rounded-lg border border-current/20 px-3 text-sm focus-within:border-current/50">
         <SearchIcon className="size-4 shrink-0 opacity-60" />
         <input
@@ -95,7 +114,7 @@ export function SearchAssistPreview({
             <li key={prompt}>
               <button
                 type="button"
-                onClick={() => setQuery(prompt)}
+                onClick={() => submit(prompt)}
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm opacity-70 hover:bg-current/5 hover:opacity-100"
               >
                 <SearchIcon className="size-3.5 shrink-0" />
@@ -105,8 +124,22 @@ export function SearchAssistPreview({
           ))}
         </ul>
       ) : null}
-    </div>
+    </form>
   )
+
+  // The way back to the box once it has stepped aside.
+  const fresh = submitted ? (
+    <button
+      type="button"
+      onClick={() => {
+        setSubmitted("")
+        setQuery("")
+      }}
+      className="w-fit shrink-0 text-xs underline-offset-4 opacity-60 hover:underline hover:opacity-100"
+    >
+      New search
+    </button>
+  ) : null
 
   return (
     <div className="relative h-full overflow-hidden rounded-xl">
@@ -126,6 +159,7 @@ export function SearchAssistPreview({
               style={{ color: ink }}
             >
               <div className="flex min-h-full flex-col">
+                {fresh}
                 {box}
                 {panel}
               </div>
@@ -138,6 +172,7 @@ export function SearchAssistPreview({
           style={{ color: ink }}
         >
           <div className="mx-auto flex min-h-full w-full max-w-lg flex-col">
+            {fresh}
             {box}
             {panel}
           </div>

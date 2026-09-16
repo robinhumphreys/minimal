@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import { useOrg } from "@/app/admin/_components/use-org"
+import { useAdminStore } from "@/lib/store/admin"
 
 import { Checklist, LoaderStage, SITES } from "./loader-stage"
 
@@ -39,6 +40,12 @@ export function MatchingStep({ next }: { next: string }) {
   // when it passes the last index every row is done and the timer stops.
   const [done, setDone] = React.useState(0)
   const finished = done >= tasks.length
+  const markMatched = useAdminStore((state) => state.markMatched)
+
+  // Tell the pager: until this has happened once, there is no step three.
+  React.useEffect(() => {
+    if (finished) markMatched(brand)
+  }, [finished, brand, markMatched])
 
   React.useEffect(() => {
     const current = tasks[done]

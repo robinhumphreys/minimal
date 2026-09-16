@@ -1,5 +1,5 @@
 import { StarIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
 import type { ProductPick } from "@/lib/agent/types"
 import type { Cards } from "@/lib/config/schema"
@@ -25,14 +25,14 @@ export function ProductCards({
   }
 
   return (
-    <div className="-mx-(--card-spacing) flex snap-x snap-mandatory [scrollbar-width:none] gap-2 overflow-x-auto px-(--card-spacing) pb-1">
+    <div className="ma:-mx-(--card-spacing) ma:flex ma:snap-x ma:snap-mandatory ma:[scrollbar-width:none] ma:gap-2 ma:overflow-x-auto ma:px-(--card-spacing) ma:pb-1">
       {products.map((product) => (
         <ProductCard
           key={product.slug}
           product={product}
           cards={cards}
           layout="column"
-          className="w-44 shrink-0 snap-start"
+          className="ma:w-44 ma:shrink-0 ma:snap-start"
         />
       ))}
     </div>
@@ -50,7 +50,7 @@ export function ProductCard({
   layout: "row" | "column"
   className?: string
 }) {
-  const ratio = cards.ratio === "square" ? "aspect-square" : "aspect-4/5"
+  const ratio = cards.ratio === "square" ? "ma:aspect-square" : "ma:aspect-4/5"
   const rating =
     cards.rating &&
     product.rating !== undefined &&
@@ -61,8 +61,8 @@ export function ProductCard({
       href={product.url}
       data-slot="product-card"
       className={cn(
-        "flex overflow-hidden rounded-lg border border-border bg-card text-card-foreground no-underline outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
-        layout === "row" ? "flex-row" : "flex-col",
+        "ma:flex ma:overflow-hidden ma:rounded-lg ma:border ma:border-border ma:bg-card ma:text-card-foreground ma:no-underline ma:outline-none ma:hover:bg-muted ma:focus-visible:ring-3 ma:focus-visible:ring-ring/50",
+        layout === "row" ? "ma:flex-row" : "ma:flex-col",
         className,
       )}
     >
@@ -74,34 +74,34 @@ export function ProductCard({
         alt=""
         loading="lazy"
         className={cn(
-          "bg-muted object-cover",
+          "ma:bg-muted ma:object-cover",
           ratio,
-          layout === "row" ? "w-24 shrink-0" : "w-full",
+          layout === "row" ? "ma:w-24 ma:shrink-0" : "ma:w-full",
         )}
       />
-      <div className="flex min-w-0 flex-1 flex-col gap-1 p-2.5">
-        <p className="line-clamp-2 text-sm leading-snug font-medium">
+      <div className="ma:flex ma:min-w-0 ma:flex-1 ma:flex-col ma:gap-1 ma:p-2.5">
+        <p className="ma:line-clamp-2 ma:text-sm ma:leading-snug ma:font-medium">
           {product.name}
         </p>
         {cards.price ? (
-          <p className="flex items-baseline gap-1.5 text-sm tabular-nums">
+          <p className="ma:flex ma:items-baseline ma:gap-1.5 ma:text-sm ma:tabular-nums">
             <span>{product.price}</span>
             {product.compareAt ? (
-              <span className="text-xs text-muted-foreground line-through">
+              <span className="ma:text-xs ma:text-muted-foreground ma:line-through">
                 {product.compareAt}
               </span>
             ) : null}
           </p>
         ) : null}
         {rating ? (
-          <p className="flex items-center gap-1 text-xs text-muted-foreground">
-            <StarIcon className="size-3 fill-current" />
+          <p className="ma:flex ma:items-center ma:gap-1 ma:text-xs ma:text-muted-foreground">
+            <StarIcon className="ma:size-3 ma:fill-current" />
             {product.rating?.toFixed(1)}
             <span>({product.reviewCount?.toLocaleString("en-IE")})</span>
           </p>
         ) : null}
         {product.why ? (
-          <p className="line-clamp-3 text-xs leading-snug text-muted-foreground">
+          <p className="ma:line-clamp-3 ma:text-xs ma:leading-snug ma:text-muted-foreground">
             {product.why}
           </p>
         ) : null}

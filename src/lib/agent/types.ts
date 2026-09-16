@@ -1,5 +1,7 @@
 import type { UIDataTypes, UIMessage } from "ai"
 
+import type { CartView } from "./cart"
+
 /**
  * What the agent hands the widget when it puts products in front of a shopper.
  *
@@ -58,10 +60,17 @@ export type SearchResult = {
 /** A question with answers to tap, in the choice guide. */
 export type AskChoiceInput = { question: string; options: string[] }
 
+/**
+ * Answered by the page, not the server: the cart is in the shopper's browser.
+ * Takes nothing; the model has no say in which cart it sees.
+ */
+export type ViewCartInput = Record<string, never>
+
 /** The tool set as the client sees it: names to input/output pairs. */
 export type AgentTools = {
   showProducts: { input: ShowProductsInput; output: ShowProductsOutput }
   askChoice: { input: AskChoiceInput; output: { asked: true } }
+  viewCart: { input: ViewCartInput; output: CartView }
 }
 
 /**

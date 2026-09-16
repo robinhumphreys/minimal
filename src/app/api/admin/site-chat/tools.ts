@@ -2,6 +2,8 @@ import { tool, type InferUITools, type UIDataTypes, type UIMessage } from "ai"
 import { z } from "zod"
 
 import type { SiteChatSettings } from "@/app/admin/[org]/agent/onboarding/_components/site-chat"
+
+import type { ChatSurface } from "./surfaces"
 import {
   avatarSchema,
   densitySchema,
@@ -193,9 +195,79 @@ export const siteChatPatchSchema = z.object({
 
 export type SiteChatPatch = z.infer<typeof siteChatPatchSchema>
 
+type PatchKey = keyof SiteChatPatch
+
+/**
+ * Settings every surface shares: the agent's voice and the look of what it
+ * draws. A change made from any tab applies to all three, which is the point
+ * — one agent, three places it appears.
+ */
+const SHARED_KEYS: readonly PatchKey[] = [
+  "voice",
+  "spelling",
+  "language",
+  "accent",
+  "roundness",
+  "font",
+  "ratio",
+  "price",
+  "rating",
+  "picks",
+]
+
+/**
+ * What each surface's chat may touch. A conversation on the Search assist tab
+ * cannot move the chat button, and one on the Site chat tab cannot rename the
+ * Product help button: the model is told about, and given, only its own keys.
+ */
+export const SURFACE_KEYS: Record<ChatSurface, readonly PatchKey[]> = {
+  "site-chat": [
+    ...SHARED_KEYS,
+    "siteChat",
+    "greeting",
+    "starters",
+    "chatPlaceholder",
+    "assistantName",
+    "subtitle",
+    "avatar",
+    "placement",
+    "shape",
+    "size",
+    "icon",
+    "iconStyle",
+    "label",
+    "header",
+    "thinking",
+    "density",
+    "nudge",
+    "openOnProductPages",
+    "hiddenPaths",
+  ],
+  "search-assist": [...SHARED_KEYS, "searchAssist", "searchPlaceholder"],
+  "product-help": [
+    ...SHARED_KEYS,
+    "productHelp",
+    "guideLabel",
+    "guideGreeting",
+    "guideSide",
+    "guidePlaceholder",
+  ],
+}
+
+function patchSchemaFor(surface: ChatSurface) {
+  const mask = Object.fromEntries(
+    SURFACE_KEYS[surface].map((key) => [key, true as const]),
+  ) as Record<PatchKey, true>
+  return siteChatPatchSchema.pick(mask)
+}
+
 /**
  * No `execute`: the settings live in the merchant's browser, so the chat
  * applies the patch itself and posts the result back for the model to confirm.
+ *
+ * The full set. The route hands the model a surface's own slice via
+ * `toolsFor`; this one is what the chat reads the call back against, since
+ * every slice is a subset of it.
  */
 export const siteChatTools = {
   updateSiteChat: tool({
@@ -204,6 +276,19 @@ export const siteChatTools = {
     inputSchema: siteChatPatchSchema,
     outputSchema: z.object({ applied: siteChatPatchSchema }),
   }),
+}
+
+/** The same tool, narrowed to the keys the surface's chat is allowed to change. */
+export function toolsFor(surface: ChatSurface) {
+  const schema = patchSchemaFor(surface)
+  return {
+    updateSiteChat: tool({
+      description:
+        "Change one or more settings of the agent. Send only the keys the merchant asked to change.",
+      inputSchema: schema,
+      outputSchema: z.object({ applied: schema }),
+    }),
+  }
 }
 
 export type SiteChatUIMessage = UIMessage<

@@ -1,0 +1,8 @@
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+  esbuild: set this to true or false
+  unrs-resolver: set this to true or false
+minimumReleaseAgeExclude:
+  - framer-motion@13.4.0
+  - motion@13.4.0
+  - prettier@3.9.7

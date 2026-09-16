@@ -11,7 +11,7 @@ import {
 
 import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
-import type { NavCategory, SearchEntry } from "@/lib/volta/types"
+import type { NavLink, SearchEntry } from "@/lib/volta/types"
 
 import { Input } from "@/components/volta/ui/input"
 import {
@@ -34,28 +34,37 @@ const POPULAR = [
 ]
 
 const MAX_RESULTS = 8
+/** Below this a search is not worth submitting. Matches the embed. */
+const MIN_QUERY = 2
 
 /**
  * Full-screen search. Matching runs over a pre-lowercased haystack built on the
  * server, so a 50-product catalog filters synchronously on every keystroke
  * without a debounce.
+ *
+ * Submitting hands the search to the agent: the query goes onto the mount
+ * below, the agent answers under it, and this sheet's own input and results —
+ * everything marked `data-native-search` — step aside for the answer, so the
+ * words the shopper typed become the first bubble and the agent's composer is
+ * the one input on screen. "New search" brings the box back.
  */
 export function SearchOverlay({
   index,
   categories,
 }: {
   index: SearchEntry[]
-  categories: NavCategory[]
+  categories: NavLink[]
 }) {
   const open = useOverlays((state) => state.open) === "search"
   const toggle = useOverlays((state) => state.toggle)
   const close = useOverlays((state) => state.close)
 
   const [query, setQuery] = React.useState("")
+  const [submitted, setSubmitted] = React.useState("")
   const trimmed = query.trim().toLowerCase()
 
   const results = React.useMemo(() => {
-    if (trimmed.length < 2) return []
+    if (trimmed.length < MIN_QUERY) return []
     const terms = trimmed.split(/\s+/)
     return index
       .filter((entry) => terms.every((term) => entry.haystack.includes(term)))
@@ -63,39 +72,72 @@ export function SearchOverlay({
   }, [index, trimmed])
 
   const categoryHits = React.useMemo(() => {
-    if (trimmed.length < 2) return []
+    if (trimmed.length < MIN_QUERY) return []
     return categories.filter((category) =>
       category.label.toLowerCase().includes(trimmed),
     )
   }, [categories, trimmed])
 
-  const searching = trimmed.length >= 2
+  const searching = trimmed.length >= MIN_QUERY
+
+  const submit = (text: string) => {
+    const next = text.trim()
+    if (next.length < MIN_QUERY) return
+    setQuery(next)
+    setSubmitted(next)
+  }
+
+  const reset = () => {
+    setQuery("")
+    setSubmitted("")
+  }
 
   return (
     <Sheet
       open={open}
       onOpenChange={(next) => {
         // Each opening starts from a clean slate rather than the last search.
-        if (!next) setQuery("")
+        if (!next) reset()
         toggle("search", next)
       }}
     >
       <SheetContent side="full" showCloseButton={false}>
-        <SheetHeader className="justify-between">
-          <SheetTitle className="text-volta-smoke">Search</SheetTitle>
-          <button
-            type="button"
-            onClick={close}
-            aria-label="Close search"
-            className="-mr-2 flex size-10 items-center justify-center rounded-volta text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none"
-          >
-            <XIcon className="size-5" weight="bold" />
-          </button>
+        <SheetHeader className="justify-end border-b-0 max-lg:justify-between max-lg:border-b">
+          <SheetTitle className="text-volta-smoke lg:sr-only">
+            Search
+          </SheetTitle>
+          <div className="flex items-center gap-4">
+            {submitted && (
+              <button
+                type="button"
+                onClick={reset}
+                className="volta-wide text-volta-micro text-volta-ash transition-colors hover:text-volta-chalk"
+              >
+                New search
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Close search"
+              className="-mr-2 flex size-10 items-center justify-center rounded-volta text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none"
+            >
+              <XIcon className="size-5" weight="bold" />
+            </button>
+          </div>
         </SheetHeader>
 
         <SheetBody>
           <div className="volta-gutter mx-auto w-full max-w-3xl pb-16">
-            <div className="flex items-center gap-3 border-b-2 border-volta-line pt-6 focus-within:border-volta-volt">
+            <form
+              data-native-search
+              role="search"
+              className="flex items-center gap-3 border-b-2 border-volta-line pt-6 focus-within:border-volta-volt"
+              onSubmit={(event) => {
+                event.preventDefault()
+                submit(query)
+              }}
+            >
               <MagnifyingGlassIcon
                 className="size-5 shrink-0 text-volta-smoke"
                 weight="bold"
@@ -109,6 +151,7 @@ export function SearchOverlay({
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="What are you training for?"
                 aria-label="Search products"
+                enterKeyHint="search"
                 className="volta-wide h-14 border-b-0 text-xl placeholder:font-normal placeholder:tracking-normal placeholder:normal-case [&::-webkit-search-cancel-button]:hidden"
               />
               {query && (
@@ -121,11 +164,12 @@ export function SearchOverlay({
                   Clear
                 </button>
               )}
-            </div>
+            </form>
 
             {/* The agent's reading of the search, when the embed is on the
-                page. Empty otherwise, and the sections below carry on. */}
-            <minimal-agent-search data-query={searching ? query.trim() : ""} />
+                page. Empty until a search is submitted, and the sections
+                below carry on. */}
+            <minimal-agent-search data-query={submitted} />
 
             {!searching && (
               <div data-native-search className="flex flex-col gap-8 pt-10">
@@ -135,7 +179,7 @@ export function SearchOverlay({
                       <li key={term}>
                         <button
                           type="button"
-                          onClick={() => setQuery(term)}
+                          onClick={() => submit(term)}
                           className="volta-wide rounded-volta border-2 border-volta-line px-3 py-2 text-volta-micro text-volta-chalk transition-colors hover:border-volta-volt hover:text-volta-volt"
                         >
                           {term}

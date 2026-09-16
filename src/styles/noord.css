@@ -177,12 +177,3 @@
   }
 }
 
-/*
- * Search, taken over. While the embed has filled the mount under the search
- * box, the sheet's own suggestions stand down; the moment it is empty — no
- * embed on the page, or nothing typed yet — they are back. Decided in CSS so
- * the sheet never has to know whether the embed is there.
- */
-.noord-sheet:has(minimal-agent-search:not(:empty)) [data-native-search] {
-  display: none;
-}

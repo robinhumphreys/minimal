@@ -3,9 +3,13 @@
 import * as React from "react"
 
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from "ai"
 
 import { SiteChatLayer, type ChatDriver } from "@embed/site-chat"
+import { answerViewCart } from "@/lib/agent/cart"
 import type { AgentUIMessage } from "@/lib/agent/types"
 import type { AgentConfig } from "@/lib/config/schema"
 
@@ -75,10 +79,31 @@ function useDraftChat(config: AgentConfig): ChatDriver {
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
     [config.id],
   )
-  const { messages, sendMessage, status, error, stop, regenerate } =
-    useChat<AgentUIMessage>({ transport })
-
   const behaviour = config.behaviour
+  // Read when the cart tool answers, which is after the render the latest
+  // behaviour arrived in, so an effect is early enough.
+  const bodyRef = React.useRef({ behaviour })
+  React.useEffect(() => {
+    bodyRef.current = { behaviour }
+  }, [behaviour])
+
+  const {
+    messages,
+    sendMessage,
+    addToolOutput,
+    status,
+    error,
+    stop,
+    regenerate,
+  } = useChat<AgentUIMessage>({
+    transport,
+    // No storefront under the preview, so the cart reads as unavailable —
+    // but it must still be answered, or the reply would never come.
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    onToolCall({ toolCall }) {
+      answerViewCart(toolCall, addToolOutput, bodyRef.current)
+    },
+  })
   const send = React.useCallback(
     (text: string) => {
       const trimmed = text.trim()

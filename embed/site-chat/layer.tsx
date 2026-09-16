@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
 import { XIcon } from "lucide-react"
 
@@ -12,9 +12,9 @@ import { ChatWindow } from "./window"
 
 /** Which corner the column of launcher-plus-window grows out of. */
 const ANCHORS: Record<Position, string> = {
-  "bottom-right": "items-end",
-  "bottom-center": "items-center",
-  "bottom-left": "items-start",
+  "bottom-right": "ma:items-end",
+  "bottom-center": "ma:items-center",
+  "bottom-left": "ma:items-start",
 }
 
 /**
@@ -49,15 +49,15 @@ export function SiteChatLayer({
     <div
       data-slot="site-chat"
       className={cn(
-        "minimal-agent-root @container pointer-events-none inset-0 font-sans text-foreground",
-        mode === "fixed" ? "fixed z-[2147483000]" : "absolute",
-        hidden && "hidden",
+        "minimal-agent-root ma:@container ma:pointer-events-none ma:inset-0 ma:font-sans ma:text-foreground",
+        mode === "fixed" ? "ma:fixed ma:z-[2147483000]" : "ma:absolute",
+        hidden && "ma:hidden",
       )}
       style={themeStyle(config.theme)}
     >
       <div
         className={cn(
-          "absolute inset-0 flex flex-col justify-end gap-3 p-4 @md:p-6",
+          "ma:absolute ma:inset-0 ma:flex ma:flex-col ma:justify-end ma:gap-3 ma:p-4 ma:@md:p-6",
           ANCHORS[position],
         )}
       >
@@ -67,12 +67,12 @@ export function SiteChatLayer({
             chat={chat}
             onClose={() => onOpenChange(false)}
             className={cn(
-              "pointer-events-auto w-[22rem] max-w-full animate-in duration-200 fade-in slide-in-from-bottom-2",
+              "ma:pointer-events-auto ma:w-[22rem] ma:max-w-full ma:animate-in ma:duration-200 ma:fade-in ma:slide-in-from-bottom-2",
               // As tall as it can be without crowding the launcher below it.
-              "h-[min(34rem,calc(100cqh-7.5rem))]",
+              "ma:h-[min(34rem,calc(100cqh-7.5rem))]",
               // The whole layer on a phone: a floating card at that size is a
               // keyhole, and the launcher has nothing left to float over.
-              "@max-md:absolute @max-md:inset-0 @max-md:h-auto @max-md:w-auto @max-md:max-w-none @max-md:rounded-none @max-md:ring-0",
+              "ma:@max-md:absolute ma:@max-md:inset-0 ma:@max-md:h-auto ma:@max-md:w-auto ma:@max-md:max-w-none ma:@max-md:rounded-none ma:@max-md:ring-0",
             )}
           />
         ) : null}
@@ -81,7 +81,7 @@ export function SiteChatLayer({
           <div
             role="status"
             className={cn(
-              "pointer-events-auto flex max-w-[18rem] animate-in items-start gap-2 rounded-(--radius) border border-border bg-card px-3 py-2.5 text-sm text-card-foreground shadow-lg duration-300 fade-in slide-in-from-bottom-2",
+              "ma:pointer-events-auto ma:flex ma:max-w-[18rem] ma:animate-in ma:items-start ma:gap-2 ma:rounded-(--radius) ma:border ma:border-border ma:bg-card ma:px-3 ma:py-2.5 ma:text-sm ma:text-card-foreground ma:shadow-lg ma:duration-300 ma:fade-in ma:slide-in-from-bottom-2",
             )}
           >
             <button
@@ -90,7 +90,7 @@ export function SiteChatLayer({
                 nudge.dismiss()
                 onOpenChange(true)
               }}
-              className="min-w-0 flex-1 cursor-pointer text-left leading-relaxed"
+              className="ma:min-w-0 ma:flex-1 ma:cursor-pointer ma:text-left ma:leading-relaxed"
             >
               {config.behaviour.greeting}
             </button>
@@ -98,9 +98,9 @@ export function SiteChatLayer({
               type="button"
               onClick={nudge.dismiss}
               aria-label="Dismiss"
-              className="-mr-1 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="ma:-mr-1 ma:flex ma:size-6 ma:shrink-0 ma:cursor-pointer ma:items-center ma:justify-center ma:rounded-full ma:text-muted-foreground ma:hover:bg-muted ma:hover:text-foreground"
             >
-              <XIcon className="size-3.5" />
+              <XIcon className="ma:size-3.5" />
             </button>
           </div>
         ) : null}
@@ -112,7 +112,7 @@ export function SiteChatLayer({
             nudge.dismiss()
             onOpenChange(!open)
           }}
-          className={cn("pointer-events-auto", open && "@max-md:hidden")}
+          className={cn("ma:pointer-events-auto", open && "ma:@max-md:hidden")}
         />
       </div>
     </div>
