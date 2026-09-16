@@ -102,9 +102,6 @@ export function FeaturesStep({ next }: { next: string }) {
         <h1 className="text-3xl tracking-tight text-balance">
           Where should the agent work?
         </h1>
-        <p className="max-w-md text-sm text-muted-foreground">
-          Switch on what you want. Nothing goes live until the end.
-        </p>
       </div>
 
       <FieldGroup className="w-full max-w-lg gap-3">
