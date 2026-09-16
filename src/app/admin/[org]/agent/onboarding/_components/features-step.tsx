@@ -157,7 +157,7 @@ function Thumb({
     <span
       aria-hidden="true"
       className={cn(
-        "relative block h-21 w-30 shrink-0 overflow-hidden rounded-md border bg-neutral-50",
+        "relative block h-21 w-30 shrink-0 overflow-hidden",
         className,
       )}
     >
