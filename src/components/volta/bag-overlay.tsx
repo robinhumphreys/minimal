@@ -2,7 +2,12 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { CheckIcon, MinusIcon, PlusIcon, TrashIcon } from "lucide-react"
+import {
+  CheckIcon,
+  MinusIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@phosphor-icons/react/ssr"
 
 import {
   bagCount,
@@ -14,9 +19,8 @@ import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
 import {
   DELIVERY_FEE,
+  FREE_DELIVERY_THRESHOLD,
   PROMISES,
-  freeDeliveryProgress,
-  toFreeDelivery,
 } from "@/lib/volta/promotions"
 
 import { Button } from "@/components/volta/ui/button"
@@ -33,9 +37,9 @@ import {
  * The shopping bag.
  *
  * A panel from `sm` up rather than a route: the shopper is mid-browse, and
- * sending them to a page to check the bag costs them their place. The free
- * delivery meter at the top is the whole reason the threshold lives in
- * `promotions.ts` — it has to be readable on the client.
+ * sending them to a page to check the bag costs them their place. It states
+ * what the order costs and gets out of the way — no meter nagging the shopper
+ * towards a bigger basket.
  */
 export function BagOverlay() {
   const open = useOverlays((state) => state.open) === "bag"
@@ -50,22 +54,16 @@ export function BagOverlay() {
   const shown = hydrated ? lines : []
   const count = bagCount(shown)
   const subtotal = bagSubtotal(shown)
-  const remaining = toFreeDelivery(subtotal)
-  const delivery = remaining === 0 ? 0 : DELIVERY_FEE
+  const delivery = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE
 
   return (
     <Sheet open={open} onOpenChange={(next) => toggle("bag", next)}>
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>
-            Bag{" "}
-            <span className="text-volta-ash tabular-nums">({count})</span>
+            Cart <span className="text-volta-ash tabular-nums">({count})</span>
           </SheetTitle>
         </SheetHeader>
-
-        {count > 0 && (
-          <DeliveryMeter subtotal={subtotal} remaining={remaining} />
-        )}
 
         <SheetBody>
           {!hydrated || count === 0 ? (
@@ -113,48 +111,6 @@ export function BagOverlay() {
         )}
       </SheetContent>
     </Sheet>
-  )
-}
-
-/** The progress meter: the single highest-converting thing in a bag panel. */
-function DeliveryMeter({
-  subtotal,
-  remaining,
-}: {
-  subtotal: number
-  remaining: number
-}) {
-  const progress = freeDeliveryProgress(subtotal)
-  const unlocked = remaining === 0
-
-  return (
-    <div className="volta-gutter shrink-0 border-b border-volta-line bg-volta-carbon py-3">
-      <p className="volta-wide flex items-center gap-1.5 text-volta-micro">
-        {unlocked ? (
-          <>
-            <CheckIcon className="size-3.5 shrink-0 text-volta-volt" />
-            <span className="text-volta-volt">Delivery is on us</span>
-          </>
-        ) : (
-          <span className="text-volta-chalk">
-            {formatPrice(remaining)} to free delivery
-          </span>
-        )}
-      </p>
-      <div
-        className="mt-2 h-1 w-full overflow-hidden rounded-volta-pill bg-volta-steel"
-        role="progressbar"
-        aria-valuenow={progress}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="Progress to free delivery"
-      >
-        <div
-          className="h-full rounded-volta-pill bg-volta-volt transition-[width] duration-500"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
   )
 }
 

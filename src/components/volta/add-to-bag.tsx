@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon, MinusIcon, PlusIcon } from "lucide-react"
+import { CheckIcon, MinusIcon, PlusIcon } from "@phosphor-icons/react/ssr"
 
 import { useBag, type BagLine } from "@/lib/volta/bag"
 import { flavourOptions } from "@/lib/volta/flavours"
@@ -109,7 +109,7 @@ export function AddToBag({
             show("bag")
           }}
         >
-          Add to bag
+          Add to cart
         </Button>
       </div>
 

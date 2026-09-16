@@ -1,7 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { MenuIcon, SearchIcon, ShoppingBagIcon, UserIcon } from "lucide-react"
+import {
+  ListIcon,
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+  UserIcon,
+} from "@phosphor-icons/react/ssr"
 import { cn } from "@/lib/utils"
 
 import { bagCount, useBag } from "@/lib/volta/bag"
@@ -12,11 +17,15 @@ import { DesktopNav } from "./desktop-nav"
 import { Wordmark } from "./wordmark"
 
 /**
- * Sticky header with two distinct layouts.
+ * Sticky header, one bar tall on every breakpoint.
  *
- * Below `lg` it is the phone bar: hamburger, wordmark, search, bag. From `lg`
- * up the hamburger is gone entirely and the categories live inline with hover
- * panels — no mobile navigation survives onto the desktop layout.
+ * The wordmark is pinned left — Volta shouts its name rather than centring it
+ * — and the actions carry written labels from `sm` up, because a supplement
+ * shop is a repeat-purchase habit and "Cart" beats a glyph for shoppers moving
+ * fast. Below `lg` it is the phone bar: hamburger, wordmark, icon-only actions.
+ * From `lg` up the hamburger is gone entirely and the categories sit inline
+ * between the wordmark and the actions, dropping their panels straight off the
+ * header — no mobile navigation survives onto the desktop layout.
  */
 export function Header({ nav }: { nav: NavModel }) {
   const show = useOverlays((state) => state.show)
@@ -26,31 +35,14 @@ export function Header({ nav }: { nav: NavModel }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-volta-line bg-volta-void/95 backdrop-blur">
-      <div className="volta-gutter flex h-volta-header items-center justify-between gap-4">
-        <div className="flex flex-1 items-center gap-6">
-          <IconButton
-            label="Open menu"
-            onClick={() => show("nav")}
-            className="-ml-2 lg:hidden"
-          >
-            <MenuIcon className="size-6" strokeWidth={2.25} />
-          </IconButton>
-
-          {/* Desktop only: the service links that sit behind the hamburger
-              on a phone. */}
-          <ul className="hidden items-center gap-6 lg:flex">
-            {nav.utility.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="volta-underline volta-wide text-volta-micro text-volta-ash transition-colors hover:text-volta-chalk"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="volta-gutter flex h-volta-header items-center gap-4">
+        <IconButton
+          label="Open menu"
+          onClick={() => show("nav")}
+          className="-ml-2 lg:hidden"
+        >
+          <ListIcon className="size-6" weight="bold" />
+        </IconButton>
 
         <Link
           href="/volta"
@@ -60,34 +52,80 @@ export function Header({ nav }: { nav: NavModel }) {
           <span className="sr-only">Volta — home</span>
         </Link>
 
-        <div className="flex flex-1 items-center justify-end gap-1">
-          <IconButton label="Search" onClick={() => show("search")}>
-            <SearchIcon className="size-5" strokeWidth={2.25} />
-          </IconButton>
+        <DesktopNav nav={nav} />
+
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <ActionButton
+            label="Search"
+            onClick={() => show("search")}
+            icon={<MagnifyingGlassIcon className="size-5" weight="bold" />}
+          />
           <Link
             href="/volta"
-            aria-label="Account"
-            className="hidden size-10 items-center justify-center text-volta-chalk transition-colors hover:text-volta-volt lg:flex"
+            className="hidden h-10 items-center gap-2 rounded-volta px-2 text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none lg:flex"
           >
-            <UserIcon className="size-5" strokeWidth={2.25} />
+            <UserIcon className="size-5" weight="bold" />
+            <span className="volta-wide text-volta-micro">Account</span>
           </Link>
-          <IconButton
-            label={`Bag, ${count} ${count === 1 ? "item" : "items"}`}
+          <ActionButton
+            label="Cart"
+            srLabel={`Cart, ${count} ${count === 1 ? "item" : "items"}`}
             onClick={() => show("bag")}
             className="-mr-2"
+            icon={<ShoppingCartIcon className="size-5" weight="bold" />}
           >
-            <ShoppingBagIcon className="size-5" strokeWidth={2.25} />
             {count > 0 && (
-              <span className="absolute top-0.5 right-0 min-w-4 rounded-volta-pill bg-volta-volt px-1 text-center text-[0.5625rem] leading-4 font-bold text-volta-void tabular-nums">
+              <span className="min-w-4 rounded-volta-pill bg-volta-volt px-1 text-center text-[0.5625rem] leading-4 font-bold text-volta-void tabular-nums">
                 {count}
               </span>
             )}
-          </IconButton>
+          </ActionButton>
         </div>
       </div>
-
-      <DesktopNav nav={nav} />
     </header>
+  )
+}
+
+/**
+ * An icon with its name spelled out beside it. The label is dropped below `sm`,
+ * where the bar is too narrow for three of them, and `srLabel` covers the case
+ * where the visible word is not the whole story — the cart also announces how
+ * full it is.
+ */
+function ActionButton({
+  label,
+  srLabel,
+  onClick,
+  icon,
+  children,
+  className,
+}: {
+  label: string
+  srLabel?: string
+  onClick: () => void
+  icon: React.ReactNode
+  children?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={srLabel ?? label}
+      className={cn(
+        "flex h-10 items-center gap-2 rounded-volta px-2 text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none",
+        className,
+      )}
+    >
+      {icon}
+      <span
+        aria-hidden
+        className="volta-wide hidden text-volta-micro sm:inline"
+      >
+        {label}
+      </span>
+      {children}
+    </button>
   )
 }
 

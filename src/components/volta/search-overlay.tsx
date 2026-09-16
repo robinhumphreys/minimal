@@ -3,7 +3,11 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRightIcon, SearchIcon, XIcon } from "lucide-react"
+import {
+  ArrowUpRightIcon,
+  MagnifyingGlassIcon,
+  XIcon,
+} from "@phosphor-icons/react/ssr"
 
 import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
@@ -85,16 +89,16 @@ export function SearchOverlay({
             aria-label="Close search"
             className="-mr-2 flex size-10 items-center justify-center rounded-volta text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none"
           >
-            <XIcon className="size-5" strokeWidth={2.25} />
+            <XIcon className="size-5" weight="bold" />
           </button>
         </SheetHeader>
 
         <SheetBody>
           <div className="volta-gutter mx-auto w-full max-w-3xl pb-16">
             <div className="flex items-center gap-3 border-b-2 border-volta-line pt-6 focus-within:border-volta-volt">
-              <SearchIcon
+              <MagnifyingGlassIcon
                 className="size-5 shrink-0 text-volta-smoke"
-                strokeWidth={2.25}
+                weight="bold"
               />
               <Input
                 // The overlay only mounts when open, so this fires once per

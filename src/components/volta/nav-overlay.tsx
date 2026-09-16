@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 
 import { useOverlays } from "@/lib/volta/overlays"
 import type { NavModel } from "@/lib/volta/types"

@@ -134,4 +134,20 @@ body {
   html {
     @apply font-sans;
   }
+
+  /*
+   * Tailwind v4's preflight drops the UA `cursor: pointer` on buttons, which
+   * leaves every icon button, toggle and accordion trigger showing an arrow.
+   * Put it back once, here, rather than repeating `cursor-pointer` on each
+   * control. Disabled controls are excluded — they keep the default arrow, or
+   * whatever `disabled:cursor-*` a component sets for itself.
+   */
+  button:not(:disabled),
+  summary,
+  label[for],
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
 }

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 import { cn } from "@/lib/utils"
 
 import type { ProductCardModel } from "@/lib/volta/types"

@@ -3,8 +3,8 @@
  * promises.
  *
  * Client-safe on purpose — the stripe scrolls above the header on every route
- * and the bag reads the threshold to draw its progress bar, so this cannot
- * live behind the server-only catalog module.
+ * and the bag reads the threshold to price delivery, so this cannot live
+ * behind the server-only catalog module.
  */
 
 /** Spend at or above this and delivery is free. Cents, EUR. */
@@ -44,13 +44,3 @@ export const PROMISES: { title: string; body: string }[] = [
     body: "Open the tub. If you do not like it, send it back within 30 days.",
   },
 ]
-
-/** Cents still to spend before delivery is free. Zero once the bag clears it. */
-export function toFreeDelivery(subtotal: number): number {
-  return Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal)
-}
-
-/** 0–100, for the progress bar in the bag. */
-export function freeDeliveryProgress(subtotal: number): number {
-  return Math.min(100, Math.round((subtotal / FREE_DELIVERY_THRESHOLD) * 100))
-}

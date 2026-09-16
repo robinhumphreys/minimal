@@ -1,6 +1,6 @@
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { cn } from "@/lib/utils"
-import { MinusIcon, PlusIcon } from "lucide-react"
+import { MinusIcon, PlusIcon } from "@phosphor-icons/react/ssr"
 
 // Hairline-separated rows with a +/- affordance. Used for product details on
 // the PDP and for the category groups in the nav overlay.

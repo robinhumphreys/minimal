@@ -2,7 +2,7 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ChevronRightIcon } from "lucide-react"
+import { CaretRightIcon } from "@phosphor-icons/react/ssr"
 
 import { getCategory, getProductsInCategory } from "@/lib/catalog"
 import {
@@ -47,7 +47,7 @@ export async function CategoryPage({
   const groups = facetGroups(slug)
 
   return (
-    <div className="flex flex-col gap-10 pb-16">
+    <div className="flex flex-col gap-6 pb-16">
       <Banner
         slug={slug}
         name={category.name}
@@ -61,7 +61,7 @@ export async function CategoryPage({
           fallback is the same height as the real thing so the grid below it
           does not jump when it resolves.
         */}
-        <React.Suspense fallback={<div className="h-44" />}>
+        <React.Suspense fallback={<div className="h-32" />}>
           <CategoryFilters
             groups={groups}
             total={total}
@@ -133,7 +133,7 @@ function Banner({
                 Volta
               </Link>
             </li>
-            <ChevronRightIcon className="size-3 text-volta-smoke" />
+            <CaretRightIcon className="size-3 text-volta-smoke" />
             <li className="volta-wide text-volta-micro text-volta-chalk">
               {name}
             </li>

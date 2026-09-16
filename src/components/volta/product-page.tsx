@@ -1,6 +1,12 @@
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ChevronRightIcon, TruckIcon, RotateCcwIcon, ShieldCheckIcon } from "lucide-react"
+import {
+  CaretRightIcon,
+  TruckIcon,
+  ArrowCounterClockwiseIcon,
+  ShieldCheckIcon,
+} from "@phosphor-icons/react/ssr"
 
 import { getCategory, getProduct } from "@/lib/catalog"
 import {
@@ -22,7 +28,6 @@ import {
 } from "@/components/volta/ui/accordion"
 import { AddToBag } from "./add-to-bag"
 import { Price } from "./price"
-import { ProductGallery } from "./product-gallery"
 import { ProductRail } from "./product-rail"
 import { Shelf } from "./shelf"
 import { ProductReviews } from "./product-reviews"
@@ -61,7 +66,7 @@ export async function ProductPage({
             </li>
             {category && (
               <>
-                <ChevronRightIcon className="size-3 text-volta-smoke" />
+                <CaretRightIcon className="size-3 text-volta-smoke" />
                 <li>
                   <Link
                     href={categoryHref(category.slug)}
@@ -72,7 +77,7 @@ export async function ProductPage({
                 </li>
               </>
             )}
-            <ChevronRightIcon className="size-3 text-volta-smoke" />
+            <CaretRightIcon className="size-3 text-volta-smoke" />
             <li className="volta-wide text-volta-micro text-volta-chalk">
               {product.name}
             </li>
@@ -80,8 +85,22 @@ export async function ProductPage({
         </nav>
 
         <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+          {/*
+            One image, no carousel. Volta shoots every product the same way —
+            tub front-on, nothing to rotate through — so a gallery would be an
+            affordance with nothing behind it.
+          */}
           <div className="lg:w-[55%]">
-            <ProductGallery images={product.images} name={product.name} />
+            <div className="relative aspect-square rounded-volta bg-white">
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                fill
+                preload
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-contain p-6 md:p-10"
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-6 lg:flex-1 lg:pt-2">
@@ -143,7 +162,7 @@ export async function ProductPage({
                 Free delivery over €{FREE_DELIVERY_THRESHOLD / 100} · ordered
                 before {CUTOFF}, shipped today
               </Promise>
-              <Promise icon={<RotateCcwIcon className="size-4" />}>
+              <Promise icon={<ArrowCounterClockwiseIcon className="size-4" />}>
                 30 days to send it back, opened or not
               </Promise>
               <Promise icon={<ShieldCheckIcon className="size-4" />}>
@@ -176,9 +195,7 @@ export async function ProductPage({
               <AccordionItem value="how-to-use">
                 <AccordionTrigger>How to use</AccordionTrigger>
                 <AccordionContent>
-                  <p>
-                    {usageFor(product.attributes.form, product.category)}
-                  </p>
+                  <p>{usageFor(product.attributes.form, product.category)}</p>
                 </AccordionContent>
               </AccordionItem>
 
@@ -187,8 +204,8 @@ export async function ProductPage({
                 <AccordionContent className="flex flex-col gap-2">
                   <p>
                     Orders placed before {CUTOFF} on a weekday leave the same
-                    day. Delivery is free over €
-                    {FREE_DELIVERY_THRESHOLD / 100}, €4.95 below it.
+                    day. Delivery is free over €{FREE_DELIVERY_THRESHOLD / 100},
+                    €4.95 below it.
                   </p>
                   <p>
                     Not for you? Send it back within 30 days, opened or not, and

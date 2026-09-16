@@ -165,12 +165,6 @@ const SERVICE = [
   { label: "Contact us", href: `/${BRAND}` },
 ]
 
-const UTILITY = [
-  { label: "Gyms", href: `/${BRAND}` },
-  { label: "Coaching", href: `/${BRAND}` },
-  { label: "Help", href: `/${BRAND}` },
-]
-
 export function navModel(): NavModel {
   const catalog = getCatalog(BRAND)
 
@@ -212,7 +206,6 @@ export function navModel(): NavModel {
       href: goalHref(goal.tag),
     })),
     service: SERVICE,
-    utility: UTILITY,
     featured: topRated(2),
   }
 }

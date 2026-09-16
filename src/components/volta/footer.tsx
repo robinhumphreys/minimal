@@ -1,15 +1,13 @@
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
 
 import { FOOTER_COLUMNS, LEGAL_LINKS } from "@/lib/volta/footer-links"
-import { PROMISES } from "@/lib/volta/promotions"
+import { PROMISES, VIOLATORS } from "@/lib/volta/promotions"
 
-import { Button } from "@/components/volta/ui/button"
-import { Input } from "@/components/volta/ui/input"
+import { Bolt } from "./promo-stripe"
 import { Wordmark } from "./wordmark"
 
 /**
- * The footer, in three bands: the promises, the sign-up, then the links.
+ * The footer, in three bands: the violator grid, the promises, then the links.
  *
  * On a phone the link columns stack; they are short enough that collapsing
  * them into accordions would hide six items behind a tap each.
@@ -17,8 +15,10 @@ import { Wordmark } from "./wordmark"
 export function Footer() {
   return (
     <footer className="border-t border-volta-line bg-volta-carbon">
+      <ViolatorGrid />
+
       <div className="volta-gutter mx-auto max-w-7xl">
-        <ul className="grid gap-6 border-b border-volta-line py-10 sm:grid-cols-3">
+        <ul className="grid gap-6 border-t border-volta-line py-10 sm:grid-cols-3">
           {PROMISES.map((promise, index) => (
             <li key={promise.title} className="flex gap-4">
               <span className="volta-display shrink-0 text-2xl leading-none text-volta-volt tabular-nums">
@@ -33,43 +33,6 @@ export function Footer() {
             </li>
           ))}
         </ul>
-
-        <div className="flex flex-col gap-8 border-b border-volta-line py-12 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
-          <div className="flex max-w-md flex-col gap-3">
-            <h2 className="volta-display text-volta-heading text-volta-chalk">
-              Train with us
-            </h2>
-            <p className="text-volta-body text-volta-ash">
-              Programmes, restocks and early access to drops. One email a week,
-              no filler.
-            </p>
-          </div>
-
-          <form
-            className="flex w-full max-w-md items-end gap-3"
-            // The demo has no list to sign up to; the field is the point.
-            action="/volta"
-          >
-            <div className="flex-1">
-              <label
-                htmlFor="volta-newsletter"
-                className="volta-wide block pb-1 text-volta-micro text-volta-smoke"
-              >
-                Email
-              </label>
-              <Input
-                id="volta-newsletter"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-              />
-            </div>
-            <Button variant="volt" type="submit" className="shrink-0">
-              Join
-              <ArrowRightIcon />
-            </Button>
-          </form>
-        </div>
 
         <div className="grid gap-10 py-12 sm:grid-cols-3">
           {FOOTER_COLUMNS.map((column) => (
@@ -113,5 +76,41 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  )
+}
+
+/**
+ * The violator stripe again, played slow: the same promises in the same order,
+ * on the same volt ground, sized to be read rather than glanced at.
+ *
+ * The hairline grid is the void showing through a `gap-px` on the `<ul>`, which
+ * gives real rules at every breakpoint without per-cell border arithmetic — the
+ * gutter lives on the wrapper so the void never leaks into the page margin.
+ *
+ * The sixth cell is the bolt on its own, so the grid divides evenly into one,
+ * two or three columns instead of leaving a hole in the last row.
+ */
+function ViolatorGrid() {
+  return (
+    <section aria-label="Why Volta">
+      <div className="volta-gutter mx-auto max-w-7xl py-12">
+        <ul className="grid gap-px bg-volta-void sm:grid-cols-2 lg:grid-cols-3">
+          {VIOLATORS.map((item) => (
+            <li
+              key={item}
+              className="flex items-start gap-4 bg-volta-volt px-6 py-10 lg:px-8 lg:py-12"
+            >
+              <Bolt className="mt-1 h-6 text-volta-void" />
+              <span className="volta-display text-volta-heading leading-none text-volta-void">
+                {item}
+              </span>
+            </li>
+          ))}
+          <li className="flex items-center justify-center bg-volta-volt px-6 py-10 lg:px-8 lg:py-12">
+            <Bolt className="h-16 text-volta-void" />
+          </li>
+        </ul>
+      </div>
+    </section>
   )
 }

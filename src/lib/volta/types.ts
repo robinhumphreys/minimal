@@ -79,8 +79,6 @@ export type NavModel = {
   /** "Shop by goal" — the entry point most nutrition shoppers actually use. */
   goals: NavLink[]
   service: NavLink[]
-  /** Compact links in the top-left of the desktop header. */
-  utility: NavLink[]
   /** Promo tiles pinned to the bottom of the mobile nav overlay. */
   featured: ProductCardModel[]
 }

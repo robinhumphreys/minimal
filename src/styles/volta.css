@@ -62,12 +62,18 @@
   --tracking-volta-wider: 0.2em;
 
   /* --- Colour ----------------------------------------------------------- */
-  /* Near-black ground so the volt reads as light rather than paint. */
-  --color-volta-void: #050505;
-  --color-volta-carbon: #0d0d0d;
-  --color-volta-steel: #171717;
-  --color-volta-line: #262626;
-  --color-volta-line-strong: #3d3d3d;
+  /*
+   * A charcoal ground rather than a black one: the base sits at 13% lightness
+   * and everything above it steps up from there, so the volt still reads as
+   * light while the surfaces keep enough separation to layer. Written as `hsl`
+   * because the ramp is a lightness scale and nothing else — same hue, same
+   * (zero) saturation, one number moving.
+   */
+  --color-volta-void: hsl(0 0% 13%);
+  --color-volta-carbon: hsl(0 0% 16%);
+  --color-volta-steel: hsl(0 0% 20%);
+  --color-volta-line: hsl(0 0% 25%);
+  --color-volta-line-strong: hsl(0 0% 35%);
 
   --color-volta-chalk: #ffffff;
   --color-volta-ash: #a3a3a3;
