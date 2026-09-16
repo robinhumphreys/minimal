@@ -2,11 +2,8 @@
 
 import * as React from "react"
 
-import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
-
 import { useOrg } from "@/app/admin/_components/use-org"
-import { Button } from "@/components/ui/button"
+import { NextButton } from "@/app/admin/_components/next-button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Field,
@@ -146,15 +143,9 @@ export function FeaturesStep({ next }: { next: string }) {
       </FieldGroup>
 
       <div className="absolute right-8 bottom-8">
-        <Button
-          size="lg"
-          disabled={!anyOn}
-          nativeButton={false}
-          render={<Link href={next} />}
-        >
+        <NextButton href={next} disabled={!anyOn}>
           Next
-          <ArrowRightIcon />
-        </Button>
+        </NextButton>
       </div>
     </div>
   )

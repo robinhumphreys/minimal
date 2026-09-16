@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 
 import { Pane } from "@/app/admin/_components/pane"
 
+import { OnboardingProgress } from "./_components/onboarding-progress"
+
 export const metadata: Metadata = {
   title: "Onboarding · Minimal AI",
 }
@@ -20,10 +22,11 @@ export default function OnboardingLayout({
 }: LayoutProps<"/admin/[org]/agent/onboarding">) {
   return (
     <div className="flex min-h-0 flex-1 flex-col rounded-xl bg-neutral-200/70">
-      <header className="flex h-11 shrink-0 items-center px-4">
+      <header className="flex h-11 shrink-0 items-center justify-between px-4">
         <h1 className="font-heading text-sm font-medium text-foreground/80">
           Set up your agentic storefront
         </h1>
+        <OnboardingProgress />
       </header>
       <Pane>{children}</Pane>
     </div>

@@ -15,11 +15,8 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
-  InputGroupInput,
   InputGroupTextarea,
 } from "@/components/ui/input-group"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Message, MessageContent, MessageGroup } from "@/components/ui/message"
 import {
   MessageScroller,
@@ -29,7 +26,6 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller"
-import { Textarea } from "@/components/ui/textarea"
 import { cn } from "cn"
 
 import {
@@ -37,26 +33,7 @@ import {
   type SiteChatUIMessage,
 } from "@/app/api/admin/site-chat/tools"
 
-import {
-  AVATARS,
-  DENSITIES,
-  FONTS,
-  HEADERS,
-  ICON_STYLES,
-  LAUNCHER_ICONS,
-  PLACEMENTS,
-  RATIOS,
-  ROUNDNESS,
-  SHAPES,
-  SIZES,
-  SPELLINGS,
-  THINKING,
-  VOICES,
-  type IconStyle,
-  type LauncherIcon,
-  type Placement,
-  type SiteChatSettings,
-} from "./site-chat"
+import type { SiteChatSettings } from "./site-chat"
 
 type Turn = { id: string; from: "agent" | "merchant"; text: string }
 
@@ -118,10 +95,10 @@ export function CustomisePane({
   settings: SiteChatSettings
   onChange: (next: SiteChatSettings) => void
   /**
-   * Another surface's options, in place of the site chat's. The chat is the
-   * same either way: one conversation about one agent, across its surfaces.
+   * The surface's own options. The chat is the same for every surface: one
+   * conversation about one agent.
    */
-  options?: React.ReactNode
+  options: React.ReactNode
 }) {
   return (
     // Both stay mounted. Swapping them out and back would unmount the chat,
@@ -142,7 +119,7 @@ export function CustomisePane({
           showing === "options" ? "flex" : "hidden",
         )}
       >
-        {options ?? <OptionsForm settings={settings} onChange={onChange} />}
+        {options}
       </div>
     </div>
   )
@@ -353,417 +330,5 @@ function CustomiseChat({
         </InputGroup>
       </form>
     </MessageScrollerProvider>
-  )
-}
-
-/** The same settings the chat edits, for when typing a sentence is slower. */
-function OptionsForm({
-  settings,
-  onChange,
-}: {
-  settings: SiteChatSettings
-  onChange: (next: SiteChatSettings) => void
-}) {
-  const set = <K extends keyof SiteChatSettings>(
-    key: K,
-    value: SiteChatSettings[K],
-  ) => onChange({ ...settings, [key]: value })
-
-  return (
-    <div className="flex min-h-0 flex-1 flex-col gap-7 overflow-y-auto pr-1">
-      <Group title="Surfaces">
-        <div className="flex flex-wrap gap-1.5">
-          <Toggle
-            label="Site chat"
-            on={settings.siteChat}
-            onToggle={() => set("siteChat", !settings.siteChat)}
-          />
-          <Toggle
-            label="Search assist"
-            on={settings.searchAssist}
-            onToggle={() => set("searchAssist", !settings.searchAssist)}
-          />
-          <Toggle
-            label="Product help"
-            on={settings.productHelp}
-            onToggle={() => set("productHelp", !settings.productHelp)}
-          />
-        </div>
-      </Group>
-
-      <Group title="Product help">
-        <Field label="Button text" hint="On the trigger the site places.">
-          <Input
-            className="ring-inset"
-            value={settings.guideLabel}
-            onChange={(event) => set("guideLabel", event.target.value)}
-          />
-        </Field>
-        <Field label="First line" hint="Before the guide's first question.">
-          <Textarea
-            rows={2}
-            className="ring-inset"
-            value={settings.guideGreeting}
-            onChange={(event) => set("guideGreeting", event.target.value)}
-          />
-        </Field>
-      </Group>
-
-      <Group title="What it says">
-        <Field label="Opening message" hint="What the agent says first.">
-          <Textarea
-            rows={3}
-            className="ring-inset"
-            value={settings.greeting}
-            onChange={(event) => set("greeting", event.target.value)}
-          />
-        </Field>
-        <Field
-          label="Suggested questions"
-          hint="Shown as taps under the opening message. One per line."
-        >
-          <Textarea
-            rows={3}
-            className="ring-inset"
-            value={settings.starters.join("\n")}
-            onChange={(event) => set("starters", lines(event.target.value))}
-          />
-        </Field>
-        <Field label="Voice">
-          <Choices
-            options={VOICES}
-            value={settings.voice}
-            onSelect={(value) => set("voice", value)}
-          />
-        </Field>
-        <Field label="Spelling">
-          <Choices
-            options={SPELLINGS}
-            value={settings.spelling}
-            onSelect={(value) => set("spelling", value)}
-          />
-        </Field>
-        <Field
-          label="Language"
-          hint="The agent answers in the shopper's language; this is the fallback."
-        >
-          <Input
-            className="ring-inset"
-            value={settings.language}
-            onChange={(event) => set("language", event.target.value)}
-          />
-        </Field>
-      </Group>
-
-      <Group title="Who it is">
-        <Field label="Name">
-          <Input
-            className="ring-inset"
-            value={settings.assistantName}
-            placeholder="Your brand's name"
-            onChange={(event) => set("assistantName", event.target.value)}
-          />
-        </Field>
-        <Field label="Subtitle">
-          <Input
-            className="ring-inset"
-            value={settings.subtitle}
-            placeholder="None"
-            onChange={(event) => set("subtitle", event.target.value)}
-          />
-        </Field>
-        <Field label="Avatar">
-          <Choices
-            options={AVATARS}
-            value={settings.avatar}
-            onSelect={(value) => set("avatar", value)}
-          />
-        </Field>
-      </Group>
-
-      <Group title="The button">
-        <Field label="Placement">
-          <Choices
-            options={PLACEMENTS}
-            value={settings.placement}
-            onSelect={(value: Placement) => set("placement", value)}
-          />
-        </Field>
-        <Field label="Shape">
-          <Choices
-            options={SHAPES}
-            value={settings.shape}
-            onSelect={(value) => set("shape", value)}
-          />
-        </Field>
-        <Field label="Size">
-          <Choices
-            options={SIZES}
-            value={settings.size}
-            onSelect={(value) => set("size", value)}
-          />
-        </Field>
-        <Field label="Icon">
-          <Choices
-            options={LAUNCHER_ICONS}
-            value={settings.icon}
-            onSelect={(value: LauncherIcon) => set("icon", value)}
-          />
-        </Field>
-        <Field label="Icon style">
-          <Choices
-            options={ICON_STYLES}
-            value={settings.iconStyle}
-            onSelect={(value: IconStyle) => set("iconStyle", value)}
-          />
-        </Field>
-        <Field label="Label">
-          <Input
-            className="ring-inset"
-            value={settings.label}
-            placeholder="Icon only"
-            onChange={(event) => set("label", event.target.value)}
-          />
-        </Field>
-      </Group>
-
-      <Group title="The window">
-        <Field label="Accent">
-          {/* One field, not a swatch parked beside one. The native colour
-              input draws its own bevelled box that nothing in this admin
-              matches, so it is laid over a plain disc at zero opacity and only
-              the disc is ever seen. */}
-          <InputGroup className="ring-inset">
-            <InputGroupAddon align="inline-start">
-              <span
-                style={{ backgroundColor: settings.accent }}
-                className="relative size-4 shrink-0 rounded-full ring-1 ring-black/10 ring-inset"
-              >
-                <input
-                  type="color"
-                  aria-label="Accent colour"
-                  value={settings.accent}
-                  onChange={(event) => set("accent", event.target.value)}
-                  className="absolute inset-0 size-full cursor-pointer opacity-0"
-                />
-              </span>
-            </InputGroupAddon>
-            <InputGroupInput
-              aria-label="Accent hex"
-              value={settings.accent}
-              onChange={(event) => set("accent", event.target.value)}
-            />
-          </InputGroup>
-        </Field>
-        <Field label="Header">
-          <Choices
-            options={HEADERS}
-            value={settings.header}
-            onSelect={(value) => set("header", value)}
-          />
-        </Field>
-        <Field label="Corners">
-          <Choices
-            options={ROUNDNESS}
-            value={settings.roundness}
-            onSelect={(value) => set("roundness", value)}
-          />
-        </Field>
-        <Field label="Font">
-          <Choices
-            options={FONTS}
-            value={settings.font}
-            onSelect={(value) => set("font", value)}
-          />
-        </Field>
-        <Field label="Spacing">
-          <Choices
-            options={DENSITIES}
-            value={settings.density}
-            onSelect={(value) => set("density", value)}
-          />
-        </Field>
-        <Field label="While it works">
-          <Choices
-            options={THINKING}
-            value={settings.thinking}
-            onSelect={(value) => set("thinking", value)}
-          />
-        </Field>
-      </Group>
-
-      <Group title="Products">
-        <Field label="Image shape">
-          <Choices
-            options={RATIOS}
-            value={settings.ratio}
-            onSelect={(value) => set("ratio", value)}
-          />
-        </Field>
-        <Field label="On cards">
-          <div className="flex flex-wrap gap-1.5">
-            <Toggle
-              label="Price"
-              on={settings.price}
-              onToggle={() => set("price", !settings.price)}
-            />
-            <Toggle
-              label="Rating"
-              on={settings.rating}
-              onToggle={() => set("rating", !settings.rating)}
-            />
-          </div>
-        </Field>
-        <Field label="Picks per answer">
-          <Choices
-            options={[
-              { value: "2", label: "Two" },
-              { value: "3", label: "Three" },
-              { value: "4", label: "Four" },
-            ]}
-            value={String(settings.picks)}
-            onSelect={(value) => set("picks", Number(value))}
-          />
-        </Field>
-      </Group>
-
-      <Group title="When it appears">
-        <Field
-          label="Nudge"
-          hint="Pops the opening message up beside the closed button."
-        >
-          <Choices
-            options={[
-              { value: "0", label: "Never" },
-              { value: "5", label: "After 5s" },
-              { value: "15", label: "After 15s" },
-              { value: "30", label: "After 30s" },
-            ]}
-            value={String(settings.nudge)}
-            onSelect={(value) => set("nudge", Number(value))}
-          />
-        </Field>
-        <Field label="Product pages">
-          <Toggle
-            label="Open the window by itself"
-            on={settings.openOnProductPages}
-            onToggle={() =>
-              set("openOnProductPages", !settings.openOnProductPages)
-            }
-          />
-        </Field>
-        <Field
-          label="Stay off these paths"
-          hint="Path prefixes, one per line, e.g. /checkout."
-        >
-          <Textarea
-            rows={2}
-            className="ring-inset"
-            value={settings.hiddenPaths.join("\n")}
-            onChange={(event) => set("hiddenPaths", lines(event.target.value))}
-          />
-        </Field>
-      </Group>
-    </div>
-  )
-}
-
-function lines(value: string): string[] {
-  return value.split("\n").filter((line) => line.trim().length > 0)
-}
-
-function Group({
-  title,
-  children,
-}: {
-  title: string
-  children: React.ReactNode
-}) {
-  return (
-    <section className="flex flex-col gap-4">
-      <h3 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-        {title}
-      </h3>
-      {children}
-    </section>
-  )
-}
-
-/** A pill that is on or off. */
-function Toggle({
-  label,
-  on,
-  onToggle,
-}: {
-  label: string
-  on: boolean
-  onToggle: () => void
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      onClick={onToggle}
-      className={cn(
-        "rounded-full border px-3 py-1 text-sm transition-colors",
-        on
-          ? "border-transparent bg-primary text-primary-foreground"
-          : "border-input text-muted-foreground hover:text-foreground",
-      )}
-    >
-      {label}
-    </button>
-  )
-}
-
-function Field({
-  label,
-  hint,
-  children,
-}: {
-  label: string
-  /** Only where the label alone leaves the field's job ambiguous. */
-  hint?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground">{label}</Label>
-      {hint ? (
-        <p className="-mt-1 text-xs text-muted-foreground">{hint}</p>
-      ) : null}
-      {children}
-    </div>
-  )
-}
-
-/** A row of mutually exclusive pills. */
-function Choices<T extends string>({
-  options,
-  value,
-  onSelect,
-}: {
-  options: { value: T; label: string }[]
-  value: T
-  onSelect: (value: T) => void
-}) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          onClick={() => onSelect(option.value)}
-          className={cn(
-            "rounded-full border px-3 py-1 text-sm transition-colors",
-            option.value === value
-              ? "border-transparent bg-primary text-primary-foreground"
-              : "border-input text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
   )
 }

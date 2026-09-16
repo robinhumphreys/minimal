@@ -2,13 +2,9 @@
 
 import * as React from "react"
 
-import Link from "next/link"
-import {
-  ArrowRightIcon,
-  CheckIcon,
-  SlidersHorizontalIcon,
-  UploadIcon,
-} from "lucide-react"
+import { CheckIcon, SlidersHorizontalIcon, UploadIcon } from "lucide-react"
+
+import { NextButton } from "@/app/admin/_components/next-button"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -26,6 +22,11 @@ import { readPublishedOrDefault } from "@/lib/config/storage"
 import { CustomisePane } from "./customise-pane"
 import type { Device } from "./device-toggle"
 import { InstallPanel } from "./install-panel"
+import {
+  ProductHelpOptions,
+  SearchAssistOptions,
+  SiteChatOptions,
+} from "./options"
 import { ProductHelpPreview } from "./product-help-preview"
 import { SearchAssistPreview } from "./search-assist-preview"
 import { applySettings, settingsFrom, type SiteChatSettings } from "./site-chat"
@@ -139,29 +140,36 @@ function Studio({
   return (
     <div className="flex h-full flex-col gap-4 p-6">
       <div className="flex items-center gap-4">
-        <Tabs
-          value={surface}
-          onValueChange={(value) => setSurface(value as SurfaceId)}
-        >
-          <TabsList>
-            {tabs.map((entry) => (
-              <TabsTrigger key={entry.value} value={entry.value}>
-                {entry.label}
-                {mode === "manage" &&
-                entry.value !== "install" &&
-                !enabled[entry.value] ? (
-                  <span className="ml-1 text-muted-foreground">off</span>
-                ) : null}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        {/* One surface is a title, not a menu of one. */}
+        {tabs.length > 1 ? (
+          <Tabs
+            value={surface}
+            onValueChange={(value) => setSurface(value as SurfaceId)}
+          >
+            <TabsList className="h-10">
+              {tabs.map((entry) => (
+                <TabsTrigger key={entry.value} value={entry.value}>
+                  {entry.label}
+                  {mode === "manage" &&
+                  entry.value !== "install" &&
+                  !enabled[entry.value] ? (
+                    <span className="ml-1 text-muted-foreground">off</span>
+                  ) : null}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        ) : (
+          <h2 className="font-heading text-lg font-medium">
+            {tabs[0]?.label ?? "Site chat"}
+          </h2>
+        )}
 
         {/* The tray. Sits on the tabs' own line because what it holds acts on
             the whole screen, not on either half of it. */}
         <div className="ml-auto flex items-center gap-1">
           <Button
-            size="sm"
+            size="lg"
             variant={showing === "options" ? "secondary" : "ghost"}
             aria-pressed={showing === "options"}
             onClick={() =>
@@ -181,27 +189,19 @@ function Studio({
                   Unpublished changes
                 </span>
               ) : null}
-              <Button
-                size="sm"
+              <NextButton
                 disabled={!valid || (!dirty && !published)}
                 onClick={() => {
                   publish(config.id)
                   setPublished(true)
                 }}
+                icon={published ? <CheckIcon /> : <UploadIcon />}
               >
-                {published ? <CheckIcon /> : <UploadIcon />}
                 {published ? "Published" : "Publish"}
-              </Button>
+              </NextButton>
             </>
           ) : next ? (
-            <Button
-              size="sm"
-              nativeButton={false}
-              render={<Link href={next} />}
-            >
-              Next
-              <ArrowRightIcon />
-            </Button>
+            <NextButton href={next}>Next</NextButton>
           ) : null}
         </div>
       </div>
@@ -248,61 +248,27 @@ function Studio({
               options={
                 surface === "search-assist" ? (
                   <SearchAssistOptions
-                    enabled={settings.searchAssist}
-                    onChange={(enabled) =>
-                      onChange({ ...settings, searchAssist: enabled })
-                    }
+                    settings={settings}
+                    onChange={onChange}
+                    switchable={mode === "manage"}
                   />
-                ) : undefined
+                ) : surface === "product-help" ? (
+                  <ProductHelpOptions
+                    settings={settings}
+                    onChange={onChange}
+                    switchable={mode === "manage"}
+                  />
+                ) : (
+                  <SiteChatOptions
+                    settings={settings}
+                    onChange={onChange}
+                    switchable={mode === "manage"}
+                  />
+                )
               }
             />
           </ResizablePanel>
         </ResizablePanelGroup>
-      </div>
-    </div>
-  )
-}
-
-/**
- * Search assist has one decision so far: whether the agent takes the search
- * box over at all. Everything it shows is read from the same voice and
- * catalogue as the chat, so there is nothing else to set yet.
- */
-function SearchAssistOptions({
-  enabled,
-  onChange,
-}: {
-  enabled: boolean
-  onChange: (enabled: boolean) => void
-}) {
-  return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-1.5">
-        <p className="text-sm text-muted-foreground">Search box</p>
-        <div className="flex gap-1.5">
-          {[
-            { value: true, label: "Agent reads it" },
-            { value: false, label: "Leave it alone" },
-          ].map((option) => (
-            <button
-              key={option.label}
-              type="button"
-              onClick={() => onChange(option.value)}
-              className={
-                option.value === enabled
-                  ? "rounded-full border border-transparent bg-primary px-3 py-1 text-sm text-primary-foreground"
-                  : "rounded-full border border-input px-3 py-1 text-sm text-muted-foreground hover:text-foreground"
-              }
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs text-muted-foreground">
-          When on, the shop&rsquo;s own search box stays where it is. What
-          appears under it is the agent&rsquo;s reading of the search: what it
-          took the words to mean, the products, one line, and a way to refine.
-        </p>
       </div>
     </div>
   )

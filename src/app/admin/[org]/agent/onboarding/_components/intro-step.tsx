@@ -1,11 +1,9 @@
 "use client"
 
-import Link from "next/link"
-
 import { motion } from "motion/react"
 
 import { MinimalLogo } from "@/app/admin/_components/minimal-logo"
-import { Button } from "@/components/ui/button"
+import { NextButton } from "@/app/admin/_components/next-button"
 
 /**
  * The flow's front door: one sentence and one button. Everything the merchant
@@ -32,14 +30,9 @@ export function IntroStep({ next }: { next: string }) {
         </h1>
       </Fade>
       <Fade>
-        <Button
-          size="lg"
-          className="mt-8"
-          nativeButton={false}
-          render={<Link href={next} />}
-        >
+        <NextButton href={next} className="mt-8">
           Start
-        </Button>
+        </NextButton>
       </Fade>
     </motion.div>
   )

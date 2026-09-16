@@ -38,6 +38,14 @@ export function PlacementStep({ next }: { next: string }) {
   const frame = React.useRef<HTMLIFrameElement>(null)
   const [pong, setPong] = React.useState<Pong | null>(null)
   const [done, setDone] = React.useState(0)
+  // Each check is a fresh load of the site; the frame's address carries the
+  // attempt so the browser cannot hand back the last one.
+  const [attempt, setAttempt] = React.useState(1)
+  const checkAgain = () => {
+    setPong(null)
+    setDone(0)
+    setAttempt((n) => n + 1)
+  }
 
   React.useEffect(() => {
     useAdminStore.getState().hydrate()
@@ -64,7 +72,7 @@ export function PlacementStep({ next }: { next: string }) {
       window.removeEventListener("message", onMessage)
       window.clearInterval(timer)
     }
-  }, [brand, pong])
+  }, [brand, pong, attempt])
 
   // One row per thing the merchant switched on, named as it was on the
   // card they switched it on with, and a last row for the whole. A surface
@@ -101,13 +109,14 @@ export function PlacementStep({ next }: { next: string }) {
   return (
     <LoaderStage
       brand={brand}
-      frameSrc={site.path}
+      frameSrc={`${site.path}?check=${attempt}`}
       frameRef={frame}
       fetched={pong !== null}
       finished={finished}
       title={finished ? "Your agent is live" : "Checking your site"}
       next={next}
-      nextLabel="Go to your agent"
+      nextLabel="Finish"
+      retry={{ label: "Check again", onClick: checkAgain }}
     >
       <Checklist tasks={tasks} done={done} />
     </LoaderStage>

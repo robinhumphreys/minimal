@@ -24,24 +24,25 @@ export type Snippet = { title: string; where: string; code: string }
 export function snippetsFor(config: AgentConfig): Snippet[] {
   const snippets: Snippet[] = [
     {
-      title: "The agent",
-      where: "Once, in your site's layout, just before </body>.",
+      title: "Body tag",
+      where:
+        "Copy this line of code into the <body> of every page, or add it to your tag manager.",
       code: scriptTag(config),
     },
   ]
   if (config.surface.searchAssist) {
     snippets.push({
-      title: "Search assist",
+      title: "Search template",
       where:
-        "In your search template, directly under the search input. Keep data-query equal to what the shopper has typed.",
+        "Copy this into your search results template, directly under the search input. Keep data-query equal to what the shopper has typed.",
       code: searchMount(),
     })
   }
   if (config.surface.productHelp.enabled) {
     snippets.push({
-      title: "Product help",
+      title: "Category or product page",
       where:
-        "Wherever the page wants the button, e.g. above a category grid. data-topic is what the guide is about.",
+        "Copy this wherever you want the button, for example above a category grid. Set data-topic to what the page is about.",
       code: guideMount(),
     })
   }
