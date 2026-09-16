@@ -7,8 +7,6 @@ import {
 } from "@/lib/catalog"
 
 import type {
-  Collection,
-  FacetKey,
   NavModel,
   ProductCardModel,
   SearchEntry,
@@ -22,11 +20,6 @@ export function productHref(slug: string) {
 
 export function categoryHref(slug: string) {
   return `/${BRAND}/${slug}`
-}
-
-/** A category page pre-filtered to one facet value. */
-export function facetHref(category: string, facet: FacetKey, value: string) {
-  return `${categoryHref(category)}?${facet}=${encodeURIComponent(value)}`
 }
 
 export function toCard(product: Product): ProductCardModel {
@@ -93,36 +86,6 @@ export function navModel(): NavModel {
     secondary: SECONDARY,
     utility: UTILITY,
   }
-}
-
-/**
- * Sub-collections for a category page, taken from whichever facet splits it
- * most usefully. Fit first — it is how tailoring is actually shopped — then
- * fabric, then colour. Returns nothing when the category has no real split.
- */
-export function collectionsFor(categorySlug: string): Collection[] {
-  const products = getProductsInCategory(BRAND, categorySlug)
-
-  for (const facet of ["fit", "fabric", "colour"] as FacetKey[]) {
-    const byValue = new Map<string, Product[]>()
-    for (const product of products) {
-      const value = product.attributes[facet]
-      if (!value) continue
-      byValue.set(value, [...(byValue.get(value) ?? []), product])
-    }
-
-    // One tile is not a collection, and a facet that splits every product into
-    // its own bucket is a spec, not a collection.
-    if (byValue.size < 2 || byValue.size > 6) continue
-
-    return [...byValue.entries()].map(([value, matches]) => ({
-      label: value,
-      href: facetHref(categorySlug, facet, value),
-      image: matches[0].images[0],
-    }))
-  }
-
-  return []
 }
 
 /**

@@ -6,6 +6,12 @@
  * one, without this file changing.
  */
 
+/**
+ * The stand-in run for a product that does not come in sizes. Named because
+ * it is a value the UI has to recognise, not just another size label.
+ */
+export const ONE_SIZE = "One size"
+
 const BY_CATEGORY: Record<string, string[]> = {
   suits: ["44", "46", "48", "50", "52", "54", "56"],
   jackets: ["44", "46", "48", "50", "52", "54", "56"],
@@ -14,7 +20,7 @@ const BY_CATEGORY: Record<string, string[]> = {
   outerwear: ["XS", "S", "M", "L", "XL", "XXL"],
   trousers: ["28", "30", "32", "34", "36", "38"],
   shoes: ["40", "41", "42", "43", "44", "45", "46"],
-  accessories: ["One size"],
+  accessories: [ONE_SIZE],
 }
 
 const FALLBACK = ["S", "M", "L", "XL"]
@@ -31,6 +37,15 @@ export function sizesFor(
       .filter(Boolean)
   }
   return BY_CATEGORY[category] ?? FALLBACK
+}
+
+/**
+ * How a chosen size reads when it is named alongside a product — in the bag,
+ * say. A one-size product has no size to state, so it stands on its own rather
+ * than coming out as "Size one size".
+ */
+export function sizeLabel(size: string): string {
+  return size === ONE_SIZE ? ONE_SIZE : `Size ${size}`
 }
 
 /**

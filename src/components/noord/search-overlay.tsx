@@ -68,7 +68,7 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
       <SheetContent side="full" showCloseButton={false}>
         <SheetTitle className="sr-only">Search</SheetTitle>
 
-        <div className="noord-gutter flex h-noord-header shrink-0 items-center justify-between">
+        <div className="noord-sheet-gutter flex h-noord-header shrink-0 items-center justify-between">
           <button
             type="button"
             onClick={() => {
@@ -94,7 +94,7 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
         </div>
 
         <SheetBody>
-          <div className="noord-gutter mx-auto w-full max-w-2xl pb-16">
+          <div className="noord-sheet-gutter mx-auto w-full max-w-2xl pb-16">
             <h2 className="pt-2 pb-5 text-noord-section">Search</h2>
 
             <div className="relative">

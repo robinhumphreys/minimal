@@ -40,16 +40,6 @@ export type NavLink = {
 
 export type NavCategory = NavLink
 
-/**
- * A sub-collection tile at the head of a category page: one value of that
- * category's dominant facet, with a product shot to stand for it.
- */
-export type Collection = {
-  label: string
-  href: string
-  image: string
-}
-
 export type NavModel = {
   /** Desktop category bar, and the search overlay's category matches. */
   categories: NavCategory[]

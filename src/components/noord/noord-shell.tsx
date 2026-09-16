@@ -49,8 +49,7 @@ export function NoordShell({
     <div className="noord flex min-h-dvh flex-col">
       <Header nav={nav} />
 
-      {/* Bottom padding clears the agent bar the embed fixes to the viewport. */}
-      <main className="flex-1 pb-noord-agent-bar">{children}</main>
+      <main className="flex-1">{children}</main>
 
       <Footer />
 

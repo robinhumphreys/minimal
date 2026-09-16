@@ -41,10 +41,16 @@ export function ProductPage({ slug }: { slug: string }) {
 
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-10 xl:gap-16">
+      {/*
+        No column gap on desktop: the detail column sets its own padding, so the
+        space between it and the gallery matches the space between it and the
+        viewport edge. A grid gap plus the page gutter made the left inset more
+        than twice the right one.
+      */}
+      <div className="lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-0">
         <ProductGallery images={product.images} alt={product.name} />
 
-        <div className="noord-gutter flex flex-col gap-6 pt-6 lg:sticky lg:top-[calc(var(--spacing-noord-header)+2rem)] lg:pt-10">
+        <div className="noord-gutter flex flex-col gap-6 pt-6 lg:sticky lg:top-[calc(var(--spacing-noord-header)+2rem)] lg:px-12 lg:pt-12 xl:px-16 xl:pt-16">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2">
             <Link
               href="/noord"
@@ -69,11 +75,6 @@ export function ProductPage({ slug }: { slug: string }) {
 
           <div className="flex flex-col gap-2">
             <h1 className="text-noord-section text-balance">{product.name}</h1>
-            {product.attributes.colour && (
-              <span className="text-noord-micro text-noord-ink-muted uppercase">
-                {product.attributes.colour}
-              </span>
-            )}
             <p className="flex items-baseline gap-3 pt-1 text-noord-title tabular-nums">
               <span className={onSale ? "text-noord-sale" : undefined}>
                 {formatPrice(product.price)}

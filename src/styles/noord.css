@@ -85,8 +85,6 @@
   /* --- Rhythm ----------------------------------------------------------- */
   --spacing-noord-gutter: 1rem;
   --spacing-noord-header: 3.25rem;
-  /* Clears the fixed agent bar the embed mounts at the bottom of the page. */
-  --spacing-noord-agent-bar: 5.5rem;
 }
 
 @layer components {
@@ -118,6 +116,38 @@
     .noord-gutter {
       padding-inline: 3rem;
     }
+  }
+
+  /*
+   * Inline padding inside a sheet.
+   *
+   * A `full` sheet is a page and takes the page gutter. A side panel is a
+   * fixed 22–26rem wide, so the page gutter — 3rem once the viewport passes
+   * 80rem — would eat an eighth of it, and would keep changing as the window
+   * resized even though the panel never does. Panels take a fixed gutter.
+   */
+  .noord-sheet {
+    --noord-sheet-gutter: 1.25rem;
+  }
+
+  .noord-sheet[data-side="full"] {
+    --noord-sheet-gutter: var(--spacing-noord-gutter);
+  }
+
+  @media (min-width: 48rem) {
+    .noord-sheet[data-side="full"] {
+      --noord-sheet-gutter: 2rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .noord-sheet[data-side="full"] {
+      --noord-sheet-gutter: 3rem;
+    }
+  }
+
+  .noord-sheet-gutter {
+    padding-inline: var(--noord-sheet-gutter);
   }
 
   /* Underline that grows from the left on hover — used on text links. */
