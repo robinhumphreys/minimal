@@ -371,6 +371,21 @@ function OptionsForm({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-7 overflow-y-auto pr-1">
+      <Group title="Surfaces">
+        <div className="flex flex-wrap gap-1.5">
+          <Toggle
+            label="Site chat"
+            on={settings.siteChat}
+            onToggle={() => set("siteChat", !settings.siteChat)}
+          />
+          <Toggle
+            label="Search assist"
+            on={settings.searchAssist}
+            onToggle={() => set("searchAssist", !settings.searchAssist)}
+          />
+        </div>
+      </Group>
+
       <Group title="What it says">
         <Field label="Opening message" hint="What the agent says first.">
           <Textarea

@@ -148,6 +148,10 @@ export const siteChatPatchSchema = z.object({
     .describe(
       "Whether the agent also takes over the site's own search box. False leaves the search box alone.",
     ),
+  siteChat: z
+    .boolean()
+    .optional()
+    .describe("Whether the chat launcher is on the site at all."),
 })
 
 export type SiteChatPatch = z.infer<typeof siteChatPatchSchema>

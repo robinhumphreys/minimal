@@ -84,6 +84,22 @@ function start() {
     render(parsed.data)
   })
 
+  // The admin's placement check loads the site in a frame and asks whether
+  // the agent is here. Answered from the DOM, not from config, so it reports
+  // what a shopper would actually see.
+  window.addEventListener("message", (event: MessageEvent) => {
+    const data = event.data as { type?: string } | null
+    if (!data || data.type !== "minimal:ping" || !event.source) return
+    const reply = {
+      type: "minimal:pong",
+      id: agentId,
+      launcher: document.querySelector('[data-slot="launcher"]') !== null,
+      searchAssist: readPublishedOrDefault(agentId).surface.searchAssist,
+      published: window.localStorage.getItem(publishedKey(agentId)) !== null,
+    }
+    ;(event.source as Window).postMessage(reply, event.origin)
+  })
+
   window.MinimalAgent = { open: (options) => bus.open(options) }
 }
 

@@ -50,7 +50,13 @@ export const behaviourSchema = z.object({
   picks: z.number().int().min(2).max(4).default(3),
 })
 
-export const entrySchema = z.enum(["launcher", "bar", "recommendations"])
+/** `none` is the site chat switched off; the other surfaces have their own flags. */
+export const entrySchema = z.enum([
+  "launcher",
+  "bar",
+  "recommendations",
+  "none",
+])
 export const positionSchema = z.enum([
   "bottom-right",
   "bottom-center",

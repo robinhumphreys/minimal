@@ -47,7 +47,12 @@ export function NavMain({ groups }: { groups: NavGroup[] }) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  isActive={item.href ? pathname.startsWith(item.href) : false}
+                  isActive={
+                    item.href
+                      ? pathname === item.href ||
+                        pathname.startsWith(`${item.href}/`)
+                      : false
+                  }
                   className={
                     item.href ? undefined : "text-sidebar-foreground/60"
                   }

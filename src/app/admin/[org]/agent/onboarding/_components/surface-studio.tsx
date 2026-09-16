@@ -2,7 +2,13 @@
 
 import * as React from "react"
 
-import { CheckIcon, SlidersHorizontalIcon, UploadIcon } from "lucide-react"
+import Link from "next/link"
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  SlidersHorizontalIcon,
+  UploadIcon,
+} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -15,8 +21,11 @@ import { agentConfigSchema, type AgentConfig } from "@/lib/config/schema"
 import { useOrg } from "@/app/admin/_components/use-org"
 import { useAdminStore } from "@/lib/store/admin"
 
+import { readPublishedOrDefault } from "@/lib/config/storage"
+
 import { CustomisePane } from "./customise-pane"
 import type { Device } from "./device-toggle"
+import { InstallPanel } from "./install-panel"
 import { SearchAssistPreview } from "./search-assist-preview"
 import { applySettings, settingsFrom, type SiteChatSettings } from "./site-chat"
 import { SiteChatPreview } from "./site-chat-preview"
@@ -24,10 +33,16 @@ import { SiteChatPreview } from "./site-chat-preview"
 const SURFACES = [
   { value: "site-chat", label: "Site chat" },
   { value: "search-assist", label: "Search assist" },
-  { value: "product-help", label: "Product help" },
+  { value: "install", label: "Install" },
 ] as const
 
 type SurfaceId = (typeof SURFACES)[number]["value"]
+
+/**
+ * Onboarding previews only what step three switched on and moves on with
+ * Next; management shows every surface, the install, and Publish.
+ */
+export type StudioMode = "onboarding" | "manage"
 
 /** How long the Publish button says it has done so. */
 const PUBLISHED_MS = 2000
@@ -38,7 +53,14 @@ const PUBLISHED_MS = 2000
  * The screen is one idea repeated per surface — the thing on the left, the way
  * to change it on the right — so the tabs swap only the left half's subject.
  */
-export function SurfaceStudio() {
+export function SurfaceStudio({
+  mode,
+  next,
+}: {
+  mode: StudioMode
+  /** Where Next goes, in onboarding. */
+  next?: string
+}) {
   const org = useOrg()
   const config = useAdminStore((state) => state.drafts[org])
 
@@ -50,16 +72,46 @@ export function SurfaceStudio() {
   return (
     // Keyed on the brand: switching accounts mid-flow should start the surface
     // over from that merchant's own draft, not carry the last one's.
-    <Studio key={config.id} config={config} />
+    <Studio key={config.id} config={config} mode={mode} next={next} />
   )
 }
 
-function Studio({ config }: { config: AgentConfig }) {
+function Studio({
+  config,
+  mode,
+  next,
+}: {
+  config: AgentConfig
+  mode: StudioMode
+  next?: string
+}) {
   const editDraft = useAdminStore((state) => state.editDraft)
   const publish = useAdminStore((state) => state.publish)
-  const [surface, setSurface] = React.useState<SurfaceId>("site-chat")
-  const [showing, setShowing] = React.useState<"chat" | "options">("chat")
   const [published, setPublished] = React.useState(false)
+  const enabled: Record<SurfaceId, boolean> = {
+    "site-chat": config.surface.entry === "launcher",
+    "search-assist": config.surface.searchAssist,
+    install: mode === "manage",
+  }
+  const tabs = SURFACES.filter(
+    (entry) => mode === "manage" || enabled[entry.value],
+  )
+  const [surface, setSurface] = React.useState<SurfaceId>(
+    () => tabs[0]?.value ?? "site-chat",
+  )
+  const revision = useAdminStore((state) => state.revision)
+  const hydrated = useAdminStore((state) => state.hydrated)
+  // Whether the draft differs from what the site is running. Read on every
+  // revision rather than kept in state: localStorage is the source.
+  const dirty = React.useMemo(
+    () =>
+      hydrated &&
+      JSON.stringify(config) !==
+        JSON.stringify(readPublishedOrDefault(config.id)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [config, hydrated, revision, published],
+  )
+  const [showing, setShowing] = React.useState<"chat" | "options">("chat")
   // Shared across surfaces: a merchant checking their phone wants to see
   // every surface on it, not re-choose it per tab.
   const [device, setDevice] = React.useState<Device>("desktop")
@@ -89,9 +141,14 @@ function Studio({ config }: { config: AgentConfig }) {
           onValueChange={(value) => setSurface(value as SurfaceId)}
         >
           <TabsList>
-            {SURFACES.map((entry) => (
+            {tabs.map((entry) => (
               <TabsTrigger key={entry.value} value={entry.value}>
                 {entry.label}
+                {mode === "manage" &&
+                entry.value !== "install" &&
+                !enabled[entry.value] ? (
+                  <span className="ml-1 text-muted-foreground">off</span>
+                ) : null}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -114,17 +171,35 @@ function Studio({ config }: { config: AgentConfig }) {
             <SlidersHorizontalIcon />
             Options
           </Button>
-          <Button
-            size="sm"
-            disabled={!valid}
-            onClick={() => {
-              publish(config.id)
-              setPublished(true)
-            }}
-          >
-            {published ? <CheckIcon /> : <UploadIcon />}
-            {published ? "Published" : "Publish"}
-          </Button>
+          {mode === "manage" ? (
+            <>
+              {dirty && !published ? (
+                <span className="px-2 text-xs text-muted-foreground">
+                  Unpublished changes
+                </span>
+              ) : null}
+              <Button
+                size="sm"
+                disabled={!valid || (!dirty && !published)}
+                onClick={() => {
+                  publish(config.id)
+                  setPublished(true)
+                }}
+              >
+                {published ? <CheckIcon /> : <UploadIcon />}
+                {published ? "Published" : "Publish"}
+              </Button>
+            </>
+          ) : next ? (
+            <Button
+              size="sm"
+              nativeButton={false}
+              render={<Link href={next} />}
+            >
+              Next
+              <ArrowRightIcon />
+            </Button>
+          ) : null}
         </div>
       </div>
 
@@ -147,7 +222,7 @@ function Studio({ config }: { config: AgentConfig }) {
                 onDeviceChange={setDevice}
               />
             ) : (
-              <NotBuiltYet />
+              <InstallPanel config={config} />
             )}
           </ResizablePanel>
 
@@ -220,15 +295,6 @@ function SearchAssistOptions({
           took the words to mean, the products, one line, and a way to refine.
         </p>
       </div>
-    </div>
-  )
-}
-
-/** The other surface exists as a tab before it exists as a screen. */
-function NotBuiltYet() {
-  return (
-    <div className="flex h-full items-center justify-center rounded-lg border border-dashed">
-      <p className="text-sm text-muted-foreground">Not built yet</p>
     </div>
   )
 }

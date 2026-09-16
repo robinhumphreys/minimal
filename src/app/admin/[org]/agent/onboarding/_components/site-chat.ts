@@ -57,6 +57,8 @@ export type SiteChatSettings = {
   price: boolean
   rating: boolean
   picks: number
+  // Which surfaces are on
+  siteChat: boolean
   // When it appears
   nudge: number
   openOnProductPages: boolean
@@ -159,6 +161,7 @@ export function settingsFrom(config: AgentConfig): SiteChatSettings {
     price: config.surface.cards.price,
     rating: config.surface.cards.rating,
     picks: config.behaviour.picks,
+    siteChat: config.surface.entry === "launcher",
     nudge: config.surface.nudge,
     openOnProductPages: config.surface.openOnProductPages,
     hiddenPaths: config.surface.hiddenPaths,
@@ -166,10 +169,7 @@ export function settingsFrom(config: AgentConfig): SiteChatSettings {
   }
 }
 
-/**
- * Writes the settings back into the draft. Choosing to set up Site chat is
- * choosing the launcher entry: the two are the same decision.
- */
+/** Writes the settings back into the draft. */
 export function applySettings(
   config: AgentConfig,
   settings: SiteChatSettings,
@@ -196,7 +196,7 @@ export function applySettings(
     },
     surface: {
       ...config.surface,
-      entry: "launcher",
+      entry: settings.siteChat ? "launcher" : "none",
       position: settings.placement,
       shape: settings.shape,
       size: settings.size,
