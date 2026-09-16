@@ -103,8 +103,7 @@ export function FeaturesStep({ next }: { next: string }) {
           Where should the agent work?
         </h1>
         <p className="max-w-md text-sm text-muted-foreground">
-          Switch on what you want. You will see each one on your own site in the
-          next step, and nothing goes live until the end.
+          Switch on what you want. Nothing goes live until the end.
         </p>
       </div>
 
