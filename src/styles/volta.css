@@ -73,12 +73,21 @@
   --color-volta-ash: #a3a3a3;
   --color-volta-smoke: #6b6b6b;
 
+  /*
+   * On the white product shelves the dark-surface greys invert. `slate` is the
+   * secondary text there and `mist` the hairline — both chosen to clear 4.5:1
+   * on white, which `ash` and `line` do not.
+   */
+  --color-volta-slate: #525252;
+  --color-volta-mist: #d4d4d4;
+
   /* The brand. Bright enough to carry black text at any size. */
   --color-volta-volt: #d7ff00;
   --color-volta-volt-dim: #b0d100;
+  /* The volt is invisible on white; this is the brand green for light shelves. */
   --color-volta-volt-deep: #3d4a00;
 
-  /* Sale and urgency. Deliberately the only other hue on the page. */
+  /* Destructive affordances only — removing a bag line. */
   --color-volta-heat: #ff3b1f;
 
   /* --- Shape ------------------------------------------------------------ */

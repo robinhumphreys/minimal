@@ -62,7 +62,6 @@ export function toCard(product: Product): ProductCardModel {
     href: productHref(product.slug),
     image: product.images[0],
     price: product.price,
-    compareAt: product.compareAt,
     rating: product.rating,
     reviewCount: product.reviewCount,
     categoryName: category?.name ?? product.category,
@@ -240,18 +239,6 @@ export function topRated(count: number, categorySlug?: string) {
 export function bestSellers(count: number) {
   return [...getCatalog(BRAND).products]
     .sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0))
-    .slice(0, count)
-    .map(toCard)
-}
-
-/** Everything carrying a struck-through price, dearest saving first. */
-export function onSale(count: number) {
-  return getCatalog(BRAND)
-    .products.filter((product) => product.compareAt)
-    .sort(
-      (a, b) =>
-        (b.compareAt ?? 0) - b.price - ((a.compareAt ?? 0) - a.price),
-    )
     .slice(0, count)
     .map(toCard)
 }

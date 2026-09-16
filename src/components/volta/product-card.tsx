@@ -1,21 +1,19 @@
 import Image from "next/image"
 import Link from "next/link"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
-import { discountPercent } from "@/lib/volta/format"
 import type { ProductCardModel } from "@/lib/volta/types"
 
-import { Badge } from "@/components/volta/ui/badge"
 import { Price } from "./price"
 import { RatingRow } from "./rating"
 
 /**
  * The product tile, used on the homepage rails, category grid and nav promos.
  *
- * The image plate is white, not dark. Every catalog shot is a white-background
- * packshot, so a dark plate leaves a white rectangle floating inside it — the
- * white plate makes the packshot's own background disappear and turns the tile
- * into a deliberate light block against the page.
+ * Always drawn for a white surface — see `Shelf`, which is what it sits on
+ * everywhere except the nav drawer, where it gets its own white panel. The
+ * card therefore takes no `surface` prop: a dark variant would only exist to
+ * be used by mistake.
  */
 export function ProductCard({
   product,
@@ -29,17 +27,15 @@ export function ProductCard({
   className?: string
   sizes?: string
 }) {
-  const saving = discountPercent(product.price, product.compareAt)
-
   return (
     <Link
       href={product.href}
       className={cn(
-        "group/card flex flex-col gap-3 outline-none focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:ring-offset-2 focus-visible:ring-offset-volta-void",
+        "group/card flex flex-col gap-3 outline-none focus-visible:ring-2 focus-visible:ring-volta-volt-deep focus-visible:ring-offset-2 focus-visible:ring-offset-volta-chalk",
         className,
       )}
     >
-      <div className="relative aspect-4/5 overflow-hidden rounded-volta bg-white">
+      <div className="relative aspect-4/5 overflow-hidden rounded-volta bg-volta-chalk">
         <Image
           src={product.image}
           alt={product.name}
@@ -48,27 +44,26 @@ export function ProductCard({
           preload={preload}
           className="object-contain transition-transform duration-500 group-hover/card:scale-105"
         />
-        {saving > 0 && (
-          <Badge variant="sale" className="absolute top-2 left-2">
-            −{saving}%
-          </Badge>
-        )}
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <RatingRow rating={product.rating} reviewCount={product.reviewCount} />
+        <RatingRow
+          rating={product.rating}
+          reviewCount={product.reviewCount}
+          surface="light"
+        />
 
-        <h3 className="volta-wide text-volta-title text-volta-chalk transition-colors group-hover/card:text-volta-volt">
+        <h3 className="volta-wide text-volta-title text-volta-void transition-colors group-hover/card:text-volta-volt-deep">
           {product.name}
         </h3>
 
         {(product.flavour || product.size) && (
-          <p className="text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+          <p className="text-volta-micro tracking-volta-wide text-volta-slate uppercase">
             {[product.flavour, product.size].filter(Boolean).join(" · ")}
           </p>
         )}
 
-        <Price price={product.price} compareAt={product.compareAt} />
+        <Price price={product.price} surface="light" />
       </div>
     </Link>
   )

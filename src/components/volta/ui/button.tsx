@@ -1,6 +1,6 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 // Volta buttons are hard-edged blocks with wide uppercase labels. Nothing here
 // reads a shadcn semantic token, so restyling Noord can never move these.

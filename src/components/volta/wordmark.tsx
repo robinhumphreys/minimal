@@ -1,4 +1,4 @@
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 /**
  * Set as text rather than drawn, so it inherits the brand grotesque and stays

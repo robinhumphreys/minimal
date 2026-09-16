@@ -6,7 +6,6 @@ import { CheckIcon, MinusIcon, PlusIcon, TrashIcon } from "lucide-react"
 
 import {
   bagCount,
-  bagSavings,
   bagSubtotal,
   useBag,
   type BagLine,
@@ -51,7 +50,6 @@ export function BagOverlay() {
   const shown = hydrated ? lines : []
   const count = bagCount(shown)
   const subtotal = bagSubtotal(shown)
-  const savings = bagSavings(shown)
   const remaining = toFreeDelivery(subtotal)
   const delivery = remaining === 0 ? 0 : DELIVERY_FEE
 
@@ -89,13 +87,6 @@ export function BagOverlay() {
           >
             <dl className="flex flex-col gap-1.5 text-volta-body">
               <Row label="Subtotal" value={formatPrice(subtotal)} />
-              {savings > 0 && (
-                <Row
-                  label="You save"
-                  value={`−${formatPrice(savings)}`}
-                  tone="heat"
-                />
-              )}
               <Row
                 label="Delivery"
                 value={delivery === 0 ? "Free" : formatPrice(delivery)}
@@ -227,16 +218,9 @@ function BagRow({ line }: { line: BagLine }) {
             </StepButton>
           </div>
 
-          <div className="flex flex-col items-end">
-            {line.compareAt && (
-              <s className="text-volta-micro text-volta-smoke tabular-nums">
-                {formatPrice(line.compareAt * line.quantity)}
-              </s>
-            )}
-            <span className="volta-wide text-volta-body text-volta-chalk tabular-nums">
-              {formatPrice(line.price * line.quantity)}
-            </span>
-          </div>
+          <span className="volta-wide text-volta-body text-volta-chalk tabular-nums">
+            {formatPrice(line.price * line.quantity)}
+          </span>
         </div>
       </div>
 
@@ -318,7 +302,7 @@ function Row({
 }: {
   label: string
   value: string
-  tone?: "volt" | "heat"
+  tone?: "volt"
 }) {
   return (
     <div className="flex items-baseline justify-between">
@@ -327,9 +311,7 @@ function Row({
         className={
           tone === "volt"
             ? "text-volta-volt tabular-nums"
-            : tone === "heat"
-              ? "text-volta-heat tabular-nums"
-              : "text-volta-chalk tabular-nums"
+            : "text-volta-chalk tabular-nums"
         }
       >
         {value}

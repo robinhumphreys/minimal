@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { MenuIcon, SearchIcon, ShoppingBagIcon, UserIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { bagCount, useBag } from "@/lib/volta/bag"
 import { useOverlays } from "@/lib/volta/overlays"

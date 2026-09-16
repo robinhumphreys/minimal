@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Input as InputPrimitive } from "@base-ui/react/input"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 // A rule under the text rather than a box around it, so the search field reads
 // as part of the page instead of a widget dropped onto it.

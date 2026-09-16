@@ -24,12 +24,6 @@ export function formatCount(count: number): string {
   return `${(count / 1000).toFixed(1).replace(/\.0$/, "")}k`
 }
 
-/** Whole percent saved, for the "-30%" badge. Returns 0 when there is no saving. */
-export function discountPercent(price: number, compareAt?: number): number {
-  if (!compareAt || compareAt <= price) return 0
-  return Math.round(((compareAt - price) / compareAt) * 100)
-}
-
 /** "August 2026" — reviews are dated to the month, not the day. */
 export function formatReviewDate(iso: string): string {
   const [year, month] = iso.split("-")

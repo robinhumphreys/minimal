@@ -17,6 +17,7 @@ import type { FacetKey } from "@/lib/volta/types"
 import { CategoryFilters } from "./category-filters"
 import { ProductCard } from "./product-card"
 import { ProductRail } from "./product-rail"
+import { Shelf } from "./shelf"
 
 const FACET_KEYS: FacetKey[] = ["form", "goal", "flavour"]
 
@@ -69,26 +70,31 @@ export async function CategoryPage({
         </React.Suspense>
       </div>
 
-      <div className="volta-gutter mx-auto w-full max-w-7xl">
-        {products.length === 0 ? (
-          <EmptyResult slug={slug} name={category.name} />
-        ) : (
-          <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product, index) => (
-              <li key={product.slug}>
-                <ProductCard product={product} preload={index < 4} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      {/*
+        The grid and the rail below it are one shelf: everything on this page
+        that is product sits on the same slab of white.
+      */}
+      <Shelf>
+        <div className="volta-gutter mx-auto w-full max-w-7xl">
+          {products.length === 0 ? (
+            <EmptyResult slug={slug} name={category.name} />
+          ) : (
+            <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+              {products.map((product, index) => (
+                <li key={product.slug}>
+                  <ProductCard product={product} preload={index < 4} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-      <ProductRail
-        eyebrow="Also worth a look"
-        title="Top rated"
-        products={topRated(8)}
-        className="pt-4"
-      />
+        <ProductRail
+          eyebrow="Also worth a look"
+          title="Top rated"
+          products={topRated(8)}
+        />
+      </Shelf>
     </div>
   )
 }
@@ -151,16 +157,14 @@ function Banner({
 
 function EmptyResult({ slug, name }: { slug: string; name: string }) {
   return (
-    <div className="volta-hatch flex flex-col items-center gap-4 rounded-volta border border-volta-line px-6 py-20 text-center">
-      <p className="volta-display text-3xl text-volta-line-strong">
-        No matches
-      </p>
-      <p className="max-w-sm text-volta-body text-volta-ash">
+    <div className="flex flex-col items-center gap-4 rounded-volta border border-volta-mist px-6 py-20 text-center">
+      <p className="volta-display text-3xl text-volta-mist">No matches</p>
+      <p className="max-w-sm text-volta-body text-volta-slate">
         Nothing in {name} fits that combination of filters.
       </p>
       <Link
         href={categoryHref(slug)}
-        className="volta-wide text-volta-label text-volta-volt hover:underline"
+        className="volta-wide text-volta-label text-volta-volt-deep hover:underline"
       >
         Clear filters
       </Link>

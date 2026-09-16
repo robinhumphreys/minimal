@@ -8,7 +8,6 @@ import {
   bestSellers,
   categoryHref,
   goalHref,
-  onSale,
   productsForGoal,
   testimonials,
   topRated,
@@ -17,6 +16,7 @@ import { categoryImage } from "@/lib/volta/editorial"
 
 import { Button } from "@/components/volta/ui/button"
 import { ProductRail } from "./product-rail"
+import { Shelf } from "./shelf"
 import { Testimonials } from "./testimonials"
 
 export function HomePage() {
@@ -27,36 +27,38 @@ export function HomePage() {
       <Hero />
       <GoalStrip />
 
-      <ProductRail
-        eyebrow="Most reviewed"
-        title="Best sellers"
-        href={categoryHref("protein")}
-        products={bestSellers(8)}
-        preload
-      />
+      <Shelf>
+        <ProductRail
+          eyebrow="Most reviewed"
+          title="Best sellers"
+          href={categoryHref("protein")}
+          products={bestSellers(8)}
+          preload
+        />
+      </Shelf>
 
       <CategoryGrid categories={catalog.categories} />
-
-      <ProductRail
-        eyebrow="Reduced this week"
-        title="On offer"
-        hrefLabel="See all offers"
-        href={categoryHref("bars")}
-        products={onSale(8)}
-      />
 
       <FeatureBand />
 
       <Testimonials reviews={testimonials(3)} />
 
-      <ProductRail
-        eyebrow="Rated 4.7 and up"
-        title="Top rated"
-        href={categoryHref("vitamins")}
-        products={topRated(8)}
-      />
-
-      <FuelBand />
+      {/* Two rails, one shelf: the page closes on a single slab of product. */}
+      <Shelf>
+        <ProductRail
+          eyebrow="Rated 4.7 and up"
+          title="Top rated"
+          href={categoryHref("vitamins")}
+          products={topRated(8)}
+        />
+        <ProductRail
+          eyebrow="For long sessions"
+          title="Go longer"
+          href={goalHref("endurance")}
+          hrefLabel="All endurance"
+          products={productsForGoal("endurance", 8)}
+        />
+      </Shelf>
     </div>
   )
 }
@@ -239,18 +241,5 @@ function FeatureBand() {
         </Button>
       </div>
     </section>
-  )
-}
-
-/** A goal-led closing rail, so the page ends on product rather than furniture. */
-function FuelBand() {
-  return (
-    <ProductRail
-      eyebrow="For long sessions"
-      title="Go longer"
-      href={goalHref("endurance")}
-      hrefLabel="All endurance"
-      products={productsForGoal("endurance", 8)}
-    />
   )
 }

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRightIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import type { ProductCardModel } from "@/lib/volta/types"
 
@@ -13,6 +13,9 @@ import { ProductCard } from "./product-card"
  * in a way a two-up grid cannot, and it keeps five rails on the homepage from
  * turning into five screens of scrolling. Snap points stop it drifting between
  * tiles.
+ *
+ * Drawn for a white surface throughout — a rail only ever appears inside a
+ * `Shelf`.
  */
 export function ProductRail({
   title,
@@ -35,24 +38,24 @@ export function ProductRail({
   if (products.length === 0) return null
 
   return (
-    <section
+    <div
       className={cn("mx-auto flex w-full max-w-7xl flex-col gap-5", className)}
     >
       <div className="volta-gutter flex items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           {eyebrow && (
-            <span className="volta-wide text-volta-micro text-volta-volt">
+            <span className="volta-wide text-volta-micro text-volta-volt-deep">
               {eyebrow}
             </span>
           )}
-          <h2 className="volta-display text-volta-heading text-volta-chalk">
+          <h2 className="volta-display text-volta-heading text-volta-void">
             {title}
           </h2>
         </div>
         {href && (
           <Link
             href={href}
-            className="volta-wide group/all flex shrink-0 items-center gap-1.5 pb-1 text-volta-micro text-volta-ash transition-colors hover:text-volta-volt"
+            className="volta-wide group/all flex shrink-0 items-center gap-1.5 pb-1 text-volta-micro text-volta-slate transition-colors hover:text-volta-void"
           >
             {hrefLabel}
             <ArrowRightIcon className="size-3.5 transition-transform group-hover/all:translate-x-0.5" />
@@ -78,6 +81,6 @@ export function ProductRail({
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }

@@ -117,7 +117,11 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
             </Section>
 
             <Section title="Top rated">
-              <div className="grid grid-cols-2 gap-4">
+              {/*
+                The drawer is dark but tiles are drawn for white, so the promos
+                get their own slab of it — the same rule as the page shelves.
+              */}
+              <div className="grid grid-cols-2 gap-4 rounded-volta bg-volta-chalk p-4">
                 {nav.featured.map((product) => (
                   <ProductCard
                     key={product.slug}

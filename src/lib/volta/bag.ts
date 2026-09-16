@@ -19,8 +19,6 @@ export type BagLine = {
   name: string
   /** Cents, EUR. */
   price: number
-  /** Cents, EUR. Shown struck through when present. */
-  compareAt?: number
   image: string
   href: string
   /** From `attributes.size`, e.g. "1000 g". Shown as a second meta line. */
@@ -103,14 +101,4 @@ export function bagCount(lines: BagLine[]): number {
 
 export function bagSubtotal(lines: BagLine[]): number {
   return lines.reduce((total, line) => total + line.price * line.quantity, 0)
-}
-
-/** What the shopper saves against the struck-through prices, in cents. */
-export function bagSavings(lines: BagLine[]): number {
-  return lines.reduce(
-    (total, line) =>
-      total +
-      (line.compareAt ? (line.compareAt - line.price) * line.quantity : 0),
-    0,
-  )
 }

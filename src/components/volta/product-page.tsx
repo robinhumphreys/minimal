@@ -20,11 +20,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/volta/ui/accordion"
-import { Badge } from "@/components/volta/ui/badge"
 import { AddToBag } from "./add-to-bag"
 import { Price } from "./price"
 import { ProductGallery } from "./product-gallery"
 import { ProductRail } from "./product-rail"
+import { Shelf } from "./shelf"
 import { ProductReviews } from "./product-reviews"
 import { Stars } from "./rating"
 
@@ -86,8 +86,6 @@ export async function ProductPage({
 
           <div className="flex flex-col gap-6 lg:flex-1 lg:pt-2">
             <div className="flex flex-col gap-3">
-              {product.compareAt && <Badge variant="sale">On offer</Badge>}
-
               <h1 className="volta-display text-volta-heading text-volta-chalk">
                 {product.name}
               </h1>
@@ -108,11 +106,7 @@ export async function ProductPage({
                   </a>
                 )}
 
-              <Price
-                price={product.price}
-                compareAt={product.compareAt}
-                size="lg"
-              />
+              <Price price={product.price} size="lg" />
 
               <p className="text-volta-micro tracking-volta-wide text-volta-ash uppercase">
                 {[
@@ -138,7 +132,6 @@ export async function ProductPage({
                 slug: product.slug,
                 name: product.name,
                 price: product.price,
-                compareAt: product.compareAt,
                 image: product.images[0],
                 href: productHref(product.slug),
                 size: product.attributes.size,
@@ -217,17 +210,19 @@ export async function ProductPage({
         />
       </div>
 
-      <ProductRail
-        eyebrow={category ? `More ${category.name.toLowerCase()}` : "More"}
-        title="Goes with this"
-        products={relatedProducts(product, 8)}
-      />
+      <Shelf>
+        <ProductRail
+          eyebrow={category ? `More ${category.name.toLowerCase()}` : "More"}
+          title="Goes with this"
+          products={relatedProducts(product, 8)}
+        />
 
-      <ProductRail
-        eyebrow="Across the range"
-        title="Stack it up"
-        products={crossSell(product, 6)}
-      />
+        <ProductRail
+          eyebrow="Across the range"
+          title="Stack it up"
+          products={crossSell(product, 6)}
+        />
+      </Shelf>
 
       <minimal-agent-recommendations data-product={product.slug} />
     </div>

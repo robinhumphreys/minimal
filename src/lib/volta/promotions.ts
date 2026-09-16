@@ -17,15 +17,16 @@ export const DELIVERY_FEE = 495
 export const CUTOFF = "22:00"
 
 /**
- * The scrolling stripe above the header. Kept short and imperative — the band
- * is 2rem tall and moves, so anything longer than a few words is unreadable.
+ * The scrolling stripe above the header. Two or three words each: the band is
+ * 2rem tall and moves, so a phrase that needs reading twice never gets read.
+ * The long form of each promise lives in `PROMISES` and on the product page.
  */
 export const VIOLATORS: string[] = [
   `Free delivery over €${FREE_DELIVERY_THRESHOLD / 100}`,
-  `Order before ${CUTOFF} — shipped today`,
-  "30 days to change your mind",
-  "Free sample in every box",
-  "Batch-tested, every batch",
+  "Shipped same day",
+  "30-day returns",
+  "Free sample inside",
+  "Batch-tested",
 ]
 
 /** The three promises repeated under the fold and in the bag. */

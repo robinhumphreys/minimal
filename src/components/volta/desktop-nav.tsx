@@ -41,14 +41,6 @@ export function DesktopNav({ nav }: { nav: NavModel }) {
             </Link>
           </li>
         ))}
-        <li onMouseEnter={() => setOpen(null)} onFocus={() => setOpen(null)}>
-          <Link
-            href="/volta?goal=sale"
-            className="volta-wide -mb-px flex h-12 items-center border-b-2 border-transparent text-volta-label text-volta-heat transition-colors hover:border-volta-heat"
-          >
-            Sale
-          </Link>
-        </li>
       </ul>
 
       {nav.categories.map((category) =>

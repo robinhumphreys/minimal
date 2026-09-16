@@ -1,47 +1,34 @@
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
-import { discountPercent, formatPrice } from "@/lib/volta/format"
+import { formatPrice } from "@/lib/volta/format"
 
 /**
- * Price, was-price and saving, as one unit.
+ * A price.
  *
- * Volta always shows the discount as a percentage rather than an amount: at
- * these price points "-30%" lands harder than "save €6".
+ * `surface` is which background it sits on, not a colour: the same price is
+ * chalk on the dark product page and near-black on a white shelf.
  */
 export function Price({
   price,
-  compareAt,
   size = "default",
+  surface = "dark",
   className,
 }: {
   price: number
-  compareAt?: number
   size?: "default" | "lg"
+  surface?: "dark" | "light"
   className?: string
 }) {
-  const saving = discountPercent(price, compareAt)
-
   return (
-    <span className={cn("flex flex-wrap items-baseline gap-x-2", className)}>
-      <span
-        className={cn(
-          "volta-wide font-volta tabular-nums",
-          saving > 0 ? "text-volta-volt" : "text-volta-chalk",
-          size === "lg" ? "text-2xl" : "text-volta-title",
-        )}
-      >
-        {formatPrice(price)}
-      </span>
-      {compareAt && (
-        <s className="text-volta-micro text-volta-smoke tabular-nums">
-          {formatPrice(compareAt)}
-        </s>
+    <span
+      className={cn(
+        "volta-wide font-volta tabular-nums",
+        surface === "light" ? "text-volta-void" : "text-volta-chalk",
+        size === "lg" ? "text-2xl" : "text-volta-title",
+        className,
       )}
-      {saving > 0 && (
-        <span className="volta-wide text-volta-micro text-volta-heat">
-          −{saving}%
-        </span>
-      )}
+    >
+      {formatPrice(price)}
     </span>
   )
 }

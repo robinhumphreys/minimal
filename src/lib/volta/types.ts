@@ -14,8 +14,6 @@ export type ProductCardModel = {
   image: string
   /** Cents, EUR. */
   price: number
-  /** Cents, EUR. Shown struck through when present. */
-  compareAt?: number
   /** 0–5, one decimal. Undefined means the tile shows no star row. */
   rating?: number
   reviewCount?: number
