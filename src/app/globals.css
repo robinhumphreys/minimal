@@ -10,6 +10,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  /* Minimal's own blue, for the few places the product speaks in its own colour. */
+  --color-brand: var(--brand);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -86,6 +88,7 @@ body {
    * is invalid at computed-value time and the page falls back to serif.
    */
   --font-sans: var(--font-geist-sans);
+  --brand: rgb(49 53 201);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
