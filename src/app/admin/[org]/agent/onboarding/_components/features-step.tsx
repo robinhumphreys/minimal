@@ -37,7 +37,7 @@ const FEATURES: {
   {
     key: "searchAssist",
     title: "Search assist",
-    description: "Your search box, read by the agent.",
+    description: "AI-powered search results.",
     thumb: <SearchAssistThumb />,
   },
   {
@@ -173,15 +173,15 @@ function Thumb({
 /** A page with a small window open above a round button, bottom right. */
 function SiteChatThumb() {
   return (
-    <Thumb>
-      <span className="absolute inset-x-2 top-2 h-1 rounded-full bg-muted" />
-      <span className="absolute top-5 left-2 h-1 w-6 rounded-full bg-muted" />
-      <span className="absolute top-7 left-2 h-1 w-9 rounded-full bg-muted" />
-      <span className="absolute top-4 right-2 flex h-6 w-8 flex-col gap-0.5 rounded-sm border bg-background p-1">
-        <span className="h-1 w-4 rounded-full bg-muted-foreground/40" />
-        <span className="ml-auto h-1 w-3 rounded-full bg-foreground/70" />
+    <Thumb className="border-sky-200 bg-sky-50">
+      <span className="absolute inset-x-2 top-2 h-1 rounded-full bg-sky-200" />
+      <span className="absolute top-5 left-2 h-1 w-6 rounded-full bg-sky-200" />
+      <span className="absolute top-7 left-2 h-1 w-9 rounded-full bg-sky-200" />
+      <span className="absolute top-4 right-2 flex h-6 w-8 flex-col gap-0.5 rounded-sm border border-sky-200 bg-white p-1 shadow-sm">
+        <span className="h-1 w-4 rounded-full bg-sky-200" />
+        <span className="ml-auto h-1 w-3 rounded-full bg-sky-500" />
       </span>
-      <span className="absolute right-2 bottom-2 size-3 rounded-full bg-foreground" />
+      <span className="absolute right-2 bottom-2 size-3 rounded-full bg-sky-600 shadow-sm" />
     </Thumb>
   )
 }
@@ -189,17 +189,17 @@ function SiteChatThumb() {
 /** A search box, two chips, and two product tiles under it. */
 function SearchAssistThumb() {
   return (
-    <Thumb>
-      <span className="absolute inset-x-2 top-2 flex h-3 items-center gap-1 rounded-sm border px-1">
-        <span className="size-1 rounded-full border border-muted-foreground/60" />
-        <span className="h-0.5 w-6 rounded-full bg-muted-foreground/40" />
+    <Thumb className="border-violet-200 bg-violet-50">
+      <span className="absolute inset-x-2 top-2 flex h-3 items-center gap-1 rounded-sm border border-violet-300 bg-white px-1">
+        <span className="size-1 rounded-full border border-violet-500" />
+        <span className="h-0.5 w-6 rounded-full bg-violet-300" />
       </span>
       <span className="absolute top-6 left-2 flex gap-1">
-        <span className="h-1.5 w-5 rounded-full bg-foreground/70" />
-        <span className="h-1.5 w-4 rounded-full border" />
+        <span className="h-1.5 w-5 rounded-full bg-violet-600" />
+        <span className="h-1.5 w-4 rounded-full border border-violet-300 bg-white" />
       </span>
-      <span className="absolute bottom-2 left-2 h-4 w-7 rounded-sm bg-muted" />
-      <span className="absolute right-2 bottom-2 h-4 w-7 rounded-sm bg-muted" />
+      <span className="absolute bottom-2 left-2 h-4 w-7 rounded-sm bg-violet-200" />
+      <span className="absolute right-2 bottom-2 h-4 w-7 rounded-sm bg-violet-200" />
     </Thumb>
   )
 }
@@ -207,13 +207,13 @@ function SearchAssistThumb() {
 /** A product image beside its title, with a question answered under it. */
 function ProductHelpThumb() {
   return (
-    <Thumb>
-      <span className="absolute top-2 left-2 h-6 w-6 rounded-sm bg-muted" />
-      <span className="absolute top-2 left-10 h-1 w-7 rounded-full bg-muted-foreground/40" />
-      <span className="absolute top-4 left-10 h-1 w-4 rounded-full bg-muted" />
-      <span className="absolute inset-x-2 bottom-2 flex h-4 flex-col justify-center gap-0.5 rounded-sm bg-muted px-1">
-        <span className="h-0.5 w-8 rounded-full bg-muted-foreground/50" />
-        <span className="h-0.5 w-11 rounded-full bg-muted-foreground/30" />
+    <Thumb className="border-amber-200 bg-amber-50">
+      <span className="absolute top-2 left-2 h-6 w-6 rounded-sm bg-amber-200" />
+      <span className="absolute top-2 left-10 h-1 w-7 rounded-full bg-amber-400" />
+      <span className="absolute top-4 left-10 h-1 w-4 rounded-full bg-amber-200" />
+      <span className="absolute inset-x-2 bottom-2 flex h-4 flex-col justify-center gap-0.5 rounded-sm bg-white px-1 shadow-sm">
+        <span className="h-0.5 w-8 rounded-full bg-amber-500" />
+        <span className="h-0.5 w-11 rounded-full bg-amber-200" />
       </span>
     </Thumb>
   )
