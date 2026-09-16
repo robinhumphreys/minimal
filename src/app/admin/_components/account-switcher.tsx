@@ -1,8 +1,8 @@
 "use client"
 
 import { ChevronsUpDownIcon } from "lucide-react"
-import { cn } from "cn"
 
+import { BrandMark } from "@/components/brand/brand-mark"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,7 +54,11 @@ export function AccountSwitcher() {
               />
             }
           >
-            <AccountMark name={account.name} className="size-8 rounded-lg" />
+            {/* Forced: `SidebarMenuButton` sizes every descendant `svg` to
+                `size-4`, which is right for an icon and wrong for a logo — and at
+                that size `rounded-lg` is half the width, so the square field
+                came out a circle. */}
+            <BrandMark brand={account.id} className="size-8! rounded-lg" />
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{account.name}</span>
               <span className="truncate text-xs text-muted-foreground">
@@ -79,7 +83,7 @@ export function AccountSwitcher() {
                   onClick={() => setActive(entry.id)}
                   className="gap-2 p-2"
                 >
-                  <AccountMark name={entry.name} className="size-6" />
+                  <BrandMark brand={entry.id} className="size-6 rounded-sm" />
                   {entry.name}
                 </DropdownMenuItem>
               ))}
@@ -88,32 +92,5 @@ export function AccountSwitcher() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
-}
-
-/**
- * Stand-in for a merchant's logo: the initial in a rounded square.
- *
- * The foreground is forced because `DropdownMenuItem` repaints *every*
- * descendant `text-accent-foreground` while highlighted, which would otherwise
- * turn the initial the same near-black as the square it sits on.
- */
-function AccountMark({
-  name,
-  className,
-}: {
-  name: string
-  className?: string
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "flex aspect-square shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-xs font-medium text-sidebar-primary-foreground!",
-        className,
-      )}
-    >
-      {name.slice(0, 1)}
-    </div>
   )
 }

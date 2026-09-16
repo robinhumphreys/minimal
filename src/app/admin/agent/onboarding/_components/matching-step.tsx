@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 
+import { BrandMark } from "@/components/brand/brand-mark"
 import { Button } from "@/components/ui/button"
 import type { BrandId } from "@/lib/catalog/types"
 import { useAdminStore } from "@/lib/store/admin"
@@ -140,6 +141,7 @@ export function MatchingStep({ next }: { next: string }) {
           pixels and its edges stay crisp. */}
       <div className="relative max-md:scale-75">
         <BrowserFrame
+          brand={brand}
           domain={site.domain}
           path={site.path}
           fetched={done > 0}
@@ -304,12 +306,14 @@ function Marker({ complete, active }: { complete: boolean; active: boolean }) {
  * by the time the placeholder lifts and the reveal is immediate.
  */
 function BrowserFrame({
+  brand,
   domain,
   path,
   fetched,
   finished,
   viewportRef,
 }: {
+  brand: BrandId
   domain: string
   path: string
   fetched: boolean
@@ -332,7 +336,11 @@ function BrowserFrame({
         </div>
         {/* Centred on the bar rather than on the space the lights leave, so
             the address sits under the middle of the window. */}
-        <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[0.6875rem] text-muted-foreground">
+        <span className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 text-[0.6875rem] text-muted-foreground">
+          {/* The merchant's own favicon, where a browser would put it. It is
+              the same mark the account switcher shows, so the window reads as
+              their site and not a generic frame. */}
+          <BrandMark brand={brand} className="size-3.5 rounded-[3px]" />
           {domain}
         </span>
       </div>
