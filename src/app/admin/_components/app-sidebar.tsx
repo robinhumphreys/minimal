@@ -44,17 +44,13 @@ const USER = { name: "Merchant admin", initials: "MA" }
 
 // Only "Agent" is wired up. The rest name the screens this admin is meant to
 // grow into, so the rail has the shape it will eventually need.
-const navFor = (org: BrandId, onboarded: boolean): NavGroup[] => [
+const navFor = (org: BrandId): NavGroup[] => [
   {
     items: [
       {
         title: "Agent",
         icon: <SparklesIcon />,
-        // Until the flow has been finished once, "Agent" is the flow; after
-        // that it is the screen where changes are made and published.
-        href: onboarded
-          ? `/admin/${org}/agent`
-          : `/admin/${org}/agent/onboarding`,
+        href: `/admin/${org}/agent/onboarding`,
       },
     ],
   },
@@ -89,7 +85,6 @@ export function AppSidebar({
   org,
   ...props
 }: { org: BrandId } & React.ComponentProps<typeof Sidebar>) {
-  const onboarded = useAdminStore((state) => state.onboarded[org])
   React.useEffect(() => {
     useAdminStore.getState().hydrate()
   }, [])
@@ -101,7 +96,7 @@ export function AppSidebar({
         <AccountSwitcher org={org} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain groups={navFor(org, onboarded)} />
+        <NavMain groups={navFor(org)} />
       </SidebarContent>
       <SidebarFooter>
         <SidebarSeparator className="mx-0" />

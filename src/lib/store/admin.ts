@@ -12,8 +12,6 @@ type Drafts = Record<BrandId, AgentConfig>
 type AdminState = {
   active: BrandId
   drafts: Drafts
-  /** Which organisations have been through onboarding to the end. */
-  onboarded: Record<BrandId, boolean>
   /**
    * Whether the merchant has been offered the surfaces yet this session. The
    * defaults ship with every surface on, which is right for a storefront and
@@ -35,14 +33,8 @@ type AdminState = {
   /** Replaces the draft for `id` with the result of `recipe`. */
   editDraft: (id: BrandId, recipe: (draft: AgentConfig) => AgentConfig) => void
   publish: (id: BrandId) => void
-  /** Marks the flow finished; the rail points at the management screen from then on. */
-  completeOnboarding: (id: BrandId) => void
   /** Seeds every draft from localStorage. Safe to call more than once. */
   hydrate: () => void
-}
-
-function onboardedKey(id: BrandId) {
-  return `onboarded:${id}`
 }
 
 function initialDrafts(): Drafts {
@@ -57,7 +49,6 @@ function initialDrafts(): Drafts {
 export const useAdminStore = create<AdminState>()((set) => ({
   active: "noord",
   drafts: initialDrafts(),
-  onboarded: { noord: false, volta: false },
   surfacesOffered: { noord: false, volta: false },
   matched: { noord: false, volta: false },
   revision: 0,
@@ -87,29 +78,13 @@ export const useAdminStore = create<AdminState>()((set) => ({
       surfacesOffered: { ...state.surfacesOffered, [id]: true },
     })),
 
-  completeOnboarding: (id) =>
-    set((state) => {
-      try {
-        window.localStorage.setItem(onboardedKey(id), "1")
-      } catch {
-        // Then the rail forgets on reload; the flow itself still finished.
-      }
-      return { onboarded: { ...state.onboarded, [id]: true } }
-    }),
-
   hydrate: () =>
     set((state) => {
       if (state.hydrated) return state
       const drafts = initialDrafts()
-      const onboarded = { ...state.onboarded }
       for (const id of BRAND_IDS) {
         drafts[id] = readPublishedOrDefault(id)
-        try {
-          onboarded[id] = window.localStorage.getItem(onboardedKey(id)) === "1"
-        } catch {
-          onboarded[id] = false
-        }
       }
-      return { drafts, onboarded, hydrated: true, revision: state.revision + 1 }
+      return { drafts, hydrated: true, revision: state.revision + 1 }
     }),
 }))

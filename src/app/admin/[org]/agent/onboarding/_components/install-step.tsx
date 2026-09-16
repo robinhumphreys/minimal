@@ -58,7 +58,6 @@ export function InstallStep({ next }: { next: string }) {
   const site = SITES[org]
   const config = useAdminStore((state) => state.drafts[org])
   const publish = useAdminStore((state) => state.publish)
-  const completeOnboarding = useAdminStore((state) => state.completeOnboarding)
 
   React.useEffect(() => {
     useAdminStore.getState().hydrate()
@@ -177,13 +176,7 @@ export function InstallStep({ next }: { next: string }) {
           icon={<SparklesIcon />}
         />
         {allFound ? (
-          <NextButton
-            onClick={() => {
-              completeOnboarding(org)
-              router.push(next)
-            }}
-            icon={<CheckIcon />}
-          >
+          <NextButton onClick={() => router.push(next)} icon={<CheckIcon />}>
             Finish
           </NextButton>
         ) : (

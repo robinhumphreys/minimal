@@ -3,12 +3,13 @@
 import * as React from "react"
 
 import { SearchIcon } from "lucide-react"
+import { cn } from "cn"
 import { SearchPanel } from "@embed/search-assist"
 import type { BrandId } from "@/lib/catalog/types"
 import { readableOn } from "@/lib/config/contrast"
 import type { AgentConfig } from "@/lib/config/schema"
 
-import { DeviceToggle, PhoneFrame, type Device } from "./device-toggle"
+import { DeviceStage, DeviceToggle, type Device } from "./device-toggle"
 import { DotField, groundFor } from "./dot-field"
 
 /**
@@ -151,33 +152,26 @@ export function SearchAssistPreview({
 
       {/* The sheet's scrolling column: the page's width on desktop, a phone's
           on mobile. The panel measures this column to reach the foot of it. */}
-      {device === "mobile" ? (
-        <div className="absolute inset-0 flex items-start justify-center p-6">
-          <PhoneFrame>
-            <div
-              className="absolute inset-0 overflow-y-auto overscroll-contain px-4 pt-4"
-              style={{ color: ink }}
-            >
-              <div className="flex min-h-full flex-col">
-                {fresh}
-                {box}
-                {panel}
-              </div>
-            </div>
-          </PhoneFrame>
-        </div>
-      ) : (
+      <DeviceStage device={device} align="start">
         <div
-          className="absolute inset-0 overflow-y-auto overscroll-contain px-6 pt-6"
+          className={cn(
+            "absolute inset-0 overflow-y-auto overscroll-contain",
+            device === "mobile" ? "px-4 pt-4" : "px-6 pt-6",
+          )}
           style={{ color: ink }}
         >
-          <div className="mx-auto flex min-h-full w-full max-w-lg flex-col">
+          <div
+            className={cn(
+              "mx-auto flex min-h-full w-full flex-col",
+              device === "mobile" ? "max-w-none" : "max-w-lg",
+            )}
+          >
             {fresh}
             {box}
             {panel}
           </div>
         </div>
-      )}
+      </DeviceStage>
 
       <DeviceToggle
         value={device}

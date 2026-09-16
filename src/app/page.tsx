@@ -16,9 +16,6 @@ export default function Page() {
       <Link href="/volta" className="underline">
         Volta storefront
       </Link>
-      <Link href="/debug" className="underline">
-        Surfaces on fixtures
-      </Link>
     </div>
   )
 }
