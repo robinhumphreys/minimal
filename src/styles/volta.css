@@ -213,6 +213,24 @@
   }
 
   /*
+   * The tab underline, in plain CSS rather than a `border-transparent` utility
+   * with a `data-[active]:` override.
+   *
+   * `public/embed.css` is a second, unscoped Tailwind build that loads after
+   * the app stylesheet, and it ships its own `.border-transparent` — which then
+   * outranks any variant of ours the checked-in copy does not also happen to
+   * carry. Owning the property here keeps the rule out of that fight: nothing
+   * in embed.css matches `.volta-tab`.
+   */
+  .volta-tab {
+    border-bottom: 2px solid transparent;
+  }
+
+  .volta-tab[data-active] {
+    border-bottom-color: var(--color-volta-volt);
+  }
+
+  /*
    * Diagonal volt hatching. Backs the violator stripe and empty states so a
    * flat black band still has some texture to it.
    */

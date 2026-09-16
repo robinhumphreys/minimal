@@ -1,8 +1,6 @@
 import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
-  CaretRightIcon,
   TruckIcon,
   ArrowCounterClockwiseIcon,
   ShieldCheckIcon,
@@ -20,13 +18,9 @@ import {
 import { formatCount, formatRating } from "@/lib/volta/format"
 import { CUTOFF, FREE_DELIVERY_THRESHOLD } from "@/lib/volta/promotions"
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/volta/ui/accordion"
+import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/volta/ui/tabs"
 import { AddToBag } from "./add-to-bag"
+import { Breadcrumbs } from "./breadcrumbs"
 import { Price } from "./price"
 import { ProductRail } from "./product-rail"
 import { Shelf } from "./shelf"
@@ -54,35 +48,16 @@ export async function ProductPage({
   return (
     <div className="flex flex-col gap-16 pb-16">
       <div className="volta-gutter mx-auto w-full max-w-7xl pt-4">
-        <nav aria-label="Breadcrumb" className="pb-5">
-          <ol className="flex flex-wrap items-center gap-1.5">
-            <li>
-              <Link
-                href="/volta"
-                className="volta-wide text-volta-micro text-volta-ash hover:text-volta-volt"
-              >
-                Volta
-              </Link>
-            </li>
-            {category && (
-              <>
-                <CaretRightIcon className="size-3 text-volta-smoke" />
-                <li>
-                  <Link
-                    href={categoryHref(category.slug)}
-                    className="volta-wide text-volta-micro text-volta-ash hover:text-volta-volt"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              </>
-            )}
-            <CaretRightIcon className="size-3 text-volta-smoke" />
-            <li className="volta-wide text-volta-micro text-volta-chalk">
-              {product.name}
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          className="pb-5"
+          trail={[
+            { label: "Volta", href: "/volta" },
+            ...(category
+              ? [{ label: category.name, href: categoryHref(category.slug) }]
+              : []),
+            { label: product.name },
+          ]}
+        />
 
         {/*
           Detail column first, image second: on desktop the name, rating, price
@@ -115,7 +90,7 @@ export async function ProductPage({
 
               <Price price={product.price} size="lg" />
 
-              <p className="text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+              <p className="text-volta-micro text-volta-ash">
                 {[
                   product.attributes.size,
                   // The catalog stores a bare number; on its own "30" reads as
@@ -158,50 +133,47 @@ export async function ProductPage({
               </Promise>
             </ul>
 
-            <Accordion multiple={false}>
-              <AccordionItem value="specification">
-                <AccordionTrigger>Specification</AccordionTrigger>
-                <AccordionContent>
-                  <dl className="flex flex-col">
-                    {Object.entries(product.attributes).map(([key, value]) => (
-                      <div
-                        key={key}
-                        className="flex justify-between gap-6 border-b border-volta-line py-2.5 last:border-b-0"
-                      >
-                        <dt className="text-volta-micro tracking-volta-wide text-volta-smoke uppercase">
-                          {key}
-                        </dt>
-                        <dd className="text-right text-volta-body text-volta-chalk">
-                          {value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </AccordionContent>
-              </AccordionItem>
+            <Tabs defaultValue="specification">
+              <TabsList>
+                <TabsTab value="specification">Specification</TabsTab>
+                <TabsTab value="how-to-use">How to use</TabsTab>
+                <TabsTab value="delivery">Delivery &amp; returns</TabsTab>
+              </TabsList>
 
-              <AccordionItem value="how-to-use">
-                <AccordionTrigger>How to use</AccordionTrigger>
-                <AccordionContent>
-                  <p>{usageFor(product.attributes.form, product.category)}</p>
-                </AccordionContent>
-              </AccordionItem>
+              <TabsPanel value="specification">
+                <dl className="flex flex-col">
+                  {Object.entries(product.attributes).map(([key, value]) => (
+                    <div
+                      key={key}
+                      className="flex justify-between gap-6 border-b border-volta-line py-2.5 last:border-b-0"
+                    >
+                      <dt className="text-volta-micro text-volta-smoke">
+                        {sentenceCase(key)}
+                      </dt>
+                      <dd className="text-right text-volta-body text-volta-chalk">
+                        {value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </TabsPanel>
 
-              <AccordionItem value="delivery">
-                <AccordionTrigger>Delivery & returns</AccordionTrigger>
-                <AccordionContent className="flex flex-col gap-2">
-                  <p>
-                    Orders placed before {CUTOFF} on a weekday leave the same
-                    day. Delivery is free over €{FREE_DELIVERY_THRESHOLD / 100},
-                    €4.95 below it.
-                  </p>
-                  <p>
-                    Not for you? Send it back within 30 days, opened or not, and
-                    we refund the order in full.
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+              <TabsPanel value="how-to-use">
+                <p>{usageFor(product.attributes.form, product.category)}</p>
+              </TabsPanel>
+
+              <TabsPanel value="delivery" className="flex flex-col gap-2">
+                <p>
+                  Orders placed before {CUTOFF} on a weekday leave the same day.
+                  Delivery is free over €{FREE_DELIVERY_THRESHOLD / 100}, €4.95
+                  below it.
+                </p>
+                <p>
+                  Not for you? Send it back within 30 days, opened or not, and
+                  we refund the order in full.
+                </p>
+              </TabsPanel>
+            </Tabs>
           </div>
 
           {/*
@@ -246,8 +218,6 @@ export async function ProductPage({
           products={crossSell(product, 6)}
         />
       </Shelf>
-
-      <minimal-agent-recommendations data-product={product.slug} />
     </div>
   )
 }
@@ -265,6 +235,11 @@ function Promise({
       <span className="text-volta-body text-volta-ash">{children}</span>
     </li>
   )
+}
+
+/** The catalog stores attribute keys lower case; the spec list shows them. */
+function sentenceCase(key: string): string {
+  return key.charAt(0).toUpperCase() + key.slice(1)
 }
 
 /**
