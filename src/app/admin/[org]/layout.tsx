@@ -26,6 +26,9 @@ export default async function OrgLayout({
 
   return (
     <OrgSync org={org}>
+      {/* The onboarding previews render the embed's own components, whose
+          utilities carry the embed's prefix and so live in its stylesheet. */}
+      <link rel="stylesheet" href="/embed.css" precedence="default" />
       {/* The rail starts collapsed: the admin is a handful of screens, and
           the icons plus their tooltips carry it. There is no top bar — the
           mark, the account switcher and the operator all live on the rail,

@@ -21,6 +21,13 @@ type AdminState = {
    */
   surfacesOffered: Record<BrandId, boolean>
   markSurfacesOffered: (id: BrandId) => void
+  /**
+   * Whether step two has run to the end for this organisation. The pager
+   * cannot go past a step that has not finished, and this is the one step
+   * whose finishing is a matter of time rather than of a choice.
+   */
+  matched: Record<BrandId, boolean>
+  markMatched: (id: BrandId) => void
   /** Bumped on every draft edit so the preview can re-post. */
   revision: number
   hydrated: boolean
@@ -52,6 +59,7 @@ export const useAdminStore = create<AdminState>()((set) => ({
   drafts: initialDrafts(),
   onboarded: { noord: false, volta: false },
   surfacesOffered: { noord: false, volta: false },
+  matched: { noord: false, volta: false },
   revision: 0,
   hydrated: false,
 
@@ -68,6 +76,11 @@ export const useAdminStore = create<AdminState>()((set) => ({
       writePublished(id, state.drafts[id])
       return state
     }),
+
+  markMatched: (id) =>
+    set((state) =>
+      state.matched[id] ? state : { matched: { ...state.matched, [id]: true } },
+    ),
 
   markSurfacesOffered: (id) =>
     set((state) => ({

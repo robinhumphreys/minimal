@@ -99,15 +99,14 @@ function Hero() {
       <div className="volta-gutter relative mx-auto flex w-full max-w-7xl flex-col gap-6 pb-14 md:pb-20">
         {/*
           Three lines of eight or nine characters, so the block stays square at
-          every width. A hyphenated "out-trains" broke across two lines on a
-          phone and left a dangling hyphen.
+          every width and nothing hyphenates on a phone.
         */}
         <h1 className="volta-display text-volta-display text-volta-chalk">
-          You can&rsquo;t
+          Fuel that
           <br />
-          <span className="text-volta-volt">outtrain</span>
+          <span className="text-volta-volt">keeps up</span>
           <br />
-          bad fuel
+          with you
         </h1>
 
         <p className="max-w-md text-volta-lead text-volta-ash">

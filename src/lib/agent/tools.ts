@@ -3,6 +3,7 @@ import { z } from "zod"
 
 import { getCatalog, type BrandId } from "@/lib/catalog"
 
+import type { CartView } from "./cart"
 import { pickFrom } from "./picks"
 import type { ProductPick, ShowProductsOutput } from "./types"
 
@@ -26,7 +27,7 @@ const showProductsInput = (max: number) =>
   })
 
 /**
- * The one tool the storefront agent has: putting products on the screen.
+ * Putting products on the screen is the agent's main tool.
  *
  * The model names slugs and reasons; the server fills in everything else from
  * the catalog so the model can neither invent a price nor mis-link a page.
@@ -46,6 +47,23 @@ const askChoiceInput = z.object({
     ),
 })
 
+const cartLineSchema = z.object({
+  slug: z.string(),
+  name: z.string(),
+  variant: z.string().optional(),
+  quantity: z.number().int(),
+  price: z.string(),
+  lineTotal: z.string(),
+  url: z.string(),
+})
+
+const cartViewSchema: z.ZodType<CartView> = z.object({
+  available: z.boolean(),
+  lines: z.array(cartLineSchema),
+  count: z.number().int(),
+  subtotal: z.string().optional(),
+})
+
 export function agentTools(brand: BrandId, maxPicks = 3, guide = false) {
   const catalog = getCatalog(brand)
 
@@ -56,8 +74,21 @@ export function agentTools(brand: BrandId, maxPicks = 3, guide = false) {
     execute: async () => ({ asked: true as const }),
   })
 
+  /**
+   * No `execute`: the cart is in the shopper's browser, so the embed answers
+   * this one (see `answerViewCart`) and the conversation resumes with the
+   * result. The server only ever sees what the page reported.
+   */
+  const viewCart = tool({
+    description:
+      "See what is in the shopper's cart right now: each line's name, variant, quantity and price, and the subtotal. Call it when they ask about their cart, or when what they already have should shape what you recommend. If it reports the cart as unavailable, say you cannot see it from here.",
+    inputSchema: z.object({}),
+    outputSchema: cartViewSchema,
+  })
+
   return {
     ...(guide ? { askChoice } : {}),
+    viewCart,
     showProducts: tool({
       description: `Show the shopper up to ${maxPicks} products from the catalog as cards, each with your one-line reason. Use it whenever you recommend something; never describe a product you could show instead.`,
       inputSchema: showProductsInput(maxPicks),

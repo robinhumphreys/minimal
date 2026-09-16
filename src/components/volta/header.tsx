@@ -7,6 +7,7 @@ import {
   ShoppingCartIcon,
   UserIcon,
 } from "@phosphor-icons/react/ssr"
+import { useSearchAssist } from "@/lib/config/use-surface"
 import { cn } from "@/lib/utils"
 
 import { bagCount, useBag } from "@/lib/volta/bag"
@@ -29,6 +30,7 @@ import { Wordmark } from "./wordmark"
  */
 export function Header({ nav }: { nav: NavModel }) {
   const show = useOverlays((state) => state.show)
+  const searchAssist = useSearchAssist("volta")
   const lines = useBag((state) => state.lines)
   const hydrated = useBag((state) => state.hydrated)
   const count = hydrated ? bagCount(lines) : 0
@@ -55,11 +57,14 @@ export function Header({ nav }: { nav: NavModel }) {
         <DesktopNav nav={nav} />
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
-          <ActionButton
-            label="Search"
-            onClick={() => show("search")}
-            icon={<MagnifyingGlassIcon className="size-5" weight="bold" />}
-          />
+          {/* Search is the agent's; without it there is nothing to open. */}
+          {searchAssist && (
+            <ActionButton
+              label="Search"
+              onClick={() => show("search")}
+              icon={<MagnifyingGlassIcon className="size-5" weight="bold" />}
+            />
+          )}
           <Link
             href="/volta"
             className="hidden h-10 items-center gap-2 rounded-volta px-2 text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none lg:flex"

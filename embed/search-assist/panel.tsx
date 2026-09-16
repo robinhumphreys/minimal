@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ArrowUpIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
 import type { SearchRequest, SearchResult } from "@/lib/agent/types"
 import type { AgentConfig, Behaviour } from "@/lib/config/schema"
@@ -9,10 +9,15 @@ import { ProductCard } from "../site-chat/products"
 import { Working } from "../site-chat/thinking"
 import { themeStyle } from "../theme"
 
-/** How long the shopper has to stop typing before a search goes out. */
-const DEBOUNCE_MS = 300
 /** Below this the site's own suggestions do a better job. */
 const MIN_QUERY = 2
+/**
+ * Set on <html> while the panel has a search to answer. The site's own input
+ * and results carry `data-native-search`, and the stylesheet hides them under
+ * it: the search box the shopper typed into has become the first bubble, and
+ * the composer at the foot is the one input from here on.
+ */
+const ACTIVE_ATTR = "data-minimal-search"
 /**
  * The least time the agent is shown reading. Keyword retrieval is instant,
  * and an answer that lands before the question has settled reads as a lookup,
@@ -25,8 +30,8 @@ const STAGE_MS = 900
 
 type Turn = {
   id: number
-  /** What the shopper added, for every turn after the first. */
-  ask?: string
+  /** What the shopper asked: the search itself first, then each refinement. */
+  ask: string
   result: SearchResult | null
   reading: boolean
 }
@@ -34,15 +39,16 @@ type Turn = {
 /**
  * The site's search box, read by the agent.
  *
- * The box stays the site's: this panel is portaled under it and only ever
- * sees the query. Underneath, the search is a conversation — the agent's
- * answer to what was typed, then the shopper's taps and refinements as turns
- * of their own — so narrowing down never means starting over in the box.
+ * The box stays the site's until the shopper submits it: this panel is
+ * portaled under it and only ever sees the submitted query. From then on the
+ * search is a conversation — what was typed becomes the first bubble, the
+ * site's input steps aside, and the composer at the foot is the one place to
+ * type — so narrowing down never means starting over in the box.
  *
- * Each turn asks twice: keyword retrieval for the grid the moment the shopper
- * pauses, then the model for its reading, line and follow-ups. If the model
- * is unreachable the keyword answer carries its own line and facet chips, so
- * the conversation still has a voice.
+ * Each turn asks twice: keyword retrieval for the grid straight away, then
+ * the model for its reading, line and follow-ups. If the model is unreachable
+ * the keyword answer carries its own line and facet chips, so the
+ * conversation still has a voice.
  */
 /** One search request, however it is answered. */
 export type SearchFn = (
@@ -146,25 +152,29 @@ export function SearchPanel({
     [searchFn, trimmed, behaviour],
   )
 
-  // The first turn: typed, paused, answered.
+  // The first turn: submitted, answered.
   React.useEffect(() => {
     if (trimmed.length < MIN_QUERY) return
     const controller = new AbortController()
     const id = nextId.current++
-    const timer = window.setTimeout(() => {
-      setThread({
-        query: trimmed,
-        turns: [{ id, result: null, reading: true }],
-      })
-      void run(id, [], controller.signal)
-    }, DEBOUNCE_MS)
-    return () => {
-      window.clearTimeout(timer)
-      controller.abort()
-    }
+    setThread({
+      query: trimmed,
+      turns: [{ id, ask: trimmed, result: null, reading: true }],
+    })
+    void run(id, [], controller.signal)
+    return () => controller.abort()
     // `run` changes with the query, which is the trigger already.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trimmed])
+
+  // While there is a search to answer, the site's own input and results
+  // stand down; see ACTIVE_ATTR.
+  const active = trimmed.length >= MIN_QUERY
+  React.useLayoutEffect(() => {
+    if (!active) return
+    document.documentElement.setAttribute(ACTIVE_ATTR, "")
+    return () => document.documentElement.removeAttribute(ACTIVE_ATTR)
+  }, [active])
 
   // Every later turn: a tap or a sentence, appended to the same thread.
   const refinementsRef = React.useRef<AbortController | null>(null)
@@ -175,10 +185,8 @@ export function SearchPanel({
     const controller = new AbortController()
     refinementsRef.current = controller
     const id = nextId.current++
-    const refinements = [
-      ...turns.flatMap((turn) => (turn.ask ? [turn.ask] : [])),
-      ask,
-    ]
+    // The first turn's ask is the query itself, sent separately.
+    const refinements = [...turns.slice(1).map((turn) => turn.ask), ask]
     setThread({
       query: trimmed,
       turns: [...turns, { id, ask, result: null, reading: true }],
@@ -202,7 +210,7 @@ export function SearchPanel({
     <div
       ref={rootRef}
       data-slot="search-assist"
-      className="minimal-agent-root @container flex flex-col gap-4 pt-4 font-sans text-foreground"
+      className="minimal-agent-root ma:@container ma:flex ma:flex-col ma:gap-4 ma:pt-4 ma:font-sans ma:text-foreground"
       style={{ ...themeStyle(config.theme), minHeight: fill }}
     >
       {turns.map((turn, index) => (
@@ -218,34 +226,38 @@ export function SearchPanel({
 
       <div ref={endRef} />
 
-      {/* Refining in the shopper's own words, without leaving the search.
-          On a phone the composer is pinned to the foot of the screen — it is
-          the one thing the shopper should never have to scroll to — and the
-          panel is stretched to reach it, so it sits there before there is
-          anything to scroll as well as after. */}
+      {/* The one input from here on: the site's box has become the first
+          bubble, and this is where the shopper carries on, in their own
+          words, without leaving the search. Focused as it arrives, so the
+          typing they were doing continues here. On a phone the composer is
+          pinned to the foot of the screen — it is the one thing the shopper
+          should never have to scroll to — and the panel is stretched to
+          reach it, so it sits there before there is anything to scroll as
+          well as after. */}
       <form
-        className="sticky bottom-0 mt-auto flex items-center gap-2 rounded-[calc(var(--radius)+0.25rem)] bg-muted pr-1.5 pl-3 @max-md:-mx-4 @max-md:rounded-none @max-md:border-t @max-md:border-border @max-md:bg-background @max-md:px-4 @max-md:py-3"
+        className="ma:sticky ma:bottom-0 ma:mt-auto ma:flex ma:items-center ma:gap-2 ma:rounded-[calc(var(--radius)+0.25rem)] ma:bg-muted ma:pr-1.5 ma:pl-3 ma:@max-md:-mx-4 ma:@max-md:rounded-none ma:@max-md:border-t ma:@max-md:border-border ma:@max-md:bg-background ma:@max-md:px-4 ma:@max-md:py-3"
         onSubmit={(event) => {
           event.preventDefault()
           refine(draft)
           setDraft("")
         }}
       >
-        <div className="flex min-w-0 flex-1 items-center gap-2 @max-md:rounded-[calc(var(--radius)+0.25rem)] @max-md:bg-muted @max-md:pr-1.5 @max-md:pl-3">
+        <div className="ma:flex ma:min-w-0 ma:flex-1 ma:items-center ma:gap-2 ma:@max-md:rounded-[calc(var(--radius)+0.25rem)] ma:@max-md:bg-muted ma:@max-md:pr-1.5 ma:@max-md:pl-3">
           <input
+            autoFocus
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             placeholder={behaviour.placeholders.search}
             aria-label="Refine the search"
-            className="h-10 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm"
+            className="ma:h-10 ma:min-w-0 ma:flex-1 ma:bg-transparent ma:text-base ma:outline-none ma:placeholder:text-muted-foreground ma:md:text-sm"
           />
           <button
             type="submit"
             disabled={draft.trim().length === 0 || busy}
             aria-label="Send"
-            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-40"
+            className="ma:flex ma:size-7 ma:shrink-0 ma:items-center ma:justify-center ma:rounded-full ma:bg-primary ma:text-primary-foreground ma:disabled:opacity-40"
           >
-            <ArrowUpIcon className="size-4" />
+            <ArrowUpIcon className="ma:size-4" />
           </button>
         </div>
       </form>
@@ -338,12 +350,19 @@ function TurnView({
   const shown = showAll ? products : products.slice(0, SHOWN)
 
   return (
-    <div className="flex flex-col gap-3">
-      {turn.ask ? (
-        <p className="w-fit max-w-[80%] self-end rounded-xl bg-primary px-3 py-2 text-sm leading-relaxed text-primary-foreground">
-          {turn.ask}
-        </p>
-      ) : null}
+    <div className="ma:flex ma:flex-col ma:gap-3">
+      {/* The first bubble is the search box's text, arriving where the box
+          was: it slides in from above as the input goes, so the two read as
+          one thing changing shape. */}
+      <p
+        className={cn(
+          "ma:w-fit ma:max-w-[80%] ma:self-end ma:rounded-xl ma:bg-primary ma:px-3 ma:py-2 ma:text-sm ma:leading-relaxed ma:text-primary-foreground",
+          first &&
+            "ma:animate-in ma:fade-in ma:slide-in-from-top-2 ma:duration-300",
+        )}
+      >
+        {turn.ask}
+      </p>
 
       {reading || !result ? (
         reading ? (
@@ -351,14 +370,14 @@ function TurnView({
         ) : null
       ) : (
         <>
-          <p className="w-fit max-w-[85%] rounded-xl bg-muted px-3 py-2 text-sm leading-relaxed">
+          <p className="ma:w-fit ma:max-w-[85%] ma:rounded-xl ma:bg-muted ma:px-3 ma:py-2 ma:text-sm ma:leading-relaxed">
             {result.line}
           </p>
 
           {/* What the agent took the search to mean, once, above the first
               grid. */}
           {first && agent && agent.reading.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
+            <div className="ma:flex ma:flex-wrap ma:gap-2">
               {agent.reading.map((phrase) => (
                 <Chip key={phrase} onClick={() => onRefine(phrase)}>
                   {phrase}
@@ -368,7 +387,7 @@ function TurnView({
           ) : null}
 
           {shown.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2 @lg:grid-cols-4">
+            <div className="ma:grid ma:grid-cols-2 ma:gap-2 ma:@lg:grid-cols-4">
               {shown.map((product) => (
                 <ProductCard
                   key={product.slug}
@@ -384,14 +403,14 @@ function TurnView({
             <button
               type="button"
               onClick={() => setShowAll(true)}
-              className="w-fit text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              className="ma:w-fit ma:text-xs ma:font-medium ma:text-muted-foreground ma:underline-offset-4 ma:hover:text-foreground ma:hover:underline"
             >
               Show all {products.length}
             </button>
           ) : null}
 
           {last && result.followUps.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
+            <div className="ma:flex ma:flex-wrap ma:gap-2">
               {result.followUps.map((followUp) => (
                 <Chip key={followUp} onClick={() => onRefine(followUp)}>
                   {followUp}
@@ -417,11 +436,11 @@ function Reading({ style }: { style: AgentConfig["theme"]["thinking"] }) {
   }, [])
 
   return (
-    <div className="flex h-9 w-fit items-center rounded-xl bg-muted px-3 text-sm text-muted-foreground">
+    <div className="ma:flex ma:h-9 ma:w-fit ma:items-center ma:rounded-xl ma:bg-muted ma:px-3 ma:text-sm ma:text-muted-foreground">
       {/* The stages are the text here whatever the style: a search has more
           to say about where it is than a chat does. */}
       <Working style={style === "text" ? "dots" : style} label="" />
-      <span className="ml-2">{STAGES[stage]}…</span>
+      <span className="ma:ml-2">{STAGES[stage]}…</span>
     </div>
   )
 }
@@ -431,7 +450,7 @@ function Chip({ className, ...props }: React.ComponentProps<"button">) {
     <button
       type="button"
       className={cn(
-        "flex h-8 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium whitespace-nowrap text-foreground outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
+        "ma:flex ma:h-8 ma:cursor-pointer ma:items-center ma:gap-1.5 ma:rounded-full ma:border ma:border-border ma:bg-card ma:px-3 ma:text-xs ma:font-medium ma:whitespace-nowrap ma:text-foreground ma:outline-none ma:hover:bg-muted ma:focus-visible:ring-3 ma:focus-visible:ring-ring/50",
         className,
       )}
       {...props}

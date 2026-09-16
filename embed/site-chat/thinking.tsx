@@ -1,5 +1,5 @@
 import { LoaderCircleIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
 import type { ThinkingStyle } from "@/lib/config/schema"
 
@@ -21,16 +21,16 @@ export function Working({
     <span
       role="status"
       aria-label={label}
-      className={cn("flex h-5 items-center gap-2", className)}
+      className={cn("ma:flex ma:h-5 ma:items-center ma:gap-2", className)}
     >
       {style === "ring" ? (
-        <LoaderCircleIcon className="size-4 animate-spin" />
+        <LoaderCircleIcon className="ma:size-4 ma:animate-spin" />
       ) : style === "text" ? null : (
-        <span className="flex items-center gap-1">
+        <span className="ma:flex ma:items-center ma:gap-1">
           {[0, 1, 2].map((dot) => (
             <span
               key={dot}
-              className="size-1.5 animate-bounce rounded-full bg-current/60"
+              className="ma:size-1.5 ma:animate-bounce ma:rounded-full ma:bg-current/60"
               style={{ animationDelay: `${dot * 120}ms` }}
             />
           ))}

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { MenuIcon, SearchIcon, ShoppingBagIcon, UserIcon } from "lucide-react"
 import { cn } from "cn"
 
+import { useSearchAssist } from "@/lib/config/use-surface"
 import { bagCount, useBag } from "@/lib/noord/bag"
 import { useOverlays } from "@/lib/noord/overlays"
 import type { NavModel } from "@/lib/noord/types"
@@ -20,6 +21,7 @@ import { Wordmark } from "./wordmark"
 export function Header({ nav }: { nav: NavModel }) {
   const pathname = usePathname()
   const show = useOverlays((state) => state.show)
+  const searchAssist = useSearchAssist("noord")
   const lines = useBag((state) => state.lines)
   const hydrated = useBag((state) => state.hydrated)
   const count = hydrated ? bagCount(lines) : 0
@@ -61,9 +63,12 @@ export function Header({ nav }: { nav: NavModel }) {
         </Link>
 
         <div className="flex flex-1 items-center justify-end gap-1">
-          <IconButton label="Search" onClick={() => show("search")}>
-            <SearchIcon className="size-5" strokeWidth={1.5} />
-          </IconButton>
+          {/* Search is the agent's; without it there is nothing to open. */}
+          {searchAssist && (
+            <IconButton label="Search" onClick={() => show("search")}>
+              <SearchIcon className="size-5" strokeWidth={1.5} />
+            </IconButton>
+          )}
           <Link
             href="/noord"
             aria-label="Account"

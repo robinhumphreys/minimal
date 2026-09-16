@@ -2,27 +2,22 @@
 
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { XIcon } from "@phosphor-icons/react/ssr"
+import { CheckIcon } from "@phosphor-icons/react/ssr"
 
 import type { FacetGroup, FacetKey } from "@/lib/volta/types"
 
 /**
- * Filter chips over a category's facets.
+ * The filter column beside a category grid.
  *
  * State lives in the URL rather than in React: a filtered grid is something a
  * shopper shares and comes back to, and it keeps the page a server component
  * that re-renders with the right products instead of hiding tiles on the
  * client.
+ *
+ * Sits on the shelf's white, so it is drawn in the light palette: the same
+ * one the product tiles beside it use.
  */
-export function CategoryFilters({
-  groups,
-  total,
-  shown,
-}: {
-  groups: FacetGroup[]
-  total: number
-  shown: number
-}) {
+export function CategoryFilters({ groups }: { groups: FacetGroup[] }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -32,7 +27,7 @@ export function CategoryFilters({
 
   function set(key: FacetKey, value: string) {
     const next = new URLSearchParams(params)
-    // Tapping the chip that is already on is how a shopper clears it.
+    // Ticking the option that is already on is how a shopper clears it.
     if (next.get(key) === value) next.delete(key)
     else next.set(key, value)
 
@@ -43,75 +38,61 @@ export function CategoryFilters({
   if (groups.length === 0) return null
 
   return (
-    <div className="flex flex-col">
-      {/*
-        One rule-separated row per facet, label in a fixed column on the left
-        from `md` up — a spec sheet rather than a stack of floating boxes. On a
-        phone there is no room for the column, so the label goes back on top.
-      */}
-      {groups.map((group) => (
-        <div
-          key={group.key}
-          className="flex flex-col gap-2 border-b border-volta-line py-3 md:flex-row md:items-center md:gap-6 md:py-2"
-        >
-          <h3 className="volta-wide shrink-0 text-volta-micro text-volta-smoke md:w-20">
-            {group.label}
-          </h3>
-          {/*
-            The chips scroll rather than wrap: a category with eight forms and
-            eight flavours would otherwise push the grid below the fold.
-          */}
-          <ul className="-mx-volta-gutter flex [scrollbar-width:none] gap-1.5 overflow-x-auto px-volta-gutter md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
-            {group.options.map((option) => {
-              const on = active(group.key) === option.value
-              return (
-                <li key={option.value} className="shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => set(group.key, option.value)}
-                    aria-pressed={on}
-                    className={
-                      // Filled, not outlined: a hairline box on a charcoal
-                      // ground reads as an empty input, a solid one as a chip.
-                      on
-                        ? "volta-wide flex items-center gap-1.5 rounded-volta bg-volta-volt px-3 py-1.5 text-volta-micro text-volta-void"
-                        : "volta-wide flex items-center gap-1.5 rounded-volta bg-volta-steel px-3 py-1.5 text-volta-micro text-volta-chalk transition-colors hover:bg-volta-line-strong"
-                    }
-                  >
-                    {option.value}
-                    <span
-                      className={
-                        on
-                          ? "text-volta-void/50 tabular-nums"
-                          : "text-volta-smoke tabular-nums"
-                      }
-                    >
-                      {option.count}
-                    </span>
-                    {on && <XIcon className="size-3" weight="bold" />}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      ))}
-
-      <div className="flex items-center justify-between gap-4 pt-3">
-        <p className="text-volta-micro text-volta-ash tabular-nums">
-          {filtered ? `${shown} of ${total}` : `${total}`} products
-        </p>
+    <aside aria-label="Filters" className="flex flex-col">
+      <div className="flex items-baseline justify-between border-b border-volta-mist pb-3">
+        <h2 className="volta-wide text-volta-label text-volta-void">Filter</h2>
         {filtered && (
           <Link
             href={pathname}
             scroll={false}
             replace
-            className="volta-wide text-volta-micro text-volta-volt hover:underline"
+            className="volta-wide text-volta-micro text-volta-slate hover:text-volta-void hover:underline"
           >
-            Clear filters
+            Clear all
           </Link>
         )}
       </div>
-    </div>
+
+      {groups.map((group) => (
+        <section
+          key={group.key}
+          className="flex flex-col gap-3 border-b border-volta-mist py-5 last:border-b-0"
+        >
+          <h3 className="volta-wide text-volta-micro text-volta-slate">
+            {group.label}
+          </h3>
+          <ul className="flex flex-col gap-2">
+            {group.options.map((option) => {
+              const on = active(group.key) === option.value
+              return (
+                <li key={option.value}>
+                  <button
+                    type="button"
+                    onClick={() => set(group.key, option.value)}
+                    aria-pressed={on}
+                    className="group/option flex w-full items-center gap-3 text-left text-volta-body text-volta-void"
+                  >
+                    <span
+                      aria-hidden
+                      className={
+                        on
+                          ? "flex size-4 shrink-0 items-center justify-center rounded-[3px] bg-volta-void text-volta-volt"
+                          : "flex size-4 shrink-0 items-center justify-center rounded-[3px] border border-volta-mist transition-colors group-hover/option:border-volta-slate"
+                      }
+                    >
+                      {on && <CheckIcon className="size-3" weight="bold" />}
+                    </span>
+                    <span className="flex-1">{option.value}</span>
+                    <span className="text-volta-micro text-volta-slate tabular-nums">
+                      {option.count}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      ))}
+    </aside>
   )
 }

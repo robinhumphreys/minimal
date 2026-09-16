@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { notFound } from "next/navigation"
 
 import { CategoryGrid } from "@/components/noord/category-grid"
+import { ProductHelpBand } from "@/components/product-help-band"
 import { Skeleton } from "@/components/noord/ui/skeleton"
 import { getCategory, getProductsInCategory } from "@/lib/catalog"
 import { toSearchEntry } from "@/lib/noord/catalog-view"
@@ -14,18 +15,6 @@ export function CategoryPage({ slug }: { slug: string }) {
 
   return (
     <>
-      {/* Product help, where a shopper stands before a wall of one kind of
-          thing. The band is the storefront's; the button in it is the
-          embed's, drawn into the mount when the agent is on the page. */}
-      <section className="noord-gutter border-b border-noord-line bg-noord-wash">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 py-8 text-center">
-          <p className="text-noord-title">
-            Not sure which of our {category.name.toLowerCase()} is yours?
-          </p>
-          <minimal-agent-guide data-topic={category.name} />
-        </div>
-      </section>
-
       {/* The grid reads `?fit=…` and friends off the URL. `useSearchParams`
           needs a boundary for the page shell to stay statically prerendered. */}
       <Suspense fallback={<GridSkeleton />}>
@@ -35,6 +24,29 @@ export function CategoryPage({ slug }: { slug: string }) {
           description={category.description}
         />
       </Suspense>
+
+      {/* Product help, after the shopper has scrolled a wall of one kind of
+          thing. The band is the storefront's; the button in it is the
+          embed's, drawn into the mount when the agent is on the page. */}
+      <ProductHelpBand brand="noord">
+        <section className="noord-gutter border-t border-noord-line bg-noord-wash">
+          <div className="mx-auto flex max-w-2xl flex-col items-center gap-5 py-16 text-center md:py-24">
+            <span className="text-noord-micro text-noord-ink-faint uppercase">
+              A little help
+            </span>
+            <h2 className="text-noord-section text-balance">
+              Not sure which of our {category.name.toLowerCase()} is yours?
+            </h2>
+            <p className="max-w-md text-noord-lead text-balance text-noord-ink-muted">
+              Say how and where you&rsquo;ll wear them, and we&rsquo;ll narrow
+              the {category.name.toLowerCase()} down to one or two.
+            </p>
+            <div className="pt-2">
+              <minimal-agent-guide data-topic={category.name} />
+            </div>
+          </div>
+        </section>
+      </ProductHelpBand>
     </>
   )
 }

@@ -3,8 +3,12 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 
-import { useBag } from "@/lib/volta/bag"
+import { provideCart } from "@/lib/agent/cart"
+import { useSearchAssist } from "@/lib/config/use-surface"
+import { bagCount, bagSubtotal, useBag } from "@/lib/volta/bag"
+import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
+import { searchPath } from "@/lib/search-url"
 import type { NavModel, SearchEntry } from "@/lib/volta/types"
 
 import { BagOverlay } from "./bag-overlay"
@@ -33,6 +37,7 @@ export function VoltaShell({
 }) {
   const pathname = usePathname()
   const close = useOverlays((state) => state.close)
+  const searchAssist = useSearchAssist("volta")
 
   // The bag persists to localStorage with `skipHydration`, so the read happens
   // here rather than at import time — otherwise the server render and the first
@@ -41,10 +46,34 @@ export function VoltaShell({
     void useBag.persist.rehydrate()
   }, [])
 
+  // The agent can ask what is in the cart. Read live at call time, so it
+  // sees the cart as it is then, not as it was when the page loaded.
+  React.useEffect(
+    () =>
+      provideCart(() => {
+        const lines = useBag.getState().lines
+        return {
+          lines: lines.map((line) => ({
+            slug: line.slug,
+            name: line.name,
+            variant: [line.flavour, line.size].filter(Boolean).join(" · "),
+            quantity: line.quantity,
+            price: formatPrice(line.price),
+            lineTotal: formatPrice(line.price * line.quantity),
+            url: line.href,
+          })),
+          count: bagCount(lines),
+          subtotal: formatPrice(bagSubtotal(lines)),
+        }
+      }),
+    [],
+  )
+
   // An overlay left open across a route change would cover the page the shopper
-  // just asked for.
+  // just asked for. The one exception is search, which writes its own route
+  // while it opens.
   React.useEffect(() => {
-    close()
+    if (pathname !== searchPath("volta")) close()
   }, [pathname, close])
 
   return (
@@ -58,7 +87,9 @@ export function VoltaShell({
       <Footer />
 
       <NavOverlay nav={nav} />
-      <SearchOverlay index={searchIndex} categories={nav.categories} />
+      {searchAssist && (
+        <SearchOverlay index={searchIndex} categories={nav.categories} />
+      )}
       <BagOverlay />
     </div>
   )

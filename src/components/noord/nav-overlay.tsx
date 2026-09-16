@@ -9,6 +9,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/noord/ui/sheet"
+import { useSearchAssist } from "@/lib/config/use-surface"
 import { useOverlays } from "@/lib/noord/overlays"
 import type { NavModel } from "@/lib/noord/types"
 
@@ -24,6 +25,7 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
   const open = useOverlays((state) => state.open) === "nav"
   const toggle = useOverlays((state) => state.toggle)
   const show = useOverlays((state) => state.show)
+  const searchAssist = useSearchAssist("noord")
   const close = useOverlays((state) => state.close)
 
   return (
@@ -33,14 +35,16 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
 
         {/* Search sits where the hamburger was, so the two swap in place. */}
         <div className="noord-sheet-gutter flex h-noord-header shrink-0 items-center">
-          <button
-            type="button"
-            onClick={() => show("search")}
-            aria-label="Search"
-            className="-ml-1 flex size-10 items-center justify-center text-noord-ink transition-colors hover:text-noord-ink-muted"
-          >
-            <SearchIcon className="size-5" strokeWidth={1.5} />
-          </button>
+          {searchAssist && (
+            <button
+              type="button"
+              onClick={() => show("search")}
+              aria-label="Search"
+              className="-ml-1 flex size-10 items-center justify-center text-noord-ink transition-colors hover:text-noord-ink-muted"
+            >
+              <SearchIcon className="size-5" strokeWidth={1.5} />
+            </button>
+          )}
         </div>
 
         <SheetBody>

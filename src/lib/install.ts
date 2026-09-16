@@ -15,7 +15,7 @@ export function guideMount(topic = "Suits"): string {
 
 /** The mount the search takeover needs, under the site's own search input. */
 export function searchMount(): string {
-  return `<minimal-agent-search data-query="{{ query }}"></minimal-agent-search>`
+  return `<minimal-agent-search data-query="{{ submitted_query }}"></minimal-agent-search>`
 }
 
 export type SnippetKey = "script" | "search" | "guide"
@@ -33,8 +33,7 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
     {
       key: "script",
       title: "Body tag",
-      where:
-        "Copy this line of code into the <body> of every page, or add it to your tag manager.",
+      where: "In the <body> of every page, or your tag manager.",
       code: scriptTag(config),
     },
   ]
@@ -43,7 +42,7 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
       key: "search",
       title: "Search template",
       where:
-        "Copy this into your search results template, directly under the search input. Keep data-query equal to what the shopper has typed.",
+        "Under the search input in your results template. Set data-query to the submitted search.",
       code: searchMount(),
     })
   }
@@ -51,8 +50,7 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
     snippets.push({
       key: "guide",
       title: "Category or product page",
-      where:
-        "Copy this wherever you want the button, for example above a category grid. Set data-topic to what the page is about.",
+      where: "Wherever the button should go. Set data-topic to the page's subject.",
       code: guideMount(),
     })
   }
@@ -80,7 +78,7 @@ export function agentInstructionsFor(config: AgentConfig): string {
       "",
       `   ${searchMount()}`,
       "",
-      "   and keep the data-query attribute equal to the current value of the search input as the shopper types (an input event handler is enough). Leave the site's own results in place; the agent hides them while it has an answer, and they return if the script is absent.",
+      "   and set the data-query attribute to the search when the shopper submits it (Enter or the search button), emptying it when they start a new search. Add data-native-search to the search input's row and to the site's own results: the agent hides them while it has an answer, replacing the input with the shopper's words as the first message and a composer for what comes next, and they return untouched if the script is absent.",
     )
   }
   if (config.surface.productHelp.enabled) {

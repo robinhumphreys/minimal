@@ -2,11 +2,10 @@
 
 import * as React from "react"
 
-import { CheckIcon, SlidersHorizontalIcon, UploadIcon } from "lucide-react"
+import { CheckIcon, UploadIcon } from "lucide-react"
 
 import { NextButton } from "@/app/admin/_components/next-button"
 
-import { Button } from "@/components/ui/button"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -18,15 +17,11 @@ import { useOrg } from "@/app/admin/_components/use-org"
 import { useAdminStore } from "@/lib/store/admin"
 
 import { readPublishedOrDefault } from "@/lib/config/storage"
+import type { ChatSurface } from "@/app/api/admin/site-chat/surfaces"
 
 import { CustomisePane } from "./customise-pane"
 import type { Device } from "./device-toggle"
 import { InstallPanel } from "./install-panel"
-import {
-  ProductHelpOptions,
-  SearchAssistOptions,
-  SiteChatOptions,
-} from "./options"
 import { ProductHelpPreview } from "./product-help-preview"
 import { SearchAssistPreview } from "./search-assist-preview"
 import { applySettings, settingsFrom, type SiteChatSettings } from "./site-chat"
@@ -40,6 +35,14 @@ const SURFACES = [
 ] as const
 
 type SurfaceId = (typeof SURFACES)[number]["value"]
+
+/**
+ * Which conversation the right half holds. The install tab has nothing to
+ * customise, so it keeps the site chat's — the surface it installs.
+ */
+function chatSurfaceFor(surface: SurfaceId): ChatSurface {
+  return surface === "install" ? "site-chat" : surface
+}
 
 /**
  * Onboarding previews only what step three switched on and moves on with
@@ -115,7 +118,6 @@ function Studio({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [config, hydrated, revision, published],
   )
-  const [showing, setShowing] = React.useState<"chat" | "options">("chat")
   // Shared across surfaces: a merchant checking their phone wants to see
   // every surface on it, not re-choose it per tab.
   const [device, setDevice] = React.useState<Device>("desktop")
@@ -127,8 +129,9 @@ function Studio({
   const onChange = (next: SiteChatSettings) =>
     editDraft(config.id, (current) => applySettings(current, next))
 
-  // An emptied greeting is the one thing the form lets through that the
-  // schema does not; hold Publish rather than throw on it.
+  // The agent's patch is checked before it is applied, but the draft is
+  // read back from storage too; hold Publish on anything the schema rejects
+  // rather than throw on it.
   const valid = agentConfigSchema.safeParse(config).success
 
   React.useEffect(() => {
@@ -168,20 +171,6 @@ function Studio({
         {/* The tray. Sits on the tabs' own line because what it holds acts on
             the whole screen, not on either half of it. */}
         <div className="ml-auto flex items-center gap-1">
-          <Button
-            size="lg"
-            variant={showing === "options" ? "secondary" : "ghost"}
-            aria-pressed={showing === "options"}
-            onClick={() =>
-              setShowing((value) => (value === "options" ? "chat" : "options"))
-            }
-            className={
-              showing === "options" ? undefined : "text-muted-foreground"
-            }
-          >
-            <SlidersHorizontalIcon />
-            Options
-          </Button>
           {mode === "manage" ? (
             <>
               {dirty && !published ? (
@@ -242,30 +231,10 @@ function Studio({
 
           <ResizablePanel defaultSize="38" minSize="25" className="pl-4">
             <CustomisePane
-              showing={showing}
+              brand={config.id}
+              surface={chatSurfaceFor(surface)}
               settings={settings}
               onChange={onChange}
-              options={
-                surface === "search-assist" ? (
-                  <SearchAssistOptions
-                    settings={settings}
-                    onChange={onChange}
-                    switchable={mode === "manage"}
-                  />
-                ) : surface === "product-help" ? (
-                  <ProductHelpOptions
-                    settings={settings}
-                    onChange={onChange}
-                    switchable={mode === "manage"}
-                  />
-                ) : (
-                  <SiteChatOptions
-                    settings={settings}
-                    onChange={onChange}
-                    switchable={mode === "manage"}
-                  />
-                )
-              }
             />
           </ResizablePanel>
         </ResizablePanelGroup>

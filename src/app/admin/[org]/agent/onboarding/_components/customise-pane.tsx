@@ -3,10 +3,6 @@
 import * as React from "react"
 
 import { useChat } from "@ai-sdk/react"
-import {
-  DefaultChatTransport,
-  lastAssistantMessageIsCompleteWithToolCalls,
-} from "ai"
 import { ArrowUpIcon } from "lucide-react"
 import { motion } from "motion/react"
 
@@ -26,48 +22,18 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller"
-import { cn } from "cn"
+
+import type { ChatSurface } from "@/app/api/admin/site-chat/surfaces"
+import type { BrandId } from "@/lib/catalog/types"
 
 import {
-  applySiteChatPatch,
-  type SiteChatUIMessage,
-} from "@/app/api/admin/site-chat/tools"
-
+  OPENERS,
+  customiseChatFor,
+  type CustomiseChatEntry,
+} from "./customise-chats"
 import type { SiteChatSettings } from "./site-chat"
 
 type Turn = { id: string; from: "agent" | "merchant"; text: string }
-
-/**
- * What the agent opens with. It plays rather than sits there: arriving a line
- * at a time says the agent has been working on this, where a finished
- * transcript on mount just looks like placeholder copy.
- *
- * Both lines are the agent's — putting words in the merchant's mouth before
- * they have said anything is a transcript pretending to be a conversation.
- *
- * `after` is the pause before each line lands.
- */
-const SCRIPT: { text: string; after: number }[] = [
-  {
-    text: "I matched the chat button to your site — your accent, your corner radius, bottom right where your live chat used to sit.",
-    after: 500,
-  },
-  {
-    text: "Tell me what to change, or open Options if you would rather set it yourself.",
-    after: 1200,
-  },
-]
-
-/**
- * The opener as the model sees it. Seeding the conversation with it means
- * the model knows what it has already told the merchant, so "change that"
- * has something to refer to.
- */
-const OPENER: SiteChatUIMessage[] = SCRIPT.map((line, index) => ({
-  id: `script-${index}`,
-  role: "assistant",
-  parts: [{ type: "text", text: line.text }],
-}))
 
 /**
  * What the agent is doing while the merchant waits. Two lines rather than one
@@ -78,49 +44,37 @@ const WORKING = ["Reading the settings", "Updating the preview"]
 
 /**
  * The right half: the merchant changes the surface by asking, and the preview
- * on the left answers. The same settings sit behind the tray's options toggle
- * — chat is the way in, not the only way, because nobody wants to negotiate
- * with a model over a hex code.
- *
- * Which of the two is showing is owned by the studio, since the control that
- * switches them lives up in the tray rather than in here.
+ * on the left answers. The chat is the only way in — the agent is the one
+ * that edits the settings, so there is no form beside it.
  */
 export function CustomisePane({
-  showing,
+  brand,
+  surface,
   settings,
   onChange,
-  options,
 }: {
-  showing: "chat" | "options"
+  brand: BrandId
+  /**
+   * Which surface the merchant is looking at. Each has a conversation of its
+   * own, briefed on that surface and allowed to change only its settings.
+   */
+  surface: ChatSurface
   settings: SiteChatSettings
   onChange: (next: SiteChatSettings) => void
-  /**
-   * The surface's own options. The chat is the same for every surface: one
-   * conversation about one agent.
-   */
-  options: React.ReactNode
 }) {
+  // The conversation lives outside React, so swapping the chat out for
+  // another tab's and back — or leaving the step and returning — picks it up
+  // where it was, opener and all.
+  const entry = customiseChatFor(brand, surface)
+
   return (
-    // Both stay mounted. Swapping them out and back would unmount the chat,
-    // and the chat is the one thing here with a history worth keeping — the
-    // opener would replay every time the merchant closed the options.
     <div className="flex h-full min-h-0 flex-col">
-      <div
-        className={cn(
-          "min-h-0 flex-1 flex-col",
-          showing === "chat" ? "flex" : "hidden",
-        )}
-      >
-        <CustomiseChat settings={settings} onChange={onChange} />
-      </div>
-      <div
-        className={cn(
-          "min-h-0 flex-1 flex-col",
-          showing === "options" ? "flex" : "hidden",
-        )}
-      >
-        {options}
-      </div>
+      <CustomiseChat
+        key={entry.chat.id}
+        entry={entry}
+        settings={settings}
+        onChange={onChange}
+      />
     </div>
   )
 }
@@ -131,54 +85,58 @@ export function CustomisePane({
  * its result is posted back so the model can say how it looks.
  */
 function CustomiseChat({
+  entry,
   settings,
   onChange,
 }: {
+  entry: CustomiseChatEntry
   settings: SiteChatSettings
   onChange: (next: SiteChatSettings) => void
 }) {
+  const SCRIPT = OPENERS[entry.surface]
   const [draft, setDraft] = React.useState("")
-  /** How many of the scripted opener's lines have landed. */
-  const [revealed, setRevealed] = React.useState(0)
+  /**
+   * How many of the scripted opener's lines have landed. A conversation that
+   * has already opened once shows all of them at once: the merchant has seen
+   * it play, and a replay on every return would be a tic.
+   */
+  const [revealed, setRevealed] = React.useState(() =>
+    entry.opened ? SCRIPT.length : 0,
+  )
 
   // The tool call reads whatever the settings are when it lands, not what
-  // they were when the hook was set up: the merchant may have used the
-  // options form in between.
-  const latest = React.useRef({ settings, onChange })
+  // they were when the chat was made: the draft may have been re-read from
+  // what was published in between. Bound in an effect rather than in render
+  // so a render that is thrown away cannot leave the entry pointing at stale
+  // callbacks.
   React.useEffect(() => {
-    latest.current = { settings, onChange }
-  }, [settings, onChange])
+    entry.bind({ settings, onChange })
+  }, [entry, settings, onChange])
 
-  const transport = React.useMemo(
-    () => new DefaultChatTransport({ api: "/api/admin/site-chat" }),
-    [],
+  const { messages, status, error, sendMessage } = useChat({ chat: entry.chat })
+
+  // Bubbles that were already there when this pane mounted — a conversation
+  // picked up again after a tab switch or a step back — land at once. Only
+  // what arrives from now on fades in.
+  const [restored] = React.useState(
+    () => new Set(entry.opened ? messages.map((message) => message.id) : []),
   )
-  const { messages, status, error, sendMessage, addToolOutput } =
-    useChat<SiteChatUIMessage>({
-      transport,
-      messages: OPENER,
-      sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-      onToolCall: ({ toolCall }) => {
-        if (toolCall.dynamic || toolCall.toolName !== "updateSiteChat") return
-        const next = applySiteChatPatch(latest.current.settings, toolCall.input)
-        latest.current.onChange(next)
-        addToolOutput({
-          tool: "updateSiteChat",
-          toolCallId: toolCall.toolCallId,
-          output: { applied: toolCall.input },
-        })
-      },
-    })
 
   React.useEffect(() => {
+    if (entry.opened) return
     const timers: number[] = []
     let elapsed = 0
     SCRIPT.forEach((line, index) => {
       elapsed += line.after
-      timers.push(window.setTimeout(() => setRevealed(index + 1), elapsed))
+      timers.push(
+        window.setTimeout(() => {
+          setRevealed(index + 1)
+          if (index === SCRIPT.length - 1) entry.markOpened()
+        }, elapsed),
+      )
     })
     return () => timers.forEach(window.clearTimeout)
-  }, [])
+  }, [entry, SCRIPT])
 
   const busy = status === "submitted" || status === "streaming"
 
@@ -212,7 +170,7 @@ function CustomiseChat({
     const text = draft.trim()
     if (!text || busy) return
     setDraft("")
-    void sendMessage({ text }, { body: { settings: latest.current.settings } })
+    void sendMessage({ text }, { body: { settings, surface: entry.surface } })
   }
 
   return (
@@ -229,7 +187,7 @@ function CustomiseChat({
                 scrollAnchor={turn.from === "merchant"}
               >
                 <motion.div
-                  initial={{ opacity: 0, y: 6 }}
+                  initial={restored.has(turn.id) ? false : { opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                 >

@@ -35,6 +35,13 @@ type Pong = {
 const TICK_MS = 500
 
 /**
+ * How long to wait for the site to answer before calling the check failed.
+ * A site without the embed never answers, so without this the rows would
+ * spin for ever and the button would stay disabled.
+ */
+const TIMEOUT_MS = 8000
+
+/**
  * The last step: the merchant takes the agent to their site, and this same
  * screen checks that it arrived. One row per surface that is on, with the
  * code to paste; Check now publishes the draft and asks the site, and each
@@ -60,20 +67,23 @@ export function InstallStep({ next }: { next: string }) {
   // `attempt` is 0 until Check now; each check loads the site afresh.
   const [attempt, setAttempt] = React.useState(0)
   const [pong, setPong] = React.useState<Pong | null>(null)
+  const [timedOut, setTimedOut] = React.useState(false)
   const [ticked, setTicked] = React.useState(0)
   const frame = React.useRef<HTMLIFrameElement>(null)
 
   const check = () => {
     publish(org)
     setPong(null)
+    setTimedOut(false)
     setTicked(0)
     setAttempt((n) => n + 1)
   }
 
-  // Ask until answered: the frame may still be loading when the first ping
-  // goes out, and a ping into a page without the embed is simply ignored.
+  // Ask until answered or out of time: the frame may still be loading when
+  // the first ping goes out, and a ping into a page without the embed is
+  // simply ignored.
   React.useEffect(() => {
-    if (attempt === 0 || pong) return
+    if (attempt === 0 || pong || timedOut) return
     const onMessage = (event: MessageEvent) => {
       const data = event.data as Partial<Pong> | null
       if (data?.type === "minimal:pong" && data.id === org) {
@@ -87,11 +97,13 @@ export function InstallStep({ next }: { next: string }) {
         window.location.origin,
       )
     }, 700)
+    const deadline = window.setTimeout(() => setTimedOut(true), TIMEOUT_MS)
     return () => {
       window.removeEventListener("message", onMessage)
       window.clearInterval(timer)
+      window.clearTimeout(deadline)
     }
-  }, [org, attempt, pong])
+  }, [org, attempt, pong, timedOut])
 
   const snippets = snippetsFor(config)
   const found: Record<SnippetKey, boolean> = {
@@ -107,21 +119,25 @@ export function InstallStep({ next }: { next: string }) {
     return () => window.clearTimeout(timer)
   }, [pong, ticked, snippets.length])
 
-  const checking = attempt > 0 && (pong === null || ticked < snippets.length)
+  const checking =
+    attempt > 0 && !timedOut && (pong === null || ticked < snippets.length)
   const status = Object.fromEntries(
     snippets.map((snippet, index) => [
       snippet.key,
       attempt === 0
         ? "idle"
-        : pong === null || index >= ticked
-          ? "checking"
-          : found[snippet.key]
-            ? "pass"
-            : "fail",
+        : timedOut
+          ? "fail"
+          : pong === null || index >= ticked
+            ? "checking"
+            : found[snippet.key]
+              ? "pass"
+              : "fail",
     ]),
   ) as Partial<Record<SnippetKey, SnippetState>>
   const allFound =
     attempt > 0 && !checking && snippets.every((s) => found[s.key])
+  const missing = attempt > 0 && !checking && !allFound
 
   return (
     <div className="relative flex h-full flex-col items-center justify-center gap-10 overflow-y-auto px-8 py-16">
@@ -141,8 +157,15 @@ export function InstallStep({ next }: { next: string }) {
         {allFound ? "Your agent is live" : "Embed the agent on your site"}
       </h1>
 
-      <div className="w-full max-w-lg">
+      <div className="flex w-full max-w-lg flex-col gap-4">
         <InstallSnippets config={config} status={status} />
+        {missing ? (
+          <p role="status" className="text-sm text-muted-foreground">
+            {timedOut
+              ? `${site.domain} did not answer. Make sure the body tag is on the page, then check again.`
+              : `Some of the code is not on ${site.domain} yet. Paste what is missing, then check again.`}
+          </p>
+        ) : null}
       </div>
 
       <div className="absolute right-8 bottom-8 flex items-center gap-2">

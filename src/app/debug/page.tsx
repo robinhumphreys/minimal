@@ -19,11 +19,16 @@ export default function Page() {
   ) as Record<BrandId, Fixtures>
 
   return (
-    <DebugView
-      brands={BRAND_IDS.map((brand) => ({
-        config: defaultConfig(brand),
-        fixtures: brands[brand],
-      }))}
-    />
+    <>
+      {/* The surfaces are the embed's components; their utilities live in
+          its stylesheet. */}
+      <link rel="stylesheet" href="/embed.css" precedence="default" />
+      <DebugView
+        brands={BRAND_IDS.map((brand) => ({
+          config: defaultConfig(brand),
+          fixtures: brands[brand],
+        }))}
+      />
+    </>
   )
 }

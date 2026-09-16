@@ -7,12 +7,6 @@ import { useOverlays } from "@/lib/volta/overlays"
 import type { NavModel } from "@/lib/volta/types"
 
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/volta/ui/accordion"
-import {
   Sheet,
   SheetBody,
   SheetContent,
@@ -26,9 +20,9 @@ import { Wordmark } from "./wordmark"
 /**
  * The phone site navigation, behind the hamburger.
  *
- * Categories are accordions rather than a drill-down stack: with six of them
- * the whole tree fits on one screen, and a stack would cost a tap and an
- * animation for no gain. Never rendered on desktop — `<DesktopNav>` owns that.
+ * Categories are a flat list: each one's page carries its own filters, so
+ * there is nothing to expand here. Never rendered on desktop — `<DesktopNav>`
+ * owns that.
  */
 export function NavOverlay({ nav }: { nav: NavModel }) {
   const open = useOverlays((state) => state.open)
@@ -48,43 +42,19 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
 
         <SheetBody>
           <div className="volta-gutter pb-10">
-            <Accordion className="border-t-0">
+            <ul className="flex flex-col">
               {nav.categories.map((category) => (
-                <AccordionItem key={category.href} value={category.href}>
-                  <AccordionTrigger className="text-volta-title">
+                <li key={category.href}>
+                  <Link
+                    href={category.href}
+                    className="flex items-center justify-between border-b border-volta-line py-4 text-volta-title text-volta-chalk"
+                  >
                     {category.label}
-                  </AccordionTrigger>
-                  <AccordionContent className="flex flex-col gap-4">
-                    <Link
-                      href={category.href}
-                      className="volta-wide flex items-center gap-2 text-volta-label text-volta-volt"
-                    >
-                      All {category.label}
-                      <ArrowRightIcon className="size-3.5" />
-                    </Link>
-                    {category.columns.map((column) => (
-                      <div key={column.title} className="flex flex-col gap-2">
-                        <h4 className="volta-wide text-volta-micro text-volta-smoke">
-                          {column.title}
-                        </h4>
-                        <ul className="flex flex-wrap gap-x-4 gap-y-2">
-                          {column.links.map((link) => (
-                            <li key={link.href}>
-                              <Link
-                                href={link.href}
-                                className="text-volta-body text-volta-ash"
-                              >
-                                {link.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </AccordionContent>
-                </AccordionItem>
+                    <ArrowRightIcon className="size-4 text-volta-smoke" />
+                  </Link>
+                </li>
               ))}
-            </Accordion>
+            </ul>
 
             <Section title="Shop by goal">
               <ul className="grid grid-cols-2 gap-x-4 gap-y-3">

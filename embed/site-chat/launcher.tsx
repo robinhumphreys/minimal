@@ -5,7 +5,7 @@ import {
   SparkleIcon,
 } from "@phosphor-icons/react/ssr"
 import { XIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
 import type { Surface } from "@/lib/config/schema"
 
@@ -27,9 +27,9 @@ const SIZES: Record<
   Surface["size"],
   { bare: string; labelled: string; icon: string }
 > = {
-  sm: { bare: "size-11", labelled: "h-10 px-4", icon: "size-5" },
-  md: { bare: "size-14", labelled: "h-12 px-5", icon: "size-6" },
-  lg: { bare: "size-16", labelled: "h-14 px-6", icon: "size-7" },
+  sm: { bare: "ma:size-11", labelled: "ma:h-10 ma:px-4", icon: "ma:size-5" },
+  md: { bare: "ma:size-14", labelled: "ma:h-12 ma:px-5", icon: "ma:size-6" },
+  lg: { bare: "ma:size-16", labelled: "ma:h-14 ma:px-6", icon: "ma:size-7" },
 }
 
 /**
@@ -65,9 +65,9 @@ export function Launcher({
       aria-expanded={open}
       aria-label={open ? "Close chat" : label || "Open chat"}
       className={cn(
-        "flex cursor-pointer items-center gap-2 bg-primary text-sm font-medium text-primary-foreground shadow-lg outline-none hover:scale-105 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-100",
-        surface.shape === "square" ? "rounded-(--radius)" : "rounded-full",
-        label ? size.labelled : cn(size.bare, "justify-center"),
+        "ma:flex ma:cursor-pointer ma:items-center ma:gap-2 ma:bg-primary ma:text-sm ma:font-medium ma:text-primary-foreground ma:shadow-lg ma:outline-none ma:hover:scale-105 ma:focus-visible:ring-3 ma:focus-visible:ring-ring/50 ma:focus-visible:ring-offset-2 ma:focus-visible:ring-offset-background ma:active:scale-100",
+        surface.shape === "square" ? "ma:rounded-(--radius)" : "ma:rounded-full",
+        label ? size.labelled : cn(size.bare, "ma:justify-center"),
         className,
       )}
     >

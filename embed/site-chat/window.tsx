@@ -1,10 +1,10 @@
 import * as React from "react"
 import { ArrowUpIcon, SquareIcon, XIcon } from "lucide-react"
-import { cn } from "cn"
+import { cn } from "../cn"
 
 import type { AgentUIMessage } from "@/lib/agent/types"
-import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble"
-import { Button } from "@/components/ui/button"
+import { Bubble, BubbleContent, BubbleGroup } from "../ui/bubble"
+import { Button } from "../ui/button"
 import {
   Card,
   CardAction,
@@ -13,14 +13,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "../ui/card"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "@/components/ui/input-group"
-import { Message, MessageContent, MessageGroup } from "@/components/ui/message"
+} from "../ui/input-group"
+import { Message, MessageContent, MessageGroup } from "../ui/message"
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -29,8 +29,8 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
   useMessageScroller,
-} from "@/components/ui/message-scroller"
-import { BrandMark } from "@/components/brand/brand-mark"
+} from "../ui/message-scroller"
+import { BrandMark } from "../ui/brand-mark"
 import type { AgentConfig } from "@/lib/config/schema"
 
 import { ProductCards } from "./products"
@@ -77,7 +77,7 @@ export function ChatWindow({
           } as React.CSSProperties
         }
         className={cn(
-          "gap-0 rounded-(--window-radius) py-0 shadow-2xl ring-border",
+          "ma:gap-0 ma:rounded-(--window-radius) ma:py-0 ma:shadow-2xl ma:ring-border",
           className,
         )}
       >
@@ -86,52 +86,52 @@ export function ChatWindow({
             the name from its avatar. */}
         <CardHeader
           className={cn(
-            "flex items-center gap-3 rounded-t-[inherit] py-3",
+            "ma:flex ma:items-center ma:gap-3 ma:rounded-t-[inherit] ma:py-3",
             plain
-              ? "border-b border-border bg-card text-foreground"
-              : "bg-primary text-primary-foreground",
+              ? "ma:border-b ma:border-border ma:bg-card ma:text-foreground"
+              : "ma:bg-primary ma:text-primary-foreground",
           )}
         >
           {config.identity.avatar === "mark" ? (
             <BrandMark
               brand={config.id}
-              className="size-8 rounded-full ring-1 ring-current/15"
+              className="ma:size-8 ma:rounded-full ma:ring-1 ma:ring-current/15"
             />
           ) : (
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-current/20 text-xs font-medium">
+            <div className="ma:flex ma:size-8 ma:shrink-0 ma:items-center ma:justify-center ma:rounded-full ma:bg-current/20 ma:text-xs ma:font-medium">
               {initial}
             </div>
           )}
-          <div className="flex min-w-0 flex-col">
+          <div className="ma:flex ma:min-w-0 ma:flex-col">
             <CardTitle
-              className="truncate text-sm"
+              className="ma:truncate ma:text-sm"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {name}
             </CardTitle>
             {config.identity.subtitle.trim() ? (
-              <CardDescription className="text-xs text-current/70">
+              <CardDescription className="ma:text-xs ma:text-current/70">
                 {config.identity.subtitle}
               </CardDescription>
             ) : null}
           </div>
-          <CardAction className="ml-auto self-center">
+          <CardAction className="ma:ml-auto ma:self-center">
             <Button
               size="icon-sm"
               variant="ghost"
               onClick={onClose}
               aria-label="Close chat"
-              className="text-current hover:bg-current/15 hover:text-current"
+              className="ma:text-current ma:hover:bg-current/15 ma:hover:text-current"
             >
               <XIcon />
             </Button>
           </CardAction>
         </CardHeader>
 
-        <CardContent className="flex-1 overflow-hidden p-0">
+        <CardContent className="ma:flex-1 ma:overflow-hidden ma:p-0">
           <MessageScroller>
             <MessageScrollerViewport>
-              <MessageScrollerContent className="gap-(--minimal-gap) p-(--card-spacing)">
+              <MessageScrollerContent className="ma:gap-(--minimal-gap) ma:p-(--card-spacing)">
                 <MessageScrollerItem>
                   <AgentLine>{config.behaviour.greeting}</AgentLine>
                 </MessageScrollerItem>
@@ -192,7 +192,7 @@ export function ChatWindow({
                         <Bubble variant="muted">
                           {/* Demo app: the gateway's own message is more use
                               than a blank apology. */}
-                          <BubbleContent className="text-muted-foreground">
+                          <BubbleContent className="ma:text-muted-foreground">
                             {chat.error?.message?.trim() ||
                               "That didn\u2019t go through."}
                           </BubbleContent>
@@ -216,7 +216,7 @@ export function ChatWindow({
           </MessageScroller>
         </CardContent>
 
-        <CardFooter className="flex-col gap-2 rounded-b-[inherit]">
+        <CardFooter className="ma:flex-col ma:gap-2 ma:rounded-b-[inherit]">
           <Composer
             busy={busy}
             placeholder={config.behaviour.placeholders.chat}
@@ -251,13 +251,13 @@ function Composer({
 
   return (
     <form
-      className="w-full"
+      className="ma:w-full"
       onSubmit={(event) => {
         event.preventDefault()
         submit()
       }}
     >
-      <InputGroup className="rounded-[calc(var(--radius)+0.25rem)] border-transparent bg-muted ring-inset">
+      <InputGroup className="ma:rounded-[calc(var(--radius)+0.25rem)] ma:border-transparent ma:bg-muted ma:ring-inset">
         <InputGroupTextarea
           placeholder={placeholder}
           rows={1}
@@ -273,9 +273,9 @@ function Composer({
           }}
           // Its own block above the control row, the way the native composer
           // is laid out.
-          className="max-h-28 min-h-14 px-3 py-2.5 text-base md:text-sm"
+          className="ma:max-h-28 ma:min-h-14 ma:px-3 ma:py-2.5 ma:text-base ma:md:text-sm"
         />
-        <InputGroupAddon align="block-end" className="px-2 pb-2">
+        <InputGroupAddon align="block-end" className="ma:px-2 ma:pb-2">
           {busy ? (
             <InputGroupButton
               type="button"
@@ -283,9 +283,9 @@ function Composer({
               size="icon-sm"
               onClick={onStop}
               aria-label="Stop"
-              className="ml-auto"
+              className="ma:ml-auto"
             >
-              <SquareIcon className="size-3 fill-current" />
+              <SquareIcon className="ma:size-3 ma:fill-current" />
             </InputGroupButton>
           ) : (
             <InputGroupButton
@@ -294,7 +294,7 @@ function Composer({
               size="icon-sm"
               disabled={draft.trim().length === 0}
               aria-label="Send"
-              className="ml-auto"
+              className="ma:ml-auto"
             >
               <ArrowUpIcon />
             </InputGroupButton>
@@ -332,7 +332,7 @@ function MessageItem({
       <Message align="end">
         <MessageContent>
           <Bubble align="end" variant="default">
-            <BubbleContent className="whitespace-pre-wrap">
+            <BubbleContent className="ma:whitespace-pre-wrap">
               {text}
             </BubbleContent>
           </Bubble>
@@ -349,7 +349,7 @@ function MessageItem({
             if (part.text.trim().length === 0) return null
             return (
               <Bubble key={index} variant="muted">
-                <BubbleContent className="whitespace-pre-wrap">
+                <BubbleContent className="ma:whitespace-pre-wrap">
                   {part.text}
                 </BubbleContent>
               </Bubble>
@@ -369,7 +369,7 @@ function MessageItem({
             if (part.state === "output-error") return null
             return (
               <Bubble key={index} variant="ghost">
-                <BubbleContent className="text-muted-foreground">
+                <BubbleContent className="ma:text-muted-foreground">
                   <Working
                     style={config.theme.thinking}
                     label="Finding products"
@@ -430,7 +430,7 @@ function Thinking({ style }: { style: AgentConfig["theme"]["thinking"] }) {
     <Message>
       <MessageContent>
         <Bubble variant="muted">
-          <BubbleContent className="flex h-9 items-center px-3.5 text-muted-foreground">
+          <BubbleContent className="ma:flex ma:h-9 ma:items-center ma:px-3.5 ma:text-muted-foreground">
             <Working style={style} label="Thinking" />
           </BubbleContent>
         </Bubble>

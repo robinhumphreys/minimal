@@ -24,9 +24,8 @@ export type { IconStyle, LauncherIcon }
  * Everything the merchant can change about their agent, flat.
  *
  * Deliberately a flat object rather than the nested `AgentConfig`: these are
- * the knobs the studio exposes, the options form edits them by name and the
- * customise chat patches them by name. `settingsFrom` and `applySettings`
- * are the two directions of the same map.
+ * the knobs the studio exposes, and the customise chat patches them by name.
+ * `settingsFrom` and `applySettings` are the two directions of the same map.
  */
 export type SiteChatSettings = {
   // What it says
