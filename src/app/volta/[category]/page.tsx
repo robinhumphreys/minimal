@@ -1,5 +1,7 @@
-import { CategoryTemplate } from "@/components/storefront/templates"
-import { getCatalog } from "@/lib/catalog"
+import type { Metadata } from "next"
+
+import { CategoryPage } from "@/components/volta/category-page"
+import { getCatalog, getCategory } from "@/lib/catalog"
 
 export function generateStaticParams() {
   return getCatalog("volta").categories.map((category) => ({
@@ -7,6 +9,24 @@ export function generateStaticParams() {
   }))
 }
 
+export async function generateMetadata(
+  props: PageProps<"/volta/[category]">,
+): Promise<Metadata> {
+  const { category: slug } = await props.params
+  const category = getCategory("volta", slug)
+  if (!category) return {}
+
+  return {
+    title: `${category.name} — Volta`,
+    description: category.description,
+  }
+}
+
 export default function Page(props: PageProps<"/volta/[category]">) {
-  return <CategoryTemplate id="volta" params={props.params} />
+  return (
+    <CategoryPage
+      params={props.params}
+      searchParams={props.searchParams}
+    />
+  )
 }

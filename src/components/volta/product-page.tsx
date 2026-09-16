@@ -1,0 +1,284 @@
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { ChevronRightIcon, TruckIcon, RotateCcwIcon, ShieldCheckIcon } from "lucide-react"
+
+import { getCategory, getProduct } from "@/lib/catalog"
+import {
+  categoryHref,
+  crossSell,
+  productHref,
+  productReviews,
+  ratingBreakdown,
+  relatedProducts,
+} from "@/lib/volta/catalog-view"
+import { formatCount, formatRating } from "@/lib/volta/format"
+import { CUTOFF, FREE_DELIVERY_THRESHOLD } from "@/lib/volta/promotions"
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/volta/ui/accordion"
+import { Badge } from "@/components/volta/ui/badge"
+import { AddToBag } from "./add-to-bag"
+import { Price } from "./price"
+import { ProductGallery } from "./product-gallery"
+import { ProductRail } from "./product-rail"
+import { ProductReviews } from "./product-reviews"
+import { Stars } from "./rating"
+
+const MAX_REVIEWS = 6
+
+export async function ProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const product = getProduct("volta", slug)
+  if (!product) notFound()
+
+  const category = getCategory("volta", product.category)
+  const reviews = productReviews(slug, MAX_REVIEWS)
+  const breakdown =
+    product.rating !== undefined && product.reviewCount !== undefined
+      ? ratingBreakdown(product.rating, product.reviewCount)
+      : []
+
+  return (
+    <div className="flex flex-col gap-16 pb-16">
+      <div className="volta-gutter mx-auto w-full max-w-7xl pt-4">
+        <nav aria-label="Breadcrumb" className="pb-5">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li>
+              <Link
+                href="/volta"
+                className="volta-wide text-volta-micro text-volta-ash hover:text-volta-volt"
+              >
+                Volta
+              </Link>
+            </li>
+            {category && (
+              <>
+                <ChevronRightIcon className="size-3 text-volta-smoke" />
+                <li>
+                  <Link
+                    href={categoryHref(category.slug)}
+                    className="volta-wide text-volta-micro text-volta-ash hover:text-volta-volt"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              </>
+            )}
+            <ChevronRightIcon className="size-3 text-volta-smoke" />
+            <li className="volta-wide text-volta-micro text-volta-chalk">
+              {product.name}
+            </li>
+          </ol>
+        </nav>
+
+        <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+          <div className="lg:w-[55%]">
+            <ProductGallery images={product.images} name={product.name} />
+          </div>
+
+          <div className="flex flex-col gap-6 lg:flex-1 lg:pt-2">
+            <div className="flex flex-col gap-3">
+              {product.compareAt && <Badge variant="sale">On offer</Badge>}
+
+              <h1 className="volta-display text-volta-heading text-volta-chalk">
+                {product.name}
+              </h1>
+
+              {product.rating !== undefined &&
+                product.reviewCount !== undefined && (
+                  <a
+                    href="#reviews"
+                    className="flex w-fit items-center gap-2 hover:underline"
+                  >
+                    <Stars rating={product.rating} size="lg" />
+                    <span className="text-volta-body text-volta-chalk tabular-nums">
+                      {formatRating(product.rating)}
+                    </span>
+                    <span className="text-volta-body text-volta-ash tabular-nums">
+                      ({formatCount(product.reviewCount)})
+                    </span>
+                  </a>
+                )}
+
+              <Price
+                price={product.price}
+                compareAt={product.compareAt}
+                size="lg"
+              />
+
+              <p className="text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+                {[
+                  product.attributes.size,
+                  // The catalog stores a bare number; on its own "30" reads as
+                  // part of the size.
+                  product.attributes.servings &&
+                    `${product.attributes.servings} servings`,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+            </div>
+
+            <p className="text-volta-lead text-volta-ash">
+              {product.description}
+            </p>
+
+            <AddToBag
+              form={product.attributes.form}
+              flavour={product.attributes.flavour}
+              line={{
+                slug: product.slug,
+                name: product.name,
+                price: product.price,
+                compareAt: product.compareAt,
+                image: product.images[0],
+                href: productHref(product.slug),
+                size: product.attributes.size,
+              }}
+            />
+
+            <ul className="flex flex-col gap-3 border-y border-volta-line py-5">
+              <Promise icon={<TruckIcon className="size-4" />}>
+                Free delivery over €{FREE_DELIVERY_THRESHOLD / 100} · ordered
+                before {CUTOFF}, shipped today
+              </Promise>
+              <Promise icon={<RotateCcwIcon className="size-4" />}>
+                30 days to send it back, opened or not
+              </Promise>
+              <Promise icon={<ShieldCheckIcon className="size-4" />}>
+                Third-party batch tested
+              </Promise>
+            </ul>
+
+            <Accordion multiple={false}>
+              <AccordionItem value="specification">
+                <AccordionTrigger>Specification</AccordionTrigger>
+                <AccordionContent>
+                  <dl className="flex flex-col">
+                    {Object.entries(product.attributes).map(([key, value]) => (
+                      <div
+                        key={key}
+                        className="flex justify-between gap-6 border-b border-volta-line py-2.5 last:border-b-0"
+                      >
+                        <dt className="text-volta-micro tracking-volta-wide text-volta-smoke uppercase">
+                          {key}
+                        </dt>
+                        <dd className="text-right text-volta-body text-volta-chalk">
+                          {value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="how-to-use">
+                <AccordionTrigger>How to use</AccordionTrigger>
+                <AccordionContent>
+                  <p>
+                    {usageFor(product.attributes.form, product.category)}
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="delivery">
+                <AccordionTrigger>Delivery & returns</AccordionTrigger>
+                <AccordionContent className="flex flex-col gap-2">
+                  <p>
+                    Orders placed before {CUTOFF} on a weekday leave the same
+                    day. Delivery is free over €
+                    {FREE_DELIVERY_THRESHOLD / 100}, €4.95 below it.
+                  </p>
+                  <p>
+                    Not for you? Send it back within 30 days, opened or not, and
+                    we refund the order in full.
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+      </div>
+
+      <div className="volta-gutter mx-auto w-full max-w-7xl">
+        <ProductReviews
+          rating={product.rating}
+          reviewCount={product.reviewCount}
+          breakdown={breakdown}
+          reviews={reviews}
+        />
+      </div>
+
+      <ProductRail
+        eyebrow={category ? `More ${category.name.toLowerCase()}` : "More"}
+        title="Goes with this"
+        products={relatedProducts(product, 8)}
+      />
+
+      <ProductRail
+        eyebrow="Across the range"
+        title="Stack it up"
+        products={crossSell(product, 6)}
+      />
+
+      <minimal-agent-recommendations data-product={product.slug} />
+    </div>
+  )
+}
+
+function Promise({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <li className="flex items-start gap-3">
+      <span className="mt-0.5 shrink-0 text-volta-volt">{icon}</span>
+      <span className="text-volta-body text-volta-ash">{children}</span>
+    </li>
+  )
+}
+
+/**
+ * Usage copy by form.
+ *
+ * The catalog does not carry dosing instructions — it is a product list, not a
+ * label — so the PDP derives a sensible line from the form rather than leaving
+ * the panel empty.
+ */
+function usageFor(form: string | undefined, category: string): string {
+  switch (form) {
+    case "Powder":
+      return category === "pre-workout"
+        ? "One scoop in 300 ml of cold water, 20–30 minutes before training. Start on half a scoop until you know how you respond to it."
+        : "One to two scoops in 250–350 ml of water or milk. Shake for ten seconds and drink within the hour."
+    case "Capsules":
+    case "Softgels":
+      return "Take with a meal and a full glass of water. Splitting the daily amount across two meals is easier on the stomach than taking it all at once."
+    case "Tablets":
+    case "Chewable Tablets":
+      return "One a day with food. Consistency matters more than timing — take it at whatever point in the day you will not forget."
+    case "Effervescent Tablets":
+      return "Drop one tablet into 500–750 ml of water and let it dissolve fully before drinking. One during a session, one after."
+    case "Sachets":
+      return "Stir one sachet into 500 ml of water until clear. Drink steadily rather than in one go."
+    case "Ready-to-Drink":
+      return "Chill and drink as it is. Best within an hour of training, or as a protein top-up between meals."
+    case "Bar":
+    case "Wafer":
+    case "Chocolate":
+      return "Eat it. Works as a pre-session top-up, a post-session refuel, or the thing that stops you buying a pastry at three o'clock."
+    default:
+      return "Follow the dosing on the pack. If you are unsure how it fits with anything else you take, ask a professional first."
+  }
+}

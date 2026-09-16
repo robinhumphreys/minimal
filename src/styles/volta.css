@@ -1,0 +1,200 @@
+/*
+ * Volta design tokens.
+ *
+ * Every token is namespaced `volta-*` so the other storefront (Noord) can keep
+ * its own `noord-*` set without either brand inheriting the other's look.
+ * Nothing here touches the shadcn semantic tokens in `globals.css` — the Volta
+ * primitives under `src/components/volta/ui` spend these tokens directly.
+ *
+ * Namespacing rather than a `.volta` cascade scope is deliberate: dialogs
+ * portal to `document.body`, outside any wrapper element, so scope-based
+ * theming would silently drop out inside the nav, search and bag overlays.
+ */
+
+@theme {
+  /* --- Type ------------------------------------------------------------- */
+  /*
+   * One family throughout. Archivo is a variable grotesque with a width axis,
+   * so the same font carries both the wide, heavy display voice and a normal
+   * width body — the range comes from `font-stretch`, not a second typeface.
+   */
+  --font-volta: var(--font-volta-sans), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+
+  /* Violator stripe, badges, meta rows. Always paired with `uppercase`. */
+  --text-volta-micro: 0.625rem;
+  --text-volta-micro--line-height: 1.2;
+  --text-volta-micro--letter-spacing: 0.14em;
+  --text-volta-micro--font-weight: 700;
+
+  /* Nav items, button labels, eyebrows. Always paired with `uppercase`. */
+  --text-volta-label: 0.75rem;
+  --text-volta-label--line-height: 1.2;
+  --text-volta-label--letter-spacing: 0.12em;
+  --text-volta-label--font-weight: 700;
+
+  /* Prose, descriptions, review bodies. */
+  --text-volta-body: 0.875rem;
+  --text-volta-body--line-height: 1.6;
+
+  --text-volta-lead: 1rem;
+  --text-volta-lead--line-height: 1.6;
+
+  /* Product names, list rows, prices. */
+  --text-volta-title: 1rem;
+  --text-volta-title--line-height: 1.2;
+  --text-volta-title--letter-spacing: -0.01em;
+  --text-volta-title--font-weight: 800;
+
+  /* Section headers. */
+  --text-volta-heading: clamp(1.5rem, 6vw, 2.25rem);
+  --text-volta-heading--line-height: 0.95;
+  --text-volta-heading--letter-spacing: -0.02em;
+  --text-volta-heading--font-weight: 900;
+
+  /* Full-bleed statements: hero, campaign bands, 404. */
+  --text-volta-display: clamp(2.5rem, 12vw, 6rem);
+  --text-volta-display--line-height: 0.85;
+  --text-volta-display--letter-spacing: -0.035em;
+  --text-volta-display--font-weight: 900;
+
+  --tracking-volta-wide: 0.12em;
+  --tracking-volta-wider: 0.2em;
+
+  /* --- Colour ----------------------------------------------------------- */
+  /* Near-black ground so the volt reads as light rather than paint. */
+  --color-volta-void: #050505;
+  --color-volta-carbon: #0d0d0d;
+  --color-volta-steel: #171717;
+  --color-volta-line: #262626;
+  --color-volta-line-strong: #3d3d3d;
+
+  --color-volta-chalk: #ffffff;
+  --color-volta-ash: #a3a3a3;
+  --color-volta-smoke: #6b6b6b;
+
+  /* The brand. Bright enough to carry black text at any size. */
+  --color-volta-volt: #d7ff00;
+  --color-volta-volt-dim: #b0d100;
+  --color-volta-volt-deep: #3d4a00;
+
+  /* Sale and urgency. Deliberately the only other hue on the page. */
+  --color-volta-heat: #ff3b1f;
+
+  /* --- Shape ------------------------------------------------------------ */
+  /* Volta is near-square: a hairline radius, never a soft one. */
+  --radius-volta: 2px;
+  --radius-volta-pill: 999px;
+
+  /* --- Rhythm ----------------------------------------------------------- */
+  --spacing-volta-gutter: 1rem;
+  --spacing-volta-stripe: 2rem;
+  --spacing-volta-header: 3.5rem;
+  /* Stripe + header, for offsetting content under the sticky chrome. */
+  --spacing-volta-chrome: 5.5rem;
+  /* Clears the fixed agent bar the embed mounts at the bottom of the page. */
+  --spacing-volta-agent-bar: 5.5rem;
+
+  /* --- Motion ----------------------------------------------------------- */
+  --animate-volta-marquee: volta-marquee 28s linear infinite;
+
+  @keyframes volta-marquee {
+    from {
+      transform: translateX(0);
+    }
+    /* The track renders its content twice; half a loop is a seamless cycle. */
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Root wrapper for every Volta route. Sets the brand's baseline typography
+   * so individual components only declare what differs from it.
+   */
+  .volta {
+    font-family: var(--font-volta);
+    font-size: var(--text-volta-body);
+    line-height: 1.6;
+    color: var(--color-volta-chalk);
+    background-color: var(--color-volta-void);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The full-bleed page gutter, widening with the viewport. */
+  .volta-gutter {
+    padding-inline: var(--spacing-volta-gutter);
+  }
+
+  @media (min-width: 48rem) {
+    .volta-gutter {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .volta-gutter {
+      padding-inline: 3rem;
+    }
+  }
+
+  /*
+   * The brand's headline voice: Archivo pushed to the wide end of its width
+   * axis. Applied as a class rather than baked into the `--text-volta-*`
+   * tokens because Tailwind's font-size tokens carry no `font-stretch`.
+   */
+  .volta-display {
+    font-stretch: 125%;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  /* The same voice at nav/label scale, where full width is too shouty. */
+  .volta-wide {
+    font-stretch: 112%;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  /*
+   * Diagonal volt hatching. Backs the violator stripe and empty states so a
+   * flat black band still has some texture to it.
+   */
+  .volta-hatch {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      color-mix(in oklab, var(--color-volta-volt) 12%, transparent) 0 1px,
+      transparent 1px 8px
+    );
+  }
+
+  /* Bottom-up fill on hover — used on text links in the footer and nav. */
+  .volta-underline {
+    background-image: linear-gradient(
+      var(--color-volta-volt),
+      var(--color-volta-volt)
+    );
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
+    transition: background-size 200ms ease;
+  }
+
+  @media (hover: hover) {
+    .volta-underline {
+      background-size: 0 2px;
+    }
+
+    .volta-underline:hover {
+      background-size: 100% 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .volta-marquee-track {
+      animation: none !important;
+    }
+  }
+}

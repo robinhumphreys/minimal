@@ -1,4 +1,4 @@
-import type { Category, Product } from "./types";
+import type { Category, Product, Review } from "./types";
 
 export const categories: Category[] = [
   {
@@ -53,6 +53,8 @@ export const products: Product[] = [
     description:
       "A creamy whey blend of concentrate and isolate that mixes without lumps. Made without aspartame and sold in twenty-one flavours.",
     tags: ["protein", "whey", "post-workout"],
+    rating: 4.8,
+    reviewCount: 3412,
   },
   {
     slug: "perfect-whey-protein",
@@ -72,6 +74,8 @@ export const products: Product[] = [
     description:
       "Cross-flow microfiltered concentrate at the keenest price we can hold. The four-kilo bag runs to roughly a hundred and sixty shakes.",
     tags: ["protein", "whey", "everyday"],
+    rating: 4.6,
+    reviewCount: 1897,
   },
   {
     slug: "whey-isolate",
@@ -92,6 +96,8 @@ export const products: Product[] = [
     description:
       "Filtered whey isolate with a low fat content and 0.8% lactose by lab analysis. The cleanest protein we carry.",
     tags: ["protein", "whey", "isolate"],
+    rating: 4.7,
+    reviewCount: 1240,
   },
   {
     slug: "whey-isolate-zero",
@@ -113,6 +119,8 @@ export const products: Product[] = [
     description:
       "Ninety per cent protein, lactose free and without fat or sugar. A full flavour on a very short ingredient list.",
     tags: ["protein", "isolate", "lactose-free"],
+    rating: 4.5,
+    reviewCount: 612,
   },
   {
     slug: "clear-whey-isolate",
@@ -133,6 +141,8 @@ export const products: Product[] = [
     description:
       "Mixes clear rather than creamy, at 21 g protein and 90 calories a serving. Drinks like a cordial after a hot session.",
     tags: ["protein", "isolate", "post-workout"],
+    rating: 4.4,
+    reviewCount: 908,
   },
   {
     slug: "protein-iced-coffee",
@@ -154,6 +164,8 @@ export const products: Product[] = [
     description:
       "Whey protein and coffee in one shake, at 22.9 g protein and 80 mg caffeine. Built for the morning session.",
     tags: ["protein", "whey", "caffeine"],
+    rating: 4.6,
+    reviewCount: 431,
   },
   {
     slug: "protein-oats-drink",
@@ -174,6 +186,8 @@ export const products: Product[] = [
     description:
       "A gluten-free meal in a bottle with 30 g protein, 6 g fibre and fermented oat flour. 363 calories and 5.7 g sugar.",
     tags: ["protein", "meal", "oats"],
+    rating: 4.3,
+    reviewCount: 276,
   },
   {
     slug: "liquid-egg-whites",
@@ -193,6 +207,8 @@ export const products: Product[] = [
     description:
       "Pasteurised egg white with no separating and no refrigeration needed. Drink it, cook with it, or put it through a shake.",
     tags: ["protein", "everyday"],
+    rating: 3.9,
+    reviewCount: 154,
   },
 
   // ------------------------------------------------------------ pre-workout
@@ -214,6 +230,8 @@ export const products: Product[] = [
     description:
       "Five proven pre-workout ingredients that come up within fifteen minutes. Thirty sessions to a tub and suited to any sport.",
     tags: ["pre-workout", "caffeine", "everyday"],
+    rating: 4.8,
+    reviewCount: 2107,
   },
   {
     slug: "black-label-pre-workout",
@@ -234,6 +252,8 @@ export const products: Product[] = [
     description:
       "Our exclusive formula at 330 mg caffeine a serving, with added vitamins and minerals. A full month in one tub.",
     tags: ["pre-workout", "caffeine"],
+    rating: 4.9,
+    reviewCount: 1563,
   },
   {
     slug: "quake-pre-workout",
@@ -254,6 +274,8 @@ export const products: Product[] = [
     description:
       "The strongest formula we make, at 350 mg caffeine plus citrulline and beta-alanine. Cherry Cola and Fruit Punch only.",
     tags: ["pre-workout", "caffeine"],
+    rating: 4.5,
+    reviewCount: 744,
   },
   {
     slug: "abe-ultimate-pre-workout",
@@ -273,6 +295,8 @@ export const products: Product[] = [
     description:
       "A concentrated pre-workout on a blend of active ingredients. Thirty servings a tub across several flavours.",
     tags: ["pre-workout", "caffeine"],
+    rating: 4.7,
+    reviewCount: 1122,
   },
   {
     slug: "venom-pre-workout-drink",
@@ -291,6 +315,8 @@ export const products: Product[] = [
     description:
       "A ready-to-drink pre-workout in a 250 ml can, dosed high on the ingredients that matter. Best served cold.",
     tags: ["pre-workout", "caffeine"],
+    rating: 4.4,
+    reviewCount: 389,
   },
   {
     slug: "energize-energy-drink",
@@ -310,6 +336,8 @@ export const products: Product[] = [
     description:
       "Caffeine and vitamins in a 330 ml can, with two sugar-free versions at 3 calories per 100 ml. Bigger than the usual can.",
     tags: ["caffeine", "everyday", "sugar-free"],
+    rating: 4.2,
+    reviewCount: 502,
   },
   {
     slug: "citrulline-malate",
@@ -329,6 +357,8 @@ export const products: Product[] = [
     description:
       "A precursor to L-arginine, taken before training to raise arginine levels. Unflavoured and easy to dose.",
     tags: ["pre-workout", "amino"],
+    rating: 4.6,
+    reviewCount: 318,
   },
   {
     slug: "caffeine-booster",
@@ -343,6 +373,8 @@ export const products: Product[] = [
     description:
       "250 mg of pure caffeine anhydrous a capsule, about three cups of coffee. The most direct form there is.",
     tags: ["pre-workout", "caffeine"],
+    rating: 4.5,
+    reviewCount: 671,
   },
 
   // --------------------------------------------------------------- recovery
@@ -364,6 +396,8 @@ export const products: Product[] = [
     description:
       "An all-in-one post-workout with creatine, BCAAs, protein and carbohydrate. Our strongest recovery formula, and long a bestseller.",
     tags: ["post-workout", "creatine", "protein"],
+    rating: 4.4,
+    reviewCount: 583,
   },
   {
     slug: "advanced-post-workout",
@@ -383,6 +417,8 @@ export const products: Product[] = [
     description:
       "The most complete recovery blend we make, with PeptoPro, waxy maize and added vitamins. High doses across the board.",
     tags: ["post-workout", "endurance"],
+    rating: 4.7,
+    reviewCount: 429,
   },
   {
     slug: "bcaa-powder",
@@ -403,6 +439,8 @@ export const products: Product[] = [
     description:
       "Naturally fermented BCAAs premixed at 2:1:1, with no sugar and no filler. Also sold without flavour or sweetener.",
     tags: ["amino", "post-workout", "sugar-free"],
+    rating: 4.5,
+    reviewCount: 1034,
   },
   {
     slug: "bcaa-recovery",
@@ -423,6 +461,8 @@ export const products: Product[] = [
     description:
       "BCAAs and glutamine in one bag at a hundred servings. No added sugars and nothing bulking it out.",
     tags: ["amino", "post-workout"],
+    rating: 4.3,
+    reviewCount: 468,
   },
   {
     slug: "glutamine",
@@ -442,6 +482,8 @@ export const products: Product[] = [
     description:
       "Pure L-glutamine, the amino acid most common in human muscle tissue. Sold plain or in two flavours.",
     tags: ["amino", "everyday"],
+    rating: 4.4,
+    reviewCount: 726,
   },
   {
     slug: "hmb-capsules",
@@ -460,6 +502,8 @@ export const products: Product[] = [
     description:
       "A high dose of HMB in plain capsules, with effects comparable to L-leucine. Pairs well with creatine.",
     tags: ["amino", "post-workout"],
+    rating: 4.1,
+    reviewCount: 197,
   },
   {
     slug: "acetyl-l-carnitine",
@@ -479,6 +523,8 @@ export const products: Product[] = [
     description:
       "An easy source of L-carnitine at forty servings a bottle. Straightforward capsules to sit alongside a diet.",
     tags: ["amino", "everyday"],
+    rating: 4.2,
+    reviewCount: 341,
   },
   {
     slug: "booty-builder",
@@ -499,6 +545,8 @@ export const products: Product[] = [
     description:
       "An all-in-one blend with whey, creatine, collagen and BCAAs, plus vitamin B12 and potassium. Formulated for women.",
     tags: ["post-workout", "creatine", "protein"],
+    rating: 4.6,
+    reviewCount: 889,
   },
 
   // -------------------------------------------------------------- hydration
@@ -521,6 +569,8 @@ export const products: Product[] = [
     description:
       "Magnesium, calcium and Celtic sea salt to top up fluid and mineral balance. Sixty servings across five flavours.",
     tags: ["hydration", "minerals", "endurance"],
+    rating: 4.8,
+    reviewCount: 1471,
   },
   {
     slug: "hydrate-tablets",
@@ -541,6 +591,8 @@ export const products: Product[] = [
     description:
       "Drop a tablet in a bottle for a hypotonic sports drink with no calories. Magnesium and sodium included.",
     tags: ["hydration", "minerals", "sugar-free"],
+    rating: 4.6,
+    reviewCount: 823,
   },
   {
     slug: "isotonic-pro",
@@ -561,6 +613,8 @@ export const products: Product[] = [
     description:
       "32.5 g of carbohydrate a serving at a 2:1 glucose-to-fructose ratio for uptake under load. Thirty servings a tub.",
     tags: ["hydration", "endurance"],
+    rating: 4.5,
+    reviewCount: 394,
   },
   {
     slug: "oral-rehydration-salts",
@@ -580,6 +634,8 @@ export const products: Product[] = [
     description:
       "A hypotonic drink at low osmolality, mixed to the standard rehydration ratios. For long or hot sessions.",
     tags: ["hydration", "endurance"],
+    rating: 4.7,
+    reviewCount: 266,
   },
   {
     slug: "protein-lemonade",
@@ -600,6 +656,8 @@ export const products: Product[] = [
     description:
       "Lightly sparkling lemonade with 10 g protein and 40 calories a can. No sugar, no fat, no lactose and no preservatives.",
     tags: ["hydration", "protein", "sugar-free"],
+    rating: 4.4,
+    reviewCount: 517,
   },
   {
     slug: "njoy-protein-drink",
@@ -619,6 +677,8 @@ export const products: Product[] = [
     description:
       "A ready-mixed shake with 32 g protein and 2 g fat, stable out of the fridge. Five flavours, one of them lactose free.",
     tags: ["protein", "everyday"],
+    rating: 4.3,
+    reviewCount: 602,
   },
   {
     slug: "protein-water",
@@ -640,6 +700,8 @@ export const products: Product[] = [
     description:
       "20 g of whey isolate in a clear bottle with no sugar, carbohydrate, fat or lactose. Drinks like flavoured water.",
     tags: ["protein", "hydration", "sugar-free"],
+    rating: 4.2,
+    reviewCount: 448,
   },
   {
     slug: "burner-drink",
@@ -660,6 +722,8 @@ export const products: Product[] = [
     description:
       "A sugar-free sports drink with L-carnitine, at 50 mg caffeine and 6 calories a bottle. Made to drink mid-session.",
     tags: ["hydration", "caffeine", "sugar-free"],
+    rating: 4.0,
+    reviewCount: 359,
   },
 
   // --------------------------------------------------------------- vitamins
@@ -681,6 +745,8 @@ export const products: Product[] = [
     description:
       "A multivitamin set to the needs of women, with biotin, selenium and vitamin D. One tablet a day is enough.",
     tags: ["vitamins", "everyday"],
+    rating: 4.7,
+    reviewCount: 1186,
   },
   {
     slug: "vitamin-d3-3000",
@@ -695,6 +761,8 @@ export const products: Product[] = [
     description:
       "Softgels supporting normal immune function and the upkeep of normal bones. Made for the winter months.",
     tags: ["vitamins", "everyday"],
+    rating: 4.8,
+    reviewCount: 2043,
   },
   {
     slug: "vitamin-d3-chewable",
@@ -714,6 +782,8 @@ export const products: Product[] = [
     description:
       "Fruit-flavoured chewables at 1000 IU, for normal muscle function and the body's own defences. An easy way to close a shortfall.",
     tags: ["vitamins", "everyday"],
+    rating: 4.6,
+    reviewCount: 512,
   },
   {
     slug: "vitamin-d3-k2",
@@ -732,6 +802,8 @@ export const products: Product[] = [
     description:
       "25 mcg of vitamin D3 with 45 mcg of K2 as MK-7. D for normal muscle function, K for the upkeep of normal bones.",
     tags: ["vitamins", "minerals", "everyday"],
+    rating: 4.7,
+    reviewCount: 687,
   },
   {
     slug: "vitamin-c-1000",
@@ -751,6 +823,8 @@ export const products: Product[] = [
     description:
       "Helps reduce tiredness and fatigue and keeps skin in normal condition. Made stronger with rosehip extract and citrus bioflavonoids.",
     tags: ["vitamins", "everyday"],
+    rating: 4.6,
+    reviewCount: 1329,
   },
   {
     slug: "vitamin-b-complex",
@@ -769,6 +843,8 @@ export const products: Product[] = [
     description:
       "Every B vitamin at the right ratios in one tablet, with added choline and calcium. Supports the nervous system and protein metabolism.",
     tags: ["vitamins", "everyday"],
+    rating: 4.5,
+    reviewCount: 741,
   },
   {
     slug: "fruits-veggies-greens",
@@ -788,6 +864,8 @@ export const products: Product[] = [
     description:
       "Thirty-one fruits, vegetables and superfoods in one scoop, sweetened with stevia. A way to round out the day's eating.",
     tags: ["vitamins", "greens", "vegan"],
+    rating: 4.3,
+    reviewCount: 496,
   },
   {
     slug: "mens-performance-pack",
@@ -807,6 +885,8 @@ export const products: Product[] = [
     description:
       "A complete daily sachet for male athletes running to more than thirty active ingredients. Multivitamin tablets and a greens blend in one.",
     tags: ["vitamins", "greens", "everyday"],
+    rating: 4.6,
+    reviewCount: 388,
   },
 
   // ------------------------------------------------------------------- bars
@@ -829,6 +909,8 @@ export const products: Product[] = [
     description:
       "A soft bar at 36% protein under a crunchy topping, low on sugar and saturated fat. Good at any hour of the day.",
     tags: ["snack", "protein"],
+    rating: 4.7,
+    reviewCount: 1642,
   },
   {
     slug: "high-protein-bar",
@@ -848,6 +930,8 @@ export const products: Product[] = [
     description:
       "Our best numbers in a bar: 25 g of protein and 0.7 g of sugar. Four full flavours.",
     tags: ["snack", "protein"],
+    rating: 4.5,
+    reviewCount: 973,
   },
   {
     slug: "crunchy-protein-bar",
@@ -868,6 +952,8 @@ export const products: Product[] = [
     description:
       "Crisp on the outside and soft in the middle, at up to 22 g protein a bar. Seven flavours to work through.",
     tags: ["snack", "protein"],
+    rating: 4.6,
+    reviewCount: 1288,
   },
   {
     slug: "clean-protein-bar",
@@ -887,6 +973,8 @@ export const products: Product[] = [
     description:
       "Natural ingredients, high in fibre and nothing artificial added. Up to 12 g of protein across four flavours.",
     tags: ["snack", "protein"],
+    rating: 4.4,
+    reviewCount: 456,
   },
   {
     slug: "delicious-oat-bar",
@@ -907,6 +995,8 @@ export const products: Product[] = [
     description:
       "A plain oat bar full of complex carbohydrate at over 460 calories apiece. Six flavours for long days.",
     tags: ["snack", "oats", "endurance"],
+    rating: 4.5,
+    reviewCount: 611,
   },
   {
     slug: "delicious-protein-wafer",
@@ -927,6 +1017,8 @@ export const products: Product[] = [
     description:
       "A very crisp chocolate wafer at 30% protein and 0.6% sugar. Chocolate or Cookies & Cream.",
     tags: ["snack", "protein"],
+    rating: 4.8,
+    reviewCount: 1734,
   },
   {
     slug: "njoy-nuts-bar",
@@ -949,6 +1041,8 @@ export const products: Product[] = [
     description:
       "A vegan bar of 50% nuts coated in organic chocolate, at 9% protein. Under 200 calories a bar.",
     tags: ["snack", "nuts", "vegan"],
+    rating: 4.4,
+    reviewCount: 382,
   },
   {
     slug: "protein-nut-bar",
@@ -970,6 +1064,8 @@ export const products: Product[] = [
     description:
       "Almonds, cashews, hazelnut and linseed with whey protein worked through. Natural throughout and under 180 calories.",
     tags: ["snack", "nuts", "protein"],
+    rating: 4.5,
+    reviewCount: 529,
   },
   {
     slug: "energy-nougat",
@@ -989,6 +1085,8 @@ export const products: Product[] = [
     description:
       "Fast carbohydrate at a 2:1 glucose-to-fructose ratio, and light on the stomach. Strawberry, lemon, pistachio or original.",
     tags: ["snack", "endurance"],
+    rating: 4.2,
+    reviewCount: 241,
   },
   {
     slug: "protein-chocolate",
@@ -1008,5 +1106,347 @@ export const products: Product[] = [
     description:
       "Chocolate at a minimum 23% whey protein and half the sugar of comparable bars. Milk, Salted Caramel and Biscuit.",
     tags: ["snack", "protein"],
+    rating: 4.9,
+    reviewCount: 2216,
+  },
+];
+
+/**
+ * Customer reviews.
+ *
+ * A curated sample rather than one per product: the product page shows what it
+ * has and falls back to the rating summary alone, and the homepage pulls its
+ * testimonials from the five-star entries here.
+ */
+export const reviews: Review[] = [
+  // ---------------------------------------------------------------- protein
+  {
+    id: "r-whey-delicious-1",
+    product: "whey-delicious",
+    author: "Joris K.",
+    rating: 5,
+    title: "Finally one that actually mixes",
+    body: "Two scoops in a shaker with cold water and there is nothing left at the bottom. I have been through four brands this year and this is the first that does not need a blender.",
+    date: "2026-08-21",
+    verified: true,
+    context: "Lifting 4x a week",
+  },
+  {
+    id: "r-whey-delicious-2",
+    product: "whey-delicious",
+    author: "Amara O.",
+    rating: 5,
+    title: "Vanilla is not sickly",
+    body: "Most vanilla proteins taste like a melted milkshake. This one is closer to plain yoghurt, which means I can drink it every day without getting sick of it.",
+    date: "2026-07-03",
+    verified: true,
+  },
+  {
+    id: "r-whey-delicious-3",
+    product: "whey-delicious",
+    author: "Ruben D.",
+    rating: 4,
+    title: "Great, bag could be better",
+    body: "No complaints about the powder at all. The resealable strip on the bag gave up around the halfway mark and I had to move it into a tub.",
+    date: "2026-06-14",
+    verified: true,
+  },
+  {
+    id: "r-whey-isolate-1",
+    product: "whey-isolate",
+    author: "Sanne V.",
+    rating: 5,
+    title: "Kind to my stomach",
+    body: "Concentrate always left me bloated for an hour afterwards. Switched to the isolate six weeks ago and that stopped completely. Worth the extra money for me.",
+    date: "2026-09-01",
+    verified: true,
+    context: "Lactose sensitive",
+  },
+  {
+    id: "r-clear-whey-isolate-1",
+    product: "clear-whey-isolate",
+    author: "Tom B.",
+    rating: 4,
+    title: "More squash than shake",
+    body: "If you are expecting a creamy shake you will be surprised. It is a light fruit drink with 20 g of protein in it, and in summer that is exactly what I want after a session.",
+    date: "2026-07-28",
+    verified: true,
+  },
+  {
+    id: "r-protein-iced-coffee-1",
+    product: "protein-iced-coffee",
+    author: "Nadia H.",
+    rating: 5,
+    title: "Replaced my morning flat white",
+    body: "Same caffeine hit, 22 g of protein, and it costs less than the place on the corner. I have one on the way to the gym at 6am and it holds me until lunch.",
+    date: "2026-08-09",
+    verified: true,
+  },
+  {
+    id: "r-liquid-egg-whites-1",
+    product: "liquid-egg-whites",
+    author: "Marc S.",
+    rating: 3,
+    title: "Does the job, taste is the taste",
+    body: "It is pasteurised egg white, so it tastes like pasteurised egg white. Fine in an omelette or cooked into oats. I would not drink it straight, whatever the label says.",
+    date: "2026-05-30",
+    verified: true,
+  },
+
+  // ------------------------------------------------------------ pre-workout
+  {
+    id: "r-blast-pre-workout-1",
+    product: "blast-pre-workout",
+    author: "Dario P.",
+    rating: 5,
+    title: "Half a scoop is plenty",
+    body: "Started on a full scoop and spent the session feeling like my skin was on fire. Half a scoop is a clean lift with no crash afterwards. Read the label before you go all in.",
+    date: "2026-09-04",
+    verified: true,
+    context: "Powerlifting",
+  },
+  {
+    id: "r-blast-pre-workout-2",
+    product: "blast-pre-workout",
+    author: "Lena M.",
+    rating: 5,
+    title: "Gets me through 5am sessions",
+    body: "I train before work and there are mornings where the only reason I make it through the warm-up is this. Mixes clear, no grit at the bottom.",
+    date: "2026-06-22",
+    verified: true,
+  },
+  {
+    id: "r-black-label-pre-workout-1",
+    product: "black-label-pre-workout",
+    author: "Casey W.",
+    rating: 5,
+    title: "Not a beginner product",
+    body: "This is the strongest thing on the site and it behaves like it. Fantastic for a heavy squat day, far too much for a steady cardio session. Nothing after 4pm unless you like ceilings.",
+    date: "2026-08-15",
+    verified: true,
+    context: "Training 5 years",
+  },
+  {
+    id: "r-abe-ultimate-pre-workout-1",
+    product: "abe-ultimate-pre-workout",
+    author: "Priya R.",
+    rating: 5,
+    title: "The flavour is the reason I reorder",
+    body: "Plenty of pre-workouts do the job. Very few are something I look forward to drinking. I have been through three tubs and have not got bored yet.",
+    date: "2026-07-11",
+    verified: true,
+  },
+  {
+    id: "r-citrulline-malate-1",
+    product: "citrulline-malate",
+    author: "Felix A.",
+    rating: 5,
+    title: "Unflavoured means unflavoured",
+    body: "Sour, but it disappears into any pre-workout. I stack 6 g with the caffeine tablets and skip the all-in-one tubs entirely. Cheaper and I know exactly what is in it.",
+    date: "2026-08-27",
+    verified: true,
+  },
+
+  // --------------------------------------------------------------- recovery
+  {
+    id: "r-advanced-post-workout-1",
+    product: "advanced-post-workout",
+    author: "Hugo L.",
+    rating: 5,
+    title: "Second session no longer hurts",
+    body: "I train twice on Saturdays. Since adding this between sessions the second one stopped feeling like wading through mud. Nothing dramatic, just consistently better.",
+    date: "2026-09-08",
+    verified: true,
+    context: "Two-a-days",
+  },
+  {
+    id: "r-bcaa-powder-1",
+    product: "bcaa-powder",
+    author: "Iris T.",
+    rating: 5,
+    title: "Makes me drink more water",
+    body: "Honestly this is half the benefit. I sip it through the whole session and get through two litres without noticing, which never happened with plain water.",
+    date: "2026-07-19",
+    verified: true,
+  },
+  {
+    id: "r-glutamine-1",
+    product: "glutamine",
+    author: "Bram J.",
+    rating: 4,
+    title: "Quiet but I keep buying it",
+    body: "Hard to point at one thing it does. What I can say is that the week I ran out was the week my legs were wrecked, so it goes back in the basket.",
+    date: "2026-06-05",
+    verified: true,
+  },
+  {
+    id: "r-hmb-capsules-1",
+    product: "hmb-capsules",
+    author: "Elena F.",
+    rating: 4,
+    title: "Useful while cutting",
+    body: "Took it through a twelve week cut and held onto more strength than the last time I did one. Capsules are large, so take them with a full glass.",
+    date: "2026-08-02",
+    verified: true,
+  },
+  {
+    id: "r-booty-builder-1",
+    product: "booty-builder",
+    author: "Zoë K.",
+    rating: 5,
+    title: "Sceptical, then converted",
+    body: "The name nearly put me off. It is a sensible recovery blend with a good flavour and I have used it for four months of lower body work. Judge it on the label, not the marketing.",
+    date: "2026-09-10",
+    verified: true,
+    context: "Glute focused programme",
+  },
+
+  // -------------------------------------------------------------- hydration
+  {
+    id: "r-electrolytes-1",
+    product: "electrolytes",
+    author: "Ahmed N.",
+    rating: 5,
+    title: "Cramps gone",
+    body: "I used to lock up in my calves at around 30km. One sachet at the start and another at halfway and I finished my last long run with nothing. First supplement that made an obvious difference.",
+    date: "2026-09-12",
+    verified: true,
+    context: "Marathon, 3:12",
+  },
+  {
+    id: "r-electrolytes-2",
+    product: "electrolytes",
+    author: "Julia B.",
+    rating: 5,
+    title: "Not sweet, which is the point",
+    body: "Every sports drink I tried was syrup. This is barely sweet and slightly salty, so I can actually drink it in volume when it is hot.",
+    date: "2026-07-24",
+    verified: true,
+  },
+  {
+    id: "r-hydrate-tablets-1",
+    product: "hydrate-tablets",
+    author: "Stefan R.",
+    rating: 5,
+    title: "Lives in my cycling jersey",
+    body: "A tube fits in a back pocket and one tablet does a 750ml bottle. Far less faff than measuring powder at the side of a road.",
+    date: "2026-08-18",
+    verified: true,
+    context: "Road cycling",
+  },
+  {
+    id: "r-oral-rehydration-salts-1",
+    product: "oral-rehydration-salts",
+    author: "Meera S.",
+    rating: 5,
+    title: "The serious one",
+    body: "This is the clinical formula rather than a sports drink and it tastes accordingly. When you genuinely need rehydrating it is in a different league.",
+    date: "2026-06-29",
+    verified: true,
+  },
+  {
+    id: "r-burner-drink-1",
+    product: "burner-drink",
+    author: "Nico V.",
+    rating: 4,
+    title: "Fine as a caffeine drink",
+    body: "Pleasant, sugar free, keeps me going through an afternoon session. I would not buy it expecting the burner part to do anything on its own.",
+    date: "2026-05-21",
+    verified: true,
+  },
+
+  // --------------------------------------------------------------- vitamins
+  {
+    id: "r-vitamin-d3-3000-1",
+    product: "vitamin-d3-3000",
+    author: "Karin P.",
+    rating: 5,
+    title: "Bloods came back right",
+    body: "My GP flagged low D in January. Three months on 3000 IU and the follow-up test was mid-range. Tiny softgels, no aftertaste, costs almost nothing.",
+    date: "2026-04-16",
+    verified: true,
+  },
+  {
+    id: "r-womens-multivit-1",
+    product: "womens-multivit",
+    author: "Tess D.",
+    rating: 5,
+    title: "Covers the gaps",
+    body: "Sensible amounts of the things I actually miss — iron, B12, D — rather than a wall of ingredients at token doses. Two a day with breakfast and I stopped thinking about it.",
+    date: "2026-08-06",
+    verified: true,
+  },
+  {
+    id: "r-vitamin-c-1000-1",
+    product: "vitamin-c-1000",
+    author: "Olivier G.",
+    rating: 5,
+    title: "Winter staple",
+    body: "I take one a day from October to March. Whether it is the vitamin C or the habit I do not know, but I got through last winter without losing a week.",
+    date: "2026-03-02",
+    verified: true,
+  },
+  {
+    id: "r-fruits-veggies-greens-1",
+    product: "fruits-veggies-greens",
+    author: "Hannah W.",
+    rating: 4,
+    title: "Tastes green, works fine",
+    body: "No amount of apple flavouring hides what this is. I put it in a smoothie with banana and it is completely fine. Not a replacement for eating vegetables and it does not claim to be.",
+    date: "2026-07-15",
+    verified: true,
+  },
+
+  // ------------------------------------------------------------------- bars
+  {
+    id: "r-protein-chocolate-1",
+    product: "protein-chocolate",
+    author: "Daan H.",
+    rating: 5,
+    title: "Dangerous",
+    body: "It is chocolate. Real chocolate, with 23 g of protein per 100 g and half the sugar. I have had to stop buying three at a time.",
+    date: "2026-09-13",
+    verified: true,
+  },
+  {
+    id: "r-delicious-protein-wafer-1",
+    product: "delicious-protein-wafer",
+    author: "Sofia L.",
+    rating: 5,
+    title: "Best texture of any protein snack",
+    body: "Protein bars are usually a chew. This is crisp the whole way through and does not have that rubbery aftertaste. My kids keep stealing them.",
+    date: "2026-08-24",
+    verified: true,
+  },
+  {
+    id: "r-njoy-protein-bar-1",
+    product: "njoy-protein-bar",
+    author: "Pieter M.",
+    rating: 5,
+    title: "Always one in my bag",
+    body: "Survives being sat on, does not melt, and covers the gap between training and dinner. I buy a box a month and have done for two years.",
+    date: "2026-07-07",
+    verified: true,
+  },
+  {
+    id: "r-crunchy-protein-bar-1",
+    product: "crunchy-protein-bar",
+    author: "Ayla C.",
+    rating: 5,
+    title: "Actually crunchy",
+    body: "Plenty of bars use the word. This one has real crisped pieces through it instead of a soft core with a dusting on top.",
+    date: "2026-06-18",
+    verified: true,
+  },
+  {
+    id: "r-energy-nougat-1",
+    product: "energy-nougat",
+    author: "Wouter E.",
+    rating: 4,
+    title: "Mid-ride fuel",
+    body: "Sticky and very sweet, which is what you want at hour three. Not an everyday snack, but I keep two taped to the bike for long days.",
+    date: "2026-05-11",
+    verified: true,
+    context: "Gran fondo",
   },
 ];
