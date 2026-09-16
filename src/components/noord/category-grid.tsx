@@ -14,7 +14,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/noord/ui/sheet"
-import { ToggleGroup, ToggleGroupItem } from "@/components/noord/ui/toggle-group"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/noord/ui/toggle-group"
 import type { FacetKey, SearchEntry } from "@/lib/noord/types"
 
 type Sort = "featured" | "price-asc" | "price-desc"
@@ -203,12 +206,12 @@ export function CategoryGrid({
       )}
 
       <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
-        <SheetContent side="left">
+        <SheetContent side="right">
           <SheetHeader>
             <SheetTitle>Filter</SheetTitle>
           </SheetHeader>
 
-          <SheetBody className="noord-gutter flex flex-col gap-8 py-6">
+          <SheetBody className="noord-sheet-gutter flex flex-col gap-8 py-6">
             <fieldset className="flex flex-col gap-3">
               <legend className="mb-3 text-noord-micro text-noord-ink-faint uppercase">
                 Sort

@@ -67,7 +67,7 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "noord fixed inset-0 z-50 flex flex-col overflow-hidden bg-noord-paper text-noord-ink transition-all duration-300 ease-out outline-none data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "noord noord-sheet fixed inset-0 z-50 flex flex-col overflow-hidden bg-noord-paper text-noord-ink transition-all duration-300 ease-out outline-none data-ending-style:opacity-0 data-starting-style:opacity-0",
           SIDE_CLASS[side],
           className,
         )}
@@ -81,7 +81,11 @@ function SheetContent({
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-1.5 right-2 sm:top-3 sm:right-3"
+                // Sits on the header row, not at an arbitrary offset from the
+                // popup: centred on the header's height, and pulled right by
+                // the 0.75rem of padding around its glyph so the glyph — not
+                // the hit area — lines up with the sheet gutter.
+                className="absolute top-[calc((var(--spacing-noord-header)-2.5rem)/2)] right-[calc(var(--noord-sheet-gutter)-0.75rem)]"
               />
             }
           >
@@ -99,7 +103,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sheet-header"
       className={cn(
-        "noord-gutter flex h-noord-header shrink-0 items-center border-b border-noord-line",
+        "noord-sheet-gutter flex h-noord-header shrink-0 items-center border-b border-noord-line",
         className,
       )}
       {...props}
@@ -111,7 +115,10 @@ function SheetBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-body"
-      className={cn("min-h-0 flex-1 overflow-y-auto overscroll-contain", className)}
+      className={cn(
+        "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+        className,
+      )}
       {...props}
     />
   )
@@ -121,10 +128,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-footer"
-      className={cn(
-        "noord-gutter mt-auto shrink-0 border-t border-noord-line py-4",
-        className,
-      )}
+      className={cn("noord-sheet-gutter mt-auto shrink-0 py-4", className)}
       {...props}
     />
   )

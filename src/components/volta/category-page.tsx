@@ -2,7 +2,6 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ChevronRightIcon } from "lucide-react"
 
 import { getCategory, getProductsInCategory } from "@/lib/catalog"
 import {
@@ -14,6 +13,7 @@ import {
 import { categoryBanner } from "@/lib/volta/editorial"
 import type { FacetKey } from "@/lib/volta/types"
 
+import { Breadcrumbs } from "./breadcrumbs"
 import { CategoryFilters } from "./category-filters"
 import { ProductCard } from "./product-card"
 import { ProductRail } from "./product-rail"
@@ -47,7 +47,7 @@ export async function CategoryPage({
   const groups = facetGroups(slug)
 
   return (
-    <div className="flex flex-col gap-10 pb-16">
+    <div className="flex flex-col gap-6 pb-16">
       <Banner
         slug={slug}
         name={category.name}
@@ -61,7 +61,7 @@ export async function CategoryPage({
           fallback is the same height as the real thing so the grid below it
           does not jump when it resolves.
         */}
-        <React.Suspense fallback={<div className="h-44" />}>
+        <React.Suspense fallback={<div className="h-32" />}>
           <CategoryFilters
             groups={groups}
             total={total}
@@ -123,22 +123,9 @@ function Banner({
       <div className="absolute inset-0 bg-gradient-to-t from-volta-void via-volta-void/60 to-volta-void/30" />
 
       <div className="volta-gutter relative mx-auto flex w-full max-w-7xl flex-col gap-3 pt-10 pb-8">
-        <nav aria-label="Breadcrumb">
-          <ol className="flex items-center gap-1.5">
-            <li>
-              <Link
-                href="/volta"
-                className="volta-wide text-volta-micro text-volta-ash hover:text-volta-volt"
-              >
-                Volta
-              </Link>
-            </li>
-            <ChevronRightIcon className="size-3 text-volta-smoke" />
-            <li className="volta-wide text-volta-micro text-volta-chalk">
-              {name}
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          trail={[{ label: "Volta", href: "/volta" }, { label: name }]}
+        />
 
         <div className="flex flex-wrap items-baseline gap-4">
           <h1 className="volta-display text-volta-display text-volta-chalk">

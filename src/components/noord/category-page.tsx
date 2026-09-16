@@ -2,10 +2,9 @@ import { Suspense } from "react"
 import { notFound } from "next/navigation"
 
 import { CategoryGrid } from "@/components/noord/category-grid"
-import { CollectionRail } from "@/components/noord/collection-rail"
 import { Skeleton } from "@/components/noord/ui/skeleton"
 import { getCategory, getProductsInCategory } from "@/lib/catalog"
-import { collectionsFor, toSearchEntry } from "@/lib/noord/catalog-view"
+import { toSearchEntry } from "@/lib/noord/catalog-view"
 
 export function CategoryPage({ slug }: { slug: string }) {
   const category = getCategory("noord", slug)
@@ -15,11 +14,8 @@ export function CategoryPage({ slug }: { slug: string }) {
 
   return (
     <>
-      <CollectionRail collections={collectionsFor(slug)} />
-
-      {/* The grid reads `?fit=…` and friends off the URL, which is what the
-          collection rail links into. `useSearchParams` needs a boundary for
-          the page shell to stay statically prerendered. */}
+      {/* The grid reads `?fit=…` and friends off the URL. `useSearchParams`
+          needs a boundary for the page shell to stay statically prerendered. */}
       <Suspense fallback={<GridSkeleton />}>
         <CategoryGrid
           products={products}

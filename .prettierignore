@@ -1,0 +1,10 @@
+# Build output and generated bundles.
+.next/
+out/
+public/embed.js
+public/embed.css
+
+# Lockfiles and vendored data are machine-written; reformatting them only
+# creates diff noise and merge conflicts.
+package-lock.json
+node_modules/

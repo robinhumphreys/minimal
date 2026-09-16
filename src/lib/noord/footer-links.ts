@@ -71,23 +71,3 @@ export const FOOTER_LEGAL: NavLink[] = [
   { label: "Cookie settings", href: HOME },
   { label: "Accessibility", href: HOME },
 ]
-
-export const FOOTER_SOCIAL: NavLink[] = [
-  { label: "Instagram", href: HOME },
-  { label: "Pinterest", href: HOME },
-  { label: "YouTube", href: HOME },
-  { label: "LinkedIn", href: HOME },
-]
-
-/** Shown beside the country selector, the way a European retailer would. */
-export const FOOTER_PAYMENTS = [
-  "Visa",
-  "Mastercard",
-  "Amex",
-  "iDEAL",
-  "Bancontact",
-  "PayPal",
-  "Klarna",
-]
-
-export const FOOTER_STORES = ["Amsterdam", "Antwerp", "Copenhagen"]

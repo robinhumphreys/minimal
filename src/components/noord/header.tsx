@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { MenuIcon, SearchIcon, ShoppingBagIcon, UserIcon } from "lucide-react"
 import { cn } from "cn"
 
@@ -17,6 +18,7 @@ import { Wordmark } from "./wordmark"
  * up the hamburger is gone entirely and the categories live inline.
  */
 export function Header({ nav }: { nav: NavModel }) {
+  const pathname = usePathname()
   const show = useOverlays((state) => state.show)
   const lines = useBag((state) => state.lines)
   const hydrated = useBag((state) => state.hydrated)
@@ -85,18 +87,25 @@ export function Header({ nav }: { nav: NavModel }) {
         className="hidden border-t border-noord-line lg:block"
       >
         <ul className="noord-gutter flex items-center justify-center gap-7 xl:gap-9">
-          {nav.categories.map((category) => (
-            <li key={category.href + category.label}>
-              <Link
-                href={category.href}
-                // `-mb-px` drops the underline onto the header rule rather
-                // than leaving it floating a pixel above it.
-                className="-mb-px flex h-11 items-center border-b border-transparent text-noord-micro text-noord-ink uppercase transition-colors hover:border-noord-ink"
-              >
-                {category.label}
-              </Link>
-            </li>
-          ))}
+          {nav.categories.map((category) => {
+            const current = pathname === category.href
+            return (
+              <li key={category.href + category.label}>
+                <Link
+                  href={category.href}
+                  aria-current={current ? "page" : undefined}
+                  // `-mb-px` drops the underline onto the header rule rather
+                  // than leaving it floating a pixel above it.
+                  className={cn(
+                    "-mb-px flex h-11 items-center border-b text-noord-micro text-noord-ink uppercase transition-colors hover:border-noord-ink",
+                    current ? "border-noord-ink" : "border-transparent",
+                  )}
+                >
+                  {category.label}
+                </Link>
+              </li>
+            )
+          })}
         </ul>
       </nav>
     </header>

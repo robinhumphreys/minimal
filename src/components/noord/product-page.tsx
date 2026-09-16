@@ -41,10 +41,16 @@ export function ProductPage({ slug }: { slug: string }) {
 
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-10 xl:gap-16">
+      {/*
+        No column gap on desktop: the detail column sets its own padding, so the
+        space between it and the gallery matches the space between it and the
+        viewport edge. A grid gap plus the page gutter made the left inset more
+        than twice the right one.
+      */}
+      <div className="lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-0">
         <ProductGallery images={product.images} alt={product.name} />
 
-        <div className="noord-gutter flex flex-col gap-6 pt-6 lg:sticky lg:top-[calc(var(--spacing-noord-header)+2rem)] lg:pt-10">
+        <div className="noord-gutter flex flex-col gap-6 pt-6 lg:sticky lg:top-[calc(var(--spacing-noord-header)+2rem)] lg:px-12 lg:pt-12 xl:px-16 xl:pt-16">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2">
             <Link
               href="/noord"
@@ -69,11 +75,6 @@ export function ProductPage({ slug }: { slug: string }) {
 
           <div className="flex flex-col gap-2">
             <h1 className="text-noord-section text-balance">{product.name}</h1>
-            {product.attributes.colour && (
-              <span className="text-noord-micro text-noord-ink-muted uppercase">
-                {product.attributes.colour}
-              </span>
-            )}
             <p className="flex items-baseline gap-3 pt-1 text-noord-title tabular-nums">
               <span className={onSale ? "text-noord-sale" : undefined}>
                 {formatPrice(product.price)}
@@ -108,7 +109,9 @@ export function ProductPage({ slug }: { slug: string }) {
                   <dl className="mt-4 flex flex-col gap-1.5">
                     {details.map(([key, value]) => (
                       <div key={key} className="flex justify-between gap-4">
-                        <dt className="text-noord-ink-faint capitalize">{key}</dt>
+                        <dt className="text-noord-ink-faint capitalize">
+                          {key}
+                        </dt>
                         <dd className="text-right text-noord-ink">{value}</dd>
                       </div>
                     ))}
@@ -124,13 +127,16 @@ export function ProductPage({ slug }: { slug: string }) {
                   <dl className="flex flex-col gap-1.5">
                     {fabric.map(([key, value]) => (
                       <div key={key} className="flex justify-between gap-4">
-                        <dt className="text-noord-ink-faint capitalize">{key}</dt>
+                        <dt className="text-noord-ink-faint capitalize">
+                          {key}
+                        </dt>
                         <dd className="text-right text-noord-ink">{value}</dd>
                       </div>
                     ))}
                   </dl>
                   <p className="mt-4">
-                    Dry clean only. Rest between wears and brush along the grain.
+                    Dry clean only. Rest between wears and brush along the
+                    grain.
                   </p>
                 </AccordionContent>
               </AccordionItem>
@@ -140,9 +146,9 @@ export function ProductPage({ slug }: { slug: string }) {
               <AccordionTrigger>Delivery & returns</AccordionTrigger>
               <AccordionContent>
                 <p>
-                  Free shipping on orders over €150, delivered within two to four
-                  working days. Returns are free for thirty days, in store or by
-                  post.
+                  Free shipping on orders over €150, delivered within two to
+                  four working days. Returns are free for thirty days, in store
+                  or by post.
                 </p>
                 <p className="mt-3">
                   Alterations are included with every suit, jacket and pair of
@@ -151,9 +157,6 @@ export function ProductPage({ slug }: { slug: string }) {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
-          {/* Filled by the embed with agent-driven recommendations. */}
-          <minimal-agent-recommendations data-product={product.slug} />
         </div>
       </div>
 

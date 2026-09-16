@@ -32,7 +32,7 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
         <SheetTitle className="sr-only">Menu</SheetTitle>
 
         {/* Search sits where the hamburger was, so the two swap in place. */}
-        <div className="noord-gutter flex h-noord-header shrink-0 items-center">
+        <div className="noord-sheet-gutter flex h-noord-header shrink-0 items-center">
           <button
             type="button"
             onClick={() => show("search")}
@@ -44,7 +44,7 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
         </div>
 
         <SheetBody>
-          <nav className="noord-gutter flex flex-col pt-5 pb-8">
+          <nav className="noord-sheet-gutter flex flex-col pt-5 pb-8">
             <ul className="flex flex-col gap-1">
               {nav.menu.map((link) => (
                 <li key={link.label}>

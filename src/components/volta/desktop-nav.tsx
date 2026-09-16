@@ -7,12 +7,16 @@ import Link from "next/link"
 import type { NavModel } from "@/lib/volta/types"
 
 /**
- * The `lg`-and-up category bar with drop panels.
+ * The `lg`-and-up categories, sitting inline in the header bar itself rather
+ * than on a second row, with panels that drop off the header's bottom edge.
  *
  * Hover-intent rather than click: the panel opens on pointer enter and closes
  * on leave, with keyboard focus doing the same thing so the panel is reachable
  * without a mouse. Hidden entirely below `lg`, where the nav overlay takes over
  * — the phone menu is never shown on a desktop layout.
+ *
+ * The panels are `absolute` against the sticky `<header>`, which is the nearest
+ * positioned ancestor; nothing between here and there may be positioned.
  */
 export function DesktopNav({ nav }: { nav: NavModel }) {
   const [open, setOpen] = React.useState<string | null>(null)
@@ -20,10 +24,10 @@ export function DesktopNav({ nav }: { nav: NavModel }) {
   return (
     <nav
       aria-label="Categories"
-      className="hidden border-t border-volta-line lg:block"
+      className="hidden min-w-0 self-stretch lg:block"
       onMouseLeave={() => setOpen(null)}
     >
-      <ul className="volta-gutter flex items-center justify-center gap-8 xl:gap-10">
+      <ul className="ml-6 flex h-full items-center gap-6 xl:ml-10 xl:gap-8">
         {nav.categories.map((category) => (
           <li
             key={category.href}
@@ -34,7 +38,7 @@ export function DesktopNav({ nav }: { nav: NavModel }) {
               href={category.href}
               // `-mb-px` drops the underline onto the header rule rather than
               // leaving it floating a pixel above it.
-              className="volta-wide -mb-px flex h-12 items-center border-b-2 border-transparent text-volta-label text-volta-chalk transition-colors hover:border-volta-volt hover:text-volta-volt aria-expanded:border-volta-volt"
+              className="volta-wide -mb-px flex h-full items-center border-b-2 border-transparent text-volta-label whitespace-nowrap text-volta-chalk transition-colors hover:border-volta-volt hover:text-volta-volt aria-expanded:border-volta-volt"
               aria-expanded={open === category.href}
             >
               {category.label}
@@ -106,7 +110,7 @@ export function DesktopNav({ nav }: { nav: NavModel }) {
                       <span className="volta-wide text-volta-micro text-volta-volt">
                         {category.promo.eyebrow}
                       </span>
-                      <span className="volta-display text-volta-title leading-none text-volta-chalk">
+                      <span className="volta-title text-volta-title leading-none text-volta-chalk">
                         {category.promo.title}
                       </span>
                     </div>

@@ -5,12 +5,12 @@ import { cn } from "cn"
 // Noord buttons are rectangles with uppercase labels. Nothing here reads a
 // shadcn semantic token, so restyling Volta can never move these.
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-noord border font-noord text-noord-micro uppercase whitespace-nowrap transition-colors outline-none select-none focus-visible:ring-1 focus-visible:ring-noord-ink focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-noord border font-noord text-noord-micro whitespace-nowrap uppercase transition-colors outline-none select-none focus-visible:ring-1 focus-visible:ring-noord-ink focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         solid:
-          "border-noord-ink bg-noord-ink text-noord-paper hover:bg-noord-ink-muted hover:border-noord-ink-muted",
+          "border-noord-ink bg-noord-ink text-noord-paper hover:border-noord-ink-muted hover:bg-noord-ink-muted",
         outline:
           "border-noord-ink bg-transparent text-noord-ink hover:bg-noord-ink hover:text-noord-paper",
         quiet:

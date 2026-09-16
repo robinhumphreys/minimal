@@ -3,7 +3,13 @@ import Link from "next/link"
 
 import { formatPrice, type BrandId, type Product } from "@/lib/catalog"
 
-export function ProductCard({ id, product }: { id: BrandId; product: Product }) {
+export function ProductCard({
+  id,
+  product,
+}: {
+  id: BrandId
+  product: Product
+}) {
   return (
     <Link href={`/${id}/p/${product.slug}`} className="flex flex-col gap-2">
       <Image

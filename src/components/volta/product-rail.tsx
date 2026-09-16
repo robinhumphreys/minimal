@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 import { cn } from "@/lib/utils"
 
 import type { ProductCardModel } from "@/lib/volta/types"
@@ -67,7 +67,7 @@ export function ProductRail({
         The negative gutter lets tiles bleed to the screen edge while the
         scroll padding keeps the first and last one clear of it.
       */}
-      <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-pl-volta-gutter px-volta-gutter pb-2 md:px-8 md:scroll-pl-8 xl:px-12 xl:scroll-pl-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <ul className="flex snap-x snap-mandatory scroll-pl-volta-gutter [scrollbar-width:none] gap-4 overflow-x-auto px-volta-gutter pb-2 md:scroll-pl-8 md:px-8 xl:scroll-pl-12 xl:px-12 [&::-webkit-scrollbar]:hidden">
         {products.map((product, index) => (
           <li
             key={product.slug}

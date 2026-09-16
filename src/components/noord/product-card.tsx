@@ -45,10 +45,7 @@ export function ProductCard({
       </div>
 
       <div
-        className={cn(
-          "flex flex-col gap-1",
-          bleed && "noord-gutter sm:px-0",
-        )}
+        className={cn("flex flex-col gap-1", bleed && "noord-gutter sm:px-0")}
       >
         <span className="text-noord-micro text-noord-ink-faint uppercase">
           {product.colour ?? product.categoryName}

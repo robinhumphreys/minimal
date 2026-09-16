@@ -26,7 +26,12 @@ const JOBS = [
 
   ["plates-rack", "andrew-valdivia-NNYw7vzQZNE-unsplash.jpg", 1000, 1250],
   ["plates-hands", "andrew-valdivia-bP82pq5z_PE-unsplash.jpg", 1000, 1250],
-  ["overhead-press", "logan-weaver-lgnwvr-ALdfSuMfLl8-unsplash.jpg", 1000, 1250],
+  [
+    "overhead-press",
+    "logan-weaver-lgnwvr-ALdfSuMfLl8-unsplash.jpg",
+    1000,
+    1250,
+  ],
   ["barbell-hands", "logan-weaver-lgnwvr-LzT-WMv1xrI-unsplash.jpg", 1000, 1250],
   ["barbell-dark", "tyler-raye-Xb1d-N04Quc-unsplash.jpg", 1000, 1250],
   ["water-hands", "mrjn-photography-YpZ2cj4s0oo-unsplash.jpg", 1000, 1250],
@@ -42,7 +47,12 @@ const JOBS = [
   ["drink-water", "engin-akyurt-PcU17evKnew-unsplash.jpg", 1200, 1200],
   ["lemon-water", "john-cardamone-Cy4Z2QhInZc-unsplash.jpg", 1200, 1200],
   ["gummies-citrus", "maria-kozyr-KQBX7YTcGuc-unsplash.jpg", 1200, 1200],
-  ["bottle-softgels", "supliful-supplements-on-demand-URH9F9E32og-unsplash.jpg", 1200, 1200],
+  [
+    "bottle-softgels",
+    "supliful-supplements-on-demand-URH9F9E32og-unsplash.jpg",
+    1200,
+    1200,
+  ],
 ]
 
 for (const [name, file, w, h] of JOBS) {

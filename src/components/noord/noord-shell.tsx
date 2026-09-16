@@ -10,6 +10,7 @@ import type { NavModel, SearchEntry } from "@/lib/noord/types"
 import { BagOverlay } from "./bag-overlay"
 import { Footer } from "./footer"
 import { Header } from "./header"
+import { Invitation } from "./invitation"
 import { NavOverlay } from "./nav-overlay"
 import { SearchOverlay } from "./search-overlay"
 
@@ -49,9 +50,9 @@ export function NoordShell({
     <div className="noord flex min-h-dvh flex-col">
       <Header nav={nav} />
 
-      {/* Bottom padding clears the agent bar the embed fixes to the viewport. */}
-      <main className="flex-1 pb-noord-agent-bar">{children}</main>
+      <main className="flex-1">{children}</main>
 
+      <Invitation seed={pathname} />
       <Footer />
 
       <NavOverlay nav={nav} />

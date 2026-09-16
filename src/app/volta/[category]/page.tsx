@@ -24,9 +24,6 @@ export async function generateMetadata(
 
 export default function Page(props: PageProps<"/volta/[category]">) {
   return (
-    <CategoryPage
-      params={props.params}
-      searchParams={props.searchParams}
-    />
+    <CategoryPage params={props.params} searchParams={props.searchParams} />
   )
 }

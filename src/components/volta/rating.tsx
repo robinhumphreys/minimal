@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { StarIcon } from "lucide-react"
+import { StarIcon } from "@phosphor-icons/react/ssr"
 
 import { formatCount, formatRating } from "@/lib/volta/format"
 
@@ -43,7 +43,7 @@ export function Stars({
         )}
       >
         {[0, 1, 2, 3, 4].map((i) => (
-          <StarIcon key={i} className={icon} fill="currentColor" />
+          <StarIcon key={i} className={icon} weight="fill" />
         ))}
       </span>
       {/*
@@ -57,7 +57,7 @@ export function Stars({
         style={{ width: `${percent}%` }}
       >
         {[0, 1, 2, 3, 4].map((i) => (
-          <StarIcon key={i} className={cn(icon, "shrink-0")} fill="currentColor" />
+          <StarIcon key={i} className={cn(icon, "shrink-0")} weight="fill" />
         ))}
       </span>
     </span>

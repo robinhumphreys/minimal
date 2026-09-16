@@ -116,7 +116,10 @@ export function Agent({ config }: { config: AgentConfig }) {
 
       {config.surface.entry === "bar" && targets.bar
         ? createPortal(
-            <Bar style={style} onSubmit={(text) => openWith({ prompt: text })} />,
+            <Bar
+              style={style}
+              onSubmit={(text) => openWith({ prompt: text })}
+            />,
             targets.bar,
           )
         : null}

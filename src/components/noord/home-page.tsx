@@ -19,7 +19,9 @@ const IMAGERY = {
 export function HomePage() {
   const catalog = getCatalog("noord")
   const arrivals = pickFeatured(8, 3)
-  const tailoring = getProductsInCategory("noord", "suits").slice(0, 4).map(toCard)
+  const tailoring = getProductsInCategory("noord", "suits")
+    .slice(0, 4)
+    .map(toCard)
 
   const tiles = catalog.categories
     .map((category) => ({
@@ -71,8 +73,6 @@ export function HomePage() {
         href={categoryHref("suits")}
         products={tailoring}
       />
-
-      <Appointment />
     </>
   )
 }
@@ -94,29 +94,27 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-noord-ink/70 via-noord-ink/20 to-transparent" />
       </div>
 
-      <div className="noord-gutter absolute inset-x-0 bottom-0 pb-8 md:pb-14">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-4">
-          <span className="text-noord-micro text-noord-paper/80 uppercase">
-            Autumn / Winter
-          </span>
-          <h1 className="max-w-2xl text-noord-display text-noord-paper text-balance">
-            Tailoring for the northern half of the year
-          </h1>
-          <div className="flex flex-wrap gap-3 pt-1">
-            <Button
-              render={<Link href={categoryHref("suits")} />}
-              className="border-noord-paper bg-noord-paper text-noord-ink hover:border-noord-paper hover:bg-transparent hover:text-noord-paper"
-            >
-              Shop suits
-            </Button>
-            <Button
-              render={<Link href={categoryHref("outerwear")} />}
-              variant="outline"
-              className="border-noord-paper text-noord-paper hover:bg-noord-paper hover:text-noord-ink"
-            >
-              Shop outerwear
-            </Button>
-          </div>
+      <div className="noord-gutter absolute inset-x-0 bottom-0 flex flex-col items-start gap-4 pb-8 md:pb-14">
+        <span className="text-noord-micro text-noord-paper/80 uppercase">
+          Autumn / Winter
+        </span>
+        <h1 className="max-w-2xl text-noord-display text-balance text-noord-paper">
+          Tailoring for the northern half of the year
+        </h1>
+        <div className="flex flex-wrap gap-3 pt-1">
+          <Button
+            render={<Link href={categoryHref("suits")} />}
+            className="border-noord-paper bg-noord-paper text-noord-ink hover:border-noord-paper hover:bg-transparent hover:text-noord-paper"
+          >
+            Shop suits
+          </Button>
+          <Button
+            render={<Link href={categoryHref("outerwear")} />}
+            variant="outline"
+            className="border-noord-paper text-noord-paper hover:bg-noord-paper hover:text-noord-ink"
+          >
+            Shop outerwear
+          </Button>
         </div>
       </div>
     </section>
@@ -125,33 +123,34 @@ function Hero() {
 
 function HouseFits() {
   return (
-    <section className="noord-gutter py-12 md:py-16">
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-6 md:grid-cols-2 md:gap-12">
-        <div className="relative aspect-[4/5] overflow-hidden bg-noord-wash md:aspect-[3/4]">
-          <Image
-            src={IMAGERY.fits}
-            alt=""
-            fill
-            sizes="(min-width: 768px) 46vw, 92vw"
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-col items-start gap-5">
-          <span className="text-noord-micro text-noord-ink-faint uppercase">
-            The house fits
-          </span>
-          <h2 className="text-noord-section text-balance">
-            Three cuts, measured against each other
-          </h2>
-          <p className="max-w-md text-noord-lead text-noord-ink-muted">
-            Havana is soft-shouldered and unstructured. Milano is cleaner
-            through the chest. Roma is the relaxed one. Every jacket is altered
-            in store before it leaves.
-          </p>
-          <Button render={<Link href={categoryHref("jackets")} />} variant="outline">
-            Read the guide
-          </Button>
-        </div>
+    <section className="noord-gutter grid items-center gap-6 py-12 md:grid-cols-2 md:gap-12 md:py-16">
+      <div className="relative aspect-[4/5] overflow-hidden bg-noord-wash md:aspect-[3/4]">
+        <Image
+          src={IMAGERY.fits}
+          alt=""
+          fill
+          sizes="(min-width: 768px) 46vw, 92vw"
+          className="object-cover"
+        />
+      </div>
+      <div className="flex flex-col items-start gap-5">
+        <span className="text-noord-micro text-noord-ink-faint uppercase">
+          The house fits
+        </span>
+        <h2 className="text-noord-section text-balance">
+          Three cuts, measured against each other
+        </h2>
+        <p className="max-w-md text-noord-lead text-noord-ink-muted">
+          Havana is soft-shouldered and unstructured. Milano is cleaner through
+          the chest. Roma is the relaxed one. Every jacket is altered in store
+          before it leaves.
+        </p>
+        <Button
+          render={<Link href={categoryHref("jackets")} />}
+          variant="outline"
+        >
+          Read the guide
+        </Button>
       </div>
     </section>
   )
@@ -160,92 +159,44 @@ function HouseFits() {
 const PAIR = [
   {
     image: IMAGERY.rail,
-    eyebrow: "The fabric library",
     title: "Woven in Biella, cut in Amsterdam",
-    copy: "Four mills, one cloth book, and a rail you are welcome to work through slowly.",
+    copy: "Four mills and one cloth book, to work through slowly.",
     href: "/noord/suits",
-    cta: "See the cloths",
   },
   {
     image: IMAGERY.store,
-    eyebrow: "In store",
     title: "An hour with a stylist",
-    copy: "Bring the invitation, the weather forecast, or nothing at all. Appointments are free.",
+    copy: "Bring the weather forecast, or nothing at all. Appointments are free.",
     href: "/noord",
-    cta: "Book a fitting",
   },
 ]
 
 function EditorialPair() {
   return (
-    <section className="noord-gutter py-12 md:py-16">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-2 md:gap-6">
-        {PAIR.map((block) => (
-          <article key={block.title} className="group flex flex-col gap-5">
-            <Link
-              href={block.href}
-              className="relative aspect-[4/3] overflow-hidden bg-noord-wash"
-            >
-              <Image
-                src={block.image}
-                alt=""
-                fill
-                sizes="(min-width: 768px) 46vw, 92vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            </Link>
-            <div className="flex flex-col items-start gap-3">
-              <span className="text-noord-micro text-noord-ink-faint uppercase">
-                {block.eyebrow}
-              </span>
-              <h2 className="text-noord-title text-balance">{block.title}</h2>
-              <p className="max-w-sm text-noord-body text-noord-ink-muted">
-                {block.copy}
-              </p>
-              <Link
-                href={block.href}
-                className="noord-underline text-noord-micro text-noord-ink uppercase"
-              >
-                {block.cta}
-              </Link>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function Appointment() {
-  return (
-    <section className="relative">
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-noord-wash sm:aspect-[16/9] lg:aspect-[3/1]">
-        <Image
-          src={IMAGERY.appointment}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-[50%_40%]"
-        />
-        <div className="absolute inset-0 bg-noord-ink/45" />
-      </div>
-
-      <div className="noord-gutter absolute inset-0 flex items-center">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-4">
-          <span className="text-noord-micro text-noord-paper/80 uppercase">
-            Amsterdam · Antwerp · Copenhagen
-          </span>
-          <h2 className="max-w-xl text-noord-section text-noord-paper text-balance">
-            Come in and be measured
-          </h2>
-          <Button
-            render={<Link href="/noord" />}
-            className="border-noord-paper bg-noord-paper text-noord-ink hover:border-noord-paper hover:bg-transparent hover:text-noord-paper"
-          >
-            Book an appointment
-          </Button>
-        </div>
-      </div>
+    <section className="noord-gutter grid gap-10 py-12 md:grid-cols-2 md:gap-6 md:py-16">
+      {PAIR.map((block) => (
+        <Link
+          key={block.title}
+          href={block.href}
+          className="group flex flex-col gap-5"
+        >
+          <div className="relative aspect-[4/3] overflow-hidden bg-noord-wash">
+            <Image
+              src={block.image}
+              alt=""
+              fill
+              sizes="(min-width: 768px) 46vw, 92vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-noord-title text-balance group-hover:underline">
+              {block.title}
+            </h2>
+            <p className="text-noord-body text-noord-ink-muted">{block.copy}</p>
+          </div>
+        </Link>
+      ))}
     </section>
   )
 }

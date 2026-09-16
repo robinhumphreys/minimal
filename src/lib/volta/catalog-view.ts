@@ -127,14 +127,16 @@ function facetOptions(products: Product[], facet: FacetKey, limit: number) {
 export function facetGroups(categorySlug: string): FacetGroup[] {
   const products = getProductsInCategory(BRAND, categorySlug)
 
-  return (["form", "goal", "flavour"] as FacetKey[])
-    .map((key) => ({
-      key,
-      label: FACET_LABELS[key],
-      options: facetOptions(products, key, 8),
-    }))
-    // A row offering a single choice is not a choice.
-    .filter((group) => group.options.length > 1)
+  return (
+    (["form", "goal", "flavour"] as FacetKey[])
+      .map((key) => ({
+        key,
+        label: FACET_LABELS[key],
+        options: facetOptions(products, key, 8),
+      }))
+      // A row offering a single choice is not a choice.
+      .filter((group) => group.options.length > 1)
+  )
 }
 
 /** Applies the `?form=`/`?goal=`/`?flavour=` query to a category's products. */
@@ -163,12 +165,6 @@ const SERVICE = [
   { label: "Subscribe & save", href: `/${BRAND}` },
   { label: "Batch test results", href: `/${BRAND}` },
   { label: "Contact us", href: `/${BRAND}` },
-]
-
-const UTILITY = [
-  { label: "Gyms", href: `/${BRAND}` },
-  { label: "Coaching", href: `/${BRAND}` },
-  { label: "Help", href: `/${BRAND}` },
 ]
 
 export function navModel(): NavModel {
@@ -212,7 +208,6 @@ export function navModel(): NavModel {
       href: goalHref(goal.tag),
     })),
     service: SERVICE,
-    utility: UTILITY,
     featured: topRated(2),
   }
 }

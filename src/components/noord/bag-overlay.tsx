@@ -16,6 +16,7 @@ import {
 import { bagCount, bagSubtotal, useBag, type BagLine } from "@/lib/noord/bag"
 import { formatPrice } from "@/lib/noord/format"
 import { useOverlays } from "@/lib/noord/overlays"
+import { sizeLabel } from "@/lib/noord/sizing"
 
 /** Free shipping threshold, in cents. */
 const FREE_SHIPPING_FROM = 15000
@@ -45,20 +46,25 @@ export function BagOverlay() {
 
         <SheetBody>
           {count === 0 ? (
-            <div className="noord-gutter flex flex-col items-start gap-5 pt-16">
-              <p className="text-noord-section">Your bag is empty.</p>
-              <p className="max-w-xs text-noord-body text-noord-ink-muted">
+            // Centred rather than parked at the top: an outlined button in the
+            // corner of an otherwise empty panel reads as a dead end. The CTA
+            // takes the same full-width solid treatment as Checkout, so the
+            // empty bag has the same weight as a full one.
+            <div className="noord-sheet-gutter flex h-full flex-col items-start justify-center gap-4 pb-16">
+              <p className="text-noord-title">Your bag is empty.</p>
+              <p className="text-noord-body text-noord-ink-muted">
                 Pieces you add will stay here between visits.
               </p>
               <Button
                 render={<Link href="/noord" onClick={close} />}
-                variant="outline"
+                size="block"
+                className="mt-3"
               >
                 Continue shopping
               </Button>
             </div>
           ) : (
-            <ul className="noord-gutter divide-y divide-noord-line">
+            <ul className="noord-sheet-gutter divide-y divide-noord-line">
               {visible.map((line) => (
                 <BagRow
                   key={`${line.slug}:${line.size}`}
@@ -142,7 +148,7 @@ function BagRow({
         </div>
 
         <span className="text-noord-micro text-noord-ink-muted uppercase">
-          Size {line.size}
+          {sizeLabel(line.size)}
         </span>
 
         <div className="mt-1 flex items-center justify-between gap-3">

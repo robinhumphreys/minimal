@@ -16,7 +16,10 @@ export async function generateMetadata(
   const { category: slug } = await props.params
   const category = getCategory("noord", slug)
   if (!category) return {}
-  return { title: `${category.name} — Noord Suits`, description: category.description }
+  return {
+    title: `${category.name} — Noord Suits`,
+    description: category.description,
+  }
 }
 
 export default async function Page(props: PageProps<"/noord/[category]">) {

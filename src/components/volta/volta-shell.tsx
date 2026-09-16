@@ -53,7 +53,7 @@ export function VoltaShell({
       <Header nav={nav} />
 
       {/* Bottom padding clears the agent bar the embed fixes to the viewport. */}
-      <main className="flex-1 pb-volta-agent-bar">{children}</main>
+      <main className="flex-1">{children}</main>
 
       <Footer />
 

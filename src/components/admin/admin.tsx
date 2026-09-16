@@ -38,7 +38,8 @@ export function Admin() {
   }, [])
 
   const edit = React.useCallback(
-    (recipe: (current: AgentConfig) => AgentConfig) => editDraft(active, recipe),
+    (recipe: (current: AgentConfig) => AgentConfig) =>
+      editDraft(active, recipe),
     [active, editDraft],
   )
 

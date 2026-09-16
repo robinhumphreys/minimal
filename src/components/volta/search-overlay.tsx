@@ -3,7 +3,11 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRightIcon, SearchIcon, XIcon } from "lucide-react"
+import {
+  ArrowUpRightIcon,
+  MagnifyingGlassIcon,
+  XIcon,
+} from "@phosphor-icons/react/ssr"
 
 import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
@@ -85,16 +89,16 @@ export function SearchOverlay({
             aria-label="Close search"
             className="-mr-2 flex size-10 items-center justify-center rounded-volta text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none"
           >
-            <XIcon className="size-5" strokeWidth={2.25} />
+            <XIcon className="size-5" weight="bold" />
           </button>
         </SheetHeader>
 
         <SheetBody>
           <div className="volta-gutter mx-auto w-full max-w-3xl pb-16">
             <div className="flex items-center gap-3 border-b-2 border-volta-line pt-6 focus-within:border-volta-volt">
-              <SearchIcon
+              <MagnifyingGlassIcon
                 className="size-5 shrink-0 text-volta-smoke"
-                strokeWidth={2.25}
+                weight="bold"
               />
               <Input
                 // The overlay only mounts when open, so this fires once per
@@ -105,7 +109,7 @@ export function SearchOverlay({
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="What are you training for?"
                 aria-label="Search products"
-                className="volta-wide h-14 border-b-0 text-xl placeholder:normal-case placeholder:tracking-normal placeholder:font-normal [&::-webkit-search-cancel-button]:hidden"
+                className="volta-wide h-14 border-b-0 text-xl placeholder:font-normal placeholder:tracking-normal placeholder:normal-case [&::-webkit-search-cancel-button]:hidden"
               />
               {query && (
                 <button
@@ -204,10 +208,10 @@ export function SearchOverlay({
                               />
                             </div>
                             <div className="flex min-w-0 flex-1 flex-col gap-1">
-                              <span className="volta-wide truncate text-volta-body text-volta-chalk group-hover/result:text-volta-volt">
+                              <span className="volta-title truncate text-volta-body text-volta-chalk group-hover/result:text-volta-volt">
                                 {entry.name}
                               </span>
-                              <span className="truncate text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+                              <span className="truncate text-volta-micro text-volta-ash">
                                 {[entry.categoryName, entry.flavour]
                                   .filter(Boolean)
                                   .join(" · ")}
@@ -218,7 +222,7 @@ export function SearchOverlay({
                                 size="sm"
                               />
                             </div>
-                            <span className="volta-wide shrink-0 text-volta-body text-volta-chalk tabular-nums">
+                            <span className="volta-title shrink-0 text-volta-body text-volta-chalk tabular-nums">
                               {formatPrice(entry.price)}
                             </span>
                           </Link>

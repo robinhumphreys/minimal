@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 
 import { getCatalog } from "@/lib/catalog"
 import {
@@ -97,11 +97,6 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-volta-void via-volta-void/55 to-transparent md:bg-gradient-to-r md:from-volta-void md:via-volta-void/60 md:to-transparent" />
 
       <div className="volta-gutter relative mx-auto flex w-full max-w-7xl flex-col gap-6 pb-14 md:pb-20">
-        <span className="volta-wide flex items-center gap-2 text-volta-micro text-volta-volt">
-          <span className="h-px w-8 bg-volta-volt" />
-          Fuel the work
-        </span>
-
         {/*
           Three lines of eight or nine characters, so the block stays square at
           every width. A hyphenated "out-trains" broke across two lines on a
@@ -197,7 +192,7 @@ function CategoryGrid({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-volta-void via-volta-void/30 to-transparent" />
               <div className="relative flex w-full items-center justify-between gap-2 p-4">
-                <span className="volta-display text-volta-title text-volta-chalk group-hover/tile:text-volta-volt">
+                <span className="volta-title text-volta-title text-volta-chalk group-hover/tile:text-volta-volt">
                   {category.name}
                 </span>
                 <ArrowRightIcon className="size-4 shrink-0 text-volta-volt transition-transform group-hover/tile:translate-x-0.5" />

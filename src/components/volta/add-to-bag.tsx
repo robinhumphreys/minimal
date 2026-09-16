@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon, MinusIcon, PlusIcon } from "lucide-react"
+import { CheckIcon, MinusIcon, PlusIcon } from "@phosphor-icons/react/ssr"
 
 import { useBag, type BagLine } from "@/lib/volta/bag"
 import { flavourOptions } from "@/lib/volta/flavours"
@@ -49,14 +49,14 @@ export function AddToBag({
     <div className="flex flex-col gap-5">
       {options.length > 1 && (
         <div className="flex flex-col gap-2.5">
-          <div className="flex items-baseline justify-between">
-            <h2 className="volta-wide text-volta-micro text-volta-smoke">
-              Flavour
-            </h2>
-            <span className="volta-wide text-volta-micro text-volta-chalk">
-              {flavour}
-            </span>
-          </div>
+          {/*
+            No readout of the current flavour beside the heading: the selected
+            chip is already lit volt, and naming it again says the same thing
+            twice in the same glance.
+          */}
+          <h2 className="volta-wide text-volta-micro text-volta-smoke">
+            Flavour
+          </h2>
           <ToggleGroup
             value={[flavour]}
             onValueChange={(next) => {
@@ -109,11 +109,11 @@ export function AddToBag({
             show("bag")
           }}
         >
-          Add to bag
+          Add to cart
         </Button>
       </div>
 
-      <p className="flex items-center gap-2 text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+      <p className="flex items-center gap-2 text-volta-micro text-volta-ash">
         <CheckIcon className="size-3.5 shrink-0 text-volta-volt" />
         In stock — shipped today
       </p>
