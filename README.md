@@ -1,6 +1,6 @@
 # Minimal
 
-An AI storefront agent: one admin (`/minimal`), two storefronts (`/noord`, `/volta`),
+An AI storefront agent: one admin (`/admin`), two storefronts (`/noord`, `/volta`),
 and a script-tag embed that mounts the agent into either storefront.
 
 ## Development
@@ -27,7 +27,8 @@ AI_GATEWAY_API_KEY=...
 
 | Path                                                            | What it is                                                             |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `src/app/minimal`                                               | Admin: draft editor, snippet, publish, live iframe preview             |
+| `src/app/admin`                                                 | Admin: shell, draft editor, snippet, publish, live iframe preview      |
+| `src/app/admin/_components`                                     | The admin's own components, colocated with the route                   |
 | `src/app/noord`, `src/app/volta`                                | Storefronts: home, category, product                                   |
 | `src/app/api/agents/[id]/chat`                                  | Streaming chat route                                                   |
 | `src/components/volta`, `src/lib/volta`, `src/styles/volta.css` | The Volta storefront: components, view models, `volta-*` design tokens |

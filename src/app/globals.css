@@ -80,6 +80,12 @@ body {
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
+  /*
+   * The admin's face. `@theme inline` maps `--font-sans` to this variable but
+   * never emits it, so without a definition here `body`'s `font-family`
+   * is invalid at computed-value time and the page falls back to serif.
+   */
+  --font-sans: var(--font-geist-sans);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);

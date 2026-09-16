@@ -1,4 +1,4 @@
-import { Admin } from "@/components/admin/admin"
+import { Admin } from "./_components/admin"
 
 export default function Page() {
   return <Admin />
