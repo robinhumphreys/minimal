@@ -103,7 +103,7 @@ export function FeaturesStep({ next }: { next: string }) {
               htmlFor={id}
               // Chosen cards take the brand's own colour, not the admin's
               // neutral primary.
-              className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5 has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-brand/5"
+              className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5 has-data-checked:hover:bg-brand/10 has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-brand/5"
             >
               <Field
                 orientation="horizontal"
