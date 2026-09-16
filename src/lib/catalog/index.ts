@@ -8,12 +8,24 @@ import {
 import {
   categories as voltaCategories,
   products as voltaProducts,
+  reviews as voltaReviews,
 } from "./volta"
 import { BRAND_IDS, type BrandId, type Catalog } from "./types"
 
 const catalogs: Record<BrandId, Catalog> = {
-  noord: { id: "noord", categories: noordCategories, products: noordProducts },
-  volta: { id: "volta", categories: voltaCategories, products: voltaProducts },
+  noord: {
+    id: "noord",
+    categories: noordCategories,
+    products: noordProducts,
+    // Noord shows no social proof; its pages never reach for this.
+    reviews: [],
+  },
+  volta: {
+    id: "volta",
+    categories: voltaCategories,
+    products: voltaProducts,
+    reviews: voltaReviews,
+  },
 }
 
 function assertValid(catalog: Catalog) {
@@ -61,6 +73,22 @@ function assertValid(catalog: Catalog) {
       }
     }
   }
+
+  const reviewIds = new Set<string>()
+  for (const review of catalog.reviews) {
+    if (reviewIds.has(review.id)) {
+      throw new Error(
+        `[catalog:${catalog.id}] duplicate review id "${review.id}"`,
+      )
+    }
+    reviewIds.add(review.id)
+
+    if (!productSlugs.has(review.product)) {
+      throw new Error(
+        `[catalog:${catalog.id}] review "${review.id}" references unknown product "${review.product}"`,
+      )
+    }
+  }
 }
 
 for (const id of BRAND_IDS) {
@@ -81,6 +109,13 @@ export function getProduct(id: BrandId, slug: string) {
 
 export function getProductsInCategory(id: BrandId, slug: string) {
   return catalogs[id].products.filter((product) => product.category === slug)
+}
+
+/** Newest first, so a product page can slice the top few. */
+export function getReviews(id: BrandId, slug?: string) {
+  return catalogs[id].reviews
+    .filter((review) => slug === undefined || review.product === slug)
+    .sort((a, b) => b.date.localeCompare(a.date))
 }
 
 /** One line per product, for stuffing into the chat system prompt. */
