@@ -6,18 +6,20 @@ const DEFAULT_MODEL = "anthropic/claude-sonnet-4.5"
 export const defaults: Record<BrandId, AgentConfig> = {
   noord: {
     id: "noord",
-    name: "Noord",
+    name: "Noord Suits",
+    // Matches the Noord storefront tokens in `src/styles/noord.css`, so the
+    // embedded agent does not read as a third-party widget bolted on.
     theme: {
-      accent: "#1f2933",
+      accent: "#131313",
       surface: "#ffffff",
-      radius: "0.5rem",
-      fontBody: "system-ui, sans-serif",
-      fontDisplay: "system-ui, sans-serif",
+      radius: "0rem",
+      fontBody: "var(--font-noord-sans), Helvetica, Arial, sans-serif",
+      fontDisplay: "var(--font-noord-sans), Helvetica, Arial, sans-serif",
       density: "comfortable",
     },
     behaviour: {
       systemPrompt:
-        "You are a shopping assistant for Noord, a menswear label. Answer using only the catalog below and name specific products.",
+        "You are a shopping assistant for Noord Suits, a menswear label. Answer using only the catalog below and name specific products.",
       greeting: "Looking for something in particular?",
       starterPrompts: [
         "What should I wear to an office in winter?",
