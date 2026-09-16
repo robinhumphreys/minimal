@@ -1,4 +1,4 @@
-import type { Category, Product } from "./types"
+import type { Category, Product } from "./types";
 
 export const categories: Category[] = [
   {
@@ -31,84 +31,982 @@ export const categories: Category[] = [
     name: "Bars",
     description: "Whole-food and protein bars for training and travel.",
   },
-]
+];
 
 export const products: Product[] = [
+  // ---------------------------------------------------------------- protein
+  {
+    slug: "whey-delicious",
+    name: "Whey Delicious",
+    category: "protein",
+    price: 1999,
+    images: [
+      "/catalog/volta/whey-delicious-1.jpg",
+      "/catalog/volta/whey-delicious-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      source: "Whey Concentrate & Isolate",
+      flavour: "Vanilla",
+      size: "1000 g",
+    },
+    description:
+      "A creamy whey blend of concentrate and isolate that mixes without lumps. Made without aspartame and sold in twenty-one flavours.",
+    tags: ["protein", "whey", "post-workout"],
+  },
+  {
+    slug: "perfect-whey-protein",
+    name: "Perfect Whey Protein",
+    category: "protein",
+    price: 2799,
+    images: [
+      "/catalog/volta/perfect-whey-protein-1.jpg",
+      "/catalog/volta/perfect-whey-protein-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      source: "Whey Concentrate",
+      flavour: "Chocolate",
+      size: "2000 g",
+    },
+    description:
+      "Cross-flow microfiltered concentrate at the keenest price we can hold. The four-kilo bag runs to roughly a hundred and sixty shakes.",
+    tags: ["protein", "whey", "everyday"],
+  },
   {
     slug: "whey-isolate",
     name: "Whey Isolate",
     category: "protein",
-    price: 4900,
-    compareAt: 5900,
-    images: ["/catalog/volta/whey-isolate-1.jpg", "/catalog/volta/whey-isolate-2.jpg"],
-    attributes: { flavour: "Vanilla", size: "900g", goal: "Muscle gain" },
+    price: 2599,
+    images: [
+      "/catalog/volta/whey-isolate-1.jpg",
+      "/catalog/volta/whey-isolate-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      source: "Whey Isolate",
+      flavour: "Vanilla",
+      size: "1000 g",
+      diet: "Low Lactose",
+    },
     description:
-      "A cold-filtered whey isolate at 27g protein per scoop. Mixes clear with water.",
-    tags: ["protein", "lean", "post-workout"],
+      "Filtered whey isolate with a low fat content and 0.8% lactose by lab analysis. The cleanest protein we carry.",
+    tags: ["protein", "whey", "isolate"],
   },
   {
-    slug: "pre-surge",
-    name: "Pre-Surge",
+    slug: "whey-isolate-zero",
+    name: "Whey Isolate Zero",
+    category: "protein",
+    price: 2999,
+    images: [
+      "/catalog/volta/whey-isolate-zero-1.jpg",
+      "/catalog/volta/whey-isolate-zero-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      source: "Whey Isolate",
+      protein: "90%",
+      flavour: "Vanilla",
+      size: "1000 g",
+      diet: "Lactose Free",
+    },
+    description:
+      "Ninety per cent protein, lactose free and without fat or sugar. A full flavour on a very short ingredient list.",
+    tags: ["protein", "isolate", "lactose-free"],
+  },
+  {
+    slug: "clear-whey-isolate",
+    name: "Clear Whey Isolate",
+    category: "protein",
+    price: 2999,
+    images: [
+      "/catalog/volta/clear-whey-isolate-1.jpg",
+      "/catalog/volta/clear-whey-isolate-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      source: "Whey Isolate",
+      protein: "21 g",
+      flavour: "Strawberry Cherry",
+      size: "500 g",
+    },
+    description:
+      "Mixes clear rather than creamy, at 21 g protein and 90 calories a serving. Drinks like a cordial after a hot session.",
+    tags: ["protein", "isolate", "post-workout"],
+  },
+  {
+    slug: "protein-iced-coffee",
+    name: "Protein Iced Coffee",
+    category: "protein",
+    price: 2499,
+    images: [
+      "/catalog/volta/protein-iced-coffee-1.jpg",
+      "/catalog/volta/protein-iced-coffee-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      source: "Whey Protein",
+      protein: "22.9 g",
+      caffeine: "80 mg",
+      flavour: "Iced Coffee",
+      size: "450 g",
+    },
+    description:
+      "Whey protein and coffee in one shake, at 22.9 g protein and 80 mg caffeine. Built for the morning session.",
+    tags: ["protein", "whey", "caffeine"],
+  },
+  {
+    slug: "protein-oats-drink",
+    name: "Protein & Oats Drink",
+    category: "protein",
+    price: 1699,
+    images: [
+      "/catalog/volta/protein-oats-drink-1.jpg",
+      "/catalog/volta/protein-oats-drink-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      protein: "30 g",
+      flavour: "Vanilla",
+      size: "6 x 500 ml",
+      diet: "Gluten Free",
+    },
+    description:
+      "A gluten-free meal in a bottle with 30 g protein, 6 g fibre and fermented oat flour. 363 calories and 5.7 g sugar.",
+    tags: ["protein", "meal", "oats"],
+  },
+  {
+    slug: "liquid-egg-whites",
+    name: "Liquid Egg Whites",
+    category: "protein",
+    price: 2799,
+    images: [
+      "/catalog/volta/liquid-egg-whites-1.jpg",
+      "/catalog/volta/liquid-egg-whites-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      source: "Egg White",
+      protein: "52 g",
+      size: "6 x 483 ml",
+    },
+    description:
+      "Pasteurised egg white with no separating and no refrigeration needed. Drink it, cook with it, or put it through a shake.",
+    tags: ["protein", "everyday"],
+  },
+
+  // ------------------------------------------------------------ pre-workout
+  {
+    slug: "blast-pre-workout",
+    name: "Blast! Pre-Workout",
     category: "pre-workout",
-    price: 3400,
-    images: ["/catalog/volta/pre-surge-1.jpg", "/catalog/volta/pre-surge-2.jpg"],
-    attributes: { flavour: "Citrus", size: "300g", goal: "Training energy" },
+    price: 2799,
+    images: [
+      "/catalog/volta/blast-pre-workout-1.jpg",
+      "/catalog/volta/blast-pre-workout-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      servings: "30",
+      flavour: "Fruit Punch",
+      size: "300 g",
+    },
     description:
-      "Caffeine, beta-alanine and citrulline in a single scoop. Take twenty minutes before training.",
-    tags: ["energy", "strength", "caffeine"],
+      "Five proven pre-workout ingredients that come up within fifteen minutes. Thirty sessions to a tub and suited to any sport.",
+    tags: ["pre-workout", "caffeine", "everyday"],
   },
   {
-    slug: "recovery-blend",
-    name: "Recovery Blend",
+    slug: "black-label-pre-workout",
+    name: "Black Label Pre-Workout",
+    category: "pre-workout",
+    price: 3499,
+    images: [
+      "/catalog/volta/black-label-pre-workout-1.jpg",
+      "/catalog/volta/black-label-pre-workout-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      caffeine: "330 mg",
+      servings: "30",
+      flavour: "Blue Raspberry",
+      size: "390 g",
+    },
+    description:
+      "Our exclusive formula at 330 mg caffeine a serving, with added vitamins and minerals. A full month in one tub.",
+    tags: ["pre-workout", "caffeine"],
+  },
+  {
+    slug: "quake-pre-workout",
+    name: "Quake Pre-Workout",
+    category: "pre-workout",
+    price: 3999,
+    images: [
+      "/catalog/volta/quake-pre-workout-1.jpg",
+      "/catalog/volta/quake-pre-workout-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      caffeine: "350 mg",
+      servings: "30",
+      flavour: "Fruit Punch",
+      size: "450 g",
+    },
+    description:
+      "The strongest formula we make, at 350 mg caffeine plus citrulline and beta-alanine. Cherry Cola and Fruit Punch only.",
+    tags: ["pre-workout", "caffeine"],
+  },
+  {
+    slug: "abe-ultimate-pre-workout",
+    name: "ABE Ultimate Pre-Workout",
+    category: "pre-workout",
+    price: 2799,
+    images: [
+      "/catalog/volta/abe-ultimate-pre-workout-1.jpg",
+      "/catalog/volta/abe-ultimate-pre-workout-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      servings: "30",
+      flavour: "Assorted",
+      size: "315 g",
+    },
+    description:
+      "A concentrated pre-workout on a blend of active ingredients. Thirty servings a tub across several flavours.",
+    tags: ["pre-workout", "caffeine"],
+  },
+  {
+    slug: "venom-pre-workout-drink",
+    name: "Venom Pre-Workout Drink",
+    category: "pre-workout",
+    price: 4699,
+    images: [
+      "/catalog/volta/venom-pre-workout-drink-1.jpg",
+      "/catalog/volta/venom-pre-workout-drink-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      flavour: "Berry",
+      size: "24 x 250 ml",
+    },
+    description:
+      "A ready-to-drink pre-workout in a 250 ml can, dosed high on the ingredients that matter. Best served cold.",
+    tags: ["pre-workout", "caffeine"],
+  },
+  {
+    slug: "energize-energy-drink",
+    name: "Energize Energy Drink",
+    category: "pre-workout",
+    price: 699,
+    images: [
+      "/catalog/volta/energize-energy-drink-1.jpg",
+      "/catalog/volta/energize-energy-drink-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      flavour: "Ginger Lemon",
+      size: "6 x 330 ml",
+      diet: "Sugar Free",
+    },
+    description:
+      "Caffeine and vitamins in a 330 ml can, with two sugar-free versions at 3 calories per 100 ml. Bigger than the usual can.",
+    tags: ["caffeine", "everyday", "sugar-free"],
+  },
+  {
+    slug: "citrulline-malate",
+    name: "Citrulline Malate",
+    category: "pre-workout",
+    price: 1699,
+    images: [
+      "/catalog/volta/citrulline-malate-1.jpg",
+      "/catalog/volta/citrulline-malate-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "L-Citrulline Malate",
+      flavour: "Unflavoured",
+      size: "250 g",
+    },
+    description:
+      "A precursor to L-arginine, taken before training to raise arginine levels. Unflavoured and easy to dose.",
+    tags: ["pre-workout", "amino"],
+  },
+  {
+    slug: "caffeine-booster",
+    name: "Caffeine Booster",
+    category: "pre-workout",
+    price: 1099,
+    images: [
+      "/catalog/volta/caffeine-booster-1.jpg",
+      "/catalog/volta/caffeine-booster-2.jpg",
+    ],
+    attributes: { form: "Capsules", caffeine: "250 mg", size: "180 capsules" },
+    description:
+      "250 mg of pure caffeine anhydrous a capsule, about three cups of coffee. The most direct form there is.",
+    tags: ["pre-workout", "caffeine"],
+  },
+
+  // --------------------------------------------------------------- recovery
+  {
+    slug: "muscle-grow",
+    name: "Muscle Grow",
     category: "recovery",
-    price: 4200,
+    price: 2899,
     images: [
-      "/catalog/volta/recovery-blend-1.jpg",
-      "/catalog/volta/recovery-blend-2.jpg",
+      "/catalog/volta/muscle-grow-1.jpg",
+      "/catalog/volta/muscle-grow-2.jpg",
     ],
-    attributes: { flavour: "Berry", size: "750g", goal: "Recovery" },
+    attributes: {
+      form: "Powder",
+      actives: "Creatine, BCAA & Protein",
+      flavour: "Strawberry",
+      size: "2000 g",
+    },
     description:
-      "Carbohydrate and protein in a 3:1 ratio with added tart cherry. Built for back-to-back sessions.",
-    tags: ["recovery", "endurance", "post-workout"],
+      "An all-in-one post-workout with creatine, BCAAs, protein and carbohydrate. Our strongest recovery formula, and long a bestseller.",
+    tags: ["post-workout", "creatine", "protein"],
   },
   {
-    slug: "electrolyte-mix",
-    name: "Electrolyte Mix",
+    slug: "advanced-post-workout",
+    name: "Advanced Post Workout",
+    category: "recovery",
+    price: 3499,
+    images: [
+      "/catalog/volta/advanced-post-workout-1.jpg",
+      "/catalog/volta/advanced-post-workout-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "PeptoPro & Waxy Maize",
+      flavour: "Tropical Fruit",
+      size: "2100 g",
+    },
+    description:
+      "The most complete recovery blend we make, with PeptoPro, waxy maize and added vitamins. High doses across the board.",
+    tags: ["post-workout", "endurance"],
+  },
+  {
+    slug: "bcaa-powder",
+    name: "BCAA Powder",
+    category: "recovery",
+    price: 2499,
+    images: [
+      "/catalog/volta/bcaa-powder-1.jpg",
+      "/catalog/volta/bcaa-powder-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "BCAA 2:1:1",
+      flavour: "Raspberry",
+      size: "500 g",
+      diet: "Sugar Free",
+    },
+    description:
+      "Naturally fermented BCAAs premixed at 2:1:1, with no sugar and no filler. Also sold without flavour or sweetener.",
+    tags: ["amino", "post-workout", "sugar-free"],
+  },
+  {
+    slug: "bcaa-recovery",
+    name: "BCAA Recovery",
+    category: "recovery",
+    price: 3299,
+    images: [
+      "/catalog/volta/bcaa-recovery-1.jpg",
+      "/catalog/volta/bcaa-recovery-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "BCAA & Glutamine",
+      servings: "100",
+      flavour: "Assorted",
+      size: "1000 g",
+    },
+    description:
+      "BCAAs and glutamine in one bag at a hundred servings. No added sugars and nothing bulking it out.",
+    tags: ["amino", "post-workout"],
+  },
+  {
+    slug: "glutamine",
+    name: "Glutamine",
+    category: "recovery",
+    price: 2199,
+    images: [
+      "/catalog/volta/glutamine-1.jpg",
+      "/catalog/volta/glutamine-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "L-Glutamine",
+      flavour: "Unflavoured",
+      size: "500 g",
+    },
+    description:
+      "Pure L-glutamine, the amino acid most common in human muscle tissue. Sold plain or in two flavours.",
+    tags: ["amino", "everyday"],
+  },
+  {
+    slug: "hmb-capsules",
+    name: "HMB 750 mg",
+    category: "recovery",
+    price: 1699,
+    images: [
+      "/catalog/volta/hmb-capsules-1.jpg",
+      "/catalog/volta/hmb-capsules-2.jpg",
+    ],
+    attributes: {
+      form: "Capsules",
+      actives: "HMB 750 mg",
+      size: "120 capsules",
+    },
+    description:
+      "A high dose of HMB in plain capsules, with effects comparable to L-leucine. Pairs well with creatine.",
+    tags: ["amino", "post-workout"],
+  },
+  {
+    slug: "acetyl-l-carnitine",
+    name: "Acetyl L-Carnitine",
+    category: "recovery",
+    price: 1699,
+    images: [
+      "/catalog/volta/acetyl-l-carnitine-1.jpg",
+      "/catalog/volta/acetyl-l-carnitine-2.jpg",
+    ],
+    attributes: {
+      form: "Capsules",
+      actives: "Acetyl L-Carnitine 500 mg",
+      servings: "40",
+      size: "120 capsules",
+    },
+    description:
+      "An easy source of L-carnitine at forty servings a bottle. Straightforward capsules to sit alongside a diet.",
+    tags: ["amino", "everyday"],
+  },
+  {
+    slug: "booty-builder",
+    name: "Booty Builder",
+    category: "recovery",
+    price: 3999,
+    images: [
+      "/catalog/volta/booty-builder-1.jpg",
+      "/catalog/volta/booty-builder-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "Whey, Creatine & Collagen",
+      servings: "30",
+      flavour: "Fresh Raspberry",
+      size: "1050 g",
+    },
+    description:
+      "An all-in-one blend with whey, creatine, collagen and BCAAs, plus vitamin B12 and potassium. Formulated for women.",
+    tags: ["post-workout", "creatine", "protein"],
+  },
+
+  // -------------------------------------------------------------- hydration
+  {
+    slug: "electrolytes",
+    name: "Electrolytes",
     category: "hydration",
-    price: 2400,
+    price: 1999,
     images: [
-      "/catalog/volta/electrolyte-mix-1.jpg",
-      "/catalog/volta/electrolyte-mix-2.jpg",
+      "/catalog/volta/electrolytes-1.jpg",
+      "/catalog/volta/electrolytes-2.jpg",
     ],
-    attributes: { flavour: "Lemon", size: "30 sachets", goal: "Hydration" },
+    attributes: {
+      form: "Powder",
+      actives: "Magnesium, Calcium & Sea Salt",
+      servings: "60",
+      flavour: "Forest Fruit",
+      size: "360 g",
+    },
     description:
-      "Sodium, potassium and magnesium in single-serve sachets. No added sugar.",
-    tags: ["hydration", "endurance", "vegan"],
+      "Magnesium, calcium and Celtic sea salt to top up fluid and mineral balance. Sixty servings across five flavours.",
+    tags: ["hydration", "minerals", "endurance"],
   },
   {
-    slug: "daily-multi",
-    name: "Daily Multi",
+    slug: "hydrate-tablets",
+    name: "Hydrate Effervescent Tablets",
+    category: "hydration",
+    price: 499,
+    images: [
+      "/catalog/volta/hydrate-tablets-1.jpg",
+      "/catalog/volta/hydrate-tablets-2.jpg",
+    ],
+    attributes: {
+      form: "Effervescent Tablets",
+      actives: "Magnesium & Sodium",
+      flavour: "Lemon",
+      size: "20 tablets",
+      diet: "Sugar Free",
+    },
+    description:
+      "Drop a tablet in a bottle for a hypotonic sports drink with no calories. Magnesium and sodium included.",
+    tags: ["hydration", "minerals", "sugar-free"],
+  },
+  {
+    slug: "isotonic-pro",
+    name: "Isotonic Pro",
+    category: "hydration",
+    price: 1799,
+    images: [
+      "/catalog/volta/isotonic-pro-1.jpg",
+      "/catalog/volta/isotonic-pro-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      carbs: "32.5 g",
+      servings: "30",
+      flavour: "Juicy Fruit",
+      size: "1050 g",
+    },
+    description:
+      "32.5 g of carbohydrate a serving at a 2:1 glucose-to-fructose ratio for uptake under load. Thirty servings a tub.",
+    tags: ["hydration", "endurance"],
+  },
+  {
+    slug: "oral-rehydration-salts",
+    name: "Oral Rehydration Salts",
+    category: "hydration",
+    price: 1899,
+    images: [
+      "/catalog/volta/oral-rehydration-salts-1.jpg",
+      "/catalog/volta/oral-rehydration-salts-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      servings: "40",
+      flavour: "Orange",
+      size: "600 g",
+    },
+    description:
+      "A hypotonic drink at low osmolality, mixed to the standard rehydration ratios. For long or hot sessions.",
+    tags: ["hydration", "endurance"],
+  },
+  {
+    slug: "protein-lemonade",
+    name: "Protein Lemonade",
+    category: "hydration",
+    price: 1199,
+    images: [
+      "/catalog/volta/protein-lemonade-1.jpg",
+      "/catalog/volta/protein-lemonade-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      protein: "10 g",
+      flavour: "Raspberry",
+      size: "6 x 330 ml",
+      diet: "Sugar Free",
+    },
+    description:
+      "Lightly sparkling lemonade with 10 g protein and 40 calories a can. No sugar, no fat, no lactose and no preservatives.",
+    tags: ["hydration", "protein", "sugar-free"],
+  },
+  {
+    slug: "njoy-protein-drink",
+    name: "N'Joy Protein Drink",
+    category: "hydration",
+    price: 1499,
+    images: [
+      "/catalog/volta/njoy-protein-drink-1.jpg",
+      "/catalog/volta/njoy-protein-drink-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      protein: "32 g",
+      flavour: "Iced Coffee",
+      size: "6 x 310 ml",
+    },
+    description:
+      "A ready-mixed shake with 32 g protein and 2 g fat, stable out of the fridge. Five flavours, one of them lactose free.",
+    tags: ["protein", "everyday"],
+  },
+  {
+    slug: "protein-water",
+    name: "Protein Water",
+    category: "hydration",
+    price: 1399,
+    images: [
+      "/catalog/volta/protein-water-1.jpg",
+      "/catalog/volta/protein-water-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      source: "Whey Isolate",
+      protein: "20 g",
+      flavour: "Peach",
+      size: "6 x 500 ml",
+      diet: "Sugar Free",
+    },
+    description:
+      "20 g of whey isolate in a clear bottle with no sugar, carbohydrate, fat or lactose. Drinks like flavoured water.",
+    tags: ["protein", "hydration", "sugar-free"],
+  },
+  {
+    slug: "burner-drink",
+    name: "Burner Drink",
+    category: "hydration",
+    price: 1099,
+    images: [
+      "/catalog/volta/burner-drink-1.jpg",
+      "/catalog/volta/burner-drink-2.jpg",
+    ],
+    attributes: {
+      form: "Ready-to-Drink",
+      caffeine: "50 mg",
+      flavour: "Cranberry",
+      size: "6 x 500 ml",
+      diet: "Sugar Free",
+    },
+    description:
+      "A sugar-free sports drink with L-carnitine, at 50 mg caffeine and 6 calories a bottle. Made to drink mid-session.",
+    tags: ["hydration", "caffeine", "sugar-free"],
+  },
+
+  // --------------------------------------------------------------- vitamins
+  {
+    slug: "womens-multivit",
+    name: "Women's Multivit",
     category: "vitamins",
-    price: 1900,
-    images: ["/catalog/volta/daily-multi-1.jpg", "/catalog/volta/daily-multi-2.jpg"],
-    attributes: { flavour: "Unflavoured", size: "120 capsules", goal: "General health" },
+    price: 1799,
+    images: [
+      "/catalog/volta/womens-multivit-1.jpg",
+      "/catalog/volta/womens-multivit-2.jpg",
+    ],
+    attributes: {
+      form: "Tablets",
+      dose: "One a Day",
+      actives: "Biotin, Selenium & Vitamin D",
+      size: "120 tablets",
+    },
     description:
-      "A two-a-day multivitamin with vitamin D3, zinc and magnesium. Capsule shell is plant-based.",
-    tags: ["vitamins", "vegan", "daily"],
+      "A multivitamin set to the needs of women, with biotin, selenium and vitamin D. One tablet a day is enough.",
+    tags: ["vitamins", "everyday"],
   },
   {
-    slug: "oat-protein-bar",
-    name: "Oat Protein Bar",
-    category: "bars",
-    price: 2900,
-    compareAt: 3400,
+    slug: "vitamin-d3-3000",
+    name: "Vitamin D3 3000 IU",
+    category: "vitamins",
+    price: 449,
     images: [
-      "/catalog/volta/oat-protein-bar-1.jpg",
-      "/catalog/volta/oat-protein-bar-2.jpg",
+      "/catalog/volta/vitamin-d3-3000-1.jpg",
+      "/catalog/volta/vitamin-d3-3000-2.jpg",
     ],
-    attributes: { flavour: "Cocoa", size: "12 bars", goal: "Snacking" },
+    attributes: { form: "Softgels", dose: "3000 IU", size: "60 softgels" },
     description:
-      "Rolled oats and pea protein at 15g per bar. Chewy rather than crunchy.",
-    tags: ["snack", "vegan", "protein"],
+      "Softgels supporting normal immune function and the upkeep of normal bones. Made for the winter months.",
+    tags: ["vitamins", "everyday"],
   },
-]
+  {
+    slug: "vitamin-d3-chewable",
+    name: "Vitamin D3 Chewable",
+    category: "vitamins",
+    price: 799,
+    images: [
+      "/catalog/volta/vitamin-d3-chewable-1.jpg",
+      "/catalog/volta/vitamin-d3-chewable-2.jpg",
+    ],
+    attributes: {
+      form: "Chewable Tablets",
+      dose: "1000 IU",
+      flavour: "Fruit",
+      size: "250 tablets",
+    },
+    description:
+      "Fruit-flavoured chewables at 1000 IU, for normal muscle function and the body's own defences. An easy way to close a shortfall.",
+    tags: ["vitamins", "everyday"],
+  },
+  {
+    slug: "vitamin-d3-k2",
+    name: "Vitamin D3 + K2",
+    category: "vitamins",
+    price: 1299,
+    images: [
+      "/catalog/volta/vitamin-d3-k2-1.jpg",
+      "/catalog/volta/vitamin-d3-k2-2.jpg",
+    ],
+    attributes: {
+      form: "Tablets",
+      dose: "25 mcg D3 & 45 mcg K2",
+      size: "60 tablets",
+    },
+    description:
+      "25 mcg of vitamin D3 with 45 mcg of K2 as MK-7. D for normal muscle function, K for the upkeep of normal bones.",
+    tags: ["vitamins", "minerals", "everyday"],
+  },
+  {
+    slug: "vitamin-c-1000",
+    name: "Vitamin C 1000 mg",
+    category: "vitamins",
+    price: 1049,
+    images: [
+      "/catalog/volta/vitamin-c-1000-1.jpg",
+      "/catalog/volta/vitamin-c-1000-2.jpg",
+    ],
+    attributes: {
+      form: "Tablets",
+      dose: "1000 mg",
+      actives: "Rosehip & Bioflavonoids",
+      size: "120 tablets",
+    },
+    description:
+      "Helps reduce tiredness and fatigue and keeps skin in normal condition. Made stronger with rosehip extract and citrus bioflavonoids.",
+    tags: ["vitamins", "everyday"],
+  },
+  {
+    slug: "vitamin-b-complex",
+    name: "Vitamin B Complex",
+    category: "vitamins",
+    price: 999,
+    images: [
+      "/catalog/volta/vitamin-b-complex-1.jpg",
+      "/catalog/volta/vitamin-b-complex-2.jpg",
+    ],
+    attributes: {
+      form: "Tablets",
+      actives: "B Complex, Choline & Calcium",
+      size: "100 tablets",
+    },
+    description:
+      "Every B vitamin at the right ratios in one tablet, with added choline and calcium. Supports the nervous system and protein metabolism.",
+    tags: ["vitamins", "everyday"],
+  },
+  {
+    slug: "fruits-veggies-greens",
+    name: "Fruits, Veggies & Greens",
+    category: "vitamins",
+    price: 3199,
+    images: [
+      "/catalog/volta/fruits-veggies-greens-1.jpg",
+      "/catalog/volta/fruits-veggies-greens-2.jpg",
+    ],
+    attributes: {
+      form: "Powder",
+      actives: "31 Fruits, Vegetables & Superfoods",
+      flavour: "Lemon",
+      size: "300 g",
+    },
+    description:
+      "Thirty-one fruits, vegetables and superfoods in one scoop, sweetened with stevia. A way to round out the day's eating.",
+    tags: ["vitamins", "greens", "vegan"],
+  },
+  {
+    slug: "mens-performance-pack",
+    name: "Men's Performance Vitamin Pack",
+    category: "vitamins",
+    price: 2899,
+    images: [
+      "/catalog/volta/mens-performance-pack-1.jpg",
+      "/catalog/volta/mens-performance-pack-2.jpg",
+    ],
+    attributes: {
+      form: "Sachets",
+      servings: "30",
+      actives: "Multivitamin & Greens Blend",
+      size: "30 sachets",
+    },
+    description:
+      "A complete daily sachet for male athletes running to more than thirty active ingredients. Multivitamin tablets and a greens blend in one.",
+    tags: ["vitamins", "greens", "everyday"],
+  },
+
+  // ------------------------------------------------------------------- bars
+  {
+    slug: "njoy-protein-bar",
+    name: "N'Joy Protein Bar",
+    category: "bars",
+    price: 3199,
+    compareAt: 3854,
+    images: [
+      "/catalog/volta/njoy-protein-bar-1.jpg",
+      "/catalog/volta/njoy-protein-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      protein: "36%",
+      flavour: "Assorted",
+      size: "15 x 55 g",
+    },
+    description:
+      "A soft bar at 36% protein under a crunchy topping, low on sugar and saturated fat. Good at any hour of the day.",
+    tags: ["snack", "protein"],
+  },
+  {
+    slug: "high-protein-bar",
+    name: "High Protein Bar",
+    category: "bars",
+    price: 3899,
+    images: [
+      "/catalog/volta/high-protein-bar-1.jpg",
+      "/catalog/volta/high-protein-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      protein: "25 g",
+      flavour: "Assorted",
+      size: "20 x 50 g",
+    },
+    description:
+      "Our best numbers in a bar: 25 g of protein and 0.7 g of sugar. Four full flavours.",
+    tags: ["snack", "protein"],
+  },
+  {
+    slug: "crunchy-protein-bar",
+    name: "Crunchy Protein Bar",
+    category: "bars",
+    price: 2699,
+    compareAt: 2999,
+    images: [
+      "/catalog/volta/crunchy-protein-bar-1.jpg",
+      "/catalog/volta/crunchy-protein-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      protein: "22 g",
+      flavour: "Assorted",
+      size: "12 x 60 g",
+    },
+    description:
+      "Crisp on the outside and soft in the middle, at up to 22 g protein a bar. Seven flavours to work through.",
+    tags: ["snack", "protein"],
+  },
+  {
+    slug: "clean-protein-bar",
+    name: "Clean Protein Bar",
+    category: "bars",
+    price: 3299,
+    images: [
+      "/catalog/volta/clean-protein-bar-1.jpg",
+      "/catalog/volta/clean-protein-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      protein: "12 g",
+      flavour: "Chocolate Peanut",
+      size: "16 x 45 g",
+    },
+    description:
+      "Natural ingredients, high in fibre and nothing artificial added. Up to 12 g of protein across four flavours.",
+    tags: ["snack", "protein"],
+  },
+  {
+    slug: "delicious-oat-bar",
+    name: "Delicious Oat Bar",
+    category: "bars",
+    price: 2199,
+    compareAt: 2932,
+    images: [
+      "/catalog/volta/delicious-oat-bar-1.jpg",
+      "/catalog/volta/delicious-oat-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      energy: "460 kcal",
+      flavour: "Chocolate",
+      size: "12 x 100 g",
+    },
+    description:
+      "A plain oat bar full of complex carbohydrate at over 460 calories apiece. Six flavours for long days.",
+    tags: ["snack", "oats", "endurance"],
+  },
+  {
+    slug: "delicious-protein-wafer",
+    name: "Delicious Protein Wafer",
+    category: "bars",
+    price: 1999,
+    compareAt: 2272,
+    images: [
+      "/catalog/volta/delicious-protein-wafer-1.jpg",
+      "/catalog/volta/delicious-protein-wafer-2.jpg",
+    ],
+    attributes: {
+      form: "Wafer",
+      protein: "30%",
+      flavour: "Cookies & Cream",
+      size: "12 x 40 g",
+    },
+    description:
+      "A very crisp chocolate wafer at 30% protein and 0.6% sugar. Chocolate or Cookies & Cream.",
+    tags: ["snack", "protein"],
+  },
+  {
+    slug: "njoy-nuts-bar",
+    name: "N'Joy Nuts Bar",
+    category: "bars",
+    price: 2499,
+    compareAt: 4235,
+    images: [
+      "/catalog/volta/njoy-nuts-bar-1.jpg",
+      "/catalog/volta/njoy-nuts-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      protein: "9%",
+      energy: "200 kcal",
+      flavour: "Dark Chocolate",
+      size: "15 x 40 g",
+      diet: "Vegan",
+    },
+    description:
+      "A vegan bar of 50% nuts coated in organic chocolate, at 9% protein. Under 200 calories a bar.",
+    tags: ["snack", "nuts", "vegan"],
+  },
+  {
+    slug: "protein-nut-bar",
+    name: "Protein Nut Bar",
+    category: "bars",
+    price: 2699,
+    compareAt: 4028,
+    images: [
+      "/catalog/volta/protein-nut-bar-1.jpg",
+      "/catalog/volta/protein-nut-bar-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      protein: "25%",
+      energy: "180 kcal",
+      flavour: "Natural",
+      size: "15 x 35 g",
+    },
+    description:
+      "Almonds, cashews, hazelnut and linseed with whey protein worked through. Natural throughout and under 180 calories.",
+    tags: ["snack", "nuts", "protein"],
+  },
+  {
+    slug: "energy-nougat",
+    name: "Energy Nougat",
+    category: "bars",
+    price: 2599,
+    images: [
+      "/catalog/volta/energy-nougat-1.jpg",
+      "/catalog/volta/energy-nougat-2.jpg",
+    ],
+    attributes: {
+      form: "Bar",
+      carbs: "2:1 Glucose to Fructose",
+      flavour: "Strawberry",
+      size: "16 x 40 g",
+    },
+    description:
+      "Fast carbohydrate at a 2:1 glucose-to-fructose ratio, and light on the stomach. Strawberry, lemon, pistachio or original.",
+    tags: ["snack", "endurance"],
+  },
+  {
+    slug: "protein-chocolate",
+    name: "Protein Chocolate",
+    category: "bars",
+    price: 599,
+    images: [
+      "/catalog/volta/protein-chocolate-1.jpg",
+      "/catalog/volta/protein-chocolate-2.jpg",
+    ],
+    attributes: {
+      form: "Chocolate",
+      protein: "23%",
+      flavour: "Salted Caramel Almond",
+      size: "100 g",
+    },
+    description:
+      "Chocolate at a minimum 23% whey protein and half the sugar of comparable bars. Milk, Salted Caramel and Biscuit.",
+    tags: ["snack", "protein"],
+  },
+];
