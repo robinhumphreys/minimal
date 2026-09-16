@@ -6,7 +6,7 @@ import { GuideOverlay, GuideTrigger } from "@embed/product-help"
 import { readableOn } from "@/lib/config/contrast"
 import type { AgentConfig } from "@/lib/config/schema"
 
-import { DeviceToggle, PhoneFrame, type Device } from "./device-toggle"
+import { DeviceStage, DeviceToggle, type Device } from "./device-toggle"
 import { DotField, groundFor } from "./dot-field"
 
 /** What the guide is about in the preview; on the site it is the page's category. */
@@ -77,13 +77,7 @@ export function ProductHelpPreview({
         back={ground.back}
         fill={ground.fill}
       />
-      {device === "mobile" ? (
-        <div className="absolute inset-0 flex items-center justify-center p-6">
-          <PhoneFrame>{stage}</PhoneFrame>
-        </div>
-      ) : (
-        stage
-      )}
+      <DeviceStage device={device}>{stage}</DeviceStage>
       {/* The guide's own header sits where the toggle does; one at a time. */}
       {open ? null : (
         <DeviceToggle

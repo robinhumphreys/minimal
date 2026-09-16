@@ -37,7 +37,7 @@ export const OPENERS: Record<ChatSurface, ScriptLine[]> = {
   ],
   "search-assist": [
     {
-      text: "I put the agent under your search box — it reads what a shopper meant, in the same voice and with the same cards as the chat, from your own catalogue. Tell me what to change and I’ll do it here.",
+      text: "I put the agent under your search box. When a shopper types, it works out what they mean and answers with products from your catalogue. Tell me what to change and I’ll do it here.",
       after: 500,
     },
   ],

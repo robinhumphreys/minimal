@@ -55,14 +55,45 @@ export function DeviceToggle({
 }
 
 /**
- * A phone's worth of screen, for the previews to render into when the toggle
- * says mobile. Only the bounds are drawn — a soft hairline, no fill, no
- * shadow — so the surface inside is judged on the same ground as desktop.
+ * Where the preview's surface stands: the whole box on desktop, a phone's
+ * worth of screen on mobile. On mobile only the bounds are drawn — a soft
+ * hairline, no fill, no shadow — so the surface is judged on the same ground
+ * as desktop.
+ *
+ * The same two elements on either device, with the phone drawn by class
+ * alone. Wrapping the surface in a frame on mobile and not on desktop would
+ * move it to a different place in the tree, and React would mount it afresh
+ * each time the toggle flipped — taking the conversation with it.
  */
-export function PhoneFrame({ children }: { children: React.ReactNode }) {
+export function DeviceStage({
+  device,
+  align = "center",
+  children,
+}: {
+  device: Device
+  /** Where the phone sits in the box, top to bottom. */
+  align?: "start" | "center"
+  children: React.ReactNode
+}) {
+  const mobile = device === "mobile"
   return (
-    <div className="relative h-full max-h-[44rem] w-[375px] max-w-full overflow-hidden rounded-xl border-2 border-foreground/10">
-      {children}
+    <div
+      className={cn(
+        "absolute inset-0",
+        mobile && "flex justify-center p-6",
+        mobile && (align === "start" ? "items-start" : "items-center"),
+      )}
+    >
+      <div
+        className={cn(
+          "relative h-full",
+          mobile
+            ? "max-h-[44rem] w-[375px] max-w-full overflow-hidden rounded-xl border-2 border-foreground/10"
+            : "w-full",
+        )}
+      >
+        {children}
+      </div>
     </div>
   )
 }

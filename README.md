@@ -28,7 +28,7 @@ AI_GATEWAY_API_KEY=vck_...
 
 | Path                                                            | What it is                                                                                                                            |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/admin`                                                 | Admin, one organisation per slug: onboarding first, then `/admin/{org}/agent` to change and publish                                   |
+| `src/app/admin`                                                 | Admin, one organisation per slug: the onboarding flow at `/admin/{org}/agent/onboarding`, which publishes on install                  |
 | `src/app/admin/_components`                                     | The admin's own components, colocated with the route                                                                                  |
 | `src/app/noord`, `src/app/volta`                                | Storefronts: home, category, product                                                                                                  |
 | `src/app/admin/[org]/agent/onboarding`                          | Merchant onboarding, five steps: start, sync styles, choose surfaces, preview and tweak, embed and check                              |

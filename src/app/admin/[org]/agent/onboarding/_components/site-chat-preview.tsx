@@ -13,7 +13,7 @@ import { answerViewCart } from "@/lib/agent/cart"
 import type { AgentUIMessage } from "@/lib/agent/types"
 import type { AgentConfig } from "@/lib/config/schema"
 
-import { DeviceToggle, PhoneFrame, type Device } from "./device-toggle"
+import { DeviceStage, DeviceToggle, type Device } from "./device-toggle"
 import { DotField } from "./dot-field"
 
 /**
@@ -50,15 +50,9 @@ export function SiteChatPreview({
   return (
     <div className="relative h-full overflow-hidden rounded-xl">
       <DotField className="absolute inset-0" />
-      {/* On a phone the layer is its own container, so the window fills the
-          frame the way it fills a real screen. */}
-      {device === "mobile" ? (
-        <div className="absolute inset-0 flex items-center justify-center p-6">
-          <PhoneFrame>{layer}</PhoneFrame>
-        </div>
-      ) : (
-        layer
-      )}
+      {/* The stage is the layer's container on either device, so on a phone
+          the window fills the frame the way it fills a real screen. */}
+      <DeviceStage device={device}>{layer}</DeviceStage>
       <DeviceToggle
         value={device}
         onChange={onDeviceChange}
