@@ -4,7 +4,6 @@ import * as React from "react"
 
 import Link from "next/link"
 import { ArrowRightIcon } from "lucide-react"
-import { cn } from "cn"
 
 import { useOrg } from "@/app/admin/_components/use-org"
 import { Button } from "@/components/ui/button"
@@ -104,7 +103,7 @@ export function FeaturesStep({ next }: { next: string }) {
               htmlFor={id}
               // Chosen cards take the brand's own colour, not the admin's
               // neutral primary.
-              className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5"
+              className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5 has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-brand/5"
             >
               <Field
                 orientation="horizontal"
@@ -147,100 +146,128 @@ export function FeaturesStep({ next }: { next: string }) {
 }
 
 /*
- * Thumbnails: each surface as a few grey shapes, small enough to read as a
- * glyph of the thing rather than a picture of it. Drawn rather than
- * screenshotted so they are the same weight as the type beside them, and
- * so the merchant's own preview, one step on, is the first real one.
+ * Thumbnails: each surface as a line drawing in Minimal's blue — a stroke for
+ * the page's own furniture, a fill for the thing the agent adds to it.
+ * Drawn as SVG rather than assembled from boxes, so the corners, weights
+ * and spacing are the same kind of thing as an icon's.
  */
 
-function Thumb({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
+function Thumb({ children }: { children: React.ReactNode }) {
   return (
-    <span
+    <svg
       aria-hidden="true"
-      className={cn(
-        "relative block h-21 w-30 shrink-0 overflow-hidden",
-        className,
-      )}
+      viewBox="0 0 120 84"
+      className="h-21 w-30 shrink-0 text-brand"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      {/* Drawn at the smaller size and scaled up as one, so the shapes keep
-          their proportions to each other as the card grows. */}
-      <span className="absolute top-0 left-0 block h-14 w-20 origin-top-left scale-150">
-        {children}
-      </span>
-    </span>
+      {children}
+    </svg>
   )
 }
 
-/*
- * Three shapes each, in stops of one colour: Minimal's blue at full strength
- * for the thing the agent adds to the page, and two tints of it for the page
- * around it.
- */
-const ACCENT = "bg-brand"
-
-/** A window with one bubble each way, and the round button under it. */
+/** A chat window with a reply in it, and the button that opened it. */
 function SiteChatThumb() {
   return (
     <Thumb>
-      <span className="absolute top-2 right-4 bottom-4 left-3 flex flex-col gap-1 rounded-[3px] border border-brand/25 bg-white p-1.5">
-        <span className="h-2 w-7 rounded-[2px] bg-brand/15" />
-        <span className={cn("ml-auto h-2 w-5 rounded-[2px]", ACCENT)} />
-        <span className="h-2 w-9 rounded-[2px] bg-brand/15" />
-      </span>
-      <span
-        className={cn(
-          "absolute right-1.5 bottom-1.5 size-3.5 rounded-full ring-2 ring-white",
-          ACCENT,
-        )}
+      <rect x="15" y="9" width="76" height="52" rx="6" opacity="0.4" />
+      <path d="M23 20h30" strokeWidth="3" opacity="0.4" />
+      <rect
+        x="23"
+        y="28"
+        width="32"
+        height="9"
+        rx="4.5"
+        fill="currentColor"
+        stroke="none"
+        opacity="0.15"
       />
+      <rect
+        x="51"
+        y="41"
+        width="32"
+        height="9"
+        rx="4.5"
+        fill="currentColor"
+        stroke="none"
+      />
+      <circle cx="99" cy="69" r="9" fill="currentColor" stroke="none" />
     </Thumb>
   )
 }
 
-/** A search box with something typed, and two products under it. */
+/** A search typed in, and two results that answer it. */
 function SearchAssistThumb() {
   return (
     <Thumb>
-      <span className="absolute inset-x-2 top-2 flex h-3.5 items-center gap-1 rounded-[3px] border border-brand/30 bg-white px-1">
-        <span className="h-[3px] w-8 rounded-full bg-brand/45" />
-        <span className={cn("ml-0.5 h-2 w-[2px]", ACCENT)} />
-      </span>
-      <span className="absolute bottom-2 left-2 flex h-6 w-7 flex-col gap-0.5">
-        <span className="flex-1 rounded-[2px] bg-brand/15" />
-        <span className="h-[3px] w-4 rounded-full bg-brand/45" />
-      </span>
-      <span className="absolute right-2 bottom-2 flex h-6 w-7 flex-col gap-0.5">
-        <span className="flex-1 rounded-[2px] bg-brand/15" />
-        <span className="h-[3px] w-5 rounded-full bg-brand/45" />
-      </span>
+      <rect x="15" y="9" width="90" height="16" rx="8" opacity="0.4" />
+      <circle cx="25" cy="17" r="3" opacity="0.4" />
+      <path d="M27.5 19.5l2 2" opacity="0.4" />
+      <path d="M36 17h34" strokeWidth="3" opacity="0.3" />
+      <rect
+        x="75"
+        y="12"
+        width="2"
+        height="10"
+        rx="1"
+        fill="currentColor"
+        stroke="none"
+      />
+      <rect x="15" y="35" width="41" height="40" rx="4" opacity="0.4" />
+      <rect
+        x="19"
+        y="39"
+        width="33"
+        height="21"
+        rx="2"
+        fill="currentColor"
+        stroke="none"
+        opacity="0.15"
+      />
+      <path d="M21 68h18" strokeWidth="3" />
+      <rect x="64" y="35" width="41" height="40" rx="4" opacity="0.4" />
+      <rect
+        x="68"
+        y="39"
+        width="33"
+        height="21"
+        rx="2"
+        fill="currentColor"
+        stroke="none"
+        opacity="0.15"
+      />
+      <path d="M70 68h22" strokeWidth="3" />
     </Thumb>
   )
 }
 
-/** A product, and one question answered beside it. */
+/** A product, and a question about it answered on the spot. */
 function ProductHelpThumb() {
   return (
     <Thumb>
-      <span className="absolute top-2 bottom-2 left-2 w-7 rounded-[2px] bg-brand/15" />
-      <span className="absolute top-2.5 left-10.5 h-[3px] w-7 rounded-full bg-brand/45" />
-      <span className="absolute top-5 left-10.5 h-[3px] w-4 rounded-full bg-brand/25" />
-      <span className="absolute bottom-2 left-10.5 flex items-center gap-1">
-        <span
-          className={cn(
-            "flex size-2.5 shrink-0 items-center justify-center rounded-full text-[6px] leading-none font-semibold text-white",
-            ACCENT,
-          )}
-        >
-          ?
-        </span>
-        <span className="h-[3px] w-5 rounded-full bg-brand/45" />
-      </span>
+      <rect
+        x="15"
+        y="9"
+        width="40"
+        height="66"
+        rx="4"
+        fill="currentColor"
+        stroke="none"
+        opacity="0.15"
+      />
+      <path d="M63 17h42" strokeWidth="3" opacity="0.4" />
+      <path d="M63 27h18" strokeWidth="3" />
+      <rect x="63" y="45" width="42" height="24" rx="8" opacity="0.4" />
+      <circle cx="74" cy="57" r="5.5" fill="currentColor" stroke="none" />
+      <path
+        d="M72.4 55.6a1.7 1.7 0 1 1 2.4 1.5c-.6.3-.8.6-.8 1.2M74 60.3v.2"
+        stroke="white"
+        strokeWidth="1.3"
+      />
+      <path d="M84 57h14" strokeWidth="3" opacity="0.3" />
     </Thumb>
   )
 }
