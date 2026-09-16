@@ -20,7 +20,7 @@ The chat route talks to the [Vercel AI Gateway](https://vercel.com/ai-gateway).
 Put a key in `.env.local` before sending a message:
 
 ```env
-AI_GATEWAY_API_KEY=...
+AI_GATEWAY_API_KEY=vck_...
 ```
 
 ## Layout

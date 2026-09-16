@@ -2,6 +2,11 @@
 
 import * as React from "react"
 
+import { useChat } from "@ai-sdk/react"
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from "ai"
 import { ArrowUpIcon } from "lucide-react"
 import { motion } from "motion/react"
 
@@ -26,6 +31,11 @@ import {
 } from "@/components/ui/message-scroller"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "cn"
+
+import {
+  applySiteChatPatch,
+  type SiteChatUIMessage,
+} from "@/app/api/admin/site-chat/tools"
 
 import {
   ICON_STYLES,
@@ -61,15 +71,22 @@ const SCRIPT: { text: string; after: number }[] = [
 ]
 
 /**
- * What the agent appears to be doing while it "works". Two lines rather than
- * one spinner: a single indefinite state says nothing is happening, whereas a
- * step giving way to another says something is.
+ * The opener as the model sees it. Seeding the conversation with it means
+ * the model knows what it has already told the merchant, so "change that"
+ * has something to refer to.
+ */
+const OPENER: SiteChatUIMessage[] = SCRIPT.map((line, index) => ({
+  id: `script-${index}`,
+  role: "assistant",
+  parts: [{ type: "text", text: line.text }],
+}))
+
+/**
+ * What the agent is doing while the merchant waits. Two lines rather than one
+ * spinner: the first covers the round trip to the model, the second the
+ * moment its tool call lands and the preview redraws.
  */
 const WORKING = ["Reading the site chat settings", "Updating the launcher"]
-const WORKING_MS = 900
-
-/** Nothing is wired to a model, so the answer is the same one every time. */
-const REPLY = "How's this?"
 
 /**
  * The right half: the merchant changes the surface by asking, and the preview
@@ -100,7 +117,7 @@ export function CustomisePane({
           showing === "chat" ? "flex" : "hidden",
         )}
       >
-        <CustomiseChat />
+        <CustomiseChat settings={settings} onChange={onChange} />
       </div>
       <div
         className={cn(
@@ -114,62 +131,94 @@ export function CustomisePane({
   )
 }
 
-function CustomiseChat() {
-  const [turns, setTurns] = React.useState<Turn[]>([])
+/**
+ * The model does the editing through a tool call. The settings live in this
+ * browser, not on the server, so the call comes back here to be applied and
+ * its result is posted back so the model can say how it looks.
+ */
+function CustomiseChat({
+  settings,
+  onChange,
+}: {
+  settings: SiteChatSettings
+  onChange: (next: SiteChatSettings) => void
+}) {
   const [draft, setDraft] = React.useState("")
-  /** Index into `WORKING`, or -1 when the agent is not pretending to work. */
-  const [working, setWorking] = React.useState(-1)
-  const timers = React.useRef<number[]>([])
+  /** How many of the scripted opener's lines have landed. */
+  const [revealed, setRevealed] = React.useState(0)
 
+  // The tool call reads whatever the settings are when it lands, not what
+  // they were when the hook was set up: the merchant may have used the
+  // options form in between.
+  const latest = React.useRef({ settings, onChange })
   React.useEffect(() => {
-    const scheduled = timers.current
-    let elapsed = 0
+    latest.current = { settings, onChange }
+  }, [settings, onChange])
 
-    SCRIPT.forEach((line, index) => {
-      elapsed += line.after
-      scheduled.push(
-        window.setTimeout(() => {
-          setTurns((current) => [
-            ...current,
-            { id: `script-${index}`, from: "agent", text: line.text },
-          ])
-        }, elapsed),
-      )
+  const transport = React.useMemo(
+    () => new DefaultChatTransport({ api: "/api/admin/site-chat" }),
+    [],
+  )
+  const { messages, status, error, sendMessage, addToolOutput } =
+    useChat<SiteChatUIMessage>({
+      transport,
+      messages: OPENER,
+      sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+      onToolCall: ({ toolCall }) => {
+        if (toolCall.dynamic || toolCall.toolName !== "updateSiteChat") return
+        const next = applySiteChatPatch(latest.current.settings, toolCall.input)
+        latest.current.onChange(next)
+        addToolOutput({
+          tool: "updateSiteChat",
+          toolCallId: toolCall.toolCallId,
+          output: { applied: toolCall.input },
+        })
+      },
     })
 
-    return () => {
-      scheduled.forEach(window.clearTimeout)
-      scheduled.length = 0
-    }
+  React.useEffect(() => {
+    const timers: number[] = []
+    let elapsed = 0
+    SCRIPT.forEach((line, index) => {
+      elapsed += line.after
+      timers.push(window.setTimeout(() => setRevealed(index + 1), elapsed))
+    })
+    return () => timers.forEach(window.clearTimeout)
   }, [])
+
+  const busy = status === "submitted" || status === "streaming"
+
+  // One bubble per message with something to say. A step that was only a
+  // tool call has no text and draws nothing; the shimmer stands in for it.
+  const turns: Turn[] = []
+  messages.forEach((message, index) => {
+    if (index < SCRIPT.length && index >= revealed) return
+    const text = message.parts
+      .filter((part) => part.type === "text")
+      .map((part) => part.text)
+      .join("")
+    if (!text) return
+    turns.push({
+      id: message.id,
+      from: message.role === "user" ? "merchant" : "agent",
+      text,
+    })
+  })
+
+  const last = messages.at(-1)
+  const lastHasText =
+    last?.role === "assistant" &&
+    last.parts.some((part) => part.type === "text" && part.text.length > 0)
+  const lastHasTool =
+    last?.role === "assistant" &&
+    last.parts.some((part) => part.type === "tool-updateSiteChat")
+  const working = busy && !lastHasText ? (lastHasTool ? 1 : 0) : -1
 
   const send = () => {
     const text = draft.trim()
-    if (!text || working >= 0) return
-
+    if (!text || busy) return
     setDraft("")
-    setTurns((current) => [
-      ...current,
-      { id: `sent-${current.length}`, from: "merchant", text },
-    ])
-    setWorking(0)
-
-    WORKING.forEach((_, index) => {
-      if (index === 0) return
-      timers.current.push(
-        window.setTimeout(() => setWorking(index), WORKING_MS * index),
-      )
-    })
-
-    timers.current.push(
-      window.setTimeout(() => {
-        setWorking(-1)
-        setTurns((current) => [
-          ...current,
-          { id: `reply-${current.length}`, from: "agent", text: REPLY },
-        ])
-      }, WORKING_MS * WORKING.length),
-    )
+    void sendMessage({ text }, { body: { settings: latest.current.settings } })
   }
 
   return (
@@ -199,7 +248,9 @@ function CustomiseChat() {
                             turn.from === "merchant" ? "default" : "muted"
                           }
                         >
-                          <BubbleContent>{turn.text}</BubbleContent>
+                          <BubbleContent className="whitespace-pre-wrap">
+                            {turn.text}
+                          </BubbleContent>
                         </Bubble>
                       </MessageContent>
                     </Message>
@@ -215,6 +266,20 @@ function CustomiseChat() {
                     <Bubble variant="ghost">
                       <BubbleContent className="shimmer text-muted-foreground">
                         {WORKING[working]}
+                      </BubbleContent>
+                    </Bubble>
+                  </MessageContent>
+                </Message>
+              </MessageScrollerItem>
+            ) : null}
+
+            {error ? (
+              <MessageScrollerItem>
+                <Message>
+                  <MessageContent>
+                    <Bubble variant="muted">
+                      <BubbleContent className="text-destructive">
+                        {error.message}
                       </BubbleContent>
                     </Bubble>
                   </MessageContent>
@@ -261,7 +326,7 @@ function CustomiseChat() {
               type="submit"
               variant="default"
               size="icon-sm"
-              disabled={draft.trim().length === 0 || working >= 0}
+              disabled={draft.trim().length === 0 || busy}
               className="ml-auto"
             >
               <ArrowUpIcon />

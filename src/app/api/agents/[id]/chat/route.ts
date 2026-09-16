@@ -43,6 +43,12 @@ export async function POST(
   })
 
   return createUIMessageStreamResponse({
-    stream: toUIMessageStream({ stream: result.stream }),
+    stream: toUIMessageStream({
+      stream: result.stream,
+      // Demo app: the gateway's own message (missing key, unknown model)
+      // is more useful in the widget than a blank "An error occurred".
+      onError: (error) =>
+        error instanceof Error ? error.message : String(error),
+    }),
   })
 }

@@ -94,7 +94,7 @@ function Studio({ config }: { config: AgentConfig }) {
         <ResizablePanelGroup orientation="horizontal">
           <ResizablePanel defaultSize="62" minSize="35" className="pr-4">
             {surface === "site-chat" ? (
-              <SiteChatPreview settings={settings} />
+              <SiteChatPreview agent={config} settings={settings} />
             ) : (
               <NotBuiltYet />
             )}
