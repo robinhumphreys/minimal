@@ -41,6 +41,18 @@
   --text-noord-title--letter-spacing: -0.01em;
   --text-noord-title--font-weight: 500;
 
+  /* The menu list. Large enough to be the page, tight enough to fit eight
+     categories plus a service group on the shortest phone. */
+  --text-noord-nav: clamp(1.625rem, 7vw, 2rem);
+  --text-noord-nav--line-height: 1.25;
+  --text-noord-nav--letter-spacing: -0.02em;
+  --text-noord-nav--font-weight: 500;
+
+  --text-noord-nav-sub: clamp(1rem, 4vw, 1.125rem);
+  --text-noord-nav-sub--line-height: 1.35;
+  --text-noord-nav-sub--letter-spacing: -0.01em;
+  --text-noord-nav-sub--font-weight: 500;
+
   --text-noord-section: clamp(1.375rem, 5vw, 1.875rem);
   --text-noord-section--line-height: 1.1;
   --text-noord-section--letter-spacing: -0.02em;

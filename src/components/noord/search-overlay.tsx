@@ -1,60 +1,60 @@
 "use client"
 
 import * as React from "react"
-import Image from "next/image"
 import Link from "next/link"
-import { SearchIcon } from "lucide-react"
+import { ChevronLeftIcon, XIcon } from "lucide-react"
 
-import { Input } from "@/components/noord/ui/input"
 import {
   Sheet,
   SheetBody,
   SheetContent,
-  SheetHeader,
   SheetTitle,
 } from "@/components/noord/ui/sheet"
-import { formatPrice } from "@/lib/noord/format"
 import { useOverlays } from "@/lib/noord/overlays"
-import type { NavCategory, SearchEntry } from "@/lib/noord/types"
+import type { SearchEntry } from "@/lib/noord/types"
 
-const POPULAR = ["Navy suit", "Wool overcoat", "White shirt", "Loafers", "Linen"]
+/** Terms chosen so every one of them returns something from the catalog. */
+const POPULAR = [
+  "Havana suit",
+  "Wool overcoat",
+  "White shirt",
+  "Navy cardigan",
+  "Black loafers",
+]
+
 const MAX_RESULTS = 8
 
 /**
- * Full-screen search. Matching runs over a pre-lowercased haystack built on the
- * server, so a 90-product catalog filters synchronously on every keystroke
- * without a debounce.
+ * Full-screen search: a heading, one input, and a list of names.
+ *
+ * Suggestions are text only — no thumbnail, no price, no category. A shopper
+ * mid-keystroke is scanning for a word, and a column of 64px photographs slows
+ * that scan down rather than speeding it up. Matching runs over a pre-lowercased
+ * haystack built on the server, so the catalog filters synchronously on every
+ * keystroke without a debounce.
  */
-export function SearchOverlay({
-  index,
-  categories,
-}: {
-  index: SearchEntry[]
-  categories: NavCategory[]
-}) {
+export function SearchOverlay({ index }: { index: SearchEntry[] }) {
   const open = useOverlays((state) => state.open) === "search"
+  const from = useOverlays((state) => state.from)
   const toggle = useOverlays((state) => state.toggle)
+  const back = useOverlays((state) => state.back)
   const close = useOverlays((state) => state.close)
 
   const [query, setQuery] = React.useState("")
   const trimmed = query.trim().toLowerCase()
+  const terms = React.useMemo(
+    () => (trimmed.length < 2 ? [] : trimmed.split(/\s+/)),
+    [trimmed],
+  )
 
   const results = React.useMemo(() => {
-    if (trimmed.length < 2) return []
-    const terms = trimmed.split(/\s+/)
+    if (terms.length === 0) return []
     return index
       .filter((entry) => terms.every((term) => entry.haystack.includes(term)))
       .slice(0, MAX_RESULTS)
-  }, [index, trimmed])
+  }, [index, terms])
 
-  const categoryHits = React.useMemo(() => {
-    if (trimmed.length < 2) return []
-    return categories.filter((category) =>
-      category.label.toLowerCase().includes(trimmed),
-    )
-  }, [categories, trimmed])
-
-  const searching = trimmed.length >= 2
+  const searching = terms.length > 0
 
   return (
     <Sheet
@@ -65,124 +65,138 @@ export function SearchOverlay({
         toggle("search", next)
       }}
     >
-      <SheetContent side="full">
-        <SheetHeader>
-          <SheetTitle className="sr-only">Search</SheetTitle>
-          <span className="text-noord-micro text-noord-ink-faint uppercase">
-            Search
-          </span>
-        </SheetHeader>
+      <SheetContent side="full" showCloseButton={false}>
+        <SheetTitle className="sr-only">Search</SheetTitle>
+
+        <div className="noord-gutter flex h-noord-header shrink-0 items-center justify-between">
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("")
+              back()
+            }}
+            aria-label={from === "nav" ? "Back to menu" : "Close search"}
+            className="-ml-2 flex size-10 items-center justify-center text-noord-ink transition-colors hover:text-noord-ink-muted"
+          >
+            <ChevronLeftIcon className="size-5" strokeWidth={1.5} />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("")
+              close()
+            }}
+            aria-label="Close search"
+            className="-mr-2 flex size-10 items-center justify-center text-noord-ink transition-colors hover:text-noord-ink-muted"
+          >
+            <XIcon className="size-5" strokeWidth={1.5} />
+          </button>
+        </div>
 
         <SheetBody>
-          <div className="noord-gutter mx-auto w-full max-w-3xl pb-16">
-            <div className="relative flex items-center gap-3 pt-6">
-              <SearchIcon
-                className="size-5 shrink-0 text-noord-ink-faint"
-                strokeWidth={1.5}
-              />
-              <Input
+          <div className="noord-gutter mx-auto w-full max-w-2xl pb-16">
+            <h2 className="pt-2 pb-5 text-noord-section">Search</h2>
+
+            <div className="relative">
+              <input
                 // Autofocus is right here: the overlay exists only to be typed in.
                 autoFocus
+                type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="What are you looking for?"
+                placeholder="Search for suits, coats, etc."
                 aria-label="Search products"
-                className="h-14"
+                className="h-12 w-full border border-noord-line bg-transparent pr-11 pl-4 font-noord text-noord-lead text-noord-ink transition-colors outline-none placeholder:text-noord-ink-faint focus:border-noord-ink [&::-webkit-search-cancel-button]:hidden"
               />
+              {query.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-noord-ink-muted transition-colors hover:text-noord-ink"
+                >
+                  <XIcon className="size-4" strokeWidth={1.5} />
+                </button>
+              )}
             </div>
 
+            <h3 className="pt-6 pb-1 text-noord-body text-noord-ink-faint">
+              {!searching
+                ? "Popular searches"
+                : results.length > 0
+                  ? "Products"
+                  : "No products found"}
+            </h3>
+
             {!searching && (
-              <section className="pt-10">
-                <h2 className="mb-4 text-noord-micro text-noord-ink-faint uppercase">
-                  Popular searches
-                </h2>
-                <ul className="flex flex-wrap gap-2">
-                  {POPULAR.map((term) => (
-                    <li key={term}>
-                      <button
-                        type="button"
-                        onClick={() => setQuery(term)}
-                        className="border border-noord-line px-3 py-2 text-noord-body text-noord-ink transition-colors hover:border-noord-ink"
-                      >
-                        {term}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+              <ul className="flex flex-col">
+                {POPULAR.map((term) => (
+                  <li key={term}>
+                    <button
+                      type="button"
+                      onClick={() => setQuery(term)}
+                      className="block w-full py-2.5 text-left text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
+                    >
+                      {term}
+                    </button>
+                  </li>
+                ))}
+              </ul>
             )}
 
-            {searching && categoryHits.length > 0 && (
-              <section className="pt-8">
-                <h2 className="mb-3 text-noord-micro text-noord-ink-faint uppercase">
-                  Categories
-                </h2>
-                <ul className="flex flex-wrap gap-2">
-                  {categoryHits.map((category) => (
-                    <li key={category.href + category.label}>
+            {searching &&
+              (results.length === 0 ? (
+                <p className="py-2.5 text-noord-lead text-noord-ink-muted">
+                  Nothing matches “{query.trim()}”. Try a fabric, a colour or a
+                  category.
+                </p>
+              ) : (
+                <ul className="flex flex-col">
+                  {results.map((entry) => (
+                    <li key={entry.slug}>
                       <Link
-                        href={category.href}
-                        onClick={close}
-                        className="border border-noord-line px-3 py-2 text-noord-body text-noord-ink transition-colors hover:border-noord-ink"
+                        href={entry.href}
+                        onClick={() => {
+                          setQuery("")
+                          close()
+                        }}
+                        className="block py-2.5 text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
                       >
-                        {category.label}
+                        <Highlight text={entry.name} terms={terms} />
                       </Link>
                     </li>
                   ))}
                 </ul>
-              </section>
-            )}
-
-            {searching && (
-              <section className="pt-8">
-                <h2 className="mb-1 text-noord-micro text-noord-ink-faint uppercase">
-                  {results.length > 0 ? "Products" : "No products found"}
-                </h2>
-
-                {results.length === 0 ? (
-                  <p className="pt-3 text-noord-body text-noord-ink-muted">
-                    Nothing matches “{query.trim()}”. Try a fabric, a colour or a
-                    category.
-                  </p>
-                ) : (
-                  <ul className="divide-y divide-noord-line">
-                    {results.map((entry) => (
-                      <li key={entry.slug}>
-                        <Link
-                          href={entry.href}
-                          onClick={close}
-                          className="group flex items-center gap-4 py-3"
-                        >
-                          <div className="relative size-16 shrink-0 overflow-hidden bg-noord-wash">
-                            <Image
-                              src={entry.image}
-                              alt=""
-                              fill
-                              sizes="4rem"
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <span className="text-noord-micro text-noord-ink-faint uppercase">
-                              {entry.categoryName}
-                            </span>
-                            <span className="truncate text-noord-body text-noord-ink group-hover:underline">
-                              {entry.name}
-                            </span>
-                          </div>
-                          <span className="shrink-0 text-noord-body tabular-nums">
-                            {formatPrice(entry.price)}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </section>
-            )}
+              ))}
           </div>
         </SheetBody>
       </SheetContent>
     </Sheet>
   )
+}
+
+/** Bolds the matched words, so the reason a row is in the list is visible. */
+function Highlight({ text, terms }: { text: string; terms: string[] }) {
+  if (terms.length === 0) return <>{text}</>
+
+  const pattern = new RegExp(`(${terms.map(escapeRegExp).join("|")})`, "ig")
+  const lowered = terms.map((term) => term.toLowerCase())
+
+  return (
+    <>
+      {text.split(pattern).map((part, index) =>
+        lowered.includes(part.toLowerCase()) ? (
+          <strong key={index} className="font-semibold">
+            {part}
+          </strong>
+        ) : (
+          <React.Fragment key={index}>{part}</React.Fragment>
+        ),
+      )}
+    </>
+  )
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }

@@ -30,7 +30,7 @@ export type SearchEntry = ProductCardModel & {
   haystack: string
 }
 
-/** The facets a category page can filter on, and that the nav links into. */
+/** The facets a category page can filter on, and that collections link into. */
 export type FacetKey = "fit" | "fabric" | "colour"
 
 export type NavLink = {
@@ -38,32 +38,25 @@ export type NavLink = {
   href: string
 }
 
-/** One column of links inside a desktop nav panel. */
-export type NavColumn = {
-  title: string
-  links: NavLink[]
-}
+export type NavCategory = NavLink
 
-/** The image card pinned to the right of a desktop nav panel. */
-export type NavPromo = {
-  image: string
-  eyebrow: string
-  title: string
+/**
+ * A sub-collection tile at the head of a category page: one value of that
+ * category's dominant facet, with a product shot to stand for it.
+ */
+export type Collection = {
+  label: string
   href: string
-}
-
-export type NavCategory = NavLink & {
-  /** Populated from catalog attributes; empty when a category has no facets. */
-  columns: NavColumn[]
-  promo?: NavPromo
+  image: string
 }
 
 export type NavModel = {
+  /** Desktop category bar, and the search overlay's category matches. */
   categories: NavCategory[]
-  explore: NavLink[]
-  service: NavLink[]
+  /** The large type in the mobile menu: new arrivals, then the categories. */
+  menu: NavLink[]
+  /** The smaller group below it — service, not merchandise. */
+  secondary: NavLink[]
   /** Compact links in the top-left of the desktop header. */
   utility: NavLink[]
-  /** Two promo tiles pinned to the bottom of the mobile nav overlay. */
-  featured: ProductCardModel[]
 }

@@ -40,8 +40,7 @@ export function ProductPage({ slug }: { slug: string }) {
   )
 
   return (
-    // Bottom padding clears the add-to-bag bar, which is fixed on a phone.
-    <div className="pb-24 lg:pb-0">
+    <div>
       <div className="lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-10 xl:gap-16">
         <ProductGallery images={product.images} alt={product.name} />
 

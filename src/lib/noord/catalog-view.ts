@@ -7,10 +7,9 @@ import {
 } from "@/lib/catalog"
 
 import type {
+  Collection,
   FacetKey,
-  NavColumn,
   NavModel,
-  NavPromo,
   ProductCardModel,
   SearchEntry,
 } from "@/lib/noord/types"
@@ -25,7 +24,7 @@ export function categoryHref(slug: string) {
   return `/${BRAND}/${slug}`
 }
 
-/** A category page pre-filtered to one facet value — what the nav links to. */
+/** A category page pre-filtered to one facet value. */
 export function facetHref(category: string, facet: FacetKey, value: string) {
   return `${categoryHref(category)}?${facet}=${encodeURIComponent(value)}`
 }
@@ -67,23 +66,11 @@ export function searchIndex(): SearchEntry[] {
   return getCatalog(BRAND).products.map(toSearchEntry)
 }
 
-/**
- * Editorial links the catalog does not model. They point at real category
- * pages so nothing in the demo dead-ends.
- */
-const EXPLORE = [
-  { label: "New arrivals", href: categoryHref("suits") },
-  { label: "The tailoring guide", href: categoryHref("jackets") },
-  { label: "Perennial collection", href: categoryHref("suits") },
-  { label: "Gifting", href: categoryHref("accessories") },
-]
-
-const SERVICE = [
+const SECONDARY = [
+  { label: "Stores", href: `/${BRAND}` },
   { label: "Book an appointment", href: `/${BRAND}` },
-  { label: "Find a store", href: `/${BRAND}` },
-  { label: "Alterations", href: `/${BRAND}` },
-  { label: "Shipping & returns", href: `/${BRAND}` },
-  { label: "Contact us", href: `/${BRAND}` },
+  { label: "Gift cards", href: `/${BRAND}` },
+  { label: "Help", href: `/${BRAND}` },
 ]
 
 const UTILITY = [
@@ -92,84 +79,50 @@ const UTILITY = [
   { label: "Help", href: `/${BRAND}` },
 ]
 
-/** Editorial shots the nav panels borrow, one per category, in order. */
-const PANEL_IMAGES = [
-  "/noord/editorial/rail-glass.jpg",
-  "/noord/editorial/street-brown.jpg",
-  "/noord/editorial/detail-cuff.jpg",
-  "/noord/editorial/steps-grey.jpg",
-  "/noord/editorial/store-interior.jpg",
-  "/noord/editorial/shopfront.jpg",
-]
-
-const FACET_TITLES: Record<FacetKey, string> = {
-  fit: "Shop by fit",
-  fabric: "Shop by fabric",
-  colour: "Shop by colour",
-}
-
-/** Distinct values of one attribute, most common first, capped for the panel. */
-function facetColumn(
-  categorySlug: string,
-  products: Product[],
-  facet: FacetKey,
-  limit = 6,
-): NavColumn | null {
-  const counts = new Map<string, number>()
-  for (const product of products) {
-    const value = product.attributes[facet]
-    if (value) counts.set(value, (counts.get(value) ?? 0) + 1)
-  }
-
-  // A column offering a single choice is not a choice.
-  if (counts.size < 2) return null
-
-  const links = [...counts.entries()]
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, limit)
-    .map(([value]) => ({
-      label: value,
-      href: facetHref(categorySlug, facet, value),
-    }))
-
-  return { title: FACET_TITLES[facet], links }
-}
-
 export function navModel(): NavModel {
-  const catalog = getCatalog(BRAND)
-
-  const categories = catalog.categories.map((category, index) => {
-    const products = getProductsInCategory(BRAND, category.slug)
-
-    const columns = (["fit", "fabric", "colour"] as FacetKey[])
-      .map((facet) => facetColumn(category.slug, products, facet))
-      .filter((column): column is NavColumn => column !== null)
-
-    const promo: NavPromo | undefined =
-      columns.length > 0
-        ? {
-            image: PANEL_IMAGES[index % PANEL_IMAGES.length],
-            eyebrow: "Autumn / Winter",
-            title: `All ${category.name.toLowerCase()}`,
-            href: categoryHref(category.slug),
-          }
-        : undefined
-
-    return {
-      label: category.name,
-      href: categoryHref(category.slug),
-      columns,
-      promo,
-    }
-  })
+  const categories = getCatalog(BRAND).categories.map((category) => ({
+    label: category.name,
+    href: categoryHref(category.slug),
+  }))
 
   return {
     categories,
-    explore: EXPLORE,
-    service: SERVICE,
+    // "New arrivals" sits with the categories rather than in a group of its
+    // own, the way a shopper thinks about it.
+    menu: [{ label: "New arrivals", href: categoryHref("suits") }, ...categories],
+    secondary: SECONDARY,
     utility: UTILITY,
-    featured: pickFeatured(2),
   }
+}
+
+/**
+ * Sub-collections for a category page, taken from whichever facet splits it
+ * most usefully. Fit first — it is how tailoring is actually shopped — then
+ * fabric, then colour. Returns nothing when the category has no real split.
+ */
+export function collectionsFor(categorySlug: string): Collection[] {
+  const products = getProductsInCategory(BRAND, categorySlug)
+
+  for (const facet of ["fit", "fabric", "colour"] as FacetKey[]) {
+    const byValue = new Map<string, Product[]>()
+    for (const product of products) {
+      const value = product.attributes[facet]
+      if (!value) continue
+      byValue.set(value, [...(byValue.get(value) ?? []), product])
+    }
+
+    // One tile is not a collection, and a facet that splits every product into
+    // its own bucket is a spec, not a collection.
+    if (byValue.size < 2 || byValue.size > 6) continue
+
+    return [...byValue.entries()].map(([value, matches]) => ({
+      label: value,
+      href: facetHref(categorySlug, facet, value),
+      image: matches[0].images[0],
+    }))
+  }
+
+  return []
 }
 
 /**

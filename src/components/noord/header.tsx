@@ -8,15 +8,13 @@ import { bagCount, useBag } from "@/lib/noord/bag"
 import { useOverlays } from "@/lib/noord/overlays"
 import type { NavModel } from "@/lib/noord/types"
 
-import { DesktopNav } from "./desktop-nav"
 import { Wordmark } from "./wordmark"
 
 /**
  * Sticky header with two distinct layouts.
  *
  * Below `lg` it is the phone bar: hamburger, wordmark, search, bag. From `lg`
- * up the hamburger is gone entirely and the categories live inline, each with
- * its own drop-down panel — see `DesktopNav`.
+ * up the hamburger is gone entirely and the categories live inline.
  */
 export function Header({ nav }: { nav: NavModel }) {
   const show = useOverlays((state) => state.show)
@@ -82,9 +80,25 @@ export function Header({ nav }: { nav: NavModel }) {
         </div>
       </div>
 
-      <div className="hidden border-t border-noord-line lg:block">
-        <DesktopNav categories={nav.categories} />
-      </div>
+      <nav
+        aria-label="Categories"
+        className="hidden border-t border-noord-line lg:block"
+      >
+        <ul className="noord-gutter flex items-center justify-center gap-7 xl:gap-9">
+          {nav.categories.map((category) => (
+            <li key={category.href + category.label}>
+              <Link
+                href={category.href}
+                // `-mb-px` drops the underline onto the header rule rather
+                // than leaving it floating a pixel above it.
+                className="-mb-px flex h-11 items-center border-b border-transparent text-noord-micro text-noord-ink uppercase transition-colors hover:border-noord-ink"
+              >
+                {category.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </header>
   )
 }

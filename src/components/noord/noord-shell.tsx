@@ -55,7 +55,7 @@ export function NoordShell({
       <Footer />
 
       <NavOverlay nav={nav} />
-      <SearchOverlay index={searchIndex} categories={nav.categories} />
+      <SearchOverlay index={searchIndex} />
       <BagOverlay />
     </div>
   )

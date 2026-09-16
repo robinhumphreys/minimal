@@ -21,8 +21,8 @@ type Sort = "featured" | "price-asc" | "price-desc"
 
 const SORTS: { value: Sort; label: string }[] = [
   { value: "featured", label: "Featured" },
-  { value: "price-asc", label: "Price ↑" },
-  { value: "price-desc", label: "Price ↓" },
+  { value: "price-asc", label: "Price, low to high" },
+  { value: "price-desc", label: "Price, high to low" },
 ]
 
 const FACETS: { key: FacetKey; title: string }[] = [
@@ -41,20 +41,28 @@ function valueOf(product: SearchEntry, facet: FacetKey) {
 }
 
 /**
- * The product grid plus its controls.
+ * The category heading and its product grid.
  *
- * Sorting and filtering are client-side over the category's products: the
+ * Filtering and sorting are client-side over the category's products: the
  * whole category arrives in one payload anyway, so a round trip per facet
- * would only add latency. The desktop nav links in with `?fit=…` and friends,
- * which seed the selection on arrival.
+ * would only add latency. Sort lives inside the filter sheet rather than in a
+ * bar of its own — one control above the grid, not three.
  */
-export function CategoryGrid({ products }: { products: SearchEntry[] }) {
+export function CategoryGrid({
+  products,
+  title,
+  description,
+}: {
+  products: SearchEntry[]
+  title: string
+  description: string
+}) {
   const searchParams = useSearchParams()
   const [sort, setSort] = React.useState<Sort>("featured")
   const [filtersOpen, setFiltersOpen] = React.useState(false)
 
-  // Derived, not stored: navigating from one nav panel link to another has to
-  // replace the selection, and holding it in state would strand the old one.
+  // Derived, not stored: moving between two collection links has to replace
+  // the selection, and holding it in state would strand the old one.
   const fromUrl = React.useMemo<Selection>(() => {
     const next = { ...EMPTY }
     for (const { key } of FACETS) next[key] = searchParams.getAll(key)
@@ -76,9 +84,9 @@ export function CategoryGrid({ products }: { products: SearchEntry[] }) {
 
   const facets = React.useMemo(
     () =>
-      FACETS.map(({ key, title }) => ({
+      FACETS.map(({ key, title: facetTitle }) => ({
         key,
-        title,
+        title: facetTitle,
         options: distinct(products.map((product) => valueOf(product, key))),
       })).filter((facet) => facet.options.length > 1),
     [products],
@@ -99,9 +107,8 @@ export function CategoryGrid({ products }: { products: SearchEntry[] }) {
     return [...filtered].sort((a, b) => (a.price - b.price) * direction)
   }, [products, selection, sort])
 
-  const activeCount = FACETS.reduce(
-    (total, { key }) => total + selection[key].length,
-    0,
+  const active = FACETS.flatMap(({ key }) =>
+    selection[key].map((value) => ({ key, value })),
   )
 
   function setFacet(facet: FacetKey, values: string[]) {
@@ -114,60 +121,52 @@ export function CategoryGrid({ products }: { products: SearchEntry[] }) {
 
   return (
     <>
-      <div className="noord-gutter sticky top-noord-header z-30 flex items-center justify-between gap-4 border-b border-noord-line bg-noord-paper/95 py-3 backdrop-blur-sm lg:top-[calc(3.5rem+2.75rem)]">
+      <div className="noord-gutter flex items-end justify-between gap-6 pt-8 pb-6 md:pt-10">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-noord-section">{title}</h1>
+          <p className="max-w-md text-noord-lead text-noord-ink-muted">
+            {description}
+          </p>
+        </div>
+
         <Button
           variant="quiet"
           size="sm"
           onClick={() => setFiltersOpen(true)}
-          className="border-0 px-0 hover:text-noord-ink-muted"
+          className="shrink-0 border-0 px-0 hover:text-noord-ink-muted"
         >
           <SlidersHorizontalIcon strokeWidth={1.5} />
           Filter
           {/* A dot, not a count — Noord shows no tallies. The active filters
               are spelled out in the chip row below anyway. */}
-          {activeCount > 0 && (
-            <span aria-hidden className="size-1 bg-noord-ink" />
+          {active.length > 0 && (
+            <>
+              <span aria-hidden className="size-1 bg-noord-ink" />
+              <span className="sr-only">, filters active</span>
+            </>
           )}
-          {activeCount > 0 && <span className="sr-only">, filters active</span>}
         </Button>
-
-        <label className="flex items-center gap-2">
-          <span className="sr-only">Sort by</span>
-          <select
-            value={sort}
-            onChange={(event) => setSort(event.target.value as Sort)}
-            className="cursor-pointer border-0 bg-transparent py-1 text-noord-micro text-noord-ink uppercase outline-none focus-visible:ring-1 focus-visible:ring-noord-ink"
-          >
-            {SORTS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
       </div>
 
-      {activeCount > 0 && (
-        <div className="noord-gutter flex flex-wrap items-center gap-2 pt-4">
-          {FACETS.flatMap(({ key }) =>
-            selection[key].map((value) => (
-              <button
-                key={`${key}:${value}`}
-                type="button"
-                onClick={() =>
-                  setFacet(
-                    key,
-                    selection[key].filter((entry) => entry !== value),
-                  )
-                }
-                className="flex items-center gap-2 border border-noord-line px-3 py-1.5 text-noord-micro text-noord-ink uppercase transition-colors hover:border-noord-ink"
-              >
-                {value}
-                <span aria-hidden>×</span>
-                <span className="sr-only">Remove filter</span>
-              </button>
-            )),
-          )}
+      {active.length > 0 && (
+        <div className="noord-gutter flex flex-wrap items-center gap-2 pb-6">
+          {active.map(({ key, value }) => (
+            <button
+              key={`${key}:${value}`}
+              type="button"
+              onClick={() =>
+                setFacet(
+                  key,
+                  selection[key].filter((entry) => entry !== value),
+                )
+              }
+              className="flex items-center gap-2 border border-noord-line px-3 py-1.5 text-noord-micro text-noord-ink uppercase transition-colors hover:border-noord-ink"
+            >
+              {value}
+              <span aria-hidden>×</span>
+              <span className="sr-only">Remove filter</span>
+            </button>
+          ))}
           <button
             type="button"
             onClick={clearAll}
@@ -186,12 +185,18 @@ export function CategoryGrid({ products }: { products: SearchEntry[] }) {
           </Button>
         </div>
       ) : (
-        <div className="noord-gutter grid grid-cols-2 gap-x-3 gap-y-10 py-8 md:grid-cols-3 md:gap-x-6 xl:grid-cols-4">
+        // One full-bleed column on a phone: a suit is judged on the cut, and
+        // half a phone width is not enough to see it. From `sm` the gutter
+        // comes back so the grid lines up with the heading. The paddings
+        // mirror `.noord-gutter`, which cannot be written as a `sm:` variant.
+        <div className="grid grid-cols-1 gap-y-10 pb-8 sm:grid-cols-2 sm:gap-x-3 sm:px-4 md:grid-cols-3 md:gap-x-6 md:px-8 xl:grid-cols-4 xl:px-12">
           {visible.map((product, index) => (
             <ProductCard
               key={product.slug}
               product={product}
-              priority={index < 4}
+              priority={index < 2}
+              bleed
+              sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, (min-width: 640px) 46vw, 100vw"
             />
           ))}
         </div>
@@ -204,6 +209,32 @@ export function CategoryGrid({ products }: { products: SearchEntry[] }) {
           </SheetHeader>
 
           <SheetBody className="noord-gutter flex flex-col gap-8 py-6">
+            <fieldset className="flex flex-col gap-3">
+              <legend className="mb-3 text-noord-micro text-noord-ink-faint uppercase">
+                Sort
+              </legend>
+              <ToggleGroup
+                value={[sort]}
+                onValueChange={(next) => {
+                  const [picked] = next as Sort[]
+                  // Base UI reports an empty array when the pressed item is
+                  // pressed again; a sort always has to be something.
+                  if (picked) setSort(picked)
+                }}
+                size="sm"
+              >
+                {SORTS.map((option) => (
+                  <ToggleGroupItem
+                    key={option.value}
+                    value={option.value}
+                    className="normal-case"
+                  >
+                    {option.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </fieldset>
+
             {facets.map((facet) => (
               <FacetGroup
                 key={facet.key}

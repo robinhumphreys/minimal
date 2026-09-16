@@ -89,12 +89,9 @@ export function AddToBag({
         </div>
       )}
 
-      {/* Pinned to the bottom of the viewport on a phone, inline on desktop. */}
-      <div className="fixed inset-x-0 bottom-noord-agent-bar z-30 border-t border-noord-line bg-noord-paper/95 p-3 backdrop-blur-sm lg:static lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
-        <Button size="block" onClick={onAdd}>
-          Add to bag
-        </Button>
-      </div>
+      <Button size="block" onClick={onAdd}>
+        Add to bag
+      </Button>
     </div>
   )
 }

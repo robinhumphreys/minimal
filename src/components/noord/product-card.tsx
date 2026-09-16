@@ -11,11 +11,14 @@ export function ProductCard({
   product,
   sizes = "(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw",
   priority = false,
+  bleed = false,
   className,
 }: {
   product: ProductCardModel
   sizes?: string
   priority?: boolean
+  /** Image runs edge to edge; only the text keeps the page gutter. */
+  bleed?: boolean
   className?: string
 }) {
   const onSale = product.compareAt !== undefined
@@ -41,7 +44,12 @@ export function ProductCard({
         )}
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div
+        className={cn(
+          "flex flex-col gap-1",
+          bleed && "noord-gutter sm:px-0",
+        )}
+      >
         <span className="text-noord-micro text-noord-ink-faint uppercase">
           {product.colour ?? product.categoryName}
         </span>
