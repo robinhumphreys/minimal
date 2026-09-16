@@ -67,15 +67,22 @@
   --tracking-noord-tight: -0.02em;
 
   /* --- Colour ----------------------------------------------------------- */
-  /* Greyscale only. Colour on a Noord page comes from the product photography. */
+  /*
+   * Greyscale only. Colour on a Noord page comes from the product photography.
+   *
+   * Neutral greys, not warm ones: the catalogue is shot on a flat #efefef
+   * sweep, so `wash` matches it exactly and a product image sits in its
+   * placeholder without a seam. A warm grey next to that grey reads as dirty.
+   */
   --color-noord-paper: #ffffff;
   --color-noord-ink: #131313;
   --color-noord-ink-muted: #6c6c6c;
   --color-noord-ink-faint: #9a9a9a;
-  --color-noord-line: #e5e5e3;
-  --color-noord-line-strong: #c4c4c1;
-  --color-noord-wash: #f4f4f2;
-  --color-noord-wash-deep: #eaeae7;
+  --color-noord-line: #e5e5e5;
+  --color-noord-line-strong: #c4c4c4;
+  /* The catalogue's sweep. Placeholders behind product shots spend this. */
+  --color-noord-wash: #efefef;
+  --color-noord-wash-deep: #e8e8e8;
   --color-noord-sale: #9a2117;
 
   /* --- Shape ------------------------------------------------------------ */
