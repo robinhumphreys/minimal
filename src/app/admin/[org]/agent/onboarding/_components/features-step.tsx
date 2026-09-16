@@ -30,7 +30,7 @@ const FEATURES: {
     key: "siteChat",
     title: "Site chat",
     description:
-      "A launcher on every page. Shoppers ask in their own words and get a short answer with products to tap.",
+      "A chat button on every page. Shoppers ask in their own words and get a short answer with products to tap.",
   },
   {
     key: "searchAssist",

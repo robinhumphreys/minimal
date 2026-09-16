@@ -12,12 +12,20 @@ import { DeviceToggle, PhoneFrame, type Device } from "./device-toggle"
 import { DotField, groundFor } from "./dot-field"
 
 /**
- * A search each shop can answer even before the model weighs in, so the
- * preview opens on a grid rather than on an empty state.
+ * Things a shopper might type, offered when the box is focused and empty.
+ * Each is one the shop can answer, so trying one lands on a result.
  */
-const DEMO_QUERY: Record<BrandId, string> = {
-  noord: "navy suit for a wedding",
-  volta: "protein for after a long run",
+const PROMPTS: Record<BrandId, string[]> = {
+  noord: [
+    "navy suit for a wedding",
+    "something warm for the office",
+    "a coat that works with a suit",
+  ],
+  volta: [
+    "protein for after a long run",
+    "something for a 5am session",
+    "what do I take on a rest day?",
+  ],
 }
 
 /**
@@ -41,7 +49,11 @@ export function SearchAssistPreview({
   device: Device
   onDeviceChange: (device: Device) => void
 }) {
-  const [query, setQuery] = React.useState(DEMO_QUERY[config.id])
+  // Empty until the merchant types: the preview is their search box as a
+  // shopper meets it, and a search box does not search by itself.
+  const [query, setQuery] = React.useState("")
+  const [focused, setFocused] = React.useState(false)
+  const prompts = focused && query.trim().length === 0 ? PROMPTS[config.id] : []
   const ink = readableOn(config.theme.surface)
   const ground = groundFor(config.theme.surface, ink)
   // On the studio's ground rather than on a sheet of its own: the panel
@@ -62,16 +74,38 @@ export function SearchAssistPreview({
   )
 
   const box = (
-    <label className="flex h-11 shrink-0 items-center gap-2 rounded-lg border border-current/20 px-3 text-sm">
-      <SearchIcon className="size-4 shrink-0 opacity-60" />
-      <input
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search"
-        aria-label="Search"
-        className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-current/50"
-      />
-    </label>
+    <div className="flex shrink-0 flex-col gap-2">
+      <label className="flex h-11 items-center gap-2 rounded-lg border border-current/20 px-3 text-sm focus-within:border-current/50">
+        <SearchIcon className="size-4 shrink-0 opacity-60" />
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          onFocus={() => setFocused(true)}
+          // A tap on a prompt below blurs the box first; give it the beat it
+          // needs to land before the prompts go.
+          onBlur={() => window.setTimeout(() => setFocused(false), 150)}
+          placeholder="Search"
+          aria-label="Search"
+          className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-current/50"
+        />
+      </label>
+      {prompts.length > 0 ? (
+        <ul className="flex flex-col">
+          {prompts.map((prompt) => (
+            <li key={prompt}>
+              <button
+                type="button"
+                onClick={() => setQuery(prompt)}
+                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm opacity-70 hover:bg-current/5 hover:opacity-100"
+              >
+                <SearchIcon className="size-3.5 shrink-0" />
+                {prompt}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   )
 
   return (

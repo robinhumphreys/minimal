@@ -61,7 +61,7 @@ export function agentInstructionsFor(config: AgentConfig): string {
   }
   lines.push(
     "",
-    `${config.surface.searchAssist ? "3" : "2"}. Verify: open the site, confirm the chat launcher appears bottom ${(config.surface.position ?? "bottom-right").replace("bottom-", "")}, and that no console errors mention [minimal-agent].`,
+    `${config.surface.searchAssist ? "3" : "2"}. Verify: open the site, confirm the chat button appears bottom ${(config.surface.position ?? "bottom-right").replace("bottom-", "")}, and that no console errors mention [minimal-agent].`,
     "",
     "Do not change the site's own styles for the agent; it carries its own.",
   )

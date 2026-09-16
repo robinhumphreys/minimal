@@ -72,7 +72,7 @@ type Turn = { id: string; from: "agent" | "merchant"; text: string }
  */
 const SCRIPT: { text: string; after: number }[] = [
   {
-    text: "I matched the launcher to your site — your accent, your corner radius, bottom right where your live chat used to sit.",
+    text: "I matched the chat button to your site — your accent, your corner radius, bottom right where your live chat used to sit.",
     after: 500,
   },
   {
@@ -97,7 +97,7 @@ const OPENER: SiteChatUIMessage[] = SCRIPT.map((line, index) => ({
  * spinner: the first covers the round trip to the model, the second the
  * moment its tool call lands and the preview redraws.
  */
-const WORKING = ["Reading the site chat settings", "Updating the launcher"]
+const WORKING = ["Reading the site chat settings", "Updating the chat button"]
 
 /**
  * The right half: the merchant changes the surface by asking, and the preview

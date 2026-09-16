@@ -67,15 +67,15 @@ export const siteChatPatchSchema = z.object({
     .describe(
       "The language the agent falls back to, e.g. 'English' or 'Dutch'.",
     ),
-  placement: positionSchema.optional().describe("Where the launcher sits."),
+  placement: positionSchema.optional().describe("Where the chat button sits."),
   shape: launcherShapeSchema
     .optional()
     .describe(
-      "The launcher's shape: circle, square (follows the roundness), or pill (always labelled).",
+      "The chat button's shape: circle, square (follows the roundness), or pill (always labelled).",
     ),
   size: launcherSizeSchema
     .optional()
-    .describe("The launcher's size: sm, md or lg."),
+    .describe("The chat button's size: sm, md or lg."),
   icon: launcherIconSchema.optional().describe("The launcher's glyph."),
   iconStyle: iconStyleSchema.optional().describe("Filled or outlined glyph."),
   label: z
@@ -130,7 +130,7 @@ export const siteChatPatchSchema = z.object({
     .max(120)
     .optional()
     .describe(
-      "Seconds before the greeting pops up beside the closed launcher. 0 switches it off.",
+      "Seconds before the greeting pops up beside the closed chat button. 0 switches it off.",
     ),
   openOnProductPages: z
     .boolean()
@@ -140,7 +140,7 @@ export const siteChatPatchSchema = z.object({
     .array(z.string().min(1))
     .optional()
     .describe(
-      "Path prefixes the launcher stays off, e.g. ['/checkout']. Replaces the list.",
+      "Path prefixes the chat button stays off, e.g. ['/checkout']. Replaces the list.",
     ),
   searchAssist: z
     .boolean()
@@ -151,7 +151,7 @@ export const siteChatPatchSchema = z.object({
   siteChat: z
     .boolean()
     .optional()
-    .describe("Whether the chat launcher is on the site at all."),
+    .describe("Whether the chat button is on the site at all."),
 })
 
 export type SiteChatPatch = z.infer<typeof siteChatPatchSchema>
