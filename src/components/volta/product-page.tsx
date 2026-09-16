@@ -84,25 +84,13 @@ export async function ProductPage({
           </ol>
         </nav>
 
-        <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
-          {/*
-            One image, no carousel. Volta shoots every product the same way —
-            tub front-on, nothing to rotate through — so a gallery would be an
-            affordance with nothing behind it.
-          */}
-          <div className="lg:w-[55%]">
-            <div className="relative aspect-square rounded-volta bg-white">
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                preload
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-contain p-6 md:p-10"
-              />
-            </div>
-          </div>
-
+        {/*
+          Detail column first, image second: on desktop the name, rating, price
+          and buy button sit on the left, where the eye lands. `flex-col-reverse`
+          puts the image back on top of the stack on a phone, where a tub you
+          have not seen yet is worth more than a heading you are about to read.
+        */}
+        <div className="flex flex-col-reverse gap-8 lg:flex-row lg:gap-12">
           <div className="flex flex-col gap-6 lg:flex-1 lg:pt-2">
             <div className="flex flex-col gap-3">
               <h1 className="volta-display text-volta-heading text-volta-chalk">
@@ -214,6 +202,24 @@ export async function ProductPage({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+          </div>
+
+          {/*
+            One image, no carousel. Volta shoots every product the same way —
+            tub front-on, nothing to rotate through — so a gallery would be an
+            affordance with nothing behind it.
+          */}
+          <div className="lg:w-[55%]">
+            <div className="relative aspect-square rounded-volta bg-white">
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                fill
+                preload
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-contain p-6 md:p-10"
+              />
+            </div>
           </div>
         </div>
       </div>
