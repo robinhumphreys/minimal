@@ -1,6 +1,7 @@
 import { catalogAsText, type BrandId } from "@/lib/catalog"
 import type { Behaviour } from "@/lib/config/schema"
 
+import { pageLine } from "./page"
 import { voiceLines } from "./voice"
 
 /**
@@ -19,10 +20,15 @@ How to work:
 - If nothing in the catalog fits, say so plainly in one sentence, then offer the nearest thing you do have, or ask what they would trade off. Do not pretend a poor fit is a good one.
 - If the shopper changes their mind or adds a constraint, drop what no longer fits without comment and recommend afresh.
 - You can see the shopper's cart by calling viewCart. Do so when they ask about it, or when what they already have should shape a recommendation: something to go with it, or to avoid suggesting what is already there. Not on every turn, and never guess at its contents. If it reports the cart as unavailable, say you cannot see it from here. You cannot change the cart; if asked to, point them to the product's own page.
-- You do not know stock levels, delivery times or anything outside the catalog and the cart. Say so briefly if asked, and offer to help choose instead.
+- You do not know stock levels, delivery times or anything outside the catalog, the cart and the page the shopper is on. Say so briefly if asked, and offer to help choose instead.
 `.trim()
 
-export function instructionsFor(brand: BrandId, behaviour: Behaviour): string {
+export function instructionsFor(
+  brand: BrandId,
+  behaviour: Behaviour,
+  page?: string,
+): string {
+  const where = pageLine(brand, page)
   return [
     behaviour.systemPrompt,
     "",
@@ -30,6 +36,7 @@ export function instructionsFor(brand: BrandId, behaviour: Behaviour): string {
     "",
     voiceLines(behaviour),
     "",
+    ...(where ? [where, ""] : []),
     "Catalog (slug | name | price | category | attributes | tags | description):",
     catalogAsText(brand),
   ].join("\n")

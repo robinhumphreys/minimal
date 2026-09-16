@@ -11,6 +11,7 @@ import {
   SheetTitle,
 } from "@/components/noord/ui/sheet"
 import { useOverlays } from "@/lib/noord/overlays"
+import { useSearchUrl } from "@/lib/search-url"
 import type { SearchEntry } from "@/lib/noord/types"
 
 /** Terms chosen so every one of them returns something from the catalog. */
@@ -39,17 +40,41 @@ const MIN_QUERY = 2
  * below, the agent answers under it, and this sheet's own input and list —
  * everything marked `data-native-search` — step aside for the answer, so the
  * words the shopper typed become the first bubble and the agent's composer is
- * the one input on screen. "New search" brings the box back.
+ * the one input on screen. Back or close resets it.
+ *
+ * The sheet has a URL, `/noord/search?q=…`; see `useSearchUrl`.
  */
 export function SearchOverlay({ index }: { index: SearchEntry[] }) {
   const open = useOverlays((state) => state.open) === "search"
   const from = useOverlays((state) => state.from)
+  const show = useOverlays((state) => state.show)
   const toggle = useOverlays((state) => state.toggle)
   const back = useOverlays((state) => state.back)
   const close = useOverlays((state) => state.close)
 
   const [query, setQuery] = React.useState("")
   const [submitted, setSubmitted] = React.useState("")
+
+  // Each opening starts from a clean slate rather than the last search, so
+  // every way out of the sheet clears it first.
+  const reset = () => {
+    setQuery("")
+    setSubmitted("")
+  }
+
+  const url = useSearchUrl({
+    brand: "noord",
+    open,
+    show: () => show("search"),
+    close: () => {
+      reset()
+      close()
+    },
+    onLanding: (landed) => {
+      setQuery(landed)
+      setSubmitted(landed.length < MIN_QUERY ? "" : landed)
+    },
+  })
   const trimmed = query.trim().toLowerCase()
   const terms = React.useMemo(
     () => (trimmed.length < MIN_QUERY ? [] : trimmed.split(/\s+/)),
@@ -70,18 +95,13 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
     if (next.length < MIN_QUERY) return
     setQuery(next)
     setSubmitted(next)
-  }
-
-  const reset = () => {
-    setQuery("")
-    setSubmitted("")
+    url.setQuery(next)
   }
 
   return (
     <Sheet
       open={open}
       onOpenChange={(next) => {
-        // Each opening starts from a clean slate rather than the last search.
         if (!next) reset()
         toggle("search", next)
       }}
@@ -101,28 +121,17 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
           >
             <ChevronLeftIcon className="size-5" strokeWidth={1.5} />
           </button>
-          <div className="flex items-center gap-4">
-            {submitted && (
-              <button
-                type="button"
-                onClick={reset}
-                className="text-noord-body text-noord-ink-muted transition-colors hover:text-noord-ink"
-              >
-                New search
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => {
-                reset()
-                close()
-              }}
-              aria-label="Close search"
-              className="-mr-2 flex size-10 items-center justify-center text-noord-ink transition-colors hover:text-noord-ink-muted"
-            >
-              <XIcon className="size-5" strokeWidth={1.5} />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              reset()
+              close()
+            }}
+            aria-label="Close search"
+            className="-mr-2 flex size-10 items-center justify-center text-noord-ink transition-colors hover:text-noord-ink-muted"
+          >
+            <XIcon className="size-5" strokeWidth={1.5} />
+          </button>
         </div>
 
         <SheetBody>
@@ -201,12 +210,10 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
                   <ul className="flex flex-col">
                     {results.map((entry) => (
                       <li key={entry.slug}>
+                        {/* No close here: the route change closes the
+                            sheet, so the page underneath does not flash. */}
                         <Link
                           href={entry.href}
-                          onClick={() => {
-                            reset()
-                            close()
-                          }}
                           className="block py-2.5 text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
                         >
                           <Highlight text={entry.name} terms={terms} />

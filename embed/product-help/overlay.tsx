@@ -77,8 +77,15 @@ export function GuideOverlay({
   )
   const behaviour = config.behaviour
   const productHelp = config.surface.productHelp
+  // The page is the one the guide opened on; a guide does not outlive it.
   const body = React.useMemo(
-    () => ({ behaviour, mode: "guide", topic, productHelp }),
+    () => ({
+      behaviour,
+      mode: "guide",
+      topic,
+      productHelp,
+      page: window.location.pathname,
+    }),
     [behaviour, topic, productHelp],
   )
   // Read when the cart tool answers, which is after the render the latest

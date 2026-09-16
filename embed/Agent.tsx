@@ -220,14 +220,20 @@ export function Agent({ config }: { config: AgentConfig }) {
     [config.id],
   )
   // Sent per request rather than per transport so edits in the admin preview
-  // take effect without tearing down the conversation.
+  // take effect without tearing down the conversation, and so the page is
+  // the one the shopper is on now: the conversation follows them across
+  // pages, and "this" means whatever is under the window at the time.
   const behaviour = config.behaviour
+  const requestBody = React.useCallback(
+    () => ({ behaviour, page: window.location.pathname }),
+    [behaviour],
+  )
   // Read when the cart tool answers, which is after the render the latest
   // behaviour arrived in, so an effect is early enough.
-  const bodyRef = React.useRef({ behaviour })
+  const bodyRef = React.useRef(requestBody)
   React.useEffect(() => {
-    bodyRef.current = { behaviour }
-  }, [behaviour])
+    bodyRef.current = requestBody
+  }, [requestBody])
 
   const {
     messages,
@@ -244,13 +250,13 @@ export function Agent({ config }: { config: AgentConfig }) {
     // The cart is read from the page, then the answer carries on by itself.
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
-      answerViewCart(toolCall, addToolOutput, bodyRef.current)
+      answerViewCart(toolCall, addToolOutput, bodyRef.current())
     },
   })
 
   const send = React.useCallback(
-    (text: string) => void sendMessage({ text }, { body: { behaviour } }),
-    [sendMessage, behaviour],
+    (text: string) => void sendMessage({ text }, { body: requestBody() }),
+    [sendMessage, requestBody],
   )
 
   const busy = status === "submitted" || status === "streaming"
@@ -270,7 +276,7 @@ export function Agent({ config }: { config: AgentConfig }) {
   React.useEffect(() => {
     if (!session.pending || resumed.current) return
     resumed.current = true
-    void regenerate({ body: { behaviour } })
+    void regenerate({ body: requestBody() })
     // Once, on mount: the session is read then, and nothing after changes it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -1,6 +1,7 @@
 import { catalogAsText, type BrandId } from "@/lib/catalog"
 import type { Behaviour, ProductHelp } from "@/lib/config/schema"
 
+import { pageLine } from "./page"
 import { voiceLines } from "./voice"
 
 /**
@@ -12,8 +13,10 @@ export function guideInstructionsFor(
   behaviour: Behaviour,
   productHelp: ProductHelp,
   topic: string,
+  page?: string,
 ): string {
   const picks = behaviour.picks
+  const where = pageLine(brand, page)
   return [
     behaviour.systemPrompt,
     "",
@@ -31,6 +34,7 @@ export function guideInstructionsFor(
     "",
     voiceLines(behaviour),
     "",
+    ...(where ? [where, ""] : []),
     "Catalog (slug | name | price | category | attributes | tags | description):",
     catalogAsText(brand),
   ].join("\n")

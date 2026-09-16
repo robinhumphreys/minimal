@@ -11,6 +11,7 @@ import {
 
 import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
+import { useSearchUrl } from "@/lib/search-url"
 import type { NavLink, SearchEntry } from "@/lib/volta/types"
 
 import { Input } from "@/components/volta/ui/input"
@@ -47,6 +48,8 @@ const MIN_QUERY = 2
  * everything marked `data-native-search` — step aside for the answer, so the
  * words the shopper typed become the first bubble and the agent's composer is
  * the one input on screen. "New search" brings the box back.
+ *
+ * The sheet has a URL, `/volta/search?q=…`; see `useSearchUrl`.
  */
 export function SearchOverlay({
   index,
@@ -56,11 +59,33 @@ export function SearchOverlay({
   categories: NavLink[]
 }) {
   const open = useOverlays((state) => state.open) === "search"
+  const show = useOverlays((state) => state.show)
   const toggle = useOverlays((state) => state.toggle)
   const close = useOverlays((state) => state.close)
 
   const [query, setQuery] = React.useState("")
   const [submitted, setSubmitted] = React.useState("")
+
+  // Each opening starts from a clean slate rather than the last search, so
+  // every way out of the sheet clears it first.
+  const reset = () => {
+    setQuery("")
+    setSubmitted("")
+  }
+
+  const url = useSearchUrl({
+    brand: "volta",
+    open,
+    show: () => show("search"),
+    close: () => {
+      reset()
+      close()
+    },
+    onLanding: (landed) => {
+      setQuery(landed)
+      setSubmitted(landed.length < MIN_QUERY ? "" : landed)
+    },
+  })
   const trimmed = query.trim().toLowerCase()
 
   const results = React.useMemo(() => {
@@ -85,18 +110,13 @@ export function SearchOverlay({
     if (next.length < MIN_QUERY) return
     setQuery(next)
     setSubmitted(next)
-  }
-
-  const reset = () => {
-    setQuery("")
-    setSubmitted("")
+    url.setQuery(next)
   }
 
   return (
     <Sheet
       open={open}
       onOpenChange={(next) => {
-        // Each opening starts from a clean slate rather than the last search.
         if (!next) reset()
         toggle("search", next)
       }}
@@ -110,7 +130,10 @@ export function SearchOverlay({
             {submitted && (
               <button
                 type="button"
-                onClick={reset}
+                onClick={() => {
+                  reset()
+                  url.setQuery("")
+                }}
                 className="volta-wide text-volta-micro text-volta-ash transition-colors hover:text-volta-chalk"
               >
                 New search
@@ -118,7 +141,10 @@ export function SearchOverlay({
             )}
             <button
               type="button"
-              onClick={close}
+              onClick={() => {
+                reset()
+                close()
+              }}
               aria-label="Close search"
               className="-mr-2 flex size-10 items-center justify-center rounded-volta text-volta-chalk transition-colors hover:text-volta-volt focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:outline-none"
             >

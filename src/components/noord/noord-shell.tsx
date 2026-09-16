@@ -8,6 +8,7 @@ import { useSearchAssist } from "@/lib/config/use-surface"
 import { bagCount, bagSubtotal, useBag } from "@/lib/noord/bag"
 import { formatPrice } from "@/lib/noord/format"
 import { useOverlays } from "@/lib/noord/overlays"
+import { searchPath } from "@/lib/search-url"
 import type { NavModel, SearchEntry } from "@/lib/noord/types"
 
 import { BagOverlay } from "./bag-overlay"
@@ -68,9 +69,10 @@ export function NoordShell({
   )
 
   // An overlay left open across a route change would cover the page the shopper
-  // just asked for.
+  // just asked for. The one exception is search, which writes its own route
+  // while it opens.
   React.useEffect(() => {
-    close()
+    if (pathname !== searchPath("noord")) close()
   }, [pathname, close])
 
   return (
