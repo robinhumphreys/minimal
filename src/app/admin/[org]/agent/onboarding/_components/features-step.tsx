@@ -3,12 +3,7 @@
 import * as React from "react"
 
 import Link from "next/link"
-import {
-  ArrowRightIcon,
-  MessageCircleIcon,
-  PackageSearchIcon,
-  SearchIcon,
-} from "lucide-react"
+import { ArrowRightIcon } from "lucide-react"
 import { cn } from "cn"
 
 import { useOrg } from "@/app/admin/_components/use-org"
@@ -30,7 +25,6 @@ const FEATURES: {
   key: FeatureKey
   title: string
   description: string
-  icon: React.ReactNode
   thumb: React.ReactNode
   soon?: boolean
 }[] = [
@@ -38,21 +32,18 @@ const FEATURES: {
     key: "siteChat",
     title: "Site chat",
     description: "A chat button on every page.",
-    icon: <MessageCircleIcon />,
     thumb: <SiteChatThumb />,
   },
   {
     key: "searchAssist",
     title: "Search assist",
     description: "Your search box, read by the agent.",
-    icon: <SearchIcon />,
     thumb: <SearchAssistThumb />,
   },
   {
     key: "productHelp",
     title: "Product help",
     description: "Answers on product pages. Coming soon.",
-    icon: <PackageSearchIcon />,
     thumb: <ProductHelpThumb />,
     soon: true,
   },
@@ -114,14 +105,6 @@ export function FeaturesStep({ next }: { next: string }) {
                 data-disabled={feature.soon || undefined}
                 className="items-center gap-4"
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground [&_svg]:size-4">
-                  {feature.icon}
-                </span>
-                <FieldContent>
-                  <FieldTitle>{feature.title}</FieldTitle>
-                  <FieldDescription>{feature.description}</FieldDescription>
-                </FieldContent>
-                {feature.thumb}
                 <Checkbox
                   id={id}
                   checked={enabled[feature.key]}
@@ -130,6 +113,11 @@ export function FeaturesStep({ next }: { next: string }) {
                     set(feature.key, checked === true)
                   }
                 />
+                <FieldContent>
+                  <FieldTitle>{feature.title}</FieldTitle>
+                  <FieldDescription>{feature.description}</FieldDescription>
+                </FieldContent>
+                {feature.thumb}
               </Field>
             </FieldLabel>
           )
