@@ -27,7 +27,7 @@ export function IntroStep({ next }: { next: string }) {
         <MinimalLogo className="size-8 text-muted-foreground" />
       </Fade>
       <Fade>
-        <h1 className="mt-6 max-w-lg text-3xl tracking-tight text-balance">
+        <h1 className="mt-6 max-w-lg font-heading text-3xl tracking-tight text-balance">
           Hi! Let&rsquo;s set up your agentic storefront
         </h1>
       </Fade>

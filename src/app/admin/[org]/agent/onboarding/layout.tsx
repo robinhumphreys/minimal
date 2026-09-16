@@ -21,7 +21,7 @@ export default function OnboardingLayout({
   return (
     <div className="flex min-h-0 flex-1 flex-col rounded-xl bg-neutral-200/70">
       <header className="flex h-11 shrink-0 items-center px-4">
-        <h1 className="text-sm font-medium text-foreground/80">
+        <h1 className="font-heading text-sm font-medium text-foreground/80">
           Set up your agentic storefront
         </h1>
       </header>

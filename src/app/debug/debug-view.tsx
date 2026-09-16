@@ -23,7 +23,7 @@ export function DebugView({ brands }: { brands: Brand[] }) {
   return (
     <main className="flex flex-col gap-16 p-8">
       <header className="flex flex-col gap-1">
-        <h1 className="text-2xl">Surfaces</h1>
+        <h1 className="font-heading text-2xl">Surfaces</h1>
         <p className="text-sm text-muted-foreground">
           Both surfaces, both brands, every state, on fixtures. Nothing here
           calls a model.

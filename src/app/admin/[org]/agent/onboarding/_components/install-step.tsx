@@ -34,7 +34,7 @@ export function InstallStep({ next }: { next: string }) {
   return (
     <div className="relative flex h-full flex-col items-center justify-center gap-10 overflow-y-auto px-8 py-16">
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-3xl tracking-tight text-balance">
+        <h1 className="font-heading text-3xl tracking-tight text-balance">
           Put it on your site
         </h1>
         <p className="max-w-md text-sm text-muted-foreground">

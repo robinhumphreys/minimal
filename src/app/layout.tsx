@@ -1,15 +1,21 @@
 import type { Metadata } from "next"
 import {
   Archivo,
-  Geist,
   Geist_Mono,
   IBM_Plex_Sans,
   Inter,
+  Inter_Tight,
 } from "next/font/google"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// The admin's own faces: Inter for reading, Inter Tight for titles.
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+})
+
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
 })
 
@@ -53,7 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${voltaDisplay.variable} ${voltaText.variable} ${noordSans.variable} h-full antialiased`}
+      className={`${inter.variable} ${interTight.variable} ${geistMono.variable} ${voltaDisplay.variable} ${voltaText.variable} ${noordSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
