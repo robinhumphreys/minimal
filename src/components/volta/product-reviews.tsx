@@ -41,7 +41,7 @@ export function ProductReviews({
             </span>
             <div className="flex flex-col gap-1">
               <Stars rating={rating} size="lg" />
-              <span className="text-volta-micro tracking-volta-wide text-volta-ash uppercase tabular-nums">
+              <span className="text-volta-micro text-volta-ash tabular-nums">
                 {formatCount(reviewCount)} reviews
               </span>
             </div>
@@ -103,7 +103,7 @@ export function ProductReviews({
                       <Badge variant="dim">Verified buyer</Badge>
                     )}
                     {review.context && (
-                      <span className="text-volta-micro tracking-volta-wide text-volta-smoke uppercase">
+                      <span className="text-volta-micro text-volta-smoke">
                         {review.context}
                       </span>
                     )}

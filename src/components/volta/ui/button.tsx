@@ -2,7 +2,7 @@ import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-// Volta buttons are hard-edged blocks with wide uppercase labels. Nothing here
+// Volta buttons are hard-edged blocks with sentence-case labels. Nothing here
 // reads a shadcn semantic token, so restyling Noord can never move these.
 const buttonVariants = cva(
   "group/button volta-wide inline-flex shrink-0 items-center justify-center gap-2 rounded-volta border-2 font-volta text-volta-label whitespace-nowrap transition-colors duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-volta-volt focus-visible:ring-offset-2 focus-visible:ring-offset-volta-void disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",

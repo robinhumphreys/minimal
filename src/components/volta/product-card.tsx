@@ -58,7 +58,7 @@ export function ProductCard({
         </h3>
 
         {(product.flavour || product.size) && (
-          <p className="text-volta-micro tracking-volta-wide text-volta-slate uppercase">
+          <p className="text-volta-micro text-volta-slate">
             {[product.flavour, product.size].filter(Boolean).join(" · ")}
           </p>
         )}

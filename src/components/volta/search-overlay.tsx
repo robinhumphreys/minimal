@@ -211,7 +211,7 @@ export function SearchOverlay({
                               <span className="volta-title truncate text-volta-body text-volta-chalk group-hover/result:text-volta-volt">
                                 {entry.name}
                               </span>
-                              <span className="truncate text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+                              <span className="truncate text-volta-micro text-volta-ash">
                                 {[entry.categoryName, entry.flavour]
                                   .filter(Boolean)
                                   .join(" · ")}

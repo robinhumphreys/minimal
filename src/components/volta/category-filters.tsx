@@ -98,7 +98,7 @@ export function CategoryFilters({
       ))}
 
       <div className="flex items-center justify-between gap-4 pt-3">
-        <p className="text-volta-micro tracking-volta-wide text-volta-ash uppercase tabular-nums">
+        <p className="text-volta-micro text-volta-ash tabular-nums">
           {filtered ? `${shown} of ${total}` : `${total}`} products
         </p>
         {filtered && (

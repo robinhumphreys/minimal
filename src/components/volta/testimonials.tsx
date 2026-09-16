@@ -55,7 +55,7 @@ export function Testimonials({ reviews }: { reviews: ReviewModel[] }) {
                   </span>
                 </div>
                 {review.context && (
-                  <span className="text-volta-micro tracking-volta-wide text-volta-smoke uppercase">
+                  <span className="text-volta-micro text-volta-smoke">
                     {review.context}
                   </span>
                 )}

@@ -31,27 +31,36 @@
     var(--font-volta-display-sans), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
 
-  /* Violator stripe, badges, meta rows. Always paired with `uppercase`. */
-  --text-volta-micro: 0.625rem;
-  --text-volta-micro--line-height: 1.2;
-  --text-volta-micro--letter-spacing: 0.14em;
+  /*
+   * Violator stripe, badges, meta rows. Sentence case, like everything below
+   * title level — the tracking is the small positive amount that keeps small
+   * text from setting tight, not the wide letterspacing an all-caps run needs.
+   *
+   * The scale below title level runs a step larger than it did under the
+   * all-caps setting. Caps fill their line: every letter stands at cap height,
+   * so 10px of uppercase reads about as large as 12px of sentence case. Drop
+   * the caps and keep the size and the whole interface shrinks.
+   */
+  --text-volta-micro: 0.75rem;
+  --text-volta-micro--line-height: 1.35;
+  --text-volta-micro--letter-spacing: 0.02em;
   --text-volta-micro--font-weight: 700;
 
-  /* Nav items, button labels, eyebrows. Always paired with `uppercase`. */
-  --text-volta-label: 0.75rem;
-  --text-volta-label--line-height: 1.2;
-  --text-volta-label--letter-spacing: 0.12em;
+  /* Nav items, button labels, eyebrows. */
+  --text-volta-label: 0.875rem;
+  --text-volta-label--line-height: 1.35;
+  --text-volta-label--letter-spacing: 0.01em;
   --text-volta-label--font-weight: 700;
 
   /* Prose, descriptions, review bodies. */
-  --text-volta-body: 0.875rem;
+  --text-volta-body: 0.9375rem;
   --text-volta-body--line-height: 1.6;
 
-  --text-volta-lead: 1rem;
+  --text-volta-lead: 1.0625rem;
   --text-volta-lead--line-height: 1.6;
 
   /* Product names, list rows, prices. */
-  --text-volta-title: 1rem;
+  --text-volta-title: 1.125rem;
   --text-volta-title--line-height: 1.2;
   --text-volta-title--letter-spacing: -0.01em;
   --text-volta-title--font-weight: 800;
@@ -67,9 +76,6 @@
   --text-volta-display--line-height: 0.85;
   --text-volta-display--letter-spacing: -0.035em;
   --text-volta-display--font-weight: 900;
-
-  --tracking-volta-wide: 0.12em;
-  --tracking-volta-wider: 0.2em;
 
   /* --- Colour ----------------------------------------------------------- */
   /*
@@ -117,8 +123,6 @@
   --spacing-volta-header: 3.5rem;
   /* Stripe + header, for offsetting content under the sticky chrome. */
   --spacing-volta-chrome: 5.5rem;
-  /* Clears the fixed agent bar the embed mounts at the bottom of the page. */
-  --spacing-volta-agent-bar: 5.5rem;
 
   /* --- Motion ----------------------------------------------------------- */
   --animate-volta-marquee: volta-marquee 28s linear infinite;
@@ -170,6 +174,11 @@
    * tokens because Tailwind's font-size tokens carry neither `font-family` nor
    * `font-stretch`, and the width axis is half of what makes the display face
    * look like Volta.
+   *
+   * Uppercase stops at title level. Caps are the loudest setting there is and
+   * the storefront was spending them on nav items, spec keys and every button
+   * label — which both flattens the hierarchy and costs real reading speed,
+   * since a word in caps has no ascender-descender shape left to recognise.
    */
 
   /* Headlines, hero statements, section titles. The display face, full width. */
@@ -192,16 +201,15 @@
   }
 
   /*
-   * Nav items, button labels, eyebrows, breadcrumbs, spec keys — anything
-   * uppercase that is not a title. The text face, so the tracking baked into
-   * `--text-volta-micro` and `--text-volta-label` does the work the width axis
-   * used to. Those tokens carry their own weight; the one here is for the
-   * sizes that do not.
+   * Nav items, button labels, eyebrows, breadcrumbs, spec keys — the label
+   * voice, and the one place the brand does not shout. Sentence case on the
+   * text face, leaning on weight rather than caps to separate a label from the
+   * prose around it. The `--text-volta-*` tokens carry their own weight; the
+   * one here is for the sizes that do not.
    */
   .volta-wide {
     font-family: var(--font-volta);
     font-weight: 600;
-    text-transform: uppercase;
   }
 
   /*

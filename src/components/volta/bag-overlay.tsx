@@ -76,7 +76,7 @@ export function BagOverlay() {
           <SheetFooter
             // The embed fixes its agent bar to the bottom of the viewport, over
             // the sheet. The extra padding keeps checkout clear of it.
-            className="flex flex-col gap-3 pb-volta-agent-bar"
+            className="flex flex-col gap-3"
           >
             <dl className="flex flex-col gap-1.5 text-volta-body">
               <Row label="Subtotal" value={formatPrice(subtotal)} />
@@ -99,7 +99,7 @@ export function BagOverlay() {
               Checkout
             </Button>
 
-            <p className="text-center text-volta-micro tracking-volta-wide text-volta-smoke uppercase">
+            <p className="text-center text-volta-micro text-volta-smoke">
               Taxes included · 30-day returns
             </p>
           </SheetFooter>
@@ -138,7 +138,7 @@ function BagRow({ line }: { line: BagLine }) {
         >
           {line.name}
         </Link>
-        <p className="text-volta-micro tracking-volta-wide text-volta-ash uppercase">
+        <p className="text-volta-micro text-volta-ash">
           {[line.flavour, line.size].filter(Boolean).join(" · ")}
         </p>
 
