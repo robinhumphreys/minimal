@@ -1,0 +1,46 @@
+import { Suspense } from "react"
+import { notFound } from "next/navigation"
+
+import { CategoryGrid } from "@/components/noord/category-grid"
+import { CollectionRail } from "@/components/noord/collection-rail"
+import { Skeleton } from "@/components/noord/ui/skeleton"
+import { getCategory, getProductsInCategory } from "@/lib/catalog"
+import { collectionsFor, toSearchEntry } from "@/lib/noord/catalog-view"
+
+export function CategoryPage({ slug }: { slug: string }) {
+  const category = getCategory("noord", slug)
+  if (!category) notFound()
+
+  const products = getProductsInCategory("noord", slug).map(toSearchEntry)
+
+  return (
+    <>
+      <CollectionRail collections={collectionsFor(slug)} />
+
+      {/* The grid reads `?fit=…` and friends off the URL, which is what the
+          collection rail links into. `useSearchParams` needs a boundary for
+          the page shell to stay statically prerendered. */}
+      <Suspense fallback={<GridSkeleton />}>
+        <CategoryGrid
+          products={products}
+          title={category.name}
+          description={category.description}
+        />
+      </Suspense>
+    </>
+  )
+}
+
+function GridSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-y-8 pt-10 sm:grid-cols-2 sm:gap-x-3 sm:px-4 md:grid-cols-3 md:px-8 xl:grid-cols-4 xl:px-12">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} className="flex flex-col gap-3">
+          <Skeleton className="aspect-[3/4] w-full" />
+          <Skeleton className="mx-4 h-3 w-16 sm:mx-0" />
+          <Skeleton className="mx-4 h-3 w-3/4 sm:mx-0" />
+        </div>
+      ))}
+    </div>
+  )
+}

@@ -1,0 +1,141 @@
+/*
+ * Noord design tokens.
+ *
+ * Every token is namespaced `noord-*` so the second storefront (Volta) can
+ * define a completely different `volta-*` set without either brand inheriting
+ * the other's look. Nothing here touches the shadcn semantic tokens in
+ * `globals.css` — the Noord primitives under `src/components/noord/ui` spend
+ * these tokens directly.
+ *
+ * Namespacing rather than a `.noord` cascade scope is deliberate: dialogs
+ * portal to `document.body`, outside any wrapper element, so scope-based
+ * theming would silently drop out inside the nav, search and bag overlays.
+ */
+
+@theme {
+  /* --- Type ------------------------------------------------------------- */
+  --font-noord: var(--font-noord-sans), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+
+  /* Eyebrows, nav items, button labels. Always paired with `uppercase`. */
+  --text-noord-micro: 0.6875rem;
+  --text-noord-micro--line-height: 1.2;
+  --text-noord-micro--letter-spacing: 0.1em;
+  --text-noord-micro--font-weight: 500;
+
+  --text-noord-label: 0.75rem;
+  --text-noord-label--line-height: 1.3;
+  --text-noord-label--letter-spacing: 0.08em;
+  --text-noord-label--font-weight: 500;
+
+  /* Product names, prices, list rows. */
+  --text-noord-body: 0.8125rem;
+  --text-noord-body--line-height: 1.5;
+  --text-noord-body--letter-spacing: 0.01em;
+
+  --text-noord-lead: 0.9375rem;
+  --text-noord-lead--line-height: 1.6;
+
+  --text-noord-title: 1.125rem;
+  --text-noord-title--line-height: 1.3;
+  --text-noord-title--letter-spacing: -0.01em;
+  --text-noord-title--font-weight: 500;
+
+  /* The menu list. Large enough to be the page, tight enough to fit eight
+     categories plus a service group on the shortest phone. */
+  --text-noord-nav: clamp(1.625rem, 7vw, 2rem);
+  --text-noord-nav--line-height: 1.25;
+  --text-noord-nav--letter-spacing: -0.02em;
+  --text-noord-nav--font-weight: 500;
+
+  --text-noord-nav-sub: clamp(1rem, 4vw, 1.125rem);
+  --text-noord-nav-sub--line-height: 1.35;
+  --text-noord-nav-sub--letter-spacing: -0.01em;
+  --text-noord-nav-sub--font-weight: 500;
+
+  --text-noord-section: clamp(1.375rem, 5vw, 1.875rem);
+  --text-noord-section--line-height: 1.1;
+  --text-noord-section--letter-spacing: -0.02em;
+  --text-noord-section--font-weight: 500;
+
+  --text-noord-display: clamp(2rem, 8vw, 3.25rem);
+  --text-noord-display--line-height: 1;
+  --text-noord-display--letter-spacing: -0.03em;
+  --text-noord-display--font-weight: 500;
+
+  --tracking-noord-wide: 0.1em;
+  --tracking-noord-tight: -0.02em;
+
+  /* --- Colour ----------------------------------------------------------- */
+  /* Greyscale only. Colour on a Noord page comes from the product photography. */
+  --color-noord-paper: #ffffff;
+  --color-noord-ink: #131313;
+  --color-noord-ink-muted: #6c6c6c;
+  --color-noord-ink-faint: #9a9a9a;
+  --color-noord-line: #e5e5e3;
+  --color-noord-line-strong: #c4c4c1;
+  --color-noord-wash: #f4f4f2;
+  --color-noord-wash-deep: #eaeae7;
+  --color-noord-sale: #9a2117;
+
+  /* --- Shape ------------------------------------------------------------ */
+  /* Noord has no rounded corners. Named so intent survives a later change. */
+  --radius-noord: 0px;
+
+  /* --- Rhythm ----------------------------------------------------------- */
+  --spacing-noord-gutter: 1rem;
+  --spacing-noord-header: 3.25rem;
+  /* Clears the fixed agent bar the embed mounts at the bottom of the page. */
+  --spacing-noord-agent-bar: 5.5rem;
+}
+
+@layer components {
+  /*
+   * Root wrapper for every Noord route. Sets the brand's baseline typography
+   * so individual components only declare what differs from it.
+   */
+  .noord {
+    font-family: var(--font-noord);
+    font-size: var(--text-noord-body);
+    line-height: 1.5;
+    color: var(--color-noord-ink);
+    background-color: var(--color-noord-paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The full-bleed page gutter, widening with the viewport. */
+  .noord-gutter {
+    padding-inline: var(--spacing-noord-gutter);
+  }
+
+  @media (min-width: 48rem) {
+    .noord-gutter {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .noord-gutter {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Underline that grows from the left on hover — used on text links. */
+  .noord-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    transition: background-size 250ms ease;
+  }
+
+  @media (hover: hover) {
+    .noord-underline {
+      background-size: 0 1px;
+    }
+
+    .noord-underline:hover {
+      background-size: 100% 1px;
+    }
+  }
+}
