@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-2 p-8">
       <h1 className="text-2xl">Minimal</h1>
-      <Link href="/minimal" className="underline">
+      <Link href="/admin" className="underline">
         Admin
       </Link>
       <Link href="/noord" className="underline">

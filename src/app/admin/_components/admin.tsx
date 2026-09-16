@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { BRAND_IDS, type BrandId } from "@/lib/catalog/types"
+import type { BrandId } from "@/lib/catalog/types"
 import type { AgentConfig, Entry, Position } from "@/lib/config/schema"
 import { useAdminStore } from "@/lib/store/admin"
 
@@ -29,7 +29,6 @@ export function Admin() {
   const draft = useAdminStore((state) => state.drafts[state.active])
   const revision = useAdminStore((state) => state.revision)
   const hydrated = useAdminStore((state) => state.hydrated)
-  const setActive = useAdminStore((state) => state.setActive)
   const editDraft = useAdminStore((state) => state.editDraft)
   const publish = useAdminStore((state) => state.publish)
 
@@ -46,19 +45,8 @@ export function Admin() {
   return (
     <div className="flex flex-col gap-6 p-8 lg:flex-row">
       <div className="flex w-full max-w-xl flex-col gap-6">
+        {/* The sidebar's account switcher owns `active`. */}
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl">Minimal</h1>
-          <select
-            className="h-8 rounded-lg border border-input px-2 text-sm"
-            value={active}
-            onChange={(event) => setActive(event.target.value as BrandId)}
-          >
-            {BRAND_IDS.map((id) => (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            ))}
-          </select>
           <Button onClick={() => publish(active)}>Publish</Button>
         </div>
 
