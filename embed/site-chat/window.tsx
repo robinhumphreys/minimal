@@ -163,8 +163,11 @@ export function ChatWindow({
                     <Message>
                       <MessageContent>
                         <Bubble variant="muted">
-                          <BubbleContent>
-                            That didn&rsquo;t go through.
+                          {/* Demo app: the gateway's own message is more use
+                              than a blank apology. */}
+                          <BubbleContent className="text-muted-foreground">
+                            {chat.error?.message?.trim() ||
+                              "That didn\u2019t go through."}
                           </BubbleContent>
                         </Bubble>
                         <Bubble variant="outline">

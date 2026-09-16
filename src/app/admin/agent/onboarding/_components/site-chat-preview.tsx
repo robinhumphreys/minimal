@@ -2,7 +2,8 @@
 
 import * as React from "react"
 
-import type { ChatStatus } from "ai"
+import { useChat } from "@ai-sdk/react"
+import { DefaultChatTransport } from "ai"
 
 import { SiteChatLayer, type ChatDriver } from "@embed/site-chat"
 import type { AgentUIMessage } from "@/lib/agent/types"
@@ -16,8 +17,9 @@ import { DotField } from "./dot-field"
  * merchant's page.
  *
  * Not a picture and not a replica: this is the embed's own surface, rendered
- * from the same draft the storefront will be handed on publish. What the
- * merchant approves here is the thing that ships, to the pixel.
+ * from the same draft the storefront will be handed on publish, talking to
+ * the same route. What the merchant approves here is the thing that ships,
+ * to the pixel and to the answer.
  */
 export function SiteChatPreview({
   config,
@@ -29,7 +31,7 @@ export function SiteChatPreview({
   onDeviceChange: (device: Device) => void
 }) {
   const [open, setOpen] = React.useState(false)
-  const chat = usePreviewChat()
+  const chat = useDraftChat(config)
 
   const layer = (
     <SiteChatLayer
@@ -62,52 +64,36 @@ export function SiteChatPreview({
   )
 }
 
-const REPLY =
-  "On your site I answer this from your catalogue. Publish, then ask me on the storefront."
-
 /**
- * Stands in for the model. The window still takes a message and answers, so
- * the merchant can feel the surface work without spending a token on it.
+ * The same route the embed posts to, with the same body: the draft's prompt,
+ * model, greeting and starters, so the preview answers as the published agent
+ * would. Held here rather than in the window so closing and reopening the
+ * launcher keeps the conversation, the same as the real embed.
  */
-function usePreviewChat(): ChatDriver {
-  const [messages, setMessages] = React.useState<AgentUIMessage[]>([])
-  const [status, setStatus] = React.useState<ChatStatus>("ready")
-  const timer = React.useRef<number | null>(null)
+function useDraftChat(config: AgentConfig): ChatDriver {
+  const transport = React.useMemo(
+    () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
+    [config.id],
+  )
+  const { messages, sendMessage, status, error, stop, regenerate } =
+    useChat<AgentUIMessage>({ transport })
 
-  React.useEffect(() => {
-    return () => {
-      if (timer.current !== null) window.clearTimeout(timer.current)
-    }
-  }, [])
-
-  const send = React.useCallback((text: string) => {
-    setMessages((current) => [
-      ...current,
-      {
-        id: `user-${current.length}`,
-        role: "user",
-        parts: [{ type: "text", text }],
-      },
-    ])
-    setStatus("submitted")
-    timer.current = window.setTimeout(() => {
-      setMessages((current) => [
-        ...current,
-        {
-          id: `agent-${current.length}`,
-          role: "assistant",
-          parts: [{ type: "text", text: REPLY }],
-        },
-      ])
-      setStatus("ready")
-    }, 700)
-  }, [])
+  const behaviour = config.behaviour
+  const send = React.useCallback(
+    (text: string) => {
+      const trimmed = text.trim()
+      if (!trimmed) return
+      void sendMessage({ text: trimmed }, { body: { behaviour } })
+    },
+    [sendMessage, behaviour],
+  )
 
   return {
     messages,
     status,
+    error,
     send,
-    stop: () => {},
-    retry: () => {},
+    stop: () => void stop(),
+    retry: () => void regenerate(),
   }
 }
