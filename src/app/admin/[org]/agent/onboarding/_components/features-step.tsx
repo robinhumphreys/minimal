@@ -3,7 +3,13 @@
 import * as React from "react"
 
 import Link from "next/link"
-import { ArrowRightIcon } from "lucide-react"
+import {
+  ArrowRightIcon,
+  MessageCircleIcon,
+  PackageSearchIcon,
+  SearchIcon,
+} from "lucide-react"
+import { cn } from "cn"
 
 import { useOrg } from "@/app/admin/_components/use-org"
 import { Button } from "@/components/ui/button"
@@ -24,25 +30,30 @@ const FEATURES: {
   key: FeatureKey
   title: string
   description: string
+  icon: React.ReactNode
+  thumb: React.ReactNode
   soon?: boolean
 }[] = [
   {
     key: "siteChat",
     title: "Site chat",
-    description:
-      "A chat button on every page. Shoppers ask in their own words and get a short answer with products to tap.",
+    description: "A chat button on every page.",
+    icon: <MessageCircleIcon />,
+    thumb: <SiteChatThumb />,
   },
   {
     key: "searchAssist",
     title: "Search assist",
-    description:
-      "Your search box, read by the agent. A vague search still gets products, a line, and a way to narrow it down.",
+    description: "Your search box, read by the agent.",
+    icon: <SearchIcon />,
+    thumb: <SearchAssistThumb />,
   },
   {
     key: "productHelp",
     title: "Product help",
-    description:
-      "On a product page: the questions shoppers ask before they buy, answered from the product itself. Coming soon.",
+    description: "Answers on product pages. Coming soon.",
+    icon: <PackageSearchIcon />,
+    thumb: <ProductHelpThumb />,
     soon: true,
   },
 ]
@@ -97,7 +108,7 @@ export function FeaturesStep({ next }: { next: string }) {
         </p>
       </div>
 
-      <FieldGroup className="w-full max-w-sm gap-3">
+      <FieldGroup className="w-full max-w-lg gap-3">
         {FEATURES.map((feature) => {
           const id = `feature-${feature.key}`
           return (
@@ -105,11 +116,16 @@ export function FeaturesStep({ next }: { next: string }) {
               <Field
                 orientation="horizontal"
                 data-disabled={feature.soon || undefined}
+                className="items-center gap-4"
               >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground [&_svg]:size-4">
+                  {feature.icon}
+                </span>
                 <FieldContent>
                   <FieldTitle>{feature.title}</FieldTitle>
                   <FieldDescription>{feature.description}</FieldDescription>
                 </FieldContent>
+                {feature.thumb}
                 <Checkbox
                   id={id}
                   checked={enabled[feature.key]}
@@ -136,5 +152,81 @@ export function FeaturesStep({ next }: { next: string }) {
         </Button>
       </div>
     </div>
+  )
+}
+
+/*
+ * Thumbnails: each surface as a few grey shapes, small enough to read as a
+ * glyph of the thing rather than a picture of it. Drawn rather than
+ * screenshotted so they are the same weight as the type beside them, and
+ * so the merchant's own preview, one step on, is the first real one.
+ */
+
+function Thumb({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "relative block h-14 w-20 shrink-0 overflow-hidden rounded-md border bg-background",
+        className,
+      )}
+    >
+      {children}
+    </span>
+  )
+}
+
+/** A page with a small window open above a round button, bottom right. */
+function SiteChatThumb() {
+  return (
+    <Thumb>
+      <span className="absolute inset-x-2 top-2 h-1 rounded-full bg-muted" />
+      <span className="absolute top-5 left-2 h-1 w-6 rounded-full bg-muted" />
+      <span className="absolute top-7 left-2 h-1 w-9 rounded-full bg-muted" />
+      <span className="absolute top-4 right-2 flex h-6 w-8 flex-col gap-0.5 rounded-sm border bg-background p-1">
+        <span className="h-1 w-4 rounded-full bg-muted-foreground/40" />
+        <span className="ml-auto h-1 w-3 rounded-full bg-foreground/70" />
+      </span>
+      <span className="absolute right-2 bottom-2 size-3 rounded-full bg-foreground" />
+    </Thumb>
+  )
+}
+
+/** A search box, two chips, and two product tiles under it. */
+function SearchAssistThumb() {
+  return (
+    <Thumb>
+      <span className="absolute inset-x-2 top-2 flex h-3 items-center gap-1 rounded-sm border px-1">
+        <span className="size-1 rounded-full border border-muted-foreground/60" />
+        <span className="h-0.5 w-6 rounded-full bg-muted-foreground/40" />
+      </span>
+      <span className="absolute top-6 left-2 flex gap-1">
+        <span className="h-1.5 w-5 rounded-full bg-foreground/70" />
+        <span className="h-1.5 w-4 rounded-full border" />
+      </span>
+      <span className="absolute bottom-2 left-2 h-4 w-7 rounded-sm bg-muted" />
+      <span className="absolute right-2 bottom-2 h-4 w-7 rounded-sm bg-muted" />
+    </Thumb>
+  )
+}
+
+/** A product image beside its title, with a question answered under it. */
+function ProductHelpThumb() {
+  return (
+    <Thumb>
+      <span className="absolute top-2 left-2 h-6 w-6 rounded-sm bg-muted" />
+      <span className="absolute top-2 left-10 h-1 w-7 rounded-full bg-muted-foreground/40" />
+      <span className="absolute top-4 left-10 h-1 w-4 rounded-full bg-muted" />
+      <span className="absolute inset-x-2 bottom-2 flex h-4 flex-col justify-center gap-0.5 rounded-sm bg-muted px-1">
+        <span className="h-0.5 w-8 rounded-full bg-muted-foreground/50" />
+        <span className="h-0.5 w-11 rounded-full bg-muted-foreground/30" />
+      </span>
+    </Thumb>
   )
 }
