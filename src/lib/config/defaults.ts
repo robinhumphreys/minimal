@@ -130,6 +130,7 @@ export const defaults: Record<BrandId, AgentConfig> = {
         label: "Find your fuel",
         greeting:
           "Tell me how you train and I will point you at the right one.",
+        side: "right",
       },
     },
     identity: {
