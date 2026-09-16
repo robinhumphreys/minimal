@@ -453,7 +453,7 @@ export function ProductHelpOptions(props: OptionsProps) {
       ) : null}
       <FieldSet>
         <FieldLegend className="font-heading text-base font-semibold tracking-tight">
-          The guide
+          Product help
         </FieldLegend>
         <FieldGroup>
           <Field>
