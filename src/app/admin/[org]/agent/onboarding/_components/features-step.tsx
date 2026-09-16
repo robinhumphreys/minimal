@@ -99,7 +99,13 @@ export function FeaturesStep({ next }: { next: string }) {
         {FEATURES.map((feature) => {
           const id = `feature-${feature.key}`
           return (
-            <FieldLabel key={feature.key} htmlFor={id}>
+            <FieldLabel
+              key={feature.key}
+              htmlFor={id}
+              // Chosen cards take the brand's own colour, not the admin's
+              // neutral primary.
+              className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5"
+            >
               <Field
                 orientation="horizontal"
                 data-disabled={feature.soon || undefined}
@@ -107,6 +113,7 @@ export function FeaturesStep({ next }: { next: string }) {
               >
                 <Checkbox
                   id={id}
+                  className="data-checked:border-brand data-checked:bg-brand"
                   checked={enabled[feature.key]}
                   disabled={feature.soon}
                   onCheckedChange={(checked) =>
