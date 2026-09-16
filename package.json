@@ -8,6 +8,8 @@
     "build": "node scripts/build-embed.mjs && next build",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "placeholders": "node scripts/placeholders.mjs"
   },
@@ -38,6 +40,8 @@
     "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "prettier": "^3.9.7",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "typescript": "^5"
