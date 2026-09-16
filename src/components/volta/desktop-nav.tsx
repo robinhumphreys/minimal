@@ -110,7 +110,7 @@ export function DesktopNav({ nav }: { nav: NavModel }) {
                       <span className="volta-wide text-volta-micro text-volta-volt">
                         {category.promo.eyebrow}
                       </span>
-                      <span className="volta-display text-volta-title leading-none text-volta-chalk">
+                      <span className="volta-title text-volta-title leading-none text-volta-chalk">
                         {category.promo.title}
                       </span>
                     </div>

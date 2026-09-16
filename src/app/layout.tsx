@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Archivo, Geist, Geist_Mono, Inter } from "next/font/google";
+import {
+  Archivo,
+  Geist,
+  Geist_Mono,
+  IBM_Plex_Sans,
+  Inter,
+} from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,12 +18,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Volta's grotesque. The `wdth` axis is what makes the headline voice — without
-// it the display type collapses to a plain heavy sans.
-const archivo = Archivo({
-  variable: "--font-volta-sans",
+// Volta's headline face. The `wdth` axis is what makes the display voice —
+// without it the type collapses to a plain heavy sans. Titles only: at prose
+// and label sizes it is a poster face doing a paragraph's job.
+const voltaDisplay = Archivo({
+  variable: "--font-volta-display-sans",
   subsets: ["latin"],
   axes: ["wdth"],
+});
+
+// Volta's reading face: prose, buttons, nav, spec rows. Plex rather than Inter
+// because Noord already owns Inter, and two storefronts in one repo sharing a
+// body face would blur the line between them.
+const voltaText = IBM_Plex_Sans({
+  variable: "--font-volta-text-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 // Noord's grotesque.
@@ -37,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} ${noordSans.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${voltaDisplay.variable} ${voltaText.variable} ${noordSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

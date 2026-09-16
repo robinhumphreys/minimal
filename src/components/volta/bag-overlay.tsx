@@ -94,7 +94,7 @@ export function BagOverlay() {
                 <dt className="volta-wide text-volta-label text-volta-chalk">
                   Total
                 </dt>
-                <dd className="volta-wide text-xl text-volta-chalk tabular-nums">
+                <dd className="volta-title text-xl text-volta-chalk tabular-nums">
                   {formatPrice(subtotal + delivery)}
                 </dd>
               </div>
@@ -139,7 +139,7 @@ function BagRow({ line }: { line: BagLine }) {
         <Link
           href={line.href}
           onClick={close}
-          className="volta-wide text-volta-body text-volta-chalk hover:text-volta-volt"
+          className="volta-title text-volta-body text-volta-chalk hover:text-volta-volt"
         >
           {line.name}
         </Link>
@@ -174,7 +174,7 @@ function BagRow({ line }: { line: BagLine }) {
             </StepButton>
           </div>
 
-          <span className="volta-wide text-volta-body text-volta-chalk tabular-nums">
+          <span className="volta-title text-volta-body text-volta-chalk tabular-nums">
             {formatPrice(line.price * line.quantity)}
           </span>
         </div>

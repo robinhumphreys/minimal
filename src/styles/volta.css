@@ -14,12 +14,21 @@
 @theme {
   /* --- Type ------------------------------------------------------------- */
   /*
-   * One family throughout. Archivo is a variable grotesque with a width axis,
-   * so the same font carries both the wide, heavy display voice and a normal
-   * width body — the range comes from `font-stretch`, not a second typeface.
+   * Two families, split by job.
+   *
+   * Archivo is the headline voice: a variable grotesque with a width axis, and
+   * pushing it wide is the loudest gesture the brand has. It earns that on
+   * titles only. Set at label and prose sizes it turns every nav item and spec
+   * row into a headline, and when everything shouts nothing is emphasis.
+   *
+   * IBM Plex Sans carries what is actually read — prose, buttons, nav, meta
+   * rows, form fields. Plex rather than Inter because Noord already owns Inter,
+   * and two storefronts in one repo should not share a body face.
    */
-  --font-volta: var(--font-volta-sans), "Helvetica Neue", Helvetica, Arial,
+  --font-volta: var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
+  --font-volta-display: var(--font-volta-display-sans), "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
 
   /* Violator stripe, badges, meta rows. Always paired with `uppercase`. */
   --text-volta-micro: 0.625rem;
@@ -156,20 +165,41 @@
   }
 
   /*
-   * The brand's headline voice: Archivo pushed to the wide end of its width
-   * axis. Applied as a class rather than baked into the `--text-volta-*`
-   * tokens because Tailwind's font-size tokens carry no `font-stretch`.
+   * The three voices. Family lives here rather than in the `--text-volta-*`
+   * tokens because Tailwind's font-size tokens carry neither `font-family` nor
+   * `font-stretch`, and the width axis is half of what makes the display face
+   * look like Volta.
    */
+
+  /* Headlines, hero statements, section titles. The display face, full width. */
   .volta-display {
+    font-family: var(--font-volta-display);
     font-stretch: 125%;
     font-weight: 900;
     text-transform: uppercase;
   }
 
-  /* The same voice at nav/label scale, where full width is too shouty. */
-  .volta-wide {
+  /*
+   * Product names and prices: the same face at reading scale, pulled back off
+   * full width because 125% at 16px is a poster in a list row.
+   */
+  .volta-title {
+    font-family: var(--font-volta-display);
     font-stretch: 112%;
     font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  /*
+   * Nav items, button labels, eyebrows, breadcrumbs, spec keys — anything
+   * uppercase that is not a title. The text face, so the tracking baked into
+   * `--text-volta-micro` and `--text-volta-label` does the work the width axis
+   * used to. Those tokens carry their own weight; the one here is for the
+   * sizes that do not.
+   */
+  .volta-wide {
+    font-family: var(--font-volta);
+    font-weight: 600;
     text-transform: uppercase;
   }
 

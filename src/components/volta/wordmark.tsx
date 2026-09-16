@@ -10,7 +10,7 @@ export function Wordmark({ className }: { className?: string }) {
     <span
       aria-hidden
       className={cn(
-        "volta-display flex items-center gap-[0.15em] font-volta text-base leading-none tracking-[-0.02em] text-volta-chalk",
+        "volta-display flex items-center gap-[0.15em] font-volta-display text-base leading-none tracking-[-0.02em] text-volta-chalk",
         className,
       )}
     >

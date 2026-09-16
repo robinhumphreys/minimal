@@ -53,7 +53,7 @@ export function ProductCard({
           surface="light"
         />
 
-        <h3 className="volta-wide text-volta-title text-volta-void transition-colors group-hover/card:text-volta-volt-deep">
+        <h3 className="volta-title text-volta-title text-volta-void transition-colors group-hover/card:text-volta-volt-deep">
           {product.name}
         </h3>
 

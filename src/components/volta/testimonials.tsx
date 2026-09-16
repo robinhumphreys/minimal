@@ -36,7 +36,7 @@ export function Testimonials({ reviews }: { reviews: ReviewModel[] }) {
               <Stars rating={review.rating} size="lg" />
 
               <blockquote className="flex flex-1 flex-col gap-2">
-                <p className="volta-wide text-volta-title text-volta-chalk">
+                <p className="volta-title text-volta-title text-volta-chalk">
                   {review.title}
                 </p>
                 <p className="text-volta-body text-volta-ash">{review.body}</p>

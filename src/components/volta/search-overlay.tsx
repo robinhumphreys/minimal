@@ -208,7 +208,7 @@ export function SearchOverlay({
                               />
                             </div>
                             <div className="flex min-w-0 flex-1 flex-col gap-1">
-                              <span className="volta-wide truncate text-volta-body text-volta-chalk group-hover/result:text-volta-volt">
+                              <span className="volta-title truncate text-volta-body text-volta-chalk group-hover/result:text-volta-volt">
                                 {entry.name}
                               </span>
                               <span className="truncate text-volta-micro tracking-volta-wide text-volta-ash uppercase">
@@ -222,7 +222,7 @@ export function SearchOverlay({
                                 size="sm"
                               />
                             </div>
-                            <span className="volta-wide shrink-0 text-volta-body text-volta-chalk tabular-nums">
+                            <span className="volta-title shrink-0 text-volta-body text-volta-chalk tabular-nums">
                               {formatPrice(entry.price)}
                             </span>
                           </Link>

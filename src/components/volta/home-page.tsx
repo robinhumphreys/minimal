@@ -192,7 +192,7 @@ function CategoryGrid({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-volta-void via-volta-void/30 to-transparent" />
               <div className="relative flex w-full items-center justify-between gap-2 p-4">
-                <span className="volta-display text-volta-title text-volta-chalk group-hover/tile:text-volta-volt">
+                <span className="volta-title text-volta-title text-volta-chalk group-hover/tile:text-volta-volt">
                   {category.name}
                 </span>
                 <ArrowRightIcon className="size-4 shrink-0 text-volta-volt transition-transform group-hover/tile:translate-x-0.5" />

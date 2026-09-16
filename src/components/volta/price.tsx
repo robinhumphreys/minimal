@@ -22,7 +22,7 @@ export function Price({
   return (
     <span
       className={cn(
-        "volta-wide font-volta tabular-nums",
+        "volta-title tabular-nums",
         surface === "light" ? "text-volta-void" : "text-volta-chalk",
         size === "lg" ? "text-2xl" : "text-volta-title",
         className,
