@@ -120,54 +120,60 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
               )}
             </div>
 
-            <h3 className="pt-6 pb-1 text-noord-body text-noord-ink-faint">
-              {!searching
-                ? "Popular searches"
-                : results.length > 0
-                  ? "Products"
-                  : "No products found"}
-            </h3>
+            {/* The agent's reading of the search, when the embed is on the
+                page. Empty otherwise, and the list below carries on. */}
+            <minimal-agent-search data-query={searching ? query.trim() : ""} />
 
-            {!searching && (
-              <ul className="flex flex-col">
-                {POPULAR.map((term) => (
-                  <li key={term}>
-                    <button
-                      type="button"
-                      onClick={() => setQuery(term)}
-                      className="block w-full py-2.5 text-left text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
-                    >
-                      {term}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div data-native-search className="contents">
+              <h3 className="pt-6 pb-1 text-noord-body text-noord-ink-faint">
+                {!searching
+                  ? "Popular searches"
+                  : results.length > 0
+                    ? "Products"
+                    : "No products found"}
+              </h3>
 
-            {searching &&
-              (results.length === 0 ? (
-                <p className="py-2.5 text-noord-lead text-noord-ink-muted">
-                  Nothing matches “{query.trim()}”. Try a fabric, a colour or a
-                  category.
-                </p>
-              ) : (
+              {!searching && (
                 <ul className="flex flex-col">
-                  {results.map((entry) => (
-                    <li key={entry.slug}>
-                      <Link
-                        href={entry.href}
-                        onClick={() => {
-                          setQuery("")
-                          close()
-                        }}
-                        className="block py-2.5 text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
+                  {POPULAR.map((term) => (
+                    <li key={term}>
+                      <button
+                        type="button"
+                        onClick={() => setQuery(term)}
+                        className="block w-full py-2.5 text-left text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
                       >
-                        <Highlight text={entry.name} terms={terms} />
-                      </Link>
+                        {term}
+                      </button>
                     </li>
                   ))}
                 </ul>
-              ))}
+              )}
+
+              {searching &&
+                (results.length === 0 ? (
+                  <p className="py-2.5 text-noord-lead text-noord-ink-muted">
+                    Nothing matches “{query.trim()}”. Try a fabric, a colour or
+                    a category.
+                  </p>
+                ) : (
+                  <ul className="flex flex-col">
+                    {results.map((entry) => (
+                      <li key={entry.slug}>
+                        <Link
+                          href={entry.href}
+                          onClick={() => {
+                            setQuery("")
+                            close()
+                          }}
+                          className="block py-2.5 text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
+                        >
+                          <Highlight text={entry.name} terms={terms} />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ))}
+            </div>
           </div>
         </SheetBody>
       </SheetContent>

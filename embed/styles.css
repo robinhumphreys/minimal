@@ -2,13 +2,19 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* The embed lives outside src/, so point Tailwind at its own sources. */
+/*
+ * The embed lives outside src/, so point Tailwind at its own sources — and at
+ * the shared shadcn primitives the window is built from, which are the same
+ * files the admin's preview renders.
+ */
 @source "./";
+@source "../src/components/ui";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
+  --font-heading: var(--font-display);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -58,9 +64,11 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
+  --font-sans: system-ui, sans-serif;
+  --font-display: var(--font-sans);
 
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .minimal-agent-root *,
@@ -80,7 +88,18 @@
   transition-property: none;
 }
 
+/* The one thing that should move: the launcher's hover lift. */
+.minimal-agent-root [data-slot="launcher"] {
+  transition-property: transform, box-shadow;
+  transition-duration: 150ms;
+}
+
 minimal-agent-bar,
-minimal-agent-recommendations {
+minimal-agent-recommendations,
+minimal-agent-search {
   display: block;
+}
+
+minimal-agent-guide {
+  display: inline-block;
 }

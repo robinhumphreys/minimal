@@ -9,7 +9,10 @@ import { Agent, bus, type OpenOptions } from "./Agent"
 
 declare global {
   interface Window {
-    MinimalAgent?: { open: (options?: OpenOptions) => void }
+    MinimalAgent?: {
+      open: (options?: OpenOptions) => void
+      guide: (topic: string) => void
+    }
   }
 }
 
@@ -35,6 +38,14 @@ function injectStylesheet(src: string) {
 }
 
 function start() {
+  // The admin's onboarding shows the site as it was before the agent, in an
+  // iframe. The one thing that page must not have is the agent.
+  if (
+    new URLSearchParams(window.location.search).get("minimal-agent") === "off"
+  ) {
+    return
+  }
+
   const script = resolveScript()
   const id = script?.dataset.agent
   if (!id || !isBrandId(id)) {
@@ -76,7 +87,27 @@ function start() {
     render(parsed.data)
   })
 
-  window.MinimalAgent = { open: (options) => bus.open(options) }
+  // The admin's placement check loads the site in a frame and asks whether
+  // the agent is here. Answered from the DOM, not from config, so it reports
+  // what a shopper would actually see.
+  window.addEventListener("message", (event: MessageEvent) => {
+    const data = event.data as { type?: string } | null
+    if (!data || data.type !== "minimal:ping" || !event.source) return
+    const reply = {
+      type: "minimal:pong",
+      id: agentId,
+      launcher: document.querySelector('[data-slot="launcher"]') !== null,
+      searchAssist: readPublishedOrDefault(agentId).surface.searchAssist,
+      productHelp: readPublishedOrDefault(agentId).surface.productHelp.enabled,
+      published: window.localStorage.getItem(publishedKey(agentId)) !== null,
+    }
+    ;(event.source as Window).postMessage(reply, event.origin)
+  })
+
+  window.MinimalAgent = {
+    open: (options) => bus.open(options),
+    guide: (topic) => bus.guide(topic),
+  }
 }
 
 try {

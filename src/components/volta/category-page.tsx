@@ -55,6 +55,21 @@ export async function CategoryPage({
         count={total}
       />
 
+      {/* Product help: the storefront's band, the embed's button in it. */}
+      <div className="volta-gutter mx-auto w-full max-w-7xl">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-volta bg-volta-carbon px-6 py-5 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-1">
+            <p className="volta-title text-volta-title text-volta-chalk">
+              Not sure which {category.name.toLowerCase()} you need?
+            </p>
+            <p className="text-volta-body text-volta-ash">
+              Three questions and we point you at the right one.
+            </p>
+          </div>
+          <minimal-agent-guide data-topic={category.name} />
+        </div>
+      </div>
+
       <div className="volta-gutter mx-auto w-full max-w-7xl">
         {/*
           `useSearchParams` in the filters suspends on the server, and the

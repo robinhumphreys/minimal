@@ -1,16 +1,14 @@
 import type { Metadata } from "next"
-import {
-  Archivo,
-  Geist,
-  Geist_Mono,
-  IBM_Plex_Sans,
-  Inter,
-} from "next/font/google"
+import { Archivo, Geist_Mono, IBM_Plex_Sans, Inter } from "next/font/google"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// The admin's face. Inter with its optical-size axis, so the same file is
+// Inter for reading and Inter Display for titles: Display is Inter at the
+// top of that axis, not a separate family.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  axes: ["opsz"],
 })
 
 const geistMono = Geist_Mono({
@@ -53,7 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${voltaDisplay.variable} ${voltaText.variable} ${noordSans.variable} h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} ${voltaDisplay.variable} ${voltaText.variable} ${noordSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">{children}</body>
     </html>

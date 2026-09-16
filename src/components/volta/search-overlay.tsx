@@ -123,8 +123,12 @@ export function SearchOverlay({
               )}
             </div>
 
+            {/* The agent's reading of the search, when the embed is on the
+                page. Empty otherwise, and the sections below carry on. */}
+            <minimal-agent-search data-query={searching ? query.trim() : ""} />
+
             {!searching && (
-              <div className="flex flex-col gap-8 pt-10">
+              <div data-native-search className="flex flex-col gap-8 pt-10">
                 <Section title="Popular searches">
                   <ul className="flex flex-wrap gap-2">
                     {POPULAR.map((term) => (
@@ -160,7 +164,7 @@ export function SearchOverlay({
             )}
 
             {searching && (
-              <div className="flex flex-col gap-8 pt-8">
+              <div data-native-search className="flex flex-col gap-8 pt-8">
                 {categoryHits.length > 0 && (
                   <Section title="Categories">
                     <ul className="flex flex-wrap gap-2">

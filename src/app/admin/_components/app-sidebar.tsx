@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from "react"
+
 import {
   BookOpenIcon,
   BotIcon,
@@ -30,6 +32,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+import type { BrandId } from "@/lib/catalog/types"
+import { useAdminStore } from "@/lib/store/admin"
+
 import { AccountSwitcher } from "./account-switcher"
 import { MinimalLogo } from "./minimal-logo"
 import { NavMain, type NavGroup } from "./nav-main"
@@ -39,9 +44,19 @@ const USER = { name: "Merchant admin", initials: "MA" }
 
 // Only "Agent" is wired up. The rest name the screens this admin is meant to
 // grow into, so the rail has the shape it will eventually need.
-const NAV: NavGroup[] = [
+const navFor = (org: BrandId, onboarded: boolean): NavGroup[] => [
   {
-    items: [{ title: "Agent", icon: <SparklesIcon />, href: "/admin" }],
+    items: [
+      {
+        title: "Agent",
+        icon: <SparklesIcon />,
+        // Until the flow has been finished once, "Agent" is the flow; after
+        // that it is the screen where changes are made and published.
+        href: onboarded
+          ? `/admin/${org}/agent`
+          : `/admin/${org}/agent/onboarding`,
+      },
+    ],
   },
   {
     label: "Manage",
@@ -70,15 +85,23 @@ const NAV: NavGroup[] = [
   },
 ]
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  org,
+  ...props
+}: { org: BrandId } & React.ComponentProps<typeof Sidebar>) {
+  const onboarded = useAdminStore((state) => state.onboarded[org])
+  React.useEffect(() => {
+    useAdminStore.getState().hydrate()
+  }, [])
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <Brand />
-        <AccountSwitcher />
+        <AccountSwitcher org={org} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain groups={NAV} />
+        <NavMain groups={navFor(org, onboarded)} />
       </SidebarContent>
       <SidebarFooter>
         <SidebarSeparator className="mx-0" />

@@ -12,9 +12,13 @@ export const defaults: Record<BrandId, AgentConfig> = {
     theme: {
       accent: "#131313",
       surface: "#ffffff",
-      radius: "0rem",
+      // Noord draws nothing with a curve.
+      roundness: "square",
+      font: "site",
       fontBody: "var(--font-noord-sans), Helvetica, Arial, sans-serif",
       fontDisplay: "var(--font-noord-sans), Helvetica, Arial, sans-serif",
+      header: "accent",
+      thinking: "dots",
       density: "comfortable",
     },
     behaviour: {
@@ -26,8 +30,44 @@ export const defaults: Record<BrandId, AgentConfig> = {
         "Show me something in wool.",
       ],
       model: DEFAULT_MODEL,
+      voice: "warm",
+      spelling: "british",
+      language: "English",
+      picks: 3,
+      placeholders: {
+        chat: "Ask anything…",
+        search: "Tell the assistant more…",
+        guide: "Or type your answer…",
+      },
     },
-    surface: { entry: "bar" },
+    // Outline glyph: Noord's storefront is hairlines and thin rules.
+    surface: {
+      entry: "launcher",
+      position: "bottom-right",
+      icon: "chat",
+      iconStyle: "outline",
+      label: "",
+      shape: "circle",
+      size: "md",
+      // The catalogue is shot tall, on models.
+      cards: { ratio: "portrait", price: true, rating: true },
+      nudge: 0,
+      openOnProductPages: false,
+      hiddenPaths: [],
+      searchAssist: true,
+      productHelp: {
+        enabled: true,
+        label: "Help me choose",
+        greeting:
+          "Hi! A few quick questions and I will find you the right one.",
+        side: "right",
+      },
+    },
+    identity: {
+      assistantName: "",
+      subtitle: "Shopping assistant",
+      avatar: "initial",
+    },
   },
   volta: {
     id: "volta",
@@ -37,10 +77,18 @@ export const defaults: Record<BrandId, AgentConfig> = {
       // Bright enough that anything on it has to be black, which is what the
       // storefront does with it too.
       accent: "#d7ff00",
-      surface: "#ffffff",
-      radius: "0.75rem",
-      fontBody: "system-ui, sans-serif",
-      fontDisplay: "system-ui, sans-serif",
+      // Volta's ground is charcoal (`--color-volta-void`), so the window is
+      // dark too; a white panel on that storefront would be the bolted-on look.
+      surface: "#212121",
+      // `--radius-volta` is 2px: near-square blocks, not pills.
+      roundness: "soft",
+      font: "site",
+      fontBody:
+        'var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial, sans-serif',
+      fontDisplay:
+        'var(--font-volta-display-sans), "Helvetica Neue", Helvetica, Arial, sans-serif',
+      header: "accent",
+      thinking: "dots",
       density: "comfortable",
     },
     behaviour: {
@@ -52,8 +100,44 @@ export const defaults: Record<BrandId, AgentConfig> = {
         "Which of these are vegan?",
       ],
       model: DEFAULT_MODEL,
+      voice: "direct",
+      spelling: "british",
+      language: "English",
+      picks: 3,
+      placeholders: {
+        chat: "Ask anything…",
+        search: "Tell the assistant more…",
+        guide: "Or type your answer…",
+      },
     },
-    surface: { entry: "launcher", position: "bottom-right" },
+    // Solid glyph: Volta's marks are filled blocks of volt.
+    surface: {
+      entry: "launcher",
+      position: "bottom-right",
+      icon: "chat",
+      iconStyle: "solid",
+      label: "",
+      shape: "circle",
+      size: "md",
+      // Product shots, square, on white.
+      cards: { ratio: "square", price: true, rating: true },
+      nudge: 0,
+      openOnProductPages: false,
+      hiddenPaths: [],
+      searchAssist: true,
+      productHelp: {
+        enabled: true,
+        label: "Find your fuel",
+        greeting:
+          "Tell me how you train and I will point you at the right one.",
+        side: "right",
+      },
+    },
+    identity: {
+      assistantName: "",
+      subtitle: "Shopping assistant",
+      avatar: "mark",
+    },
   },
 }
 
