@@ -2,8 +2,6 @@
 
 import * as React from "react"
 
-import { cn } from "cn"
-
 import {
   Field,
   FieldDescription,
@@ -17,7 +15,10 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 
 import {
@@ -330,7 +331,7 @@ export function SiteChatOptions(props: OptionsProps) {
           </Field>
           <Field>
             <FieldLabel>On cards</FieldLabel>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-col gap-2">
               <Toggle
                 label="Price"
                 on={settings.price}
@@ -541,7 +542,7 @@ function lines(value: string): string[] {
   return value.split("\n").filter((line) => line.trim().length > 0)
 }
 
-/** A pill that is on or off. */
+/** A checkbox with its label: a setting that is on or off. */
 function Toggle({
   label,
   on,
@@ -551,24 +552,18 @@ function Toggle({
   on: boolean
   onToggle: () => void
 }) {
+  const id = React.useId()
   return (
-    <button
-      type="button"
-      aria-pressed={on}
-      onClick={onToggle}
-      className={cn(
-        "rounded-full border px-3 py-1 text-sm transition-colors",
-        on
-          ? "border-transparent bg-primary text-primary-foreground"
-          : "border-input text-muted-foreground hover:text-foreground",
-      )}
-    >
-      {label}
-    </button>
+    <div className="flex items-center gap-3">
+      <Checkbox id={id} checked={on} onCheckedChange={onToggle} />
+      <Label htmlFor={id} className="font-normal">
+        {label}
+      </Label>
+    </div>
   )
 }
 
-/** A row of mutually exclusive pills. */
+/** A radio group: one of a few, each on its own line. */
 function Choices<T extends string>({
   options,
   value,
@@ -578,23 +573,21 @@ function Choices<T extends string>({
   value: T
   onSelect: (value: T) => void
 }) {
+  const id = React.useId()
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <RadioGroup
+      value={value}
+      onValueChange={(next) => onSelect(next as T)}
+      className="w-fit gap-2"
+    >
       {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          onClick={() => onSelect(option.value)}
-          className={cn(
-            "rounded-full border px-3 py-1 text-sm transition-colors",
-            option.value === value
-              ? "border-transparent bg-primary text-primary-foreground"
-              : "border-input text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {option.label}
-        </button>
+        <div key={option.value} className="flex items-center gap-3">
+          <RadioGroupItem value={option.value} id={`${id}-${option.value}`} />
+          <Label htmlFor={`${id}-${option.value}`} className="font-normal">
+            {option.label}
+          </Label>
+        </div>
       ))}
-    </div>
+    </RadioGroup>
   )
 }
