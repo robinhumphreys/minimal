@@ -20,12 +20,15 @@ export const CUTOFF = "22:00"
  * The scrolling stripe above the header. Two or three words each: the band is
  * 2rem tall and moves, so a phrase that needs reading twice never gets read.
  * The long form of each promise lives in `PROMISES` and on the product page.
+ *
+ * Four, deliberately: the stripe lays them out evenly across the desktop header
+ * and the footer repeats them as a four-column grid, so an odd count leaves a
+ * hole in both. Anything added here has to displace one of these.
  */
 export const VIOLATORS: string[] = [
   `Free delivery over €${FREE_DELIVERY_THRESHOLD / 100}`,
   "Shipped same day",
   "30-day returns",
-  "Free sample inside",
   "Batch-tested",
 ]
 

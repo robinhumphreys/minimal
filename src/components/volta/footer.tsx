@@ -80,35 +80,34 @@ export function Footer() {
 }
 
 /**
- * The violator stripe again, played slow: the same promises in the same order,
- * on the same volt ground, sized to be read rather than glanced at.
+ * The violator stripe again, played slow: the same four promises in the same
+ * order, on the same volt ground, sized to be read rather than glanced at.
+ *
+ * One column per violator from `lg` up, so the band at the bottom of the page
+ * and the stripe at the top carry the same content in the same sequence. Four
+ * divides evenly into one, two and four, so the grid squares off on its own and
+ * needs no filler cell to close the last row.
  *
  * The hairline grid is the void showing through a `gap-px` on the `<ul>`, which
  * gives real rules at every breakpoint without per-cell border arithmetic — the
  * gutter lives on the wrapper so the void never leaks into the page margin.
- *
- * The sixth cell is the bolt on its own, so the grid divides evenly into one,
- * two or three columns instead of leaving a hole in the last row.
  */
 function ViolatorGrid() {
   return (
     <section aria-label="Why Volta">
       <div className="volta-gutter mx-auto max-w-7xl py-12">
-        <ul className="grid gap-px bg-volta-void sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-px bg-volta-void sm:grid-cols-2 lg:grid-cols-4">
           {VIOLATORS.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-4 bg-volta-volt px-6 py-10 lg:px-8 lg:py-12"
+              className="flex items-start gap-3 bg-volta-volt px-6 py-10 lg:flex-col lg:gap-4"
             >
-              <Bolt className="mt-1 h-6 text-volta-void" />
-              <span className="volta-display text-volta-heading leading-none text-volta-void">
+              <Bolt className="mt-1 h-6 shrink-0 text-volta-void lg:mt-0 lg:h-8" />
+              <span className="volta-display text-volta-heading leading-none text-balance text-volta-void">
                 {item}
               </span>
             </li>
           ))}
-          <li className="flex items-center justify-center bg-volta-volt px-6 py-10 lg:px-8 lg:py-12">
-            <Bolt className="h-16 text-volta-void" />
-          </li>
         </ul>
       </div>
     </section>
