@@ -1,4 +1,4 @@
-import type { Category, Product, Review } from "./types";
+import type { Category, Product, Review } from "./types"
 
 export const categories: Category[] = [
   {
@@ -31,7 +31,7 @@ export const categories: Category[] = [
     name: "Bars",
     description: "Whole-food and protein bars for training and travel.",
   },
-];
+]
 
 export const products: Product[] = [
   // ---------------------------------------------------------------- protein
@@ -959,7 +959,7 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 2216,
   },
-];
+]
 
 /**
  * Customer reviews.
@@ -1299,4 +1299,4 @@ export const reviews: Review[] = [
     verified: true,
     context: "Gran fondo",
   },
-];
+]

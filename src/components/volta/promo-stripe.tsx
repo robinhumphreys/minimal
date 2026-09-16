@@ -37,7 +37,7 @@ export function PromoStripe({ className }: { className?: string }) {
         {VIOLATORS.map((item) => (
           <li key={item} className="flex items-center gap-2">
             <Bolt />
-            <span className="volta-wide whitespace-nowrap text-volta-micro text-volta-void">
+            <span className="volta-wide text-volta-micro whitespace-nowrap text-volta-void">
               {item}
             </span>
           </li>
@@ -53,7 +53,7 @@ function Items({ ariaHidden = false }: { ariaHidden?: boolean }) {
       {VIOLATORS.map((item) => (
         <li key={item} className="flex items-center gap-2 px-4">
           <Bolt />
-          <span className="volta-wide whitespace-nowrap text-volta-micro text-volta-void">
+          <span className="volta-wide text-volta-micro whitespace-nowrap text-volta-void">
             {item}
           </span>
         </li>

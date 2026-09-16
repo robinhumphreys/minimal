@@ -127,14 +127,16 @@ function facetOptions(products: Product[], facet: FacetKey, limit: number) {
 export function facetGroups(categorySlug: string): FacetGroup[] {
   const products = getProductsInCategory(BRAND, categorySlug)
 
-  return (["form", "goal", "flavour"] as FacetKey[])
-    .map((key) => ({
-      key,
-      label: FACET_LABELS[key],
-      options: facetOptions(products, key, 8),
-    }))
-    // A row offering a single choice is not a choice.
-    .filter((group) => group.options.length > 1)
+  return (
+    (["form", "goal", "flavour"] as FacetKey[])
+      .map((key) => ({
+        key,
+        label: FACET_LABELS[key],
+        options: facetOptions(products, key, 8),
+      }))
+      // A row offering a single choice is not a choice.
+      .filter((group) => group.options.length > 1)
+  )
 }
 
 /** Applies the `?form=`/`?goal=`/`?flavour=` query to a category's products. */

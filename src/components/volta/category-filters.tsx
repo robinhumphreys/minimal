@@ -61,7 +61,7 @@ export function CategoryFilters({
             The chips scroll rather than wrap: a category with eight forms and
             eight flavours would otherwise push the grid below the fold.
           */}
-          <ul className="-mx-volta-gutter flex gap-1.5 overflow-x-auto px-volta-gutter md:mx-0 md:flex-wrap md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="-mx-volta-gutter flex [scrollbar-width:none] gap-1.5 overflow-x-auto px-volta-gutter md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
             {group.options.map((option) => {
               const on = active(group.key) === option.value
               return (
@@ -82,8 +82,8 @@ export function CategoryFilters({
                     <span
                       className={
                         on
-                          ? "tabular-nums text-volta-void/50"
-                          : "tabular-nums text-volta-smoke"
+                          ? "text-volta-void/50 tabular-nums"
+                          : "text-volta-smoke tabular-nums"
                       }
                     >
                       {option.count}

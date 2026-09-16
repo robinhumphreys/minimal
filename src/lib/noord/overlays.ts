@@ -30,8 +30,7 @@ export const useOverlays = create<OverlayState>()((set) => ({
   from: null,
   show: (overlay) => set((state) => ({ open: overlay, from: state.open })),
   close: () => set({ open: null, from: null }),
-  back: () =>
-    set((state) => ({ open: state.from, from: null })),
+  back: () => set((state) => ({ open: state.from, from: null })),
   toggle: (overlay, next) =>
     set((state) =>
       next

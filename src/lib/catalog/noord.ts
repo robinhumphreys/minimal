@@ -462,8 +462,7 @@ export const products: Product[] = [
       composition: "100% Cashmere",
       colour: "Off-White",
     },
-    description:
-      "A Long Sleeve Polo in Pure Cashmere.",
+    description: "A Long Sleeve Polo in Pure Cashmere.",
     tags: ["knitwear", "everyday", "cashmere"],
   },
   {
@@ -480,8 +479,7 @@ export const products: Product[] = [
       composition: "70% Wool, 30% Cashmere",
       colour: "Navy",
     },
-    description:
-      "A Ribbed Long Sleeve Funnel-Neck in Wool Cashmere.",
+    description: "A Ribbed Long Sleeve Funnel-Neck in Wool Cashmere.",
     tags: ["knitwear", "everyday", "cashmere"],
   },
   {
@@ -498,8 +496,7 @@ export const products: Product[] = [
       composition: "100% Wool",
       colour: "Navy",
     },
-    description:
-      "A Merino Zip Cardigan in Pure Wool.",
+    description: "A Merino Zip Cardigan in Pure Wool.",
     tags: ["knitwear", "everyday", "wool"],
   },
   {
@@ -516,8 +513,7 @@ export const products: Product[] = [
       composition: "70% Cotton, 30% Silk",
       colour: "Off-White",
     },
-    description:
-      "A Short Sleeve Crewneck in Cotton Silk.",
+    description: "A Short Sleeve Crewneck in Cotton Silk.",
     tags: ["knitwear", "everyday", "cotton"],
   },
   {
@@ -534,8 +530,7 @@ export const products: Product[] = [
       composition: "100% Wool",
       colour: "Navy",
     },
-    description:
-      "A Long Sleeve Polo Cardigan in Pure Wool.",
+    description: "A Long Sleeve Polo Cardigan in Pure Wool.",
     tags: ["knitwear", "everyday", "wool"],
   },
   {
@@ -552,8 +547,7 @@ export const products: Product[] = [
       composition: "100% Wool",
       colour: "Navy",
     },
-    description:
-      "A Merino Long Sleeve Polo in Pure Wool.",
+    description: "A Merino Long Sleeve Polo in Pure Wool.",
     tags: ["knitwear", "everyday", "wool"],
   },
   {
@@ -570,8 +564,7 @@ export const products: Product[] = [
       composition: "100% Wool",
       colour: "Light Brown",
     },
-    description:
-      "A Ribbed Henley in Pure Wool.",
+    description: "A Ribbed Henley in Pure Wool.",
     tags: ["knitwear", "everyday", "wool"],
   },
   {
@@ -588,8 +581,7 @@ export const products: Product[] = [
       composition: "63% Wool, 37% Cotton",
       colour: "Mid Brown",
     },
-    description:
-      "A Ribbed Mouliné Zip Cardigan in Wool Cotton.",
+    description: "A Ribbed Mouliné Zip Cardigan in Wool Cotton.",
     tags: ["knitwear", "everyday", "wool"],
   },
   {
@@ -607,8 +599,7 @@ export const products: Product[] = [
       colour: "Black",
       mill: "ARCHé, Italy",
     },
-    description:
-      "A Bomber Jacket in Wool Blend, woven by ARCHé, Italy.",
+    description: "A Bomber Jacket in Wool Blend, woven by ARCHé, Italy.",
     tags: ["outerwear", "everyday", "wool"],
   },
   {
@@ -626,8 +617,7 @@ export const products: Product[] = [
       colour: "Navy",
       mill: "Angelico, Italy",
     },
-    description:
-      "An Overcoat in Pure Wool, woven by Angelico, Italy.",
+    description: "An Overcoat in Pure Wool, woven by Angelico, Italy.",
     tags: ["outerwear", "everyday", "wool"],
   },
   {
@@ -645,8 +635,7 @@ export const products: Product[] = [
       colour: "Navy",
       mill: "Colombo, Italy",
     },
-    description:
-      "A Padded Zip Vest in Pure Cashmere, woven by Colombo, Italy.",
+    description: "A Padded Zip Vest in Pure Cashmere, woven by Colombo, Italy.",
     tags: ["outerwear", "everyday", "cashmere"],
   },
   {
@@ -721,8 +710,7 @@ export const products: Product[] = [
       colour: "Black",
       mill: "Longda, China Mainland",
     },
-    description:
-      "A Peacoat in Pure Wool, woven by Longda, China Mainland.",
+    description: "A Peacoat in Pure Wool, woven by Longda, China Mainland.",
     tags: ["outerwear", "everyday", "wool"],
   },
   {
@@ -877,8 +865,7 @@ export const products: Product[] = [
       sole: "Rubber",
       construction: "Cemented",
     },
-    description:
-      "A Slide in Suede. Rubber sole, cemented construction.",
+    description: "A Slide in Suede. Rubber sole, cemented construction.",
     tags: ["shoes", "everyday", "suede"],
   },
   {
@@ -915,8 +902,7 @@ export const products: Product[] = [
       composition: "100% Leather",
       colour: "Dark Brown",
     },
-    description:
-      "A pair of Gloves in Leather.",
+    description: "A pair of Gloves in Leather.",
     tags: ["accessory", "everyday", "leather"],
   },
   {
@@ -933,8 +919,7 @@ export const products: Product[] = [
       composition: "100% Cashmere",
       colour: "Black",
     },
-    description:
-      "A Scarf in Pure Cashmere.",
+    description: "A Scarf in Pure Cashmere.",
     tags: ["accessory", "everyday", "cashmere"],
   },
   {
@@ -951,8 +936,7 @@ export const products: Product[] = [
       colour: "Black",
       width: "3 cm",
     },
-    description:
-      "A Belt in Italian Cow Leather. 3 cm wide.",
+    description: "A Belt in Italian Cow Leather. 3 cm wide.",
     tags: ["accessory", "everyday", "leather"],
   },
   {
@@ -969,8 +953,7 @@ export const products: Product[] = [
       composition: "70% Wool, 30% Cashmere",
       colour: "Light Blue",
     },
-    description:
-      "A Beanie in Wool Cashmere.",
+    description: "A Beanie in Wool Cashmere.",
     tags: ["accessory", "everyday", "cashmere"],
   },
   {
@@ -1006,8 +989,7 @@ export const products: Product[] = [
       composition: "100% Silk",
       colour: "Black",
     },
-    description:
-      "A Self-tie Bow Tie in Pure Silk.",
+    description: "A Self-tie Bow Tie in Pure Silk.",
     tags: ["accessory", "formal", "silk"],
   },
   {
@@ -1024,8 +1006,7 @@ export const products: Product[] = [
       composition: "100% Cotton",
       colour: "Black",
     },
-    description:
-      "A pair of Regular Socks in Pure Cotton.",
+    description: "A pair of Regular Socks in Pure Cotton.",
     tags: ["accessory", "everyday", "cotton"],
   },
   {
@@ -1042,8 +1023,7 @@ export const products: Product[] = [
       composition: "100% Silk",
       colour: "White",
     },
-    description:
-      "A Pocket Square in Pure Silk.",
+    description: "A Pocket Square in Pure Silk.",
     tags: ["accessory", "formal", "silk"],
   },
   {

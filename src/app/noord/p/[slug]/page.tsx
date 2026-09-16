@@ -15,7 +15,10 @@ export async function generateMetadata(
   const { slug } = await props.params
   const product = getProduct("noord", slug)
   if (!product) return {}
-  return { title: `${product.name} — Noord Suits`, description: product.description }
+  return {
+    title: `${product.name} — Noord Suits`,
+    description: product.description,
+  }
 }
 
 export default async function Page(props: PageProps<"/noord/p/[slug]">) {

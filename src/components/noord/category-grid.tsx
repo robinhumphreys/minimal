@@ -14,7 +14,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/noord/ui/sheet"
-import { ToggleGroup, ToggleGroupItem } from "@/components/noord/ui/toggle-group"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/noord/ui/toggle-group"
 import type { FacetKey, SearchEntry } from "@/lib/noord/types"
 
 type Sort = "featured" | "price-asc" | "price-desc"

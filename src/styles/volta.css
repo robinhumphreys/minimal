@@ -25,10 +25,11 @@
    * rows, form fields. Plex rather than Inter because Noord already owns Inter,
    * and two storefronts in one repo should not share a body face.
    */
-  --font-volta: var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial,
+  --font-volta:
+    var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-volta-display:
+    var(--font-volta-display-sans), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
-  --font-volta-display: var(--font-volta-display-sans), "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
 
   /* Violator stripe, badges, meta rows. Always paired with `uppercase`. */
   --text-volta-micro: 0.625rem;

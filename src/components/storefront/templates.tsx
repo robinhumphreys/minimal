@@ -98,10 +98,7 @@ export async function ProductTemplate({
           {id}
         </Link>
         {category ? (
-          <Link
-            href={`/${id}/${category.slug}`}
-            className="text-sm underline"
-          >
+          <Link href={`/${id}/${category.slug}`} className="text-sm underline">
             {category.name}
           </Link>
         ) : null}

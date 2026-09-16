@@ -58,7 +58,7 @@ export function soldOutSizes(slug: string, sizes: string[]): string[] {
   // `| 0` keeps this in int32 range; without it long slugs overflow to Infinity
   // and every modulo below becomes NaN.
   const hash = Math.abs(
-    [...slug].reduce((acc, char) => ((acc * 31 + char.charCodeAt(0)) | 0), 7),
+    [...slug].reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) | 0, 7),
   )
   // Most products are fully stocked; roughly one in three loses a single size.
   if (hash % 3 !== 0) return []

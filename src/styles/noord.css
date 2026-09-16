@@ -14,8 +14,8 @@
 
 @theme {
   /* --- Type ------------------------------------------------------------- */
-  --font-noord: var(--font-noord-sans), "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+  --font-noord:
+    var(--font-noord-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Eyebrows, nav items, button labels. Always paired with `uppercase`. */
   --text-noord-micro: 0.6875rem;

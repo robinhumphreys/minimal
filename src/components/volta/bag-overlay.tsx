@@ -9,12 +9,7 @@ import {
   TrashIcon,
 } from "@phosphor-icons/react/ssr"
 
-import {
-  bagCount,
-  bagSubtotal,
-  useBag,
-  type BagLine,
-} from "@/lib/volta/bag"
+import { bagCount, bagSubtotal, useBag, type BagLine } from "@/lib/volta/bag"
 import { formatPrice } from "@/lib/volta/format"
 import { useOverlays } from "@/lib/volta/overlays"
 import {

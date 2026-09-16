@@ -109,7 +109,9 @@ export function ProductPage({ slug }: { slug: string }) {
                   <dl className="mt-4 flex flex-col gap-1.5">
                     {details.map(([key, value]) => (
                       <div key={key} className="flex justify-between gap-4">
-                        <dt className="text-noord-ink-faint capitalize">{key}</dt>
+                        <dt className="text-noord-ink-faint capitalize">
+                          {key}
+                        </dt>
                         <dd className="text-right text-noord-ink">{value}</dd>
                       </div>
                     ))}
@@ -125,13 +127,16 @@ export function ProductPage({ slug }: { slug: string }) {
                   <dl className="flex flex-col gap-1.5">
                     {fabric.map(([key, value]) => (
                       <div key={key} className="flex justify-between gap-4">
-                        <dt className="text-noord-ink-faint capitalize">{key}</dt>
+                        <dt className="text-noord-ink-faint capitalize">
+                          {key}
+                        </dt>
                         <dd className="text-right text-noord-ink">{value}</dd>
                       </div>
                     ))}
                   </dl>
                   <p className="mt-4">
-                    Dry clean only. Rest between wears and brush along the grain.
+                    Dry clean only. Rest between wears and brush along the
+                    grain.
                   </p>
                 </AccordionContent>
               </AccordionItem>
@@ -141,9 +146,9 @@ export function ProductPage({ slug }: { slug: string }) {
               <AccordionTrigger>Delivery & returns</AccordionTrigger>
               <AccordionContent>
                 <p>
-                  Free shipping on orders over €150, delivered within two to four
-                  working days. Returns are free for thirty days, in store or by
-                  post.
+                  Free shipping on orders over €150, delivered within two to
+                  four working days. Returns are free for thirty days, in store
+                  or by post.
                 </p>
                 <p className="mt-3">
                   Alterations are included with every suit, jacket and pair of

@@ -38,7 +38,7 @@ export function DesktopNav({ nav }: { nav: NavModel }) {
               href={category.href}
               // `-mb-px` drops the underline onto the header rule rather than
               // leaving it floating a pixel above it.
-              className="volta-wide -mb-px flex h-full items-center border-b-2 border-transparent whitespace-nowrap text-volta-label text-volta-chalk transition-colors hover:border-volta-volt hover:text-volta-volt aria-expanded:border-volta-volt"
+              className="volta-wide -mb-px flex h-full items-center border-b-2 border-transparent text-volta-label whitespace-nowrap text-volta-chalk transition-colors hover:border-volta-volt hover:text-volta-volt aria-expanded:border-volta-volt"
               aria-expanded={open === category.href}
             >
               {category.label}

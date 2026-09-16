@@ -98,7 +98,7 @@ function Hero() {
         <span className="text-noord-micro text-noord-paper/80 uppercase">
           Autumn / Winter
         </span>
-        <h1 className="max-w-2xl text-noord-display text-noord-paper text-balance">
+        <h1 className="max-w-2xl text-noord-display text-balance text-noord-paper">
           Tailoring for the northern half of the year
         </h1>
         <div className="flex flex-wrap gap-3 pt-1">

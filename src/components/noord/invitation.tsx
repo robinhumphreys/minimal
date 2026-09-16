@@ -72,7 +72,7 @@ export function Invitation({ seed }: { seed: string }) {
         <span className="text-noord-micro text-noord-paper/80 uppercase">
           {invitation.eyebrow}
         </span>
-        <h2 className="max-w-xl text-noord-section text-noord-paper text-balance">
+        <h2 className="max-w-xl text-noord-section text-balance text-noord-paper">
           {invitation.title}
         </h2>
         <Button

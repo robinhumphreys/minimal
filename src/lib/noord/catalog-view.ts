@@ -6,11 +6,7 @@ import {
   type Product,
 } from "@/lib/catalog"
 
-import type {
-  NavModel,
-  ProductCardModel,
-  SearchEntry,
-} from "@/lib/noord/types"
+import type { NavModel, ProductCardModel, SearchEntry } from "@/lib/noord/types"
 
 const BRAND = "noord" as const
 
@@ -82,7 +78,10 @@ export function navModel(): NavModel {
     categories,
     // "New arrivals" sits with the categories rather than in a group of its
     // own, the way a shopper thinks about it.
-    menu: [{ label: "New arrivals", href: categoryHref("suits") }, ...categories],
+    menu: [
+      { label: "New arrivals", href: categoryHref("suits") },
+      ...categories,
+    ],
     secondary: SECONDARY,
     utility: UTILITY,
   }

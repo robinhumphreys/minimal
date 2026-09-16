@@ -109,7 +109,7 @@ export function SearchOverlay({
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="What are you training for?"
                 aria-label="Search products"
-                className="volta-wide h-14 border-b-0 text-xl placeholder:normal-case placeholder:tracking-normal placeholder:font-normal [&::-webkit-search-cancel-button]:hidden"
+                className="volta-wide h-14 border-b-0 text-xl placeholder:font-normal placeholder:tracking-normal placeholder:normal-case [&::-webkit-search-cancel-button]:hidden"
               />
               {query && (
                 <button
