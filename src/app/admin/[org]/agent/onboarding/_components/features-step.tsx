@@ -62,8 +62,18 @@ export function FeaturesStep({ next }: { next: string }) {
   const editDraft = useAdminStore((state) => state.editDraft)
 
   React.useEffect(() => {
-    useAdminStore.getState().hydrate()
-  }, [])
+    const store = useAdminStore.getState()
+    store.hydrate()
+    // A choice starts from nothing. Once the merchant has been here the
+    // draft carries what they chose, so coming back does not clear it.
+    if (!store.surfacesOffered[org] && !store.onboarded[org]) {
+      store.editDraft(org, (current) => ({
+        ...current,
+        surface: { ...current.surface, entry: "none", searchAssist: false },
+      }))
+      store.markSurfacesOffered(org)
+    }
+  }, [org])
 
   const enabled: Record<FeatureKey, boolean> = {
     siteChat: config.surface.entry === "launcher",

@@ -14,6 +14,13 @@ type AdminState = {
   drafts: Drafts
   /** Which organisations have been through onboarding to the end. */
   onboarded: Record<BrandId, boolean>
+  /**
+   * Whether the merchant has been offered the surfaces yet this session. The
+   * defaults ship with every surface on, which is right for a storefront and
+   * wrong for a choice: the first visit to that step starts from nothing.
+   */
+  surfacesOffered: Record<BrandId, boolean>
+  markSurfacesOffered: (id: BrandId) => void
   /** Bumped on every draft edit so the preview can re-post. */
   revision: number
   hydrated: boolean
@@ -44,6 +51,7 @@ export const useAdminStore = create<AdminState>()((set) => ({
   active: "noord",
   drafts: initialDrafts(),
   onboarded: { noord: false, volta: false },
+  surfacesOffered: { noord: false, volta: false },
   revision: 0,
   hydrated: false,
 
@@ -60,6 +68,11 @@ export const useAdminStore = create<AdminState>()((set) => ({
       writePublished(id, state.drafts[id])
       return state
     }),
+
+  markSurfacesOffered: (id) =>
+    set((state) => ({
+      surfacesOffered: { ...state.surfacesOffered, [id]: true },
+    })),
 
   completeOnboarding: (id) =>
     set((state) => {
