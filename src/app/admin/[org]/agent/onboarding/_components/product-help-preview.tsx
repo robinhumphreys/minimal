@@ -13,8 +13,8 @@ import { DotField, groundFor } from "./dot-field"
 const TOPIC = "Suits"
 
 /**
- * The left half for Product help: a stand-in for the merchant's band with
- * the embed's own button in it, and the guide it opens, over the ground.
+ * The left half for Product help: the embed's own button on the ground, and
+ * the guide it opens over it.
  * The guide talks to the real route, so the questions are real ones.
  */
 export function ProductHelpPreview({
@@ -36,10 +36,9 @@ export function ProductHelpPreview({
         className="absolute inset-0 flex items-start justify-center p-6"
         style={{ color: ink }}
       >
-        <div className="flex w-full max-w-md flex-col items-center gap-3 rounded-lg border border-current/15 px-6 py-6 text-center">
-          <p className="text-sm font-medium">Not sure which one is yours?</p>
-          <GuideTrigger config={config} onOpen={() => setOpen(true)} />
-        </div>
+        {/* Just the button: the band it sits in is the merchant's, and the
+            guide it opens is what is being judged. */}
+        <GuideTrigger config={config} onOpen={() => setOpen(true)} />
       </div>
       <GuideOverlay
         key={config.surface.productHelp.greeting}
