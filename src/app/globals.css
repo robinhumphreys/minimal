@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
 /* Per-brand token sets. Namespaced, so neither storefront can reach the other. */
+@import "../styles/noord.css";
 @import "../styles/volta.css";
 
 @custom-variant dark (&:is(.dark *));
