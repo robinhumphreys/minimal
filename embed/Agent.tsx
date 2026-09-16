@@ -22,7 +22,12 @@ export const bus: { open: (options?: OpenOptions) => void } = {
   open: () => {},
 }
 
-type Session = { open: boolean; messages: AgentUIMessage[] }
+type Session = {
+  open: boolean
+  messages: AgentUIMessage[]
+  /** Whether anything has been stored yet: a session that exists is a shopper who has decided. */
+  touched: boolean
+}
 
 /**
  * The conversation follows the shopper across pages. A product card is a real
@@ -37,16 +42,16 @@ function sessionKey(id: string) {
 function readSession(id: string): Session {
   try {
     const raw = window.sessionStorage.getItem(sessionKey(id))
-    if (!raw) return { open: false, messages: [] }
+    if (!raw) return { open: false, messages: [], touched: false }
     const parsed = JSON.parse(raw) as Partial<Session>
     const messages = Array.isArray(parsed.messages) ? parsed.messages : []
     // A question that never got its answer — the tab was left mid-request, or
     // the request failed — would come back as a loose end with no retry
     // behind it. Drop it; the shopper can ask again.
     while (messages.at(-1)?.role === "user") messages.pop()
-    return { open: parsed.open === true, messages }
+    return { open: parsed.open === true, messages, touched: true }
   } catch {
-    return { open: false, messages: [] }
+    return { open: false, messages: [], touched: false }
   }
 }
 
@@ -118,9 +123,28 @@ function useHostDom() {
   return host
 }
 
+/** Whether the launcher belongs on this page at all. */
+function offPage(config: AgentConfig): boolean {
+  const path = window.location.pathname
+  return config.surface.hiddenPaths.some((prefix) => path.startsWith(prefix))
+}
+
+/** A product page, on either storefront: `/{brand}/p/{slug}`. */
+function onProductPage(): boolean {
+  return /\/p\//.test(window.location.pathname)
+}
+
 export function Agent({ config }: { config: AgentConfig }) {
   const [session] = React.useState(() => readSession(config.id))
-  const [open, setOpen] = React.useState(session.open)
+  // A shopper who has opened or closed the window has decided; before that,
+  // the merchant may have asked for it open on product pages.
+  const [open, setOpen] = React.useState(
+    () =>
+      session.open ||
+      (!session.touched &&
+        config.surface.openOnProductPages &&
+        onProductPage()),
+  )
   const host = useHostDom()
 
   const transport = React.useMemo(
@@ -145,7 +169,7 @@ export function Agent({ config }: { config: AgentConfig }) {
   React.useEffect(() => {
     // Mid-stream transcripts are not worth keeping; the next settled one is.
     if (status === "submitted" || status === "streaming") return
-    writeSession(config.id, { open, messages })
+    writeSession(config.id, { open, messages, touched: true })
   }, [config.id, open, messages, status])
 
   const openWith = React.useCallback(
@@ -176,7 +200,7 @@ export function Agent({ config }: { config: AgentConfig }) {
 
   return (
     <>
-      {config.surface.entry === "launcher" ? (
+      {config.surface.entry === "launcher" && !offPage(config) ? (
         <SiteChatLayer
           mode="fixed"
           config={config}

@@ -1,6 +1,6 @@
 # Minimal
 
-An AI storefront agent: one admin (`/admin`), two storefronts (`/noord`, `/volta`),
+An AI storefront agent: one admin per organisation (`/admin/noord`, `/admin/volta`), two storefronts (`/noord`, `/volta`),
 and a script-tag embed that mounts the agent into either storefront.
 
 ## Development
@@ -27,10 +27,10 @@ AI_GATEWAY_API_KEY=vck_...
 
 | Path                                                            | What it is                                                                                                                            |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/admin`                                                 | Admin: shell, draft editor, snippet, publish, live iframe preview                                                                     |
+| `src/app/admin`                                                 | Admin, one organisation per slug (`/admin/noord`, `/admin/volta`)                                                                     |
 | `src/app/admin/_components`                                     | The admin's own components, colocated with the route                                                                                  |
 | `src/app/noord`, `src/app/volta`                                | Storefronts: home, category, product                                                                                                  |
-| `src/app/admin/agent/onboarding`                                | Merchant onboarding: intro, site matching, the Site chat surface studio                                                               |
+| `src/app/admin/[org]/agent/onboarding`                          | Merchant onboarding under `[org]`: intro, site matching, the surface studio                                                           |
 | `src/app/api/agents/[id]/chat`                                  | Streaming chat route: catalog in the prompt, `showProducts` as a tool                                                                 |
 | `src/lib/agent`                                                 | The agent's tool, its job description, and the message types it emits                                                                 |
 | `src/components/volta`, `src/lib/volta`, `src/styles/volta.css` | The Volta storefront: components, view models, `volta-*` design tokens                                                                |

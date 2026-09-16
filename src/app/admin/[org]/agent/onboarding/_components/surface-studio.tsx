@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/resizable"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { agentConfigSchema, type AgentConfig } from "@/lib/config/schema"
+import { useOrg } from "@/app/admin/_components/use-org"
 import { useAdminStore } from "@/lib/store/admin"
 
 import { CustomisePane } from "./customise-pane"
@@ -38,7 +39,8 @@ const PUBLISHED_MS = 2000
  * to change it on the right — so the tabs swap only the left half's subject.
  */
 export function SurfaceStudio() {
-  const config = useAdminStore((state) => state.drafts[state.active])
+  const org = useOrg()
+  const config = useAdminStore((state) => state.drafts[org])
 
   // Whatever was last published is where the merchant left off.
   React.useEffect(() => {
@@ -155,23 +157,21 @@ function Studio({ config }: { config: AgentConfig }) {
           <ResizableHandle withHandle className="bg-transparent" />
 
           <ResizablePanel defaultSize="38" minSize="25" className="pl-4">
-            {surface === "search-assist" ? (
-              <SearchAssistOptions
-                enabled={config.surface.searchAssist}
-                onChange={(enabled) =>
-                  editDraft(config.id, (current) => ({
-                    ...current,
-                    surface: { ...current.surface, searchAssist: enabled },
-                  }))
-                }
-              />
-            ) : (
-              <CustomisePane
-                showing={showing}
-                settings={settings}
-                onChange={onChange}
-              />
-            )}
+            <CustomisePane
+              showing={showing}
+              settings={settings}
+              onChange={onChange}
+              options={
+                surface === "search-assist" ? (
+                  <SearchAssistOptions
+                    enabled={settings.searchAssist}
+                    onChange={(enabled) =>
+                      onChange({ ...settings, searchAssist: enabled })
+                    }
+                  />
+                ) : undefined
+              }
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

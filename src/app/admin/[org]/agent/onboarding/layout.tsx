@@ -11,6 +11,6 @@ export const metadata: Metadata = {
  */
 export default function OnboardingLayout({
   children,
-}: LayoutProps<"/admin/agent/onboarding">) {
+}: LayoutProps<"/admin/[org]/agent/onboarding">) {
   return children
 }

@@ -28,10 +28,13 @@ import {
   MessageScrollerItem,
   MessageScrollerProvider,
   MessageScrollerViewport,
+  useMessageScroller,
 } from "@/components/ui/message-scroller"
+import { BrandMark } from "@/components/brand/brand-mark"
 import type { AgentConfig } from "@/lib/config/schema"
 
 import { ProductCards } from "./products"
+import { Working } from "./thinking"
 import type { ChatDriver } from "./types"
 
 /**
@@ -55,10 +58,13 @@ export function ChatWindow({
   className?: string
 }) {
   const busy = chat.status === "submitted" || chat.status === "streaming"
-  const initial = config.name.trim().charAt(0).toUpperCase() || "A"
+  const name = config.identity.assistantName.trim() || config.name
+  const initial = name.charAt(0).toUpperCase() || "A"
+  const plain = config.theme.header === "plain"
 
   return (
     <MessageScrollerProvider>
+      <FollowEnd chat={chat} />
       <Card
         size="sm"
         role="dialog"
@@ -78,20 +84,36 @@ export function ChatWindow({
         {/* A flex row rather than `CardHeader`'s own grid: that grid
             re-columns itself when a `CardAction` is present, which strands
             the name from its avatar. */}
-        <CardHeader className="flex items-center gap-3 rounded-t-[inherit] bg-primary py-3 text-primary-foreground">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-current/20 text-xs font-medium">
-            {initial}
-          </div>
+        <CardHeader
+          className={cn(
+            "flex items-center gap-3 rounded-t-[inherit] py-3",
+            plain
+              ? "border-b border-border bg-card text-foreground"
+              : "bg-primary text-primary-foreground",
+          )}
+        >
+          {config.identity.avatar === "mark" ? (
+            <BrandMark
+              brand={config.id}
+              className="size-8 rounded-full ring-1 ring-current/15"
+            />
+          ) : (
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-current/20 text-xs font-medium">
+              {initial}
+            </div>
+          )}
           <div className="flex min-w-0 flex-col">
             <CardTitle
               className="truncate text-sm"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              {config.name}
+              {name}
             </CardTitle>
-            <CardDescription className="text-xs text-current/70">
-              Shopping assistant
-            </CardDescription>
+            {config.identity.subtitle.trim() ? (
+              <CardDescription className="text-xs text-current/70">
+                {config.identity.subtitle}
+              </CardDescription>
+            ) : null}
           </div>
           <CardAction className="ml-auto self-center">
             <Button
@@ -109,7 +131,7 @@ export function ChatWindow({
         <CardContent className="flex-1 overflow-hidden p-0">
           <MessageScroller>
             <MessageScrollerViewport>
-              <MessageScrollerContent className="gap-4 p-(--card-spacing)">
+              <MessageScrollerContent className="gap-(--minimal-gap) p-(--card-spacing)">
                 <MessageScrollerItem>
                   <AgentLine>{config.behaviour.greeting}</AgentLine>
                 </MessageScrollerItem>
@@ -148,13 +170,13 @@ export function ChatWindow({
                     greeting out of view. The list just follows the end. */}
                 {chat.messages.map((message) => (
                   <MessageScrollerItem key={message.id}>
-                    <MessageItem message={message} />
+                    <MessageItem message={message} config={config} />
                   </MessageScrollerItem>
                 ))}
 
                 {chat.status === "submitted" ? (
                   <MessageScrollerItem>
-                    <Thinking />
+                    <Thinking style={config.theme.thinking} />
                   </MessageScrollerItem>
                 ) : null}
 
@@ -272,7 +294,13 @@ function Composer({
 }
 
 /** One message, part by part: text as bubbles, product picks as cards. */
-function MessageItem({ message }: { message: AgentUIMessage }) {
+function MessageItem({
+  message,
+  config,
+}: {
+  message: AgentUIMessage
+  config: AgentConfig
+}) {
   if (message.role === "user") {
     const text = message.parts
       .map((part) => (part.type === "text" ? part.text : ""))
@@ -308,14 +336,21 @@ function MessageItem({ message }: { message: AgentUIMessage }) {
           if (part.type === "tool-showProducts") {
             if (part.state === "output-available") {
               return (
-                <ProductCards key={index} products={part.output.products} />
+                <ProductCards
+                  key={index}
+                  products={part.output.products}
+                  cards={config.surface.cards}
+                />
               )
             }
             if (part.state === "output-error") return null
             return (
               <Bubble key={index} variant="ghost">
-                <BubbleContent className="animate-pulse text-muted-foreground">
-                  Finding products…
+                <BubbleContent className="text-muted-foreground">
+                  <Working
+                    style={config.theme.thinking}
+                    label="Finding products"
+                  />
                 </BubbleContent>
               </Bubble>
             )
@@ -326,6 +361,30 @@ function MessageItem({ message }: { message: AgentUIMessage }) {
       </MessageContent>
     </Message>
   )
+}
+
+/**
+ * Keeps the newest part of the answer in view as it arrives. In a window this
+ * short there is no reading-behind to protect: whatever the agent is saying
+ * now is the thing to look at, and a shopper who has scrolled up to re-read
+ * has the scroller's own button to come back down.
+ */
+function FollowEnd({ chat }: { chat: ChatDriver }) {
+  const { scrollToEnd } = useMessageScroller()
+  const last = chat.messages.at(-1)
+  const growth = last ? last.parts.length : 0
+  const lastText = last?.parts.reduce(
+    (total, part) => total + (part.type === "text" ? part.text.length : 0),
+    0,
+  )
+
+  React.useEffect(() => {
+    if (chat.status === "submitted" || chat.status === "streaming") {
+      scrollToEnd({ behavior: "smooth" })
+    }
+  }, [chat.status, chat.messages.length, growth, lastText, scrollToEnd])
+
+  return null
 }
 
 function AgentLine({ children }: { children: React.ReactNode }) {
@@ -342,23 +401,14 @@ function AgentLine({ children }: { children: React.ReactNode }) {
   )
 }
 
-/** Three dots, until the first token lands. */
-function Thinking() {
+/** The agent, working, until the first token lands. */
+function Thinking({ style }: { style: AgentConfig["theme"]["thinking"] }) {
   return (
     <Message>
       <MessageContent>
         <Bubble variant="muted">
-          <BubbleContent
-            aria-label="Thinking"
-            className="flex h-9 items-center gap-1 px-3.5"
-          >
-            {[0, 1, 2].map((dot) => (
-              <span
-                key={dot}
-                className="size-1.5 animate-bounce rounded-full bg-current/60"
-                style={{ animationDelay: `${dot * 120}ms` }}
-              />
-            ))}
+          <BubbleContent className="flex h-9 items-center px-3.5 text-muted-foreground">
+            <Working style={style} label="Thinking" />
           </BubbleContent>
         </Bubble>
       </MessageContent>

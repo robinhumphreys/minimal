@@ -1,1 +1,1 @@
-export { SearchPanel } from "./panel"
+export { SearchPanel, type SearchFn } from "./panel"

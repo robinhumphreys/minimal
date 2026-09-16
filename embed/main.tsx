@@ -35,6 +35,14 @@ function injectStylesheet(src: string) {
 }
 
 function start() {
+  // The admin's onboarding shows the site as it was before the agent, in an
+  // iframe. The one thing that page must not have is the agent.
+  if (
+    new URLSearchParams(window.location.search).get("minimal-agent") === "off"
+  ) {
+    return
+  }
+
   const script = resolveScript()
   const id = script?.dataset.agent
   if (!id || !isBrandId(id)) {

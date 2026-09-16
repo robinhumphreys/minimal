@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname, useRouter } from "next/navigation"
 import { ChevronsUpDownIcon } from "lucide-react"
 
 import { BrandMark } from "@/components/brand/brand-mark"
@@ -19,7 +20,6 @@ import {
 } from "@/components/ui/sidebar"
 import { BRAND_IDS, type BrandId } from "@/lib/catalog/types"
 import { defaults } from "@/lib/config/defaults"
-import { useAdminStore } from "@/lib/store/admin"
 
 /**
  * The merchant accounts this admin can configure. There is no accounts API, so
@@ -32,15 +32,17 @@ const ACCOUNTS: { id: BrandId; name: string }[] = BRAND_IDS.map((id) => ({
 }))
 
 /**
- * Switches which merchant the whole admin is editing. `active` lives in the
- * admin store rather than the URL, so every screen — this one included —
- * follows the switch without a navigation.
+ * Switches which merchant the whole admin is editing. The organisation is
+ * the first segment of the address, so switching is a navigation to the same
+ * screen under the other slug; the store follows the address from there.
  */
-export function AccountSwitcher() {
+export function AccountSwitcher({ org }: { org: BrandId }) {
   const { isMobile } = useSidebar()
-  const active = useAdminStore((state) => state.active)
-  const setActive = useAdminStore((state) => state.setActive)
-  const account = ACCOUNTS.find((entry) => entry.id === active) ?? ACCOUNTS[0]
+  const router = useRouter()
+  const pathname = usePathname()
+  const account = ACCOUNTS.find((entry) => entry.id === org) ?? ACCOUNTS[0]
+  const switchTo = (id: BrandId) =>
+    router.push(pathname.replace(`/admin/${org}`, `/admin/${id}`))
 
   return (
     <SidebarMenu>
@@ -80,7 +82,7 @@ export function AccountSwitcher() {
               {ACCOUNTS.map((entry) => (
                 <DropdownMenuItem
                   key={entry.id}
-                  onClick={() => setActive(entry.id)}
+                  onClick={() => switchTo(entry.id)}
                   className="gap-2 p-2"
                 >
                   <BrandMark brand={entry.id} className="size-6 rounded-sm" />

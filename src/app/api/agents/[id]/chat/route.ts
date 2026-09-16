@@ -36,7 +36,7 @@ export async function POST(
     model: parsed.data.model,
     instructions: instructionsFor(id, parsed.data),
     messages: await convertToModelMessages(messages),
-    tools: agentTools(id),
+    tools: agentTools(id, parsed.data.picks),
     // One call to show products, one to correct an unknown slug, and the
     // sentence that goes with them. Anything longer is the model wandering.
     stopWhen: stepCountIs(3),

@@ -7,6 +7,7 @@ import type { Behaviour } from "@/lib/config/schema"
 
 import { pickFrom } from "./picks"
 import type { SearchRequest, SearchResult } from "./types"
+import { voiceLines } from "./voice"
 
 const LIMIT = 6
 
@@ -213,6 +214,8 @@ export async function agentSearch(
       behaviour.systemPrompt,
       "",
       JOB,
+      "",
+      voiceLines(behaviour),
       "",
       "Catalog (slug | name | price | category | attributes | tags | description):",
       catalogAsText(brand),

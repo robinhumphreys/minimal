@@ -16,7 +16,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { BrandMark } from "@/components/brand/brand-mark"
 import { Button } from "@/components/ui/button"
 import type { BrandId } from "@/lib/catalog/types"
-import { useAdminStore } from "@/lib/store/admin"
+import { useOrg } from "@/app/admin/_components/use-org"
 
 /**
  * The dot field behind the browser. Hex rather than the theme's CSS variables
@@ -85,9 +85,9 @@ function tasksFor(
  * evidence that we are looking at the right one.
  */
 export function MatchingStep({ next }: { next: string }) {
-  // Which merchant is being set up follows the sidebar's account switcher, the
+  // Which merchant is being set up is the organisation in the address, the
   // same as every other admin screen.
-  const brand = useAdminStore((state) => state.active)
+  const brand = useOrg()
   const site = SITES[brand]
   const tasks = tasksFor(site.domain)
   // How many rows have finished. The row at this index is the one in progress;
@@ -351,7 +351,10 @@ function BrowserFrame({
         style={{ width: FRAME_WIDTH, height: FRAME_HEIGHT }}
       >
         <iframe
-          src={path}
+          // The site as it is before the agent: the surfaces are set up in
+          // the steps that follow, and showing them here would be showing
+          // the answer before the question.
+          src={`${path}?minimal-agent=off`}
           title={domain}
           tabIndex={-1}
           scrolling="no"

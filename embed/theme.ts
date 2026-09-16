@@ -3,8 +3,33 @@ import type { CSSProperties } from "react"
 import { readableOn } from "@/lib/config/contrast"
 import type { Theme } from "@/lib/config/schema"
 
+/** Corner radius per roundness step. Everything rounded scales off this. */
+const RADIUS: Record<Theme["roundness"], string> = {
+  square: "0px",
+  soft: "0.5rem",
+  round: "1rem",
+}
+
 /**
- * The merchant's four theme values, spent as a whole palette.
+ * The curated faces a merchant can choose instead of their site's own. The
+ * variables are what this app's root layout loads; each falls back to the
+ * face by name so the choice still means something on a page without them.
+ */
+const FONTS: Record<Exclude<Theme["font"], "site">, string> = {
+  inter:
+    'var(--font-noord-sans), Inter, "Helvetica Neue", Helvetica, Arial, sans-serif',
+  geist:
+    'var(--font-geist-sans), Geist, "Helvetica Neue", Helvetica, Arial, sans-serif',
+  system: "system-ui, -apple-system, sans-serif",
+  serif: 'Georgia, "Times New Roman", Times, serif',
+}
+
+export function radiusOf(theme: Theme): string {
+  return RADIUS[theme.roundness]
+}
+
+/**
+ * The merchant's choices, spent as a whole palette.
  *
  * Everything between the surface and the ink is mixed from the two rather than
  * fixed: a white panel and a charcoal one need different greys for a muted
@@ -16,6 +41,8 @@ export function themeStyle(theme: Theme): CSSProperties {
   const ink = dark ? "#ffffff" : "#131313"
   const mix = (amount: number) =>
     `color-mix(in oklab, ${theme.surface}, ${ink} ${amount}%)`
+  const body = theme.font === "site" ? theme.fontBody : FONTS[theme.font]
+  const display = theme.font === "site" ? theme.fontDisplay : body
 
   return {
     "--background": theme.surface,
@@ -35,8 +62,11 @@ export function themeStyle(theme: Theme): CSSProperties {
     "--border": mix(dark ? 15 : 9),
     "--input": mix(dark ? 18 : 12),
     "--ring": theme.accent,
-    "--radius": theme.radius,
-    "--font-sans": theme.fontBody,
-    "--font-display": theme.fontDisplay,
+    "--radius": radiusOf(theme),
+    "--font-sans": body,
+    "--font-display": display,
+    // Compact pulls every gap and inset in by a quarter.
+    "--minimal-gap": theme.density === "compact" ? "0.75rem" : "1rem",
+    "--card-spacing": theme.density === "compact" ? "0.625rem" : "0.875rem",
   } as CSSProperties
 }

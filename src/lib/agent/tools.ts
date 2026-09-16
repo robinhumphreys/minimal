@@ -6,21 +6,24 @@ import { getCatalog, type BrandId } from "@/lib/catalog"
 import { pickFrom } from "./picks"
 import type { ProductPick, ShowProductsOutput } from "./types"
 
-const showProductsInput = z.object({
-  picks: z
-    .array(
-      z.object({
-        slug: z.string().describe("A product slug from the catalog, exactly."),
-        why: z
-          .string()
-          .describe(
-            "One short sentence, addressed to the shopper, on why this one fits what they asked for.",
-          ),
-      }),
-    )
-    .min(1)
-    .max(4),
-})
+const showProductsInput = (max: number) =>
+  z.object({
+    picks: z
+      .array(
+        z.object({
+          slug: z
+            .string()
+            .describe("A product slug from the catalog, exactly."),
+          why: z
+            .string()
+            .describe(
+              "One short sentence, addressed to the shopper, on why this one fits what they asked for.",
+            ),
+        }),
+      )
+      .min(1)
+      .max(max),
+  })
 
 /**
  * The one tool the storefront agent has: putting products on the screen.
@@ -30,14 +33,13 @@ const showProductsInput = z.object({
  * Unknown slugs are reported back rather than silently dropped, so the model
  * can correct itself in the same turn.
  */
-export function agentTools(brand: BrandId) {
+export function agentTools(brand: BrandId, maxPicks = 3) {
   const catalog = getCatalog(brand)
 
   return {
     showProducts: tool({
-      description:
-        "Show the shopper up to four products from the catalog as cards, each with your one-line reason. Use it whenever you recommend something; never describe a product you could show instead.",
-      inputSchema: showProductsInput,
+      description: `Show the shopper up to ${maxPicks} products from the catalog as cards, each with your one-line reason. Use it whenever you recommend something; never describe a product you could show instead.`,
+      inputSchema: showProductsInput(maxPicks),
       execute: async ({ picks }): Promise<ShowProductsOutput> => {
         const products: ProductPick[] = []
         const unknown: string[] = []

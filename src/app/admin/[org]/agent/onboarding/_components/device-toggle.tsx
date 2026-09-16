@@ -56,12 +56,12 @@ export function DeviceToggle({
 
 /**
  * A phone's worth of screen, for the previews to render into when the toggle
- * says mobile. Just the viewport — no bezel, no notch. What is being judged
- * is the surface at that width, and a drawn-on handset only gets in the way.
+ * says mobile. Only the bounds are drawn — a soft hairline, no fill, no
+ * shadow — so the surface inside is judged on the same ground as desktop.
  */
 export function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative h-full max-h-[44rem] w-[375px] max-w-full overflow-hidden rounded-xl bg-background shadow-2xl ring-1 ring-foreground/10">
+    <div className="relative h-full max-h-[44rem] w-[375px] max-w-full overflow-hidden rounded-xl border-2 border-foreground/10">
       {children}
     </div>
   )

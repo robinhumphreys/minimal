@@ -65,3 +65,16 @@ export function mixHex(hex: string, into: string, amount: number): string {
       .join("")
   )
 }
+
+/**
+ * The studio's ground for a brand's surface: the same soft grey field the
+ * previews stand on, a hair off the surface itself so a white site gets the
+ * studio's usual grey and a charcoal one gets charcoal. A surface put on this
+ * ground should take `back` as its surface, so what it mixes from it reads.
+ */
+export function groundFor(surface: string, ink: string) {
+  return {
+    back: mixHex(surface, ink, 0.035),
+    fill: mixHex(surface, ink, 0.13),
+  }
+}

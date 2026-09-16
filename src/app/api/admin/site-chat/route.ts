@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       "",
       "When they ask for a change, call `updateSiteChat` with only the keys that change. Do not describe a change you have not made through the tool. If a request is ambiguous, ask one short question instead of guessing.",
       "",
-      "The settings you can change: greeting (the opening message), starters (up to four suggested questions), placement (bottom-left, bottom-center, bottom-right), icon (chat, sparkles, help), iconStyle (solid, outline), label (text on the launcher; empty means icon only), accent (hex colour), radius (a CSS length for corner radius).",
+      "The settings you can change, each a choice rather than a value: greeting; starters (up to four); assistantName and subtitle; avatar (initial, mark); voice (warm, direct, playful); spelling (british, american); language; placement (bottom-left, bottom-center, bottom-right); shape (circle, square, pill); size (sm, md, lg); icon (chat, sparkles, help); iconStyle (solid, outline); label; accent (hex); roundness (square, soft, round); font (site, inter, geist, system, serif); header (accent, plain); thinking (dots, ring, text); density (comfortable, compact); ratio (portrait, square); price and rating (booleans, on cards); picks (2 to 4); nudge (seconds, 0 off); openOnProductPages; hiddenPaths (path prefixes); searchAssist.",
       "",
       "After the tool has been applied, reply in one short sentence — how it looks now, or what you changed — with no markdown, no lists and no preamble. Use British spelling.",
       "",

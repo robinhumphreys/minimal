@@ -3,9 +3,10 @@ import { ArrowUpIcon } from "lucide-react"
 import { cn } from "cn"
 
 import type { SearchRequest, SearchResult } from "@/lib/agent/types"
-import type { AgentConfig } from "@/lib/config/schema"
+import type { AgentConfig, Behaviour } from "@/lib/config/schema"
 
 import { ProductCard } from "../site-chat/products"
+import { Working } from "../site-chat/thinking"
 import { themeStyle } from "../theme"
 
 /** How long the shopper has to stop typing before a search goes out. */
@@ -43,12 +44,35 @@ type Turn = {
  * is unreachable the keyword answer carries its own line and facet chips, so
  * the conversation still has a voice.
  */
+/** One search request, however it is answered. */
+export type SearchFn = (
+  request: SearchRequest & { behaviour: Behaviour },
+  signal: AbortSignal,
+) => Promise<SearchResult>
+
+/** The real thing: the agent's search route on the same origin. */
+function routeSearch(id: AgentConfig["id"]): SearchFn {
+  return async (request, signal) => {
+    const response = await fetch(`/api/agents/${id}/search`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(request),
+      signal,
+    })
+    if (!response.ok) throw new Error(`search ${response.status}`)
+    return (await response.json()) as SearchResult
+  }
+}
+
 export function SearchPanel({
   config,
   query,
+  search: searchProp,
 }: {
   config: AgentConfig
   query: string
+  /** Stands in for the route, for previews that must not spend a token. */
+  search?: SearchFn
 }) {
   const trimmed = query.trim()
   // Turns belong to the search they were made for, so a new search starts
@@ -65,6 +89,10 @@ export function SearchPanel({
   const fill = useFillToBottom(rootRef)
 
   const behaviour = config.behaviour
+  const searchFn = React.useMemo(
+    () => searchProp ?? routeSearch(config.id),
+    [searchProp, config.id],
+  )
 
   /** Runs one turn: instant grid, then the agent's reading over it. */
   const run = React.useCallback(
@@ -81,21 +109,8 @@ export function SearchPanel({
               },
         )
 
-      const search = async (mode: SearchRequest["mode"]) => {
-        const response = await fetch(`/api/agents/${config.id}/search`, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            query: trimmed,
-            refinements,
-            mode,
-            behaviour,
-          } satisfies SearchRequest & { behaviour: typeof behaviour }),
-          signal,
-        })
-        if (!response.ok) throw new Error(`search ${response.status}`)
-        return (await response.json()) as SearchResult
-      }
+      const search = (mode: SearchRequest["mode"]) =>
+        searchFn({ query: trimmed, refinements, mode, behaviour }, signal)
 
       const started = Date.now()
       try {
@@ -128,7 +143,7 @@ export function SearchPanel({
         patch((turn) => ({ ...turn, reading: false }))
       }
     },
-    [config.id, trimmed, behaviour],
+    [searchFn, trimmed, behaviour],
   )
 
   // The first turn: typed, paused, answered.
@@ -194,6 +209,7 @@ export function SearchPanel({
         <TurnView
           key={turn.id}
           turn={turn}
+          config={config}
           first={index === 0}
           last={index === turns.length - 1}
           onRefine={refine}
@@ -304,11 +320,13 @@ const SHOWN = 4
  */
 function TurnView({
   turn,
+  config,
   first,
   last,
   onRefine,
 }: {
   turn: Turn
+  config: AgentConfig
   first: boolean
   last: boolean
   onRefine: (text: string) => void
@@ -329,7 +347,7 @@ function TurnView({
 
       {reading || !result ? (
         reading ? (
-          <Reading />
+          <Reading style={config.theme.thinking} />
         ) : null
       ) : (
         <>
@@ -355,6 +373,7 @@ function TurnView({
                 <ProductCard
                   key={product.slug}
                   product={product}
+                  cards={config.surface.cards}
                   layout="column"
                 />
               ))}
@@ -387,7 +406,7 @@ function TurnView({
 }
 
 /** What the agent appears to be doing, one stage giving way to the next. */
-function Reading() {
+function Reading({ style }: { style: AgentConfig["theme"]["thinking"] }) {
   const [stage, setStage] = React.useState(0)
 
   React.useEffect(() => {
@@ -398,21 +417,12 @@ function Reading() {
   }, [])
 
   return (
-    <p
-      role="status"
-      className="flex h-9 w-fit items-center gap-2 rounded-xl bg-muted px-3 text-sm text-muted-foreground"
-    >
-      <span className="flex items-center gap-1">
-        {[0, 1, 2].map((dot) => (
-          <span
-            key={dot}
-            className="size-1.5 animate-bounce rounded-full bg-current/60"
-            style={{ animationDelay: `${dot * 120}ms` }}
-          />
-        ))}
-      </span>
-      {STAGES[stage]}…
-    </p>
+    <div className="flex h-9 w-fit items-center rounded-xl bg-muted px-3 text-sm text-muted-foreground">
+      {/* The stages are the text here whatever the style: a search has more
+          to say about where it is than a chat does. */}
+      <Working style={style === "text" ? "dots" : style} label="" />
+      <span className="ml-2">{STAGES[stage]}…</span>
+    </div>
   )
 }
 

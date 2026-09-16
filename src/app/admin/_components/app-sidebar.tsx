@@ -30,6 +30,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+import type { BrandId } from "@/lib/catalog/types"
+
 import { AccountSwitcher } from "./account-switcher"
 import { MinimalLogo } from "./minimal-logo"
 import { NavMain, type NavGroup } from "./nav-main"
@@ -39,9 +41,15 @@ const USER = { name: "Merchant admin", initials: "MA" }
 
 // Only "Agent" is wired up. The rest name the screens this admin is meant to
 // grow into, so the rail has the shape it will eventually need.
-const NAV: NavGroup[] = [
+const navFor = (org: BrandId): NavGroup[] => [
   {
-    items: [{ title: "Agent", icon: <SparklesIcon />, href: "/admin" }],
+    items: [
+      {
+        title: "Agent",
+        icon: <SparklesIcon />,
+        href: `/admin/${org}/agent/onboarding`,
+      },
+    ],
   },
   {
     label: "Manage",
@@ -70,15 +78,18 @@ const NAV: NavGroup[] = [
   },
 ]
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  org,
+  ...props
+}: { org: BrandId } & React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <Brand />
-        <AccountSwitcher />
+        <AccountSwitcher org={org} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain groups={NAV} />
+        <NavMain groups={navFor(org)} />
       </SidebarContent>
       <SidebarFooter>
         <SidebarSeparator className="mx-0" />

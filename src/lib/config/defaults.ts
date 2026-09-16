@@ -12,9 +12,13 @@ export const defaults: Record<BrandId, AgentConfig> = {
     theme: {
       accent: "#131313",
       surface: "#ffffff",
-      radius: "0rem",
+      // Noord draws nothing with a curve.
+      roundness: "square",
+      font: "site",
       fontBody: "var(--font-noord-sans), Helvetica, Arial, sans-serif",
       fontDisplay: "var(--font-noord-sans), Helvetica, Arial, sans-serif",
+      header: "accent",
+      thinking: "dots",
       density: "comfortable",
     },
     behaviour: {
@@ -26,6 +30,10 @@ export const defaults: Record<BrandId, AgentConfig> = {
         "Show me something in wool.",
       ],
       model: DEFAULT_MODEL,
+      voice: "warm",
+      spelling: "british",
+      language: "English",
+      picks: 3,
     },
     // Outline glyph: Noord's storefront is hairlines and thin rules.
     surface: {
@@ -34,7 +42,19 @@ export const defaults: Record<BrandId, AgentConfig> = {
       icon: "chat",
       iconStyle: "outline",
       label: "",
+      shape: "circle",
+      size: "md",
+      // The catalogue is shot tall, on models.
+      cards: { ratio: "portrait", price: true, rating: true },
+      nudge: 0,
+      openOnProductPages: false,
+      hiddenPaths: [],
       searchAssist: true,
+    },
+    identity: {
+      assistantName: "",
+      subtitle: "Shopping assistant",
+      avatar: "initial",
     },
   },
   volta: {
@@ -48,12 +68,15 @@ export const defaults: Record<BrandId, AgentConfig> = {
       // Volta's ground is charcoal (`--color-volta-void`), so the window is
       // dark too; a white panel on that storefront would be the bolted-on look.
       surface: "#212121",
-      // `--radius-volta`: Volta's controls are near-square blocks, not pills.
-      radius: "0.125rem",
+      // `--radius-volta` is 2px: near-square blocks, not pills.
+      roundness: "soft",
+      font: "site",
       fontBody:
         'var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial, sans-serif',
       fontDisplay:
         'var(--font-volta-display-sans), "Helvetica Neue", Helvetica, Arial, sans-serif',
+      header: "accent",
+      thinking: "dots",
       density: "comfortable",
     },
     behaviour: {
@@ -65,6 +88,10 @@ export const defaults: Record<BrandId, AgentConfig> = {
         "Which of these are vegan?",
       ],
       model: DEFAULT_MODEL,
+      voice: "direct",
+      spelling: "british",
+      language: "English",
+      picks: 3,
     },
     // Solid glyph: Volta's marks are filled blocks of volt.
     surface: {
@@ -73,7 +100,19 @@ export const defaults: Record<BrandId, AgentConfig> = {
       icon: "chat",
       iconStyle: "solid",
       label: "",
+      shape: "circle",
+      size: "md",
+      // Product shots, square, on white.
+      cards: { ratio: "square", price: true, rating: true },
+      nudge: 0,
+      openOnProductPages: false,
+      hiddenPaths: [],
       searchAssist: true,
+    },
+    identity: {
+      assistantName: "",
+      subtitle: "Shopping assistant",
+      avatar: "mark",
     },
   },
 }
