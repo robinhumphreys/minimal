@@ -130,11 +130,14 @@ export function GuideOverlay({
         aria-label={`${name} guide`}
         // The drawer mounts outside the embed's own root, so the theme has to
         // travel with it: this is the root for everything inside.
+        // Floating, not flush: the drawer stands off every edge by its inset
+        // and is rounded all round, so it reads as a panel over the page
+        // rather than a column cut out of it.
         className={cn(
-          "minimal-agent-root font-sans text-foreground",
+          "minimal-agent-root rounded-xl! border! font-sans text-foreground",
           placement === "side"
-            ? "sm:[--drawer-content-width:30rem]!"
-            : "[--drawer-content-height:calc(100dvh-3rem)] [--drawer-content-max-height:calc(100dvh-3rem)]",
+            ? "[--drawer-inset:0.75rem] sm:[--drawer-content-width:30rem]!"
+            : "[--drawer-content-height:calc(100dvh-4rem)] [--drawer-content-max-height:calc(100dvh-4rem)] [--drawer-inset:0.5rem]",
         )}
         style={themeStyle(config.theme)}
       >
