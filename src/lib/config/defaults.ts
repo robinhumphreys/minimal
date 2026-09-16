@@ -33,7 +33,10 @@ export const defaults: Record<BrandId, AgentConfig> = {
     id: "volta",
     name: "Volta",
     theme: {
-      accent: "#c2410c",
+      // Volta's own volt — see `--color-volta-volt` in `src/styles/volta.css`.
+      // Bright enough that anything on it has to be black, which is what the
+      // storefront does with it too.
+      accent: "#d7ff00",
       surface: "#ffffff",
       radius: "0.75rem",
       fontBody: "system-ui, sans-serif",
