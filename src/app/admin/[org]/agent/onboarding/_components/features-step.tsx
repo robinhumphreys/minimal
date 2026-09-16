@@ -103,7 +103,7 @@ export function FeaturesStep({ next }: { next: string }) {
               <Field
                 orientation="horizontal"
                 data-disabled={feature.soon || undefined}
-                className="items-center gap-4"
+                className="items-center gap-4 p-4!"
               >
                 <Checkbox
                   id={id}
@@ -157,11 +157,15 @@ function Thumb({
     <span
       aria-hidden="true"
       className={cn(
-        "relative block h-14 w-20 shrink-0 overflow-hidden rounded-md border bg-background",
+        "relative block h-21 w-30 shrink-0 overflow-hidden rounded-md border bg-background",
         className,
       )}
     >
-      {children}
+      {/* Drawn at the smaller size and scaled up as one, so the shapes keep
+          their proportions to each other as the card grows. */}
+      <span className="absolute top-0 left-0 block h-14 w-20 origin-top-left scale-150">
+        {children}
+      </span>
     </span>
   )
 }
