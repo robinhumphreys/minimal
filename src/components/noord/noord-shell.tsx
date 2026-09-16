@@ -10,6 +10,7 @@ import type { NavModel, SearchEntry } from "@/lib/noord/types"
 import { BagOverlay } from "./bag-overlay"
 import { Footer } from "./footer"
 import { Header } from "./header"
+import { Invitation } from "./invitation"
 import { NavOverlay } from "./nav-overlay"
 import { SearchOverlay } from "./search-overlay"
 
@@ -51,6 +52,7 @@ export function NoordShell({
 
       <main className="flex-1">{children}</main>
 
+      <Invitation seed={pathname} />
       <Footer />
 
       <NavOverlay nav={nav} />

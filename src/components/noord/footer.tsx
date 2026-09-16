@@ -26,7 +26,7 @@ export function Footer() {
     <footer className="border-t border-noord-line bg-noord-paper">
       <ServiceBand />
 
-      <div className="noord-gutter mx-auto w-full max-w-7xl">
+      <div className="noord-gutter">
         <div className="grid gap-10 border-b border-noord-line py-12 md:grid-cols-4 md:gap-8">
           {/* Phone: collapsed columns. */}
           <div className="md:hidden">
@@ -89,7 +89,7 @@ const PROMISES = [
 function ServiceBand() {
   return (
     <div className="border-b border-noord-line bg-noord-wash">
-      <dl className="noord-gutter mx-auto grid w-full max-w-7xl gap-6 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+      <dl className="noord-gutter grid gap-6 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
         {PROMISES.map((promise) => (
           <div key={promise.title} className="flex flex-col gap-1.5">
             <dt className="text-noord-micro text-noord-ink uppercase">
