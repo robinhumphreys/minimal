@@ -89,7 +89,5 @@ lands on Noord's white and Volta's charcoal alike.
 | `bun run format`       | Prettier                                    |
 | `bun run placeholders` | Generate missing catalog placeholder images |
 
-One-off scripts under `scripts/`, output committed: `volta-imagery.mjs`
-re-crops Volta's editorial photography, `volta-reviews.ts` regenerates Volta's
-reviews via the gateway, `prefix-classes.mjs` adds the `ma:` prefix to a
-shadcn primitive copied into `embed/ui`.
+One-off script under `scripts/`, output committed: `prefix-classes.mjs` adds
+the `ma:` prefix to a shadcn primitive copied into `embed/ui`.
