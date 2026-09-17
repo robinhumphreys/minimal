@@ -193,6 +193,27 @@ html[data-minimal-search] [data-native-search] {
   display: none !important;
 }
 
+/*
+ * The site's "Ask about …" row is a way into the agent; without one it is a
+ * dead end. Shown only while the embed says Search assist is on (see
+ * `SEARCH_ASSIST_ATTR` in Agent.tsx).
+ */
+html:not([data-minimal-search-assist]) [data-search-assist-only] {
+  display: none !important;
+}
+
+/*
+ * With a search to answer, the mount grows to the foot of the site's sheet,
+ * so the panel's composer can sit at the bottom of a short thread and stick
+ * there over a long one. Needs the sheet's own wrapper to be a column that
+ * fills its scroller.
+ */
+html[data-minimal-search] minimal-agent-search {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+
 minimal-agent-guide {
   display: inline-block;
 }

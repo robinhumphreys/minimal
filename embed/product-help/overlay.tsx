@@ -4,7 +4,7 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from "ai"
-import { ArrowUpIcon, RotateCcwIcon, XIcon } from "lucide-react"
+import { RotateCcwIcon, XIcon } from "lucide-react"
 import { cn } from "../cn"
 
 import { answerViewCart } from "@/lib/agent/cart"
@@ -18,12 +18,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupTextarea,
-} from "../ui/input-group"
 import { Message, MessageContent } from "../ui/message"
 import {
   MessageScroller,
@@ -35,9 +29,11 @@ import {
   useMessageScroller,
 } from "../ui/message-scroller"
 import type { AgentConfig } from "@/lib/config/schema"
+import { useVisualViewport, visualViewportStyle } from "@/lib/visual-viewport"
 
 import { ProductCard } from "../site-chat/products"
 import { Working } from "../site-chat/thinking"
+import { Composer } from "../site-chat/window"
 import { themeStyle } from "../theme"
 
 /** Never shown; only triggers the first question. */
@@ -47,7 +43,8 @@ export type GuidePlacement = "side" | "sheet"
 
 /**
  * Unlike the site chat, there is no launcher or small talk: the agent asks,
- * the shopper taps, and the guide ends on a product.
+ * the shopper taps, and the guide ends on a product. On a phone it takes the
+ * whole screen, like the site chat does.
  */
 export function GuideOverlay({
   config,
@@ -129,6 +126,12 @@ export function GuideOverlay({
   const shown = messages.filter((message) => !message.metadata?.hidden)
   const last = messages.at(-1)
 
+  // On a phone the sheet is the screen, so it follows the visual viewport
+  // and the keyboard shortens it rather than covering the composer. Not in
+  // the admin's preview, where the drawer lives in a box of its own. The
+  // drawer is modal, so Base UI holds the page still underneath.
+  const screen = useVisualViewport(placement === "sheet" && open && !container)
+
   return (
     <Drawer
       open={open}
@@ -145,12 +148,20 @@ export function GuideOverlay({
         className={cn(
           // The primitive's "bleed" past its leading edge, for overscroll,
           // would show in the margin once inset from the edge; hide it.
-          "minimal-agent-root ma:rounded-2xl! ma:border! ma:font-sans ma:text-foreground ma:shadow-2xl ma:after:hidden!",
+          "minimal-agent-root ma:font-sans ma:text-foreground ma:shadow-2xl ma:after:hidden!",
           placement === "side"
-            ? "ma:[--drawer-inset:1rem] ma:sm:[--drawer-content-width:30rem]!"
-            : "ma:[--drawer-content-height:calc(100dvh-4.5rem)] ma:[--drawer-content-max-height:calc(100dvh-4.5rem)] ma:[--drawer-inset:0.75rem]",
+            ? // Floating, not flush: a margin all round and every corner
+              // rounded, the way the shadcn drawer is shown. `--drawer-inset`
+              // is the primitive's own knob for the margin; the corners it
+              // rounds only on the leading edge, so they are set here for
+              // all four.
+              "ma:rounded-2xl! ma:border! ma:[--drawer-inset:1rem] ma:sm:[--drawer-content-width:30rem]!"
+            : // The whole screen, like the site chat: a floating card at
+              // that size is a keyhole. Top to bottom until the visual
+              // viewport has been measured, then whatever it says.
+              "ma:top-0 ma:max-h-none! ma:rounded-none! ma:border-0! ma:[--drawer-content-height:100dvh]! ma:[--drawer-inset:0px]",
         )}
-        style={themeStyle(config.theme)}
+        style={{ ...themeStyle(config.theme), ...visualViewportStyle(screen) }}
       >
         <MessageScrollerProvider>
           <FollowEnd count={messages.length} status={status} />
@@ -250,12 +261,14 @@ export function GuideOverlay({
             <MessageScrollerButton />
           </MessageScroller>
 
-          <Composer
-            busy={busy}
-            placeholder={behaviour.placeholders.guide}
-            onSend={(text) => send(text)}
-            onStop={() => void stop()}
-          />
+          <div className="ma:shrink-0 ma:border-t ma:border-border ma:p-3">
+            <Composer
+              busy={busy}
+              placeholder={behaviour.placeholders.guide}
+              onSend={(text) => send(text)}
+              onStop={() => void stop()}
+            />
+          </div>
         </MessageScrollerProvider>
       </DrawerContent>
     </Drawer>
@@ -391,80 +404,18 @@ function AgentBubble({ children }: { children: React.ReactNode }) {
   )
 }
 
-function Composer({
-  busy,
-  placeholder,
-  onSend,
-  onStop,
-}: {
-  busy: boolean
-  placeholder: string
-  onSend: (text: string) => void
-  onStop: () => void
-}) {
-  const [draft, setDraft] = React.useState("")
-  const submit = () => {
-    const text = draft.trim()
-    if (!text || busy) return
-    setDraft("")
-    onSend(text)
-  }
-  return (
-    <form
-      className="ma:shrink-0 ma:border-t ma:border-border ma:p-3"
-      onSubmit={(event) => {
-        event.preventDefault()
-        submit()
-      }}
-    >
-      <InputGroup className="ma:rounded-[calc(var(--radius)+0.25rem)] ma:border-transparent ma:bg-muted ma:ring-inset">
-        <InputGroupTextarea
-          placeholder={placeholder}
-          rows={1}
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault()
-              submit()
-            }
-          }}
-          className="ma:max-h-28 ma:min-h-12 ma:px-3 ma:py-2.5 ma:text-base ma:md:text-sm"
-        />
-        <InputGroupAddon align="block-end" className="ma:px-2 ma:pb-2">
-          {busy ? (
-            <InputGroupButton
-              type="button"
-              variant="default"
-              size="icon-sm"
-              onClick={onStop}
-              aria-label="Stop"
-              className="ma:ml-auto"
-            >
-              <span className="ma:size-3 ma:rounded-[2px] ma:bg-current" />
-            </InputGroupButton>
-          ) : (
-            <InputGroupButton
-              type="submit"
-              variant="default"
-              size="icon-sm"
-              disabled={draft.trim().length === 0}
-              aria-label="Send"
-              className="ma:ml-auto"
-            >
-              <ArrowUpIcon />
-            </InputGroupButton>
-          )}
-        </InputGroupAddon>
-      </InputGroup>
-    </form>
-  )
-}
-
+/** Keeps the newest question in view as it arrives, and as the keyboard comes up. */
 function FollowEnd({ count, status }: { count: number; status: string }) {
   const { scrollToEnd } = useMessageScroller()
   React.useEffect(() => {
     scrollToEnd({ behavior: "smooth" })
   }, [count, status, scrollToEnd])
+  React.useEffect(() => {
+    const viewport = window.visualViewport
+    if (!viewport) return
+    const follow = () => scrollToEnd({ behavior: "instant" })
+    viewport.addEventListener("resize", follow)
+    return () => viewport.removeEventListener("resize", follow)
+  }, [scrollToEnd])
   return null
 }

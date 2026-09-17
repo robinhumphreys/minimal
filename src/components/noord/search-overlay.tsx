@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { ChevronLeftIcon, XIcon } from "lucide-react"
+import { ArrowRightIcon, ChevronLeftIcon, XIcon } from "lucide-react"
 
 import {
   Sheet,
@@ -122,7 +122,9 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
         </div>
 
         <SheetBody>
-          <div className="noord-sheet-gutter mx-auto w-full max-w-2xl pb-16">
+          {/* A column that fills the scroller, so the agent's composer can
+              sit at its foot; see the embed's `minimal-agent-search` rule. */}
+          <div className="noord-sheet-gutter mx-auto flex min-h-full w-full max-w-2xl flex-col">
             <h2 className="pt-2 pb-5 text-noord-section">Search</h2>
 
             <form
@@ -159,38 +161,70 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
 
             {/* The agent's reading of the search, when the embed is on the
                 page. Empty until submitted; the list below keeps working. */}
-            <minimal-agent-search data-query={submitted} />
+            <minimal-agent-search
+              data-query={submitted}
+              style={
+                {
+                  "--minimal-search-gutter": "var(--noord-sheet-gutter)",
+                } as React.CSSProperties
+              }
+            />
 
-            <div data-native-search className="contents">
+            <div data-native-search className="flex flex-col pb-16">
+              {/* The way in: submitting hands the words to the agent, and
+                  the return key does not say so. First, whatever the list
+                  below says. */}
+              {searching && (
+                <button
+                  type="button"
+                  data-search-assist-only
+                  onClick={() => submit(query)}
+                  className="mt-4 flex w-full items-center justify-between gap-4 border-b border-noord-line py-3 text-left text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
+                >
+                  <span>Ask about “{query.trim()}”</span>
+                  <ArrowRightIcon
+                    className="size-5 shrink-0"
+                    strokeWidth={1.5}
+                  />
+                </button>
+              )}
+
               <h3 className="pt-6 pb-1 text-noord-body text-noord-ink-faint">
                 {!searching
                   ? "Popular searches"
                   : results.length > 0
                     ? "Products"
-                    : "No products found"}
+                    : "No exact matches"}
               </h3>
 
               {!searching && (
-                <ul className="flex flex-col">
-                  {POPULAR.map((term) => (
-                    <li key={term}>
-                      <button
-                        type="button"
-                        onClick={() => submit(term)}
-                        className="block w-full py-2.5 text-left text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
-                      >
-                        {term}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="flex flex-col">
+                    {POPULAR.map((term) => (
+                      <li key={term}>
+                        <button
+                          type="button"
+                          onClick={() => submit(term)}
+                          className="block w-full py-2.5 text-left text-noord-lead text-noord-ink transition-colors hover:text-noord-ink-muted"
+                        >
+                          {term}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <p
+                    data-search-assist-only
+                    className="pt-6 text-noord-body text-noord-ink-faint"
+                  >
+                    Or describe what you’re looking for, in your own words.
+                  </p>
+                </>
               )}
 
               {searching &&
                 (results.length === 0 ? (
                   <p className="py-2.5 text-noord-lead text-noord-ink-muted">
-                    Nothing matches “{query.trim()}”. Try a fabric, a colour or
-                    a category.
+                    Try a fabric, a colour or a category.
                   </p>
                 ) : (
                   <ul className="flex flex-col">

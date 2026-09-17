@@ -4,6 +4,12 @@ import * as React from "react"
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
 import { cn } from "cn"
 
+import {
+  useMediaQuery,
+  useVisualViewport,
+  visualViewportStyle,
+} from "@/lib/visual-viewport"
+
 import { Button } from "@/components/noord/ui/button"
 import { XIcon } from "lucide-react"
 
@@ -52,11 +58,18 @@ function SheetContent({
   children,
   side = "full",
   showCloseButton = true,
+  style,
   ...props
 }: SheetPrimitive.Popup.Props & {
   side?: keyof typeof SIDE_CLASS
   showCloseButton?: boolean
 }) {
+  // On a phone the sheet is the screen, so it follows the visual viewport:
+  // the keyboard shortens it instead of covering its foot, which is where
+  // search keeps its composer.
+  const phone = useMediaQuery("(width < 40rem)")
+  const screen = useVisualViewport(phone)
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -68,6 +81,7 @@ function SheetContent({
           SIDE_CLASS[side],
           className,
         )}
+        style={{ ...visualViewportStyle(screen), ...style }}
         {...props}
       >
         {children}

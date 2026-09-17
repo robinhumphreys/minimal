@@ -7,3 +7,4 @@ public/embed.css
 # Lockfiles and vendored data are machine-written; reformatting them only
 # creates diff noise and merge conflicts.
 node_modules/
+bun.lock

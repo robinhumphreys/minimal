@@ -212,7 +212,8 @@ export function ChatWindow({
   )
 }
 
-function Composer({
+/** The one-row composer, shared with Product help so both chats type the same. */
+export function Composer({
   busy,
   placeholder,
   onSend,
@@ -240,7 +241,11 @@ function Composer({
         submit()
       }}
     >
-      <InputGroup className="ma:rounded-[calc(var(--radius)+0.25rem)] ma:border-transparent ma:bg-muted ma:ring-inset">
+      {/* One line with the button beside it, growing to a few lines as the
+          shopper types. A composer that starts three lines tall is a third
+          of what a phone has left once the keyboard is up. The button rides
+          the last line, so it stays where the thumb is as the text grows. */}
+      <InputGroup className="ma:items-end ma:rounded-[calc(var(--radius)+0.25rem)] ma:border-transparent ma:bg-muted ma:ring-inset">
         <InputGroupTextarea
           placeholder={placeholder}
           rows={1}
@@ -253,9 +258,13 @@ function Composer({
               submit()
             }
           }}
-          className="ma:max-h-28 ma:min-h-14 ma:px-3 ma:py-2.5 ma:text-base ma:md:text-sm"
+          // 16px on a phone: below that Safari zooms the page in on focus.
+          className="ma:max-h-32 ma:min-h-11 ma:py-2.5 ma:pl-3.5 ma:text-base ma:md:text-sm"
         />
-        <InputGroupAddon align="block-end" className="ma:px-2 ma:pb-2">
+        <InputGroupAddon
+          align="inline-end"
+          className="ma:self-end ma:pr-1.5 ma:pb-1.5"
+        >
           {busy ? (
             <InputGroupButton
               type="button"
@@ -263,7 +272,6 @@ function Composer({
               size="icon-sm"
               onClick={onStop}
               aria-label="Stop"
-              className="ma:ml-auto"
             >
               <SquareIcon className="ma:size-3 ma:fill-current" />
             </InputGroupButton>
@@ -274,7 +282,6 @@ function Composer({
               size="icon-sm"
               disabled={draft.trim().length === 0}
               aria-label="Send"
-              className="ma:ml-auto"
             >
               <ArrowUpIcon />
             </InputGroupButton>
@@ -378,6 +385,16 @@ function FollowEnd({ chat }: { chat: ChatDriver }) {
       scrollToEnd({ behavior: "smooth" })
     }
   }, [chat.status, chat.messages.length, growth, lastText, scrollToEnd])
+
+  // The keyboard coming up halves the window; the end of the conversation
+  // is what should stay in view, not the greeting.
+  React.useEffect(() => {
+    const viewport = window.visualViewport
+    if (!viewport) return
+    const follow = () => scrollToEnd({ behavior: "instant" })
+    viewport.addEventListener("resize", follow)
+    return () => viewport.removeEventListener("resize", follow)
+  }, [scrollToEnd])
 
   return null
 }

@@ -64,10 +64,7 @@ export function SearchPanel({
   const turns = thread.query === trimmed ? thread.turns : EMPTY
   const [draft, setDraft] = React.useState("")
   const nextId = React.useRef(0)
-  const endRef = React.useRef<HTMLDivElement>(null)
   const composerRef = React.useRef<HTMLFormElement>(null)
-  const composerHeight = useHeight(composerRef)
-  const keyboard = useKeyboardInset()
 
   const behaviour = config.behaviour
   const searchFn = React.useMemo(
@@ -159,10 +156,12 @@ export function SearchPanel({
     void run(id, refinements, controller.signal)
   }
 
+  // The composer is the foot of the thread, so bringing it to the bottom of
+  // the screen brings the new turn above it into view.
   const turnCount = turns.length
   React.useEffect(() => {
     if (turnCount > 1) {
-      endRef.current?.scrollIntoView({ block: "end", behavior: "smooth" })
+      composerRef.current?.scrollIntoView({ block: "end", behavior: "smooth" })
     }
   }, [turnCount])
 
@@ -173,13 +172,8 @@ export function SearchPanel({
   return (
     <div
       data-slot="search-assist"
-      className="minimal-agent-root ma:@container ma:flex ma:flex-col ma:gap-4 ma:pt-4 ma:font-sans ma:text-foreground"
-      style={
-        {
-          ...themeStyle(config.theme),
-          "--composer-height": `${composerHeight}px`,
-        } as React.CSSProperties
-      }
+      className="minimal-agent-root ma:@container ma:flex ma:flex-1 ma:flex-col ma:gap-4 ma:pt-4 ma:font-sans ma:text-foreground"
+      style={themeStyle(config.theme)}
     >
       {turns.map((turn, index) => (
         <TurnView
@@ -192,25 +186,21 @@ export function SearchPanel({
         />
       ))}
 
-      {/* Holds the composer's place in the flow; it's fixed on a phone. */}
-      <div
-        ref={endRef}
-        aria-hidden="true"
-        className="ma:h-(--composer-height) ma:shrink-0 ma:@md:h-0"
-      />
-
-      {/* Pinned to the visible screen on a phone, so it sits on the keyboard, not under it. */}
+      {/* The one input from here on, focused as it arrives so the typing
+          continues here. In the flow, sticky to the sheet's scroller, never
+          `fixed`: on a phone that pins it under the keyboard. The band bleeds
+          across the host's gutter (`--minimal-search-gutter`) so nothing
+          scrolls past beside it. */}
       <form
         ref={composerRef}
-        className="ma:sticky ma:bottom-0 ma:flex ma:items-center ma:gap-2 ma:rounded-[calc(var(--radius)+0.25rem)] ma:bg-muted ma:pr-1.5 ma:pl-3 ma:@max-md:fixed ma:@max-md:inset-x-0 ma:@max-md:z-10 ma:@max-md:rounded-none ma:@max-md:border-t ma:@max-md:border-border ma:@max-md:bg-background ma:@max-md:px-4 ma:@max-md:pt-3 ma:@max-md:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
-        style={{ bottom: keyboard }}
+        className="ma:sticky ma:bottom-0 ma:z-10 ma:mt-auto ma:-mx-(--minimal-search-gutter,0px) ma:flex ma:items-center ma:gap-2 ma:bg-background ma:px-(--minimal-search-gutter,0px) ma:pt-3 ma:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         onSubmit={(event) => {
           event.preventDefault()
           refine(draft)
           setDraft("")
         }}
       >
-        <div className="ma:flex ma:min-w-0 ma:flex-1 ma:items-center ma:gap-2 ma:@max-md:rounded-[calc(var(--radius)+0.25rem)] ma:@max-md:bg-muted ma:@max-md:pr-1.5 ma:@max-md:pl-3">
+        <div className="ma:flex ma:min-w-0 ma:flex-1 ma:items-center ma:gap-2 ma:rounded-[calc(var(--radius)+0.25rem)] ma:bg-muted ma:pr-1.5 ma:pl-3">
           <input
             autoFocus
             value={draft}
@@ -235,53 +225,7 @@ export function SearchPanel({
 
 const EMPTY: Turn[] = []
 
-function useHeight(ref: React.RefObject<HTMLElement | null>) {
-  const [height, setHeight] = React.useState(0)
-
-  React.useLayoutEffect(() => {
-    const element = ref.current
-    if (!element) return
-    const measure = () => setHeight(element.offsetHeight)
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [ref])
-
-  return height
-}
-
-/**
- * On a phone the keyboard doesn't shrink the layout viewport `position:
- * fixed` uses, so this computes the offset needed to sit on it instead.
- */
-function useKeyboardInset() {
-  const [inset, setInset] = React.useState(0)
-
-  React.useEffect(() => {
-    const viewport = window.visualViewport
-    if (!viewport) return
-    const measure = () =>
-      setInset(
-        Math.max(
-          0,
-          Math.round(
-            window.innerHeight - (viewport.offsetTop + viewport.height),
-          ),
-        ),
-      )
-    measure()
-    viewport.addEventListener("resize", measure)
-    viewport.addEventListener("scroll", measure)
-    return () => {
-      viewport.removeEventListener("resize", measure)
-      viewport.removeEventListener("scroll", measure)
-    }
-  }, [])
-
-  return inset
-}
-
+/** How many cards a turn shows before the shopper asks for the rest. */
 const SHOWN = 4
 
 /** Nothing is drawn until the reading is done, so the answer arrives before its products. */
