@@ -38,8 +38,7 @@ function injectStylesheet(src: string) {
 }
 
 function start() {
-  // The admin's onboarding shows the site as it was before the agent, in an
-  // iframe. The one thing that page must not have is the agent.
+  // The admin's onboarding iframe shows the site as it was before the agent.
   if (
     new URLSearchParams(window.location.search).get("minimal-agent") === "off"
   ) {
@@ -87,9 +86,7 @@ function start() {
     render(parsed.data)
   })
 
-  // The admin's placement check loads the site in a frame and asks whether
-  // the agent is here. Answered from the DOM, not from config, so it reports
-  // what a shopper would actually see.
+  // Answered from the DOM, not config, so it reports what a shopper would see.
   window.addEventListener("message", (event: MessageEvent) => {
     const data = event.data as { type?: string } | null
     if (!data || data.type !== "minimal:ping" || !event.source) return

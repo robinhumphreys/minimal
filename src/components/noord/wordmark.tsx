@@ -1,9 +1,8 @@
 import { cn } from "cn"
 
 /**
- * Set as text rather than drawn, so it inherits the brand grotesque and stays
- * crisp at any size. Wide tracking is the whole identity; "Suits" carries less
- * weight so "Noord" still reads as the name.
+ * Set as text rather than drawn, so it inherits the brand grotesque and
+ * stays crisp at any size.
  */
 export function Wordmark({ className }: { className?: string }) {
   return (

@@ -7,15 +7,8 @@ import type { ProductCardModel } from "@/lib/volta/types"
 import { ProductCard } from "./product-card"
 
 /**
- * A horizontally scrolling row of tiles.
- *
- * Scroll rather than a grid: on a phone a rail signals "there is more this way"
- * in a way a two-up grid cannot, and it keeps five rails on the homepage from
- * turning into five screens of scrolling. Snap points stop it drifting between
- * tiles.
- *
- * Drawn for a white surface throughout — a rail only ever appears inside a
- * `Shelf`.
+ * Scroll rather than a grid, so a phone signals "there is more this way"
+ * instead of five rails turning into five screens of scrolling.
  */
 export function ProductRail({
   title,
@@ -63,10 +56,8 @@ export function ProductRail({
         )}
       </div>
 
-      {/*
-        The negative gutter lets tiles bleed to the screen edge while the
-        scroll padding keeps the first and last one clear of it.
-      */}
+      {/* Negative gutter lets tiles bleed to the edge; scroll padding keeps
+          the first and last one clear of it. */}
       <ul className="flex snap-x snap-mandatory scroll-pl-volta-gutter [scrollbar-width:none] gap-4 overflow-x-auto px-volta-gutter pb-2 md:scroll-pl-8 md:px-8 xl:scroll-pl-12 xl:px-12 [&::-webkit-scrollbar]:hidden">
         {products.map((product, index) => (
           <li

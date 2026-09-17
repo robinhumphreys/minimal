@@ -10,56 +10,29 @@ import { BrandMark } from "@/components/brand/brand-mark"
 import { NextButton } from "@/app/admin/_components/next-button"
 import type { BrandId } from "@/lib/catalog/types"
 
-/**
- * The dot field behind the browser. Hex rather than the theme's CSS variables
- * because the shader parses colours into WebGL floats and cannot read `var()`.
- */
+/** Hex, not CSS variables: the shader parses colours into WebGL floats and cannot read `var()`. */
 const GRID = {
   colorBack: "#ffffff",
   colorFill: "#ededed",
 } as const
 
-/** Distance between dots. Every measurement on this screen is a multiple. */
 const GAP = 32
 
-/**
- * Where the shader puts its dots relative to the centre of its own canvas.
- * Measured rather than documented: the pattern's origin falls midway between
- * dots on both axes, so the canvas needs half a cell of correction before a
- * dot will sit where its centre is.
- */
+/** The pattern's origin falls midway between dots on both axes, so the canvas needs half a cell of correction. */
 const DOT_PHASE = GAP / 2
 
-/**
- * The merchant's own address, as it would read in a browser. There is no
- * accounts API, so each brand's is named here alongside the storefront route
- * the mini browser actually renders.
- */
+/** There is no accounts API, so each brand's domain is named here alongside the route it renders. */
 export const SITES: Record<BrandId, { domain: string; path: string }> = {
   noord: { domain: "noordsuits.com", path: "/noord" },
   volta: { domain: "voltanutrition.com", path: "/volta" },
 }
 
-/**
- * The storefront is rendered at desktop width and scaled down, rather than
- * loaded into a narrow frame, so the mini browser shows the site's desktop
- * layout — the one the merchant recognises — instead of its mobile one.
- *
- * The frame is sized in whole grid cells — 16 across, 10 down under a title
- * bar of exactly one — so its edges land on the dot field rather than cutting
- * through it.
- */
+/** Rendered at desktop width and scaled down so the mini browser shows the site's desktop layout, not its mobile one. */
 const VIEWPORT = { width: 1440, height: 900 }
 const FRAME_WIDTH = GAP * 16
 const FRAME_HEIGHT = GAP * 10
 const SCALE = FRAME_WIDTH / VIEWPORT.width
 
-/**
- * The waiting screen the flow uses whenever the merchant's site is being
- * looked at: their site in a browser window on the dot field, a title, a
- * checklist ticking under it, and the way out appearing once it is done.
- * Step two reads the site; step six checks the agent is on it. Same stage.
- */
 export function LoaderStage({
   brand,
   frameSrc,
@@ -72,17 +45,15 @@ export function LoaderStage({
   children,
 }: {
   brand: BrandId
-  /** What the browser window shows. */
   frameSrc: string
   frameRef?: React.Ref<HTMLIFrameElement>
-  /** Whether the site has been "fetched": the placeholder lifts on it. */
+  /** When true, the placeholder over the browser lifts. */
   fetched: boolean
-  /** Whether the work is done: the sweep stops and Next appears. */
+  /** When true, the sweep stops and Next appears. */
   finished: boolean
   title: string
   next: string
   nextLabel?: string
-  /** The checklist. */
   children: React.ReactNode
 }) {
   const site = SITES[brand]
@@ -94,8 +65,7 @@ export function LoaderStage({
       ref={root}
       className="relative flex h-full flex-col items-center justify-center gap-6 overflow-hidden rounded-xl px-4 py-10 md:gap-10 md:px-8 md:py-16"
     >
-      {/* Bled a whole cell past every edge so the field still covers the
-          corners once it has been nudged into alignment. */}
+      {/* Bled a whole cell past every edge so the field still covers the corners once nudged into alignment. */}
       <div
         aria-hidden="true"
         className="absolute -inset-8"
@@ -119,11 +89,7 @@ export function LoaderStage({
         />
       </div>
 
-      {/* Shrinks as one piece when the column is narrower than the window:
-          scaling the frame keeps the storefront inside it undistorted, which
-          re-flowing would not. The box around it takes the scaled size, so
-          the column lays out around what is drawn rather than around the
-          unscaled frame. */}
+      {/* Scaling the frame keeps the storefront undistorted; re-flowing it would not. */}
       <div ref={stage} className="relative flex w-full justify-center">
         <div
           style={{
@@ -156,9 +122,6 @@ export function LoaderStage({
         {children}
       </div>
 
-      {/* Held back until every row has ticked. Nothing on this screen is worth
-          reading once the work is done, so the only thing that appears is the
-          way out of it. */}
       <AnimatePresence>
         {finished ? (
           <motion.div
@@ -176,13 +139,7 @@ export function LoaderStage({
   )
 }
 
-/**
- * How far the browser window has to shrink to fit its column: one when there
- * is room, else the largest scale at which the frame is still an even number
- * of whole cells wide, so its side edges keep landing on dots. Measured off
- * the stage rather than a breakpoint: the column's width depends on the rail
- * as much as on the screen.
- */
+/** Scales to the largest even number of whole cells that fit, so side edges keep landing on dots. */
 function useFrameScale() {
   const stage = React.useRef<HTMLDivElement>(null)
   const [scale, setScale] = React.useState(1)
@@ -204,21 +161,7 @@ function useFrameScale() {
   return { stage, scale }
 }
 
-/**
- * Locks the dot field's phase to the browser's viewport.
- *
- * The shader anchors its pattern at the centre of its own canvas, so a dot's
- * position is only predictable relative to that centre — and which of the two
- * half-phases it lands on is not something the canvas can be asked. So pick
- * the reference point that makes the answer not matter: the viewport is a
- * whole, even number of cells on both axes, so every one of its corners sits
- * the same distance in cells from its centre. Give the canvas centre that
- * centre's phase, corrected by `DOT_PHASE`, and the corners land on dots.
- *
- * Only the remainder is applied. Moving the canvas by whole cells would change
- * nothing about the pattern and everything about whether it still reaches the
- * edges.
- */
+/** The shader anchors its pattern at its own canvas centre, so the canvas is offset by the phase remainder to land dots on the viewport's corners. */
 function useGridAlignment() {
   const root = React.useRef<HTMLDivElement>(null)
   const viewport = React.useRef<HTMLDivElement>(null)
@@ -249,10 +192,7 @@ function useGridAlignment() {
 
     align()
 
-    // The frame is centred in the root, so anything that changes the root's
-    // box moves it: the rail collapsing, the window resizing. A late font
-    // resizes neither box but does re-flow the column underneath, which shifts
-    // the frame without either observer firing — hence the second pass.
+    // A late font load re-flows the column without resizing either box, so realign once fonts are ready too.
     const observer = new ResizeObserver(align)
     if (root.current) observer.observe(root.current)
     if (viewport.current) observer.observe(viewport.current)
@@ -264,11 +204,6 @@ function useGridAlignment() {
   return { root, viewport, offset }
 }
 
-/**
- * The stages, ticked off as they pass. Left-aligned inside the centred column
- * — a ragged left edge would cost the rows the vertical line the markers give
- * them, which is what makes the list scannable at a glance.
- */
 export function Checklist({
   tasks,
   done,
@@ -298,7 +233,6 @@ export function Checklist({
   )
 }
 
-/** A row's status: filled tick, spinner, or an empty well waiting its turn. */
 function Marker({ complete, active }: { complete: boolean; active: boolean }) {
   if (complete) {
     return (
@@ -317,13 +251,7 @@ function Marker({ complete, active }: { complete: boolean; active: boolean }) {
   return <span className="size-4 shrink-0 rounded-full bg-muted" />
 }
 
-/**
- * A browser window around a live, scaled-down render of the storefront.
- *
- * The storefront is only uncovered once the checklist says it has been
- * fetched. The iframe is mounted the whole time regardless, so it has loaded
- * by the time the placeholder lifts and the reveal is immediate.
- */
+/** The iframe stays mounted throughout so it has already loaded by the time the placeholder lifts. */
 function BrowserFrame({
   brand,
   domain,
@@ -342,9 +270,7 @@ function BrowserFrame({
   viewportRef: React.RefObject<HTMLDivElement | null>
 }) {
   return (
-    // The stroke goes round the whole window, not just the title bar. It sits
-    // a hairline outside the viewport's box; alignment is measured off the
-    // viewport itself, so the border cannot knock the grid out of phase.
+    // Alignment is measured off the viewport itself, so this border cannot knock the grid out of phase.
     <div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/10">
       <div
         className="relative flex items-center border-b bg-muted/50 px-3"
@@ -355,12 +281,7 @@ function BrowserFrame({
           <span className="size-2 rounded-full bg-border" />
           <span className="size-2 rounded-full bg-border" />
         </div>
-        {/* Centred on the bar rather than on the space the lights leave, so
-            the address sits under the middle of the window. */}
         <span className="pointer-events-none absolute inset-0 flex items-center justify-center gap-1.5 text-[0.6875rem] text-muted-foreground">
-          {/* The merchant's own favicon, where a browser would put it. It is
-              the same mark the account switcher shows, so the window reads as
-              their site and not a generic frame. */}
           <BrandMark brand={brand} className="size-3.5 rounded-[3px]" />
           {domain}
         </span>
@@ -390,9 +311,7 @@ function BrowserFrame({
               key="placeholder"
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              // Opaque: the iframe behind it has already loaded, and a
-              // translucent cover would show the very thing this step says it
-              // has not fetched yet.
+              // Opaque: a translucent cover would show the already-loaded iframe before this step says it's fetched.
               className="absolute inset-0 flex items-center justify-center bg-muted"
             >
               <motion.span
@@ -414,21 +333,7 @@ function BrowserFrame({
   )
 }
 
-/**
- * The band of light that travels down the frame.
- *
- * It fades in as it enters and out as it leaves, then waits a beat before the
- * next pass. Looping the travel alone is what made it look mechanical: the
- * band arrived at the bottom edge still at full strength and reappeared at the
- * top in the same frame.
- *
- * White because the storefronts' own imagery is what it has to show up
- * against, and that is uniformly dark.
- *
- * Once the checklist is done the sweep has nothing left to stand for, so it
- * fades out mid-pass rather than being cut, and unmounts once it has — an
- * invisible element looping on every frame is still looping on every frame.
- */
+/** Fades out mid-pass rather than cutting, then unmounts, so it stops animating on every frame once inactive. */
 function ScanSweep({ active }: { active: boolean }) {
   const [mounted, setMounted] = React.useState(true)
 
@@ -446,9 +351,7 @@ function ScanSweep({ active }: { active: boolean }) {
     >
       <motion.div
         className="absolute inset-x-0 top-0 h-1/3 bg-linear-to-b from-transparent via-white/15 to-white/40"
-        // Travel and fade share one timeline, so `y` carries a keyframe at each
-        // of the fade's turning points. The values are spaced in proportion to
-        // `times` to keep the speed constant across all three legs.
+        // `y` keyframes are spaced in proportion to `times` to keep speed constant across all three legs.
         animate={{
           y: ["-60%", "-21.6%", "180%", "260%"],
           opacity: [0, 1, 1, 0],

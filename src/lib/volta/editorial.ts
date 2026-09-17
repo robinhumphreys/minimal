@@ -1,10 +1,5 @@
-/**
- * Editorial photography, keyed by category slug.
- *
- * One map, used by the homepage tiles, the category banners and the desktop
- * nav promos — so a category looks like itself wherever it turns up. Shots are
- * cropped and compressed by `scripts/volta-imagery.mjs` into `/public/volta/editorial`.
- */
+// One map shared by homepage tiles, banners and nav promos, so a category
+// looks the same wherever it turns up. Cropped by scripts/volta-imagery.mjs.
 export const CATEGORY_IMAGE: Record<string, string> = {
   protein: "/volta/editorial/plates-hands.jpg",
   "pre-workout": "/volta/editorial/curl-dark.jpg",

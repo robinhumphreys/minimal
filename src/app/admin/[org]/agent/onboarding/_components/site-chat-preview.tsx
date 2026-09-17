@@ -16,15 +16,7 @@ import type { AgentConfig } from "@/lib/config/schema"
 import { DeviceStage, DeviceToggle, type Device } from "./device-toggle"
 import { DotField } from "./dot-field"
 
-/**
- * The left half: the widget as a shopper would meet it, on a stand-in for the
- * merchant's page.
- *
- * Not a picture and not a replica: this is the embed's own surface, rendered
- * from the same draft the storefront will be handed on publish, talking to
- * the same route. What the merchant approves here is the thing that ships,
- * to the pixel and to the answer.
- */
+/** Not a mockup: this renders the embed's own surface from the same draft and route the storefront gets on publish. */
 export function SiteChatPreview({
   config,
   device,
@@ -50,8 +42,6 @@ export function SiteChatPreview({
   return (
     <div className="relative h-full overflow-hidden rounded-xl">
       <DotField className="absolute inset-0" />
-      {/* The stage is the layer's container on either device, so on a phone
-          the window fills the frame the way it fills a real screen. */}
       <DeviceStage device={device}>{layer}</DeviceStage>
       <DeviceToggle
         value={device}
@@ -62,20 +52,14 @@ export function SiteChatPreview({
   )
 }
 
-/**
- * The same route the embed posts to, with the same body: the draft's prompt,
- * model, greeting and starters, so the preview answers as the published agent
- * would. Held here rather than in the window so closing and reopening the
- * launcher keeps the conversation, the same as the real embed.
- */
+/** Held here, not in the window, so closing and reopening the launcher keeps the conversation, as in the real embed. */
 function useDraftChat(config: AgentConfig): ChatDriver {
   const transport = React.useMemo(
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
     [config.id],
   )
   const behaviour = config.behaviour
-  // Read when the cart tool answers, which is after the render the latest
-  // behaviour arrived in, so an effect is early enough.
+  // Read when the cart tool answers, after the render behaviour arrived in, so an effect is early enough.
   const bodyRef = React.useRef({ behaviour })
   React.useEffect(() => {
     bodyRef.current = { behaviour }
@@ -91,8 +75,7 @@ function useDraftChat(config: AgentConfig): ChatDriver {
     regenerate,
   } = useChat<AgentUIMessage>({
     transport,
-    // No storefront under the preview, so the cart reads as unavailable —
-    // but it must still be answered, or the reply would never come.
+    // The cart tool call must still be answered even though there's no real cart, or the reply never comes.
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
       answerViewCart(toolCall, addToolOutput, bodyRef.current)

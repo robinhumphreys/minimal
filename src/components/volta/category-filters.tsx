@@ -7,15 +7,8 @@ import { CheckIcon } from "@phosphor-icons/react/ssr"
 import type { FacetGroup, FacetKey } from "@/lib/volta/types"
 
 /**
- * The filter column beside a category grid.
- *
- * State lives in the URL rather than in React: a filtered grid is something a
- * shopper shares and comes back to, and it keeps the page a server component
- * that re-renders with the right products instead of hiding tiles on the
- * client.
- *
- * Sits on the shelf's white, so it is drawn in the light palette: the same
- * one the product tiles beside it use.
+ * State lives in the URL, not React, so a filtered grid is shareable and the
+ * page stays a server component that re-renders instead of hiding tiles.
  */
 export function CategoryFilters({ groups }: { groups: FacetGroup[] }) {
   const router = useRouter()

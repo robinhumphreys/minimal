@@ -6,12 +6,7 @@ export const metadata: Metadata = {
   title: "Search — Noord Suits",
 }
 
-/**
- * The address of the search sheet. The sheet is a client overlay that reads
- * `?q=` off the URL and opens itself when the path is this one (see
- * `useSearchUrl`); this route exists so a reload or a shared link has
- * somewhere to land, with the home page as the backdrop.
- */
+/** This route exists so a reload or shared link of the search sheet (see `useSearchUrl`) has somewhere to land. */
 export default function Page() {
   return <HomePage />
 }

@@ -44,14 +44,7 @@ const FEATURES: {
   },
 ]
 
-/**
- * Step three: which surfaces the agent gets. Decided before any of them is
- * shown, so the next step only previews what was chosen — and nothing here
- * is published; that is the last step's job.
- *
- * Choice cards rather than switches: each is a whole row to read and click,
- * and more than one can be on, so the mark is a checkbox rather than a radio.
- */
+/** Nothing here is published; that happens in the last step. More than one surface can be on, hence checkboxes not radios. */
 export function FeaturesStep({ next }: { next: string }) {
   const org = useOrg()
   const config = useAdminStore((state) => state.drafts[org])
@@ -60,9 +53,7 @@ export function FeaturesStep({ next }: { next: string }) {
   React.useEffect(() => {
     const store = useAdminStore.getState()
     store.hydrate()
-    // A choice starts from nothing, even for an agent already live: this is
-    // the flow being run, not the site. Once the merchant has been here the
-    // draft carries what they chose, so coming back does not clear it.
+    // Reset only the first time through; once the merchant has chosen, the draft carries it on return visits.
     if (!store.surfacesOffered[org]) {
       store.editDraft(org, (current) => ({
         ...current,
@@ -101,9 +92,7 @@ export function FeaturesStep({ next }: { next: string }) {
   const anyOn = enabled.siteChat || enabled.searchAssist || enabled.productHelp
 
   return (
-    // Scrolls rather than centres when the cards are taller than the screen:
-    // `m-auto` on the column centres it when there is room and lets it start
-    // at the top when there is not, which `justify-center` would clip.
+    // `m-auto`, not `justify-center`, so the column starts at the top instead of clipping when it's taller than the screen.
     <div className="relative flex h-full flex-col overflow-y-auto px-4 py-10 sm:px-8 md:py-16">
       <div className="m-auto flex w-full max-w-lg flex-col items-center gap-8 md:gap-10">
         <div className="flex flex-col items-center gap-2 text-center">
@@ -119,8 +108,7 @@ export function FeaturesStep({ next }: { next: string }) {
               <FieldLabel
                 key={feature.key}
                 htmlFor={id}
-                // Chosen cards take the brand's own colour, not the admin's
-                // neutral primary.
+                // Chosen cards take the brand's own colour, not the admin's neutral primary.
                 className="has-data-checked:border-brand/40 has-data-checked:bg-brand/5 has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:has-data-checked:hover:bg-brand/10"
               >
                 <Field
@@ -148,7 +136,6 @@ export function FeaturesStep({ next }: { next: string }) {
           })}
         </FieldGroup>
 
-        {/* Under the cards on a phone, in the corner where there is one. */}
         <div className="self-end md:absolute md:right-8 md:bottom-8">
           <NextButton href={next} disabled={!anyOn}>
             Next
@@ -159,20 +146,13 @@ export function FeaturesStep({ next }: { next: string }) {
   )
 }
 
-/*
- * Thumbnails: each surface as a line drawing in Minimal's blue — a stroke for
- * the page's own furniture, a fill for the thing the agent adds to it.
- * Drawn as SVG rather than assembled from boxes, so the corners, weights
- * and spacing are the same kind of thing as an icon's.
- */
+// Drawn as SVG, not assembled from boxes, so corners, weights and spacing match an icon's.
 
 function Thumb({ children }: { children: React.ReactNode }) {
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 120 84"
-      // Grey until the card is chosen; then the brand's blue. Dropped on a
-      // phone, where the row has room for the words or the picture, not both.
       className="h-21 w-30 shrink-0 text-muted-foreground/70 group-has-data-checked/field-label:text-brand max-sm:hidden"
       fill="none"
       stroke="currentColor"
@@ -185,7 +165,6 @@ function Thumb({ children }: { children: React.ReactNode }) {
   )
 }
 
-/** A chat window with a reply in it, and the button that opened it. */
 function SiteChatThumb() {
   return (
     <Thumb>
@@ -215,7 +194,6 @@ function SiteChatThumb() {
   )
 }
 
-/** A search typed in, and two results that answer it. */
 function SearchAssistThumb() {
   return (
     <Thumb>
@@ -260,7 +238,6 @@ function SearchAssistThumb() {
   )
 }
 
-/** A product, and a question about it answered on the spot. */
 function ProductHelpThumb() {
   return (
     <Thumb>

@@ -5,12 +5,7 @@ import { Badge } from "@/components/volta/ui/badge"
 import { Button } from "@/components/volta/ui/button"
 import { Stars } from "./rating"
 
-/**
- * The PDP review block: summary, histogram, then the reviews themselves.
- *
- * `id="reviews"` is the anchor the star row above the buy block links to, so
- * tapping the rating on a phone jumps straight here.
- */
+/** `id="reviews"` is the anchor the star row above the buy block links to. */
 export function ProductReviews({
   rating,
   reviewCount,

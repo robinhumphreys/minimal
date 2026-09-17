@@ -1,7 +1,4 @@
-/*
- * Tailwind without its preflight: the reset would land on the host page's
- * <h1>s and <button>s. A scoped one lives further down instead.
- */
+/* Tailwind without its preflight: the reset would land on the host page's own elements. */
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme) prefix(ma);
 @import "tailwindcss/utilities.css" layer(utilities) prefix(ma);
@@ -9,11 +6,8 @@
 @import "shadcn/tailwind.css";
 
 /*
- * Every utility in the bundle carries the `ma:` prefix, so the stylesheet can
- * sit in a host page next to that page's own Tailwind without either one
- * restyling the other. The shadcn primitives the window is built from are
- * copied into `./ui` for the same reason: their classes have to carry the
- * prefix too, and the admin's copies must not.
+ * Every utility carries the `ma:` prefix so the stylesheet can sit next to a
+ * host page's own Tailwind without either restyling the other.
  */
 @source "./";
 
@@ -47,10 +41,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/*
- * Scoped to the embed's own containers rather than `:root` so the bundle never
- * restyles the host page. `main.tsx` overrides the themed subset inline.
- */
+/* Scoped to the embed's own containers, not `:root`, so it never restyles the host page. */
 .minimal-agent-root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -78,12 +69,7 @@
   font-family: var(--font-sans);
 }
 
-/*
- * The preflight, scoped: what Tailwind's global reset would do, done only
- * inside the embed's own roots. Every surface — the launcher layer, the
- * search panel, the guide's drawer — carries `.minimal-agent-root`, portals
- * included, so nothing of the host page is touched.
- */
+/* Tailwind's global reset, scoped to `.minimal-agent-root` so the host page is untouched. */
 @layer base {
   .minimal-agent-root {
     line-height: 1.5;
@@ -182,17 +168,15 @@
 }
 
 /*
- * shadcn primitives carry `transition-all`, and Chrome does not restart an
- * in-flight colour transition when the inherited custom property behind it
- * changes -- a re-theme would keep painting the old accent. Nothing here is
- * meant to animate, so drop transitions inside the embed entirely.
+ * Chrome does not restart an in-flight colour transition when the inherited
+ * custom property behind it changes, so a re-theme keeps the old accent.
  */
 .minimal-agent-root,
 .minimal-agent-root * {
   transition-property: none;
 }
 
-/* The one thing that should move: the launcher's hover lift. */
+/* Exempted from the transition drop above. */
 .minimal-agent-root [data-slot="launcher"] {
   transition-property: transform, box-shadow;
   transition-duration: 150ms;
@@ -204,12 +188,7 @@ minimal-agent-search {
   display: block;
 }
 
-/*
- * While the search panel has a search to answer, the site's own input and
- * results step aside: the box has become the first bubble, and the panel's
- * composer is the one input. The site marks what should go with
- * `data-native-search`; the panel sets the attribute (see `ACTIVE_ATTR`).
- */
+/* Set via ACTIVE_ATTR in panel.tsx; hides the site's own search while the panel answers. */
 html[data-minimal-search] [data-native-search] {
   display: none !important;
 }

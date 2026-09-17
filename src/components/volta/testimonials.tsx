@@ -6,12 +6,7 @@ import type { ReviewModel } from "@/lib/volta/types"
 import { Badge } from "@/components/volta/ui/badge"
 import { Stars } from "./rating"
 
-/**
- * The homepage social-proof band.
- *
- * Quotes carry the product they are about, which is what turns a testimonial
- * into a shoppable unit — each card links through to the thing being praised.
- */
+/** Each quote carries the product it is about, so a card links through to it. */
 export function Testimonials({ reviews }: { reviews: ReviewModel[] }) {
   if (reviews.length === 0) return null
 

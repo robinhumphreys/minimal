@@ -3,11 +3,8 @@ import type { ChatStatus } from "ai"
 import type { AgentUIMessage } from "@/lib/agent/types"
 
 /**
- * What the window needs from whoever is running the conversation.
- *
- * On a storefront that is `useChat` against the real route; in the admin's
- * preview it is a stand-in that answers with a fixed line. Same window, so what
- * the merchant approves is what ships.
+ * On a storefront this is `useChat` against the real route; in the admin
+ * preview it is a stand-in with a fixed reply, so the same window renders both.
  */
 export type ChatDriver = {
   messages: AgentUIMessage[]

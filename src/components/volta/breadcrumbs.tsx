@@ -9,15 +9,9 @@ export type Crumb = {
   href?: string
 }
 
-/**
- * The breadcrumb trail, shared by the category and product pages.
- *
- * Each separator lives inside the `<li>` it precedes rather than sitting
- * between them as a bare sibling: an `<ol>` may only contain `<li>`, and a
- * caret parked in the flex row on its own also sat on its own baseline, which
- * is what made the trail look stepped. Inside the item it inherits the row's
- * alignment and lines up with the text it separates.
- */
+// Each separator lives inside the `<li>` it precedes: an `<ol>` may only
+// contain `<li>`, and a bare sibling caret sat on its own baseline, stepping
+// the trail.
 export function Breadcrumbs({
   trail,
   className,

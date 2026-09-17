@@ -12,12 +12,7 @@ import type { NavModel } from "@/lib/noord/types"
 
 import { Wordmark } from "./wordmark"
 
-/**
- * Sticky header with two distinct layouts.
- *
- * Below `lg` it is the phone bar: hamburger, wordmark, search, bag. From `lg`
- * up the hamburger is gone entirely and the categories live inline.
- */
+/** Sticky header: a phone bar below `lg`, inline categories above it. */
 export function Header({ nav }: { nav: NavModel }) {
   const pathname = usePathname()
   const show = useOverlays((state) => state.show)
@@ -38,8 +33,7 @@ export function Header({ nav }: { nav: NavModel }) {
             <MenuIcon className="size-5" strokeWidth={1.5} />
           </IconButton>
 
-          {/* Desktop only: the service links that sit behind the hamburger
-              on a phone. */}
+          {/* Desktop only: hidden behind the hamburger on a phone. */}
           <ul className="hidden items-center gap-6 lg:flex">
             {nav.utility.map((link) => (
               <li key={link.label}>

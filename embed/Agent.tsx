@@ -19,10 +19,7 @@ import { themeStyle } from "./theme"
 
 export type OpenOptions = { prompt?: string }
 
-/**
- * Set by the mounted Agent so `window.MinimalAgent` and the surfaces can
- * reach the window and the guide without threading refs through the mounts.
- */
+/** Set by the mounted Agent so surfaces can reach it without threading refs through the mounts. */
 export const bus: {
   open: (options?: OpenOptions) => void
   guide: (topic: string) => void
@@ -34,24 +31,14 @@ export const bus: {
 type Session = {
   open: boolean
   messages: AgentUIMessage[]
-  /** Whether anything has been stored yet: a session that exists is a shopper who has decided. */
   touched: boolean
-  /**
-   * An answer was still arriving when this was written. A page that loads
-   * from such a session has a question with no complete answer behind it.
-   */
+  /** An answer was still arriving when this was written. */
   pending: boolean
 }
 
 /**
- * The conversation follows the shopper across pages. A product card is a real
- * link to a real page, and the embed remounts on every one, so the transcript
- * lives in `sessionStorage` for the tab — gone when the tab is, which is the
- * lifetime a shop visit has anyway.
- *
- * Written on every change, mid-answer included: the cards arrive before the
- * sentence that goes with them, and a shopper who clicks one straight away
- * is the common case, not the edge.
+ * The embed remounts on every page, so the transcript lives in
+ * `sessionStorage` rather than component state.
  */
 function sessionKey(id: string) {
   return `minimal-agent:${id}`
@@ -71,9 +58,7 @@ function readSession(id: string): Session {
     const parsed = JSON.parse(raw) as Partial<Session>
     const messages = Array.isArray(parsed.messages) ? parsed.messages : []
     const pending = parsed.pending === true
-    // A reply the page left in the middle of — a sentence cut short, a tool
-    // call with no result — is not worth keeping and cannot be sent back to
-    // the model as it is. Drop it; the question stays, and gets asked again.
+    // A reply left mid-stream cannot be sent back to the model as-is, so drop it.
     if (pending) {
       while (messages.at(-1)?.role === "assistant") messages.pop()
     }
@@ -96,16 +81,12 @@ function writeSession(id: string, session: Session) {
   }
 }
 
-/** Re-queries the host page's DOM whenever it changes. */
 function useHostDom() {
   const [host, setHost] = React.useState<{
     bar: HTMLElement | null
     recommendations: HTMLElement[]
-    /** The site's search box, and what has been typed into it. */
     search: { element: HTMLElement; query: string } | null
-    /** Where the page wants a Product help button, and what for. */
     guides: { element: HTMLElement; topic: string; label: string }[]
-    /** The host has a modal of its own open. */
     dialogOpen: boolean
   }>({
     bar: null,
@@ -137,8 +118,7 @@ function useHostDom() {
         ).map((element) => ({
           element,
           topic: element.dataset.topic ?? "",
-          // The merchant's own words inside the tag, read once before the
-          // button replaces them.
+          // Read once before the button replaces the tag's own content.
           label: element.dataset.label ?? element.textContent?.trim() ?? "",
         }))
         const dialogOpen = Array.from(
@@ -165,7 +145,7 @@ function useHostDom() {
     observer.observe(document.body, {
       childList: true,
       subtree: true,
-      // The search mount reports the query by attribute, not by remounting.
+      // The search mount reports the query by attribute change, not remount.
       attributes: true,
       attributeFilter: ["data-query", "data-topic"],
     })
@@ -175,7 +155,6 @@ function useHostDom() {
   return host
 }
 
-/** A phone-sized viewport: the guide comes up from the bottom rather than the side. */
 function usePhone() {
   const [phone, setPhone] = React.useState(() =>
     typeof window === "undefined"
@@ -191,21 +170,19 @@ function usePhone() {
   return phone
 }
 
-/** Whether the launcher belongs on this page at all. */
 function offPage(config: AgentConfig): boolean {
   const path = window.location.pathname
   return config.surface.hiddenPaths.some((prefix) => path.startsWith(prefix))
 }
 
-/** A product page, on either storefront: `/{brand}/p/{slug}`. */
+/** Matches `/{brand}/product/{slug}` on either storefront. */
 function onProductPage(): boolean {
-  return /\/p\//.test(window.location.pathname)
+  return /\/product\//.test(window.location.pathname)
 }
 
 export function Agent({ config }: { config: AgentConfig }) {
   const [session] = React.useState(() => readSession(config.id))
-  // A shopper who has opened or closed the window has decided; before that,
-  // the merchant may have asked for it open on product pages.
+  // A prior open/close decision wins; otherwise the merchant's product-page default applies.
   const [open, setOpen] = React.useState(
     () =>
       session.open ||
@@ -219,17 +196,14 @@ export function Agent({ config }: { config: AgentConfig }) {
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
     [config.id],
   )
-  // Sent per request rather than per transport so edits in the admin preview
-  // take effect without tearing down the conversation, and so the page is
-  // the one the shopper is on now: the conversation follows them across
-  // pages, and "this" means whatever is under the window at the time.
+  // Sent per request, not per transport, so admin-preview edits and the
+  // current page apply without tearing down the conversation.
   const behaviour = config.behaviour
   const requestBody = React.useCallback(
     () => ({ behaviour, page: window.location.pathname }),
     [behaviour],
   )
-  // Read when the cart tool answers, which is after the render the latest
-  // behaviour arrived in, so an effect is early enough.
+  // Read when the cart tool answers, after the render requestBody arrived in.
   const bodyRef = React.useRef(requestBody)
   React.useEffect(() => {
     bodyRef.current = requestBody
@@ -247,7 +221,6 @@ export function Agent({ config }: { config: AgentConfig }) {
     id: sessionKey(config.id),
     transport,
     messages: session.messages,
-    // The cart is read from the page, then the answer carries on by itself.
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
       answerViewCart(toolCall, addToolOutput, bodyRef.current())
@@ -269,10 +242,7 @@ export function Agent({ config }: { config: AgentConfig }) {
     })
   }, [config.id, open, messages, busy])
 
-  // A link followed out of a full-screen window: the page is about to go, so
-  // the session is written closed here and now rather than left to the effect
-  // above, which the navigation may or may not wait for. The conversation
-  // itself stays; the launcher brings it back on the next page.
+  // Written synchronously because navigation may not wait for the effect above.
   const leave = () => {
     setOpen(false)
     writeSession(config.id, {
@@ -283,15 +253,12 @@ export function Agent({ config }: { config: AgentConfig }) {
     })
   }
 
-  // Picked up mid-answer: the shopper asked, followed a card before the
-  // reply had finished, and is now on the next page waiting for it. Ask
-  // again on their behalf, once.
+  // Resumes a question left mid-answer when a card was followed to this page.
   const resumed = React.useRef(false)
   React.useEffect(() => {
     if (!session.pending || resumed.current) return
     resumed.current = true
     void regenerate({ body: requestBody() })
-    // Once, on mount: the session is read then, and nothing after changes it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -303,8 +270,7 @@ export function Agent({ config }: { config: AgentConfig }) {
     [send],
   )
 
-  // Product help: which guide is open, if any. A merchant's own button can
-  // open it too, with `data-minimal-guide="Topic"` on any element.
+  // A merchant's own button can open a guide too, via `data-minimal-guide="Topic"`.
   const [guide, setGuide] = React.useState<string | null>(null)
   const phone = usePhone()
   React.useEffect(() => {
@@ -364,8 +330,7 @@ export function Agent({ config }: { config: AgentConfig }) {
           )
         : null}
 
-      {/* Search is the one surface that opens inside a host dialog, so it is
-          not subject to the step-aside rule the launcher follows. */}
+      {/* Search opens inside a host dialog, so it skips the launcher's step-aside rule. */}
       {config.surface.searchAssist && host.search
         ? createPortal(
             <SearchPanel config={config} query={host.search.query} />,
@@ -410,8 +375,7 @@ export function Agent({ config }: { config: AgentConfig }) {
         ),
       )}
 
-      {/* The window is only ever drawn by the launcher surface; the other
-          entries open into the same one. */}
+      {/* Other entries open into the same window the launcher surface draws. */}
       {config.surface.entry !== "launcher" && open ? (
         <SiteChatLayer
           mode="fixed"

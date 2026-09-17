@@ -1,10 +1,5 @@
-/**
- * The shapes Volta's client components receive as props.
- *
- * Server components map `@/lib/catalog` into these and pass them down; nothing
- * on the client reads the catalog directly, because `@/lib/catalog` imports
- * `node:fs`.
- */
+// Server components map `@/lib/catalog` into these shapes; the client never
+// imports the catalog directly, since it pulls in `node:fs`.
 
 /** Everything a product tile needs, including the social proof Volta always shows. */
 export type ProductCardModel = {
@@ -56,7 +51,7 @@ export type NavLink = {
 
 export type NavModel = {
   categories: NavLink[]
-  /** "Shop by goal" — the entry point most nutrition shoppers actually use. */
+  /** "Shop by goal", the entry point most nutrition shoppers actually use. */
   goals: NavLink[]
   service: NavLink[]
   /** Promo tiles pinned to the bottom of the mobile nav overlay. */

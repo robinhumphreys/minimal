@@ -19,8 +19,7 @@ const LAST = 5
 export function OnboardingProgress() {
   const org = useOrg()
   const pathname = usePathname()
-  // Each step's own rule for its Next button holds for the arrow too: the
-  // pager is a shortcut through the flow, not a way around it.
+  // The pager reuses each step's own rule for advancing, since it's a shortcut through the flow, not around it.
   const matched = useAdminStore((state) => state.matched[org])
   const chosen = useAdminStore((state) => {
     const surface = state.drafts[org].surface

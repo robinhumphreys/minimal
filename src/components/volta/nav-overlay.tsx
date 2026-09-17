@@ -17,13 +17,8 @@ import {
 import { ProductCard } from "./product-card"
 import { Wordmark } from "./wordmark"
 
-/**
- * The phone site navigation, behind the hamburger.
- *
- * Categories are a flat list: each one's page carries its own filters, so
- * there is nothing to expand here. Never rendered on desktop — `<DesktopNav>`
- * owns that.
- */
+// Categories are a flat list: each page carries its own filters, so there is
+// nothing to expand here.
 export function NavOverlay({ nav }: { nav: NavModel }) {
   const open = useOverlays((state) => state.open)
   const toggle = useOverlays((state) => state.toggle)
@@ -87,10 +82,7 @@ export function NavOverlay({ nav }: { nav: NavModel }) {
             </Section>
 
             <Section title="Top rated">
-              {/*
-                The drawer is dark but tiles are drawn for white, so the promos
-                get their own slab of it — the same rule as the page shelves.
-              */}
+              {/* Tiles are drawn for white, so the promos get their own slab of it. */}
               <div className="grid grid-cols-2 gap-4 rounded-volta bg-volta-chalk p-4">
                 {nav.featured.map((product) => (
                   <ProductCard

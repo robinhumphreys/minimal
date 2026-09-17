@@ -27,12 +27,8 @@ const showProductsInput = (max: number) =>
   })
 
 /**
- * Putting products on the screen is the agent's main tool.
- *
- * The model names slugs and reasons; the server fills in everything else from
- * the catalog so the model can neither invent a price nor mis-link a page.
- * Unknown slugs are reported back rather than silently dropped, so the model
- * can correct itself in the same turn.
+ * The server fills in slug details from the catalog so the model can't
+ * invent a price; unknown slugs are reported back so it can self-correct.
  */
 const askChoiceInput = z.object({
   question: z
@@ -75,9 +71,8 @@ export function agentTools(brand: BrandId, maxPicks = 3, guide = false) {
   })
 
   /**
-   * No `execute`: the cart is in the shopper's browser, so the embed answers
-   * this one (see `answerViewCart`) and the conversation resumes with the
-   * result. The server only ever sees what the page reported.
+   * No `execute`: the cart lives in the browser, so the embed answers this
+   * one (see `answerViewCart`) and the server only sees what it reports.
    */
   const viewCart = tool({
     description:

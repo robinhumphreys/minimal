@@ -1,10 +1,5 @@
-/**
- * Footer link inventory.
- *
- * None of these pages exist — this is a demo storefront — so every href points
- * back at a real route. Kept in one place so the footer component stays about
- * layout, and so the list is obvious to swap for real URLs later.
- */
+// None of these pages exist, so every href points back at a real route;
+// kept in one place so it's obvious to swap for real URLs later.
 
 import type { NavLink } from "@/lib/volta/types"
 

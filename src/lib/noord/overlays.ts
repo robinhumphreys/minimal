@@ -3,18 +3,16 @@
 import { create } from "zustand"
 
 /**
- * Which full-screen overlay is showing. Only one can be open at a time, so this
- * is a single slot rather than three booleans — opening the bag from the nav
- * closes the nav for free.
+ * Only one overlay can be open at a time, so this is a single slot rather
+ * than three booleans; opening the bag from the nav closes the nav for free.
  */
 export type Overlay = "nav" | "search" | "bag"
 
 type OverlayState = {
   open: Overlay | null
   /**
-   * What was showing when the current overlay opened, so search can offer a
-   * back control that returns to the menu when that is where it came from,
-   * and closes outright when it was opened from the header.
+   * What was open before this one, so search's back control can return to
+   * the menu it came from, or close outright when opened from the header.
    */
   from: Overlay | null
   show: (overlay: Overlay) => void

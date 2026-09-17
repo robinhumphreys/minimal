@@ -20,13 +20,7 @@ import type {
 export type Placement = Position
 export type { IconStyle, LauncherIcon }
 
-/**
- * Everything the merchant can change about their agent, flat.
- *
- * Deliberately a flat object rather than the nested `AgentConfig`: these are
- * the knobs the studio exposes, and the customise chat patches them by name.
- * `settingsFrom` and `applySettings` are the two directions of the same map.
- */
+/** Deliberately flat, not the nested `AgentConfig`, so the customise chat can patch each knob by name. */
 export type SiteChatSettings = {
   // What it says
   greeting: string

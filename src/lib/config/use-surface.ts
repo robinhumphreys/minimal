@@ -8,9 +8,8 @@ import { agentConfigSchema, type AgentConfig } from "./schema"
 import { readPublishedOrDefault } from "./storage"
 
 /**
- * Drafts the admin is previewing in this frame, by brand. The onboarding
- * posts them in the same message the embed listens for, so the storefront
- * and the agent agree about what is switched on.
+ * Drafts the admin is previewing, by brand: posted in the same message the
+ * embed listens for, so storefront and agent agree on what's switched on.
  */
 const previews = new Map<BrandId, AgentConfig>()
 const listeners = new Set<() => void>()
@@ -49,9 +48,8 @@ function subscribe(listener: () => void) {
 }
 
 /**
- * The config this storefront should behave as: the admin's draft when this
- * page is its preview, otherwise what is published. On the server, and on
- * the onboarding's "before the agent" view, nothing is on.
+ * Draft config when this page is the admin's preview, otherwise the
+ * published one; nothing on the server or before onboarding's agent step.
  */
 function useSurface<T>(
   id: BrandId,
@@ -70,20 +68,16 @@ function useSurface<T>(
 }
 
 /**
- * Whether the agent reads this storefront's search.
- *
- * Search on either storefront exists for the agent to answer it, so when the
- * merchant has Search assist off there is no search at all.
+ * Search only exists on either storefront for the agent to answer, so
+ * switching Search assist off removes search entirely.
  */
 export function useSearchAssist(id: BrandId): boolean {
   return useSurface(id, (config) => config.surface.searchAssist, false)
 }
 
 /**
- * Whether the agent offers a guided choice on this storefront.
- *
- * The band a category page wraps around the guide is the storefront's, but
- * it only makes sense with the embed's button in it, so it goes with it.
+ * Whether the agent offers a guided choice: the storefront's band around it
+ * only makes sense with the embed's button, so the two ship together.
  */
 export function useProductHelp(id: BrandId): boolean {
   return useSurface(id, (config) => config.surface.productHelp.enabled, false)

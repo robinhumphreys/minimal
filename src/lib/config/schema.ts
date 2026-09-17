@@ -3,9 +3,8 @@ import { z } from "zod"
 export const brandIdSchema = z.enum(["noord", "volta"])
 
 /*
- * Every knob is a choice, not a value. A merchant picks "square" or "round",
- * never a CSS length; "accent" or "plain", never a foreground colour. Choices
- * can be made to look right under any brand's surface; free values cannot.
+ * Every knob is a choice ("square"/"round"), never a free value (a CSS
+ * length or colour): choices can be made to look right under any brand.
  */
 
 export const roundnessSchema = z.enum(["square", "soft", "round"])
@@ -80,11 +79,7 @@ export const launcherShapeSchema = z.enum(["circle", "square", "pill"])
 export const launcherSizeSchema = z.enum(["sm", "md", "lg"])
 export const imageRatioSchema = z.enum(["portrait", "square"])
 
-/**
- * Product help: a guided choice ("keuzehulp") opened from a trigger the
- * merchant places on a page. The agent asks one question at a time with
- * answers to tap, and ends on a product.
- */
+/** A guided choice ("keuzehulp"): the agent asks one question at a time, ending on a product. */
 export const productHelpSchema = z.object({
   enabled: z.boolean().default(false),
   /** Text on the trigger the embed draws into `minimal-agent-guide`. */
@@ -105,10 +100,7 @@ export const cardsSchema = z.object({
   rating: z.boolean().default(true),
 })
 
-/**
- * The launcher fields default rather than require so a config published
- * before they existed still parses.
- */
+/** Fields default rather than require, so a config published before they existed still parses. */
 export const surfaceSchema = z.object({
   entry: entrySchema,
   /** Launcher only. */

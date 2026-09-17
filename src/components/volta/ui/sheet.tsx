@@ -8,15 +8,8 @@ import { XIcon } from "@phosphor-icons/react/ssr"
 import { Button } from "@/components/volta/ui/button"
 
 /**
- * The one overlay primitive Volta uses: nav, search and bag are all this.
- *
- * On mobile it always covers the viewport — a storefront overlay that leaves a
- * sliver of the page behind it reads as a mistake on a phone. From `sm` up it
- * becomes a panel on the given `side`, or stays full-bleed for `side="full"`.
- *
  * `.volta` is repeated on the popup because Base UI portals it to
- * document.body, outside the shell wrapper that normally sets the brand's
- * typography and ground colour.
+ * `document.body`, outside the shell wrapper that sets the brand styles.
  */
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />

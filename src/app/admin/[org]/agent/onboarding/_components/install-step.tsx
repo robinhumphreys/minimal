@@ -34,24 +34,10 @@ type Pong = {
 /** The rows tick one after another, once the site has answered. */
 const TICK_MS = 500
 
-/**
- * How long to wait for the site to answer before calling the check failed.
- * A site without the embed never answers, so without this the rows would
- * spin for ever and the button would stay disabled.
- */
+/** A site without the embed never answers, so without a timeout the rows would spin forever. */
 const TIMEOUT_MS = 8000
 
-/**
- * The last step: the merchant takes the agent to their site, and this same
- * screen checks that it arrived. One row per surface that is on, with the
- * code to paste; Check now publishes the draft and asks the site, and each
- * row's circle becomes a tick as the site confirms it. Check again until
- * every row is in place; then Finish.
- *
- * The site is loaded in a hidden frame and pinged; the embed answers from
- * its own DOM, so a tick means a shopper would see it too. In this demo the
- * site is ours and the snippets are already in it.
- */
+/** The embed answers from its own DOM, so a tick means a shopper would see it too. */
 export function InstallStep({ next }: { next: string }) {
   const org = useOrg()
   const router = useRouter()
@@ -169,8 +155,6 @@ export function InstallStep({ next }: { next: string }) {
           ) : null}
         </div>
 
-        {/* Under the cards on a phone, wrapping if the two will not share a
-            line; in the corner where there is one. */}
         <div className="flex flex-wrap items-center justify-end gap-2 self-end md:absolute md:right-8 md:bottom-8">
           <CopyButton
             text={agentInstructionsFor(config)}

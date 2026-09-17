@@ -46,10 +46,6 @@ export function BagOverlay() {
 
         <SheetBody>
           {count === 0 ? (
-            // Centred rather than parked at the top: an outlined button in the
-            // corner of an otherwise empty panel reads as a dead end. The CTA
-            // takes the same full-width solid treatment as Checkout, so the
-            // empty bag has the same weight as a full one.
             <div className="noord-sheet-gutter flex h-full flex-col items-start justify-center gap-4 pb-16">
               <p className="text-noord-title">Your bag is empty.</p>
               <p className="text-noord-body text-noord-ink-muted">

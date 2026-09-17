@@ -18,14 +18,9 @@ import { NavOverlay } from "./nav-overlay"
 import { PromoStripe } from "./promo-stripe"
 import { SearchOverlay } from "./search-overlay"
 
-/**
- * Chrome shared by every Volta route: violator stripe, header, the three
- * overlays, footer.
- *
- * Catalog-derived props are threaded in from the server layout because
- * `@/lib/catalog` imports `node:fs` and cannot be reached from a client
- * component.
- */
+// Catalog-derived props are threaded in from the server layout because
+// `@/lib/catalog` imports `node:fs` and cannot be reached from a client
+// component.
 export function VoltaShell({
   nav,
   searchIndex,
@@ -39,9 +34,8 @@ export function VoltaShell({
   const close = useOverlays((state) => state.close)
   const searchAssist = useSearchAssist("volta")
 
-  // The bag persists to localStorage with `skipHydration`, so the read happens
-  // here rather than at import time — otherwise the server render and the first
-  // client render disagree about what is in the bag.
+  // The bag persists with `skipHydration`, so the read happens here rather
+  // than at import time, or the server and first client render disagree.
   React.useEffect(() => {
     void useBag.persist.rehydrate()
   }, [])
@@ -69,9 +63,8 @@ export function VoltaShell({
     [],
   )
 
-  // An overlay left open across a route change would cover the page the shopper
-  // just asked for. The one exception is search, which writes its own route
-  // while it opens.
+  // An overlay left open across a route change would cover the page just
+  // asked for; search is exempt since it writes its own route while open.
   React.useEffect(() => {
     if (pathname !== searchPath("volta")) close()
   }, [pathname, close])

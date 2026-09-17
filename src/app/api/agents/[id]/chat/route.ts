@@ -61,9 +61,7 @@ export async function POST(
       : instructionsFor(id, parsed.data, where),
     messages: await convertToModelMessages(messages),
     tools: agentTools(id, parsed.data.picks, guide.success),
-    // One call to show products, one to correct an unknown slug, and the
-    // sentence that goes with them. Anything longer is the model wandering.
-    // In the guide, a question asked is a turn over.
+    // Capped at 3 steps: anything longer is the model wandering. In the guide, a question asked ends the turn.
     stopWhen: [stepCountIs(3), hasToolCall("askChoice")],
     onError: ({ error }) => {
       console.error("[agent:chat]", error)

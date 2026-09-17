@@ -8,16 +8,8 @@ import {
 } from "@/lib/catalog"
 
 /**
- * The page the shopper is on, as one line for the prompt.
- *
- * The embed sends the path of the page it is mounted on with every request,
- * and the server reads it against the catalog. So the model is told what
- * "this" means before the shopper says it, and never has to ask which
- * product they are looking at; and the page can be described from a path
- * alone, so nothing else about the storefront needs to be sent over.
- *
- * Storefront paths are `/{brand}`, `/{brand}/{category}`, `/{brand}/p/{slug}`
- * and `/{brand}/search`. Anything else is not described.
+ * One line describing the shopper's page, for the prompt: the embed sends
+ * only the path, so the model knows what "this" means without extra data.
  */
 export const pageSchema = z.string().trim().max(200).optional()
 
@@ -30,7 +22,7 @@ export function pageLine(brand: BrandId, path: string | undefined): string {
     return "The shopper is on the shop's home page."
   }
 
-  if (rest.length === 3 && rest[1] === "p") {
+  if (rest.length === 3 && rest[1] === "product") {
     const product = getProduct(brand, rest[2])
     if (!product) return ""
     const category = getCategory(brand, product.category)

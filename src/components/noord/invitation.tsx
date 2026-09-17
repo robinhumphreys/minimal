@@ -4,12 +4,8 @@ import Link from "next/link"
 import { Button } from "@/components/noord/ui/button"
 
 /**
- * The full-bleed invitation that closes every page, above the footer.
- *
- * A storefront's last word should be a reason to come in rather than a link
- * list, and the same one on every page stops reading after the second page.
- * So there are four, chosen from the path: a given page always shows the same
- * one, and a shopper moving through the site meets all of them.
+ * Four variants, chosen deterministically from the page path so a given page
+ * always shows the same one while a shopper touring the site sees all four.
  */
 const INVITATIONS = [
   {
@@ -62,9 +58,8 @@ export function Invitation({ seed }: { seed: string }) {
           sizes="100vw"
           className={`object-cover ${invitation.position}`}
         />
-        {/* Biased to the left, where the type sits: a flat scrim over the
-            whole shot dims the photography to buy contrast it only needs in
-            one corner. */}
+        {/* Gradient biased left, where the type sits, so the scrim doesn't
+            dim the whole photo to buy contrast it only needs in one corner. */}
         <div className="absolute inset-0 bg-gradient-to-r from-noord-ink/80 via-noord-ink/45 to-noord-ink/25" />
       </div>
 

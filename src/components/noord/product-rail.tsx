@@ -4,9 +4,8 @@ import { ProductCard } from "@/components/noord/product-card"
 import type { ProductCardModel } from "@/lib/noord/types"
 
 /**
- * A horizontally scrolling row on a phone, a plain grid once four tiles fit.
- * Scrolling beats wrapping on mobile: it keeps the tiles large enough to judge
- * a garment by.
+ * Horizontal scroll on a phone, a plain grid once four tiles fit; scrolling
+ * keeps tiles large enough to judge a garment by.
  */
 export function ProductRail({
   title,
@@ -35,11 +34,8 @@ export function ProductRail({
         )}
       </div>
 
-      {/*
-        The scroll padding tracks the gutter: a snap point is measured from
-        the scrollport, not the padding, so without it every tile after the
-        first would snap flush to the screen edge.
-      */}
+      {/* Scroll padding tracks the gutter: snap points measure from the
+          scrollport, not padding, so tiles would snap flush to the edge. */}
       <div className="noord-gutter -mx-px flex snap-x snap-mandatory scroll-pl-noord-gutter gap-3 overflow-x-auto pb-2 md:scroll-pl-8 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible xl:scroll-pl-12">
         {products.map((product) => (
           <ProductCard

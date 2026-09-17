@@ -3,27 +3,14 @@ import { cn } from "@/lib/utils"
 import { VIOLATORS } from "@/lib/volta/promotions"
 
 /**
- * The violator stripe above the header.
- *
- * Volt ground with black type — the one full-bleed band of brand colour on the
- * page, so the promises read before anything else does. The hatch texture the
- * darker surfaces carry is volt-on-transparent and would vanish here, so the
- * stripe goes without it.
- *
- * On a phone the list is too long to sit still, so it scrolls: the track holds
- * the items twice and translates by exactly half its width, which loops without
- * a seam. From `md` up there is room to lay all of them out and the animation
- * is dropped — a stationary band is easier to read when reading is possible.
- *
- * `prefers-reduced-motion` stops the track (see `volta.css`); the duplicate
- * copy stays hidden from assistive tech either way.
+ * The track holds the items twice and translates by half its width, looping
+ * without a seam. `prefers-reduced-motion` stops it (see `volta.css`).
  */
 export function PromoStripe({ className }: { className?: string }) {
   return (
     <div
       className={cn("h-volta-stripe overflow-hidden bg-volta-volt", className)}
     >
-      {/* Phone: one moving track. */}
       <div className="flex h-full items-center md:hidden">
         <div className="volta-marquee-track flex w-max animate-volta-marquee items-center">
           <Items />
@@ -31,8 +18,6 @@ export function PromoStripe({ className }: { className?: string }) {
         </div>
       </div>
 
-      {/* Tablet and up: everything visible, pushed out to the page gutter and
-          spaced apart, still. */}
       <ul className="volta-gutter hidden h-full w-full items-center justify-between gap-8 md:flex">
         {VIOLATORS.map((violator) => (
           <li key={violator.id} className="flex items-center gap-2">

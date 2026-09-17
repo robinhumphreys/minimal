@@ -59,12 +59,8 @@ export async function ProductPage({
           ]}
         />
 
-        {/*
-          Detail column first, image second: on desktop the name, rating, price
-          and buy button sit on the left, where the eye lands. `flex-col-reverse`
-          puts the image back on top of the stack on a phone, where a tub you
-          have not seen yet is worth more than a heading you are about to read.
-        */}
+        {/* `flex-col-reverse` puts the image back on top on a phone, where an
+            unseen tub is worth more than a heading about to be read. */}
         <div className="flex flex-col-reverse gap-8 lg:flex-row lg:gap-12">
           <div className="flex flex-col gap-6 lg:flex-1 lg:pt-2">
             <div className="flex flex-col gap-3">
@@ -176,11 +172,8 @@ export async function ProductPage({
             </Tabs>
           </div>
 
-          {/*
-            One image, no carousel. Volta shoots every product the same way —
-            tub front-on, nothing to rotate through — so a gallery would be an
-            affordance with nothing behind it.
-          */}
+          {/* No carousel: every product is shot tub front-on, nothing to
+              rotate through. */}
           <div className="lg:w-[55%]">
             <div className="relative aspect-square rounded-volta bg-white">
               <Image
@@ -242,13 +235,8 @@ function sentenceCase(key: string): string {
   return key.charAt(0).toUpperCase() + key.slice(1)
 }
 
-/**
- * Usage copy by form.
- *
- * The catalog does not carry dosing instructions — it is a product list, not a
- * label — so the PDP derives a sensible line from the form rather than leaving
- * the panel empty.
- */
+// The catalog carries no dosing instructions, so the PDP derives a sensible
+// line from the form rather than leaving the panel empty.
 function usageFor(form: string | undefined, category: string): string {
   switch (form) {
     case "Powder":

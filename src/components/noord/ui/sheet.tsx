@@ -8,11 +8,8 @@ import { Button } from "@/components/noord/ui/button"
 import { XIcon } from "lucide-react"
 
 /**
- * The one overlay primitive Noord uses: nav, search and bag are all this.
- *
- * On mobile it always covers the viewport — a storefront overlay that leaves a
- * sliver of the page behind it reads as a mistake on a phone. From `sm` up it
- * becomes a panel on the given `side`, or stays full-bleed for `side="full"`.
+ * The one overlay primitive Noord uses (nav, search, bag). Full-viewport on
+ * mobile; from `sm` up it becomes a panel on `side`, or stays full for "full".
  */
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -81,10 +78,8 @@ function SheetContent({
               <Button
                 variant="ghost"
                 size="icon"
-                // Sits on the header row, not at an arbitrary offset from the
-                // popup: centred on the header's height, and pulled right by
-                // the 0.75rem of padding around its glyph so the glyph — not
-                // the hit area — lines up with the sheet gutter.
+                // Centred on the header's height and pulled right by the
+                // glyph's own padding, so the glyph lines up with the gutter.
                 className="absolute top-[calc((var(--spacing-noord-header)-2.5rem)/2)] right-[calc(var(--noord-sheet-gutter)-0.75rem)]"
               />
             }

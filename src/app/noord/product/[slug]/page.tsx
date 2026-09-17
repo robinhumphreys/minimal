@@ -10,7 +10,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: PageProps<"/noord/p/[slug]">,
+  props: PageProps<"/noord/product/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params
   const product = getProduct("noord", slug)
@@ -21,7 +21,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function Page(props: PageProps<"/noord/p/[slug]">) {
+export default async function Page(props: PageProps<"/noord/product/[slug]">) {
   const { slug } = await props.params
   return <ProductPage slug={slug} />
 }

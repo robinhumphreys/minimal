@@ -11,17 +11,8 @@ import { VIOLATORS, type ViolatorId } from "@/lib/volta/promotions"
 
 import { Wordmark } from "./wordmark"
 
-/**
- * The footer, in two bands: the violator row, then the links.
- *
- * The numbered promises that used to sit between them said the same three
- * things the violator row says, one line further down the page — the shopper
- * had already read them in the stripe above the header and again in the row
- * below it.
- *
- * On a phone the link columns stack; they are short enough that collapsing
- * them into accordions would hide six items behind a tap each.
- */
+// On a phone the link columns stack rather than collapsing into accordions;
+// they are short enough that an accordion would just hide items behind a tap.
 export function Footer() {
   return (
     <footer className="border-t border-volta-line bg-volta-carbon">
@@ -73,14 +64,8 @@ export function Footer() {
   )
 }
 
-/**
- * One icon per violator rather than the bolt four times.
- *
- * The bolt is the brand mark — repeating it down a row says "Volta" four times
- * and says nothing about the four different promises underneath it. These do
- * the labelling the mark cannot: a shopper skimming the row can tell delivery
- * from returns before reading either.
- */
+// One icon per violator rather than the bolt four times, so a shopper
+// skimming the row can tell delivery from returns before reading either.
 const VIOLATOR_ICONS: Record<ViolatorId, typeof TruckIcon> = {
   delivery: TruckIcon,
   dispatch: LightningIcon,
@@ -89,23 +74,8 @@ const VIOLATOR_ICONS: Record<ViolatorId, typeof TruckIcon> = {
 }
 
 /**
- * The violator stripe again, played slow: the same four promises in the same
- * order, on the same volt ground, sized to be read rather than glanced at.
- *
- * Cards at 3:2 from `sm` up, icon at the top and the promise sitting on the
- * floor of the cell. The fixed ratio is what keeps the row even — the labels
- * run from two to four words, so cells sized by their content came out at four
- * different depths, and "Free delivery over €40" wrapping to a second line
- * dragged the whole row down with it. Set the box and the text can wrap where
- * it likes.
- *
- * Below `sm` the grid is one column, where a 3:2 card is a near-empty
- * full-width block and four of them stack into a very long slab of volt. The
- * ratio is dropped there and each promise sets as a compact row instead.
- *
- * The hairline grid is the void showing through a `gap-px` on the `<ul>`, which
- * gives real rules at every breakpoint without per-cell border arithmetic — the
- * gutter lives on the wrapper so the void never leaks into the page margin.
+ * The hairline grid is the void showing through `gap-px` on the `<ul>`,
+ * giving rules at every breakpoint without per-cell border arithmetic.
  */
 function ViolatorRow() {
   return (

@@ -15,8 +15,8 @@ export function CategoryPage({ slug }: { slug: string }) {
 
   return (
     <>
-      {/* The grid reads `?fit=…` and friends off the URL. `useSearchParams`
-          needs a boundary for the page shell to stay statically prerendered. */}
+      {/* `useSearchParams` needs a Suspense boundary for the page shell to
+          stay statically prerendered. */}
       <Suspense fallback={<GridSkeleton />}>
         <CategoryGrid
           products={products}
@@ -25,9 +25,8 @@ export function CategoryPage({ slug }: { slug: string }) {
         />
       </Suspense>
 
-      {/* Product help, after the shopper has scrolled a wall of one kind of
-          thing. The band is the storefront's; the button in it is the
-          embed's, drawn into the mount when the agent is on the page. */}
+      {/* The band is the storefront's; the button is the embed's, drawn
+          into the mount only when the agent is on the page. */}
       <ProductHelpBand brand="noord">
         <section className="noord-gutter border-t border-noord-line bg-noord-wash">
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-5 py-16 text-center md:py-24">

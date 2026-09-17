@@ -119,9 +119,8 @@ export function getReviews(id: BrandId, slug?: string) {
 }
 
 /**
- * One line per product, for the chat system prompt. Leads with the slug: it is
- * the handle the model has to pass back to `showProducts`, so it has to be
- * something the model has actually seen.
+ * One line per product, for the system prompt. Leads with the slug: the
+ * model has to pass it back to `showProducts`, so it must have seen it.
  */
 export function catalogAsText(id: BrandId): string {
   return catalogs[id].products

@@ -2,8 +2,6 @@ import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { cn } from "cn"
 import { MinusIcon, PlusIcon } from "lucide-react"
 
-// Hairline-separated rows with a +/- affordance. Used for product details on
-// the PDP and for the category groups in the nav overlay.
 function Accordion({ className, ...props }: AccordionPrimitive.Root.Props) {
   return (
     <AccordionPrimitive.Root

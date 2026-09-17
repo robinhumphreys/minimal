@@ -1,15 +1,6 @@
 /*
- * Noord design tokens.
- *
- * Every token is namespaced `noord-*` so the second storefront (Volta) can
- * define a completely different `volta-*` set without either brand inheriting
- * the other's look. Nothing here touches the shadcn semantic tokens in
- * `globals.css` — the Noord primitives under `src/components/noord/ui` spend
- * these tokens directly.
- *
- * Namespacing rather than a `.noord` cascade scope is deliberate: dialogs
- * portal to `document.body`, outside any wrapper element, so scope-based
- * theming would silently drop out inside the nav, search and bag overlays.
+ * Namespaced rather than scoped: dialogs portal to `document.body`, outside
+ * any wrapper, so a `.noord` scope would drop out inside the overlays.
  */
 
 @theme {
@@ -67,13 +58,8 @@
   --tracking-noord-tight: -0.02em;
 
   /* --- Colour ----------------------------------------------------------- */
-  /*
-   * Greyscale only. Colour on a Noord page comes from the product photography.
-   *
-   * Neutral greys, not warm ones: the catalogue is shot on a flat #efefef
-   * sweep, so `wash` matches it exactly and a product image sits in its
-   * placeholder without a seam. A warm grey next to that grey reads as dirty.
-   */
+  /* Neutral greys, not warm: `wash` matches the catalogue's #efefef sweep so
+     a product image sits in it without a seam. */
   --color-noord-paper: #ffffff;
   --color-noord-ink: #131313;
   --color-noord-ink-muted: #6c6c6c;
@@ -95,10 +81,8 @@
 }
 
 @layer components {
-  /*
-   * Root wrapper for every Noord route. Sets the brand's baseline typography
-   * so individual components only declare what differs from it.
-   */
+  /* Sets the brand's baseline typography so components only declare what
+     differs from it. */
   .noord {
     font-family: var(--font-noord);
     font-size: var(--text-noord-body);
@@ -125,14 +109,8 @@
     }
   }
 
-  /*
-   * Inline padding inside a sheet.
-   *
-   * A `full` sheet is a page and takes the page gutter. A side panel is a
-   * fixed 22–26rem wide, so the page gutter — 3rem once the viewport passes
-   * 80rem — would eat an eighth of it, and would keep changing as the window
-   * resized even though the panel never does. Panels take a fixed gutter.
-   */
+  /* A fixed-width side panel skips the page gutter: at 3rem it would eat an
+     eighth of the panel and keep changing size while the panel doesn't. */
   .noord-sheet {
     --noord-sheet-gutter: 1.25rem;
   }
@@ -157,7 +135,7 @@
     padding-inline: var(--noord-sheet-gutter);
   }
 
-  /* Underline that grows from the left on hover — used on text links. */
+  /* Underline that grows from the left on hover, used on text links. */
   .noord-underline {
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 0 100%;
@@ -176,4 +154,3 @@
     }
   }
 }
-

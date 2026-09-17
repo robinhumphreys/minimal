@@ -21,11 +21,7 @@ import {
   voiceSchema,
 } from "@/lib/config/schema"
 
-/**
- * Shared by the route and the customise chat: the route hands it to the model,
- * the chat uses the types to read the call back. Kept apart from the route
- * file so the client bundle does not pull in the server handler.
- */
+// Kept apart from the route file so the client bundle does not pull in the server handler.
 
 /** Every key is optional: the model sends only what the merchant asked to change. */
 export const siteChatPatchSchema = z.object({
@@ -197,11 +193,7 @@ export type SiteChatPatch = z.infer<typeof siteChatPatchSchema>
 
 type PatchKey = keyof SiteChatPatch
 
-/**
- * Settings every surface shares: the agent's voice and the look of what it
- * draws. A change made from any tab applies to all three, which is the point
- * — one agent, three places it appears.
- */
+// A change made from any tab applies to all three: one agent, three places it appears.
 const SHARED_KEYS: readonly PatchKey[] = [
   "voice",
   "spelling",
@@ -215,11 +207,7 @@ const SHARED_KEYS: readonly PatchKey[] = [
   "picks",
 ]
 
-/**
- * What each surface's chat may touch. A conversation on the Search assist tab
- * cannot move the chat button, and one on the Site chat tab cannot rename the
- * Product help button: the model is told about, and given, only its own keys.
- */
+/** The model is told about, and given, only its own surface's keys. */
 export const SURFACE_KEYS: Record<ChatSurface, readonly PatchKey[]> = {
   "site-chat": [
     ...SHARED_KEYS,
@@ -261,14 +249,7 @@ function patchSchemaFor(surface: ChatSurface) {
   return siteChatPatchSchema.pick(mask)
 }
 
-/**
- * No `execute`: the settings live in the merchant's browser, so the chat
- * applies the patch itself and posts the result back for the model to confirm.
- *
- * The full set. The route hands the model a surface's own slice via
- * `toolsFor`; this one is what the chat reads the call back against, since
- * every slice is a subset of it.
- */
+/** No `execute`: the settings live in the merchant's browser, so the chat applies the patch itself. */
 export const siteChatTools = {
   updateSiteChat: tool({
     description:

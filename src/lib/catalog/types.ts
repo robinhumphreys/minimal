@@ -28,11 +28,8 @@ export type Product = {
   description: string
   tags: string[]
   /**
-   * Mean customer rating, 0–5, one decimal.
-   *
-   * Optional because only brands that surface social proof carry it: Noord
-   * shows none, Volta shows it on every tile. Always paired with
-   * `reviewCount` — a star row with no count behind it is not evidence.
+   * Mean customer rating, 0-5, one decimal. Optional: only Volta shows
+   * ratings. Always paired with `reviewCount`; a star row alone isn't evidence.
    */
   rating?: number
   reviewCount?: number

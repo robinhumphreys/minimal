@@ -11,7 +11,7 @@ import type { NavModel, ProductCardModel, SearchEntry } from "@/lib/noord/types"
 const BRAND = "noord" as const
 
 export function productHref(slug: string) {
-  return `/${BRAND}/p/${slug}`
+  return `/${BRAND}/product/${slug}`
 }
 
 export function categoryHref(slug: string) {
@@ -76,8 +76,6 @@ export function navModel(): NavModel {
 
   return {
     categories,
-    // "New arrivals" sits with the categories rather than in a group of its
-    // own, the way a shopper thinks about it.
     menu: [
       { label: "New arrivals", href: categoryHref("suits") },
       ...categories,
@@ -88,9 +86,8 @@ export function navModel(): NavModel {
 }
 
 /**
- * A stable, spread-out sample: walking the catalog at a fixed stride avoids
- * pulling `count` near-identical navy suits, and avoids `Math.random()`, which
- * would differ between the server render and the client.
+ * Fixed stride, not `Math.random()`: avoids clustering near-identical
+ * products and stays stable between server and client renders.
  */
 export function pickFeatured(count: number, offset = 0): ProductCardModel[] {
   const products = getCatalog(BRAND).products

@@ -5,16 +5,8 @@ import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cn } from "@/lib/utils"
 
 /**
- * Tabs.
- *
- * Volta's product detail sits in tabs rather than the accordion Noord uses, so
- * the two storefronts do not read as the same template in two palettes. It also
- * suits the content: specification, dosing and delivery are three answers to
- * three separate questions, not a list to work down, and tabs show that the
- * other two exist without making the shopper open them.
- *
- * The active tab is marked by a volt rule sitting on the list's hairline, the
- * same underline the desktop nav uses for the open category.
+ * Specification, dosing and delivery are three separate answers, not a list
+ * to work down, so tabs show they exist without making the shopper open them.
  */
 function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
   return (
@@ -27,10 +19,8 @@ function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
 }
 
 /**
- * Scrolls sideways rather than wrapping: three labels do not fit a narrow
- * phone, and a tab row that reflows to two lines stops looking like a control.
- * `-mb-px` drops the list's own hairline onto the border below it so the active
- * rule and the divider are the same line.
+ * Scrolls sideways rather than wrapping to two lines. `-mb-px` drops the
+ * list's hairline onto the border below so the active rule and divider align.
  */
 function TabsList({ className, ...props }: TabsPrimitive.List.Props) {
   return (
