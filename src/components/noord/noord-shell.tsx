@@ -19,11 +19,8 @@ import { NavOverlay } from "./nav-overlay"
 import { SearchOverlay } from "./search-overlay"
 
 /**
- * Chrome shared by every Noord route: header, the three overlays, footer.
- *
- * Catalog-derived props are threaded in from the server layout because
- * `@/lib/catalog` imports `node:fs` and cannot be reached from a client
- * component.
+ * Catalog-derived props are threaded in here because `@/lib/catalog` imports
+ * `node:fs`, unreachable from a client component.
  */
 export function NoordShell({
   nav,
@@ -38,9 +35,8 @@ export function NoordShell({
   const close = useOverlays((state) => state.close)
   const searchAssist = useSearchAssist("noord")
 
-  // The bag persists to localStorage with `skipHydration`, so the read happens
-  // here rather than at import time — otherwise the server render and the first
-  // client render disagree about what is in the bag.
+  // The bag persists via localStorage with `skipHydration`, so it's read
+  // here, not at import time, to avoid a server/client hydration mismatch.
   React.useEffect(() => {
     void useBag.persist.rehydrate()
   }, [])
@@ -68,9 +64,8 @@ export function NoordShell({
     [],
   )
 
-  // An overlay left open across a route change would cover the page the shopper
-  // just asked for. The one exception is search, which writes its own route
-  // while it opens.
+  // An overlay left open across a route change would cover the page just
+  // requested. Search is the exception; it writes its own route while open.
   React.useEffect(() => {
     if (pathname !== searchPath("noord")) close()
   }, [pathname, close])

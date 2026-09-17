@@ -28,14 +28,8 @@ import {
   SheetTitle,
 } from "@/components/volta/ui/sheet"
 
-/**
- * The shopping bag.
- *
- * A panel from `sm` up rather than a route: the shopper is mid-browse, and
- * sending them to a page to check the bag costs them their place. It states
- * what the order costs and gets out of the way — no meter nagging the shopper
- * towards a bigger basket.
- */
+// A panel, not a route: sending the shopper to a page to check the bag costs
+// them their place mid-browse.
 export function BagOverlay() {
   const open = useOverlays((state) => state.open) === "bag"
   const toggle = useOverlays((state) => state.toggle)

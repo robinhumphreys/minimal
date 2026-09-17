@@ -4,10 +4,8 @@ import type { BrandId } from "@/lib/catalog/types"
 import { useProductHelp } from "@/lib/config/use-surface"
 
 /**
- * The storefront's own framing around a `minimal-agent-guide` mount. The
- * category pages are server components, so this is the one client seam
- * that lets the band follow the merchant's Product help switch: off, and
- * neither the copy nor the empty mount is on the page.
+ * Category pages are server components; this is the client seam that lets
+ * the band follow the merchant's Product help switch, hiding fully when off.
  */
 export function ProductHelpBand({
   brand,

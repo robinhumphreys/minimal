@@ -11,8 +11,7 @@ export default function VoltaLayout({ children }: LayoutProps<"/volta">) {
       <VoltaShell nav={navModel()} searchIndex={searchIndex()}>
         {children}
       </VoltaShell>
-      {/* The agent. The same tag a merchant pastes into their own site, and
-          the only line of it the storefront knows about. */}
+      {/* The same tag a merchant pastes into their own site. */}
       <Script src="/embed.js" data-agent="volta" strategy="afterInteractive" />
     </>
   )

@@ -2,11 +2,8 @@
 
 import { create } from "zustand"
 
-/**
- * Which full-screen overlay is showing. Only one can be open at a time, so this
- * is a single slot rather than three booleans — opening the bag from the nav
- * closes the nav for free.
- */
+// A single slot, not three booleans, so opening the bag from the nav closes
+// the nav for free.
 export type Overlay = "nav" | "search" | "bag"
 
 type OverlayState = {

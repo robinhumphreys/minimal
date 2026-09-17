@@ -1,18 +1,9 @@
-/**
- * Flavour options for the product page picker.
- *
- * The catalog records one flavour per SKU — the real one, from the label. A
- * flavour picker needs more than one option to be a picker, so the rest of the
- * row comes from a per-form palette here. It is demo data and deliberately
- * kept out of `@/lib/catalog` for that reason: the catalog stays factual, the
- * storefront supplies the shopping furniture.
- *
- * Client-safe: the picker is interactive, so it cannot reach the catalog.
- */
+// The catalog records one flavour per SKU, so the rest of the picker's row is
+// demo data kept here, client-safe since the picker cannot reach the catalog.
 
 /**
- * Plausible siblings by `attributes.form`. A shopper switching flavour on a
- * bar should not be offered "Unflavoured".
+ * Plausible siblings by `attributes.form`, so a shopper switching flavour on
+ * a bar is not offered "Unflavoured".
  */
 const PALETTE: Record<string, string[]> = {
   Powder: [
@@ -44,14 +35,12 @@ const PALETTE: Record<string, string[]> = {
   "Chewable Tablets": ["Orange", "Lemon", "Blackcurrant"],
 }
 
-/** Forms with no meaningful flavour — capsules taste of nothing. */
+/** Forms with no meaningful flavour, capsules taste of nothing. */
 const UNFLAVOURED_FORMS = new Set(["Capsules", "Softgels", "Tablets"])
 
 /**
- * The options to show, with the product's own flavour first and selected.
- *
- * Returns a single entry for capsules and the like, which the picker reads as
- * "nothing to choose" and hides itself.
+ * Options with the product's own flavour first; a single entry (capsules and
+ * the like) reads as "nothing to choose" and the picker hides itself.
  */
 export function flavourOptions(
   form: string | undefined,

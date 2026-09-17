@@ -7,42 +7,27 @@ import { useAdminStore } from "@/lib/store/admin"
 
 import { Checklist, LoaderStage, SITES } from "./loader-stage"
 
-/**
- * The work being reported, in the order it happens. Nothing is really running
- * — the configs for both brands ship as defaults — but the merchant is being
- * asked to wait, and a wait with named stages is a wait they can read.
- */
+// Nothing is really running here, the configs ship as defaults, but a wait with named stages is a wait they can read.
 function tasksFor(
   domain: string,
 ): { label: string; detail?: string; ms: number }[] {
   return [
-    // Long enough to register as a step having happened, short enough that
-    // the merchant sees their own site almost immediately.
     { label: "Fetch website", detail: domain, ms: 500 },
     { label: "Extracting color and typography", ms: 5500 },
     { label: "Building custom widgets", ms: 5000 },
   ]
 }
 
-/**
- * Step two: the merchant watches their own site being read. Nothing is really
- * running — the configs for both brands ship as defaults — but the merchant
- * is being asked to wait, and a wait with named stages is a wait they can
- * read. The site is shown without the agent: the surfaces are set up in the
- * steps that follow, and showing them here would be the answer before the
- * question.
- */
+/** The site is shown without the agent: the surfaces are set up in later steps, showing them now would be the answer before the question. */
 export function MatchingStep({ next }: { next: string }) {
   const brand = useOrg()
   const site = SITES[brand]
   const tasks = tasksFor(site.domain)
-  // How many rows have finished. The row at this index is the one in progress;
-  // when it passes the last index every row is done and the timer stops.
   const [done, setDone] = React.useState(0)
   const finished = done >= tasks.length
   const markMatched = useAdminStore((state) => state.markMatched)
 
-  // Tell the pager: until this has happened once, there is no step three.
+  // Until this fires once, step three stays locked in the pager.
   React.useEffect(() => {
     if (finished) markMatched(brand)
   }, [finished, brand, markMatched])

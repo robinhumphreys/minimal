@@ -5,13 +5,8 @@ import type { ProductPick } from "@/lib/agent/types"
 import type { Cards } from "@/lib/config/schema"
 
 /**
- * What a recommendation looks like: cards, not prose.
- *
- * One pick lies down as a row so it reads as the answer; two or more stand up
- * as a rail the shopper can swipe, bled to the window's edges so the rail
- * reads as continuing past them. The scroll padding matches the inline
- * padding: a snap point is measured from the scrollport, not the content
- * box, so without it every card after the first would snap flush to the edge.
+ * Scroll padding matches inline padding since a snap point is measured from
+ * the scrollport, not the content box, or cards would snap flush to the edge.
  */
 export function ProductCards({
   products,
@@ -68,8 +63,7 @@ export function ProductCard({
         className,
       )}
     >
-      {/* The embed is a standalone bundle on someone else's page; there is no
-          `next/image` to lean on out there. */}
+      {/* Standalone bundle on someone else's page; no next/image to lean on. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={product.image}

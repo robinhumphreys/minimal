@@ -3,13 +3,7 @@ import { cn } from "cn"
 import type { BrandId } from "@/lib/catalog/types"
 import { BRAND_MARK_VIEW_BOX, brandMarkArtwork } from "@/lib/brand/marks"
 
-/**
- * A merchant's logo, at whatever size the caller sets it.
- *
- * The same artwork the brand's `icon` route serves as its favicon — see
- * `lib/brand/marks.ts` for why it is markup and not JSX. A mark the product
- * draws differently from the site it stands for is worse than no mark.
- */
+/** A merchant's logo, at whatever size the caller sets it. */
 export function BrandMark({
   brand,
   className,
@@ -19,11 +13,11 @@ export function BrandMark({
     <svg
       viewBox={BRAND_MARK_VIEW_BOX}
       aria-hidden="true"
-      // The field runs to the edges, so whatever radius the caller sets has to
-      // clip it. An `<svg>` root already hides its overflow; this states it.
+      // The artwork runs to the edges, so the caller's radius needs this
+      // stated explicitly even though svg already clips overflow.
       className={cn("shrink-0 overflow-hidden", className)}
       {...props}
-      // Static markup from the module above, not anything a user supplies.
+      // Static markup from lib/brand/marks.ts, not user-supplied.
       dangerouslySetInnerHTML={{ __html: brandMarkArtwork(brand) }}
     />
   )

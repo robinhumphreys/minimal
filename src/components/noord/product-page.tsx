@@ -41,12 +41,8 @@ export function ProductPage({ slug }: { slug: string }) {
 
   return (
     <div>
-      {/*
-        No column gap on desktop: the detail column sets its own padding, so the
-        space between it and the gallery matches the space between it and the
-        viewport edge. A grid gap plus the page gutter made the left inset more
-        than twice the right one.
-      */}
+      {/* No column gap: the detail column's own padding must match the
+          gallery's inset, otherwise a grid gap plus page gutter doubles it. */}
       <div className="lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-0">
         <ProductGallery images={product.images} alt={product.name} />
 

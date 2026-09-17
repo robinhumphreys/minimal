@@ -15,9 +15,6 @@ import {
 import { Wordmark } from "./wordmark"
 
 /**
- * Three bands, in the order a retailer uses them: service promises, the link
- * columns, then the legal strip.
- *
  * The link columns collapse into an accordion below `md`, where four open
  * columns would be a wall of text on a phone.
  */
@@ -28,7 +25,6 @@ export function Footer() {
 
       <div className="noord-gutter">
         <div className="grid gap-10 border-b border-noord-line py-12 md:grid-cols-4 md:gap-8">
-          {/* Phone: collapsed columns. */}
           <div className="md:hidden">
             <Accordion>
               {FOOTER_COLUMNS.map((column) => (
@@ -42,7 +38,6 @@ export function Footer() {
             </Accordion>
           </div>
 
-          {/* Tablet and up: open columns. */}
           {FOOTER_COLUMNS.map((column) => (
             <div key={column.title} className="hidden md:block">
               <h2 className="mb-4 text-noord-micro text-noord-ink-faint uppercase">

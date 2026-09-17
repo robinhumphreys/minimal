@@ -3,11 +3,8 @@ import type { UIDataTypes, UIMessage } from "ai"
 import type { CartView } from "./cart"
 
 /**
- * What the agent hands the widget when it puts products in front of a shopper.
- *
- * Shared by the route (which builds it from the catalog) and the embed (which
- * only ever sees this shape): the embed cannot import the catalog, because the
- * catalog reads `node:fs`, so everything a card needs to draw itself is here.
+ * Shared by the route and the embed: the embed can't import the catalog
+ * (it reads `node:fs`), so everything a card needs to draw is here.
  */
 export type ProductPick = {
   slug: string
@@ -41,17 +38,14 @@ export type SearchRequest = {
   query: string
   /** Chips and answers the shopper tapped since typing the query. */
   refinements: string[]
-  /** Keyword retrieval answers at once; the agent's reading follows. */
-  mode: "keyword" | "agent"
 }
 
 export type SearchResult = {
   query: string
-  mode: "keyword" | "agent"
   /** How the agent read the search, as phrases in the catalog's own terms. */
   reading: string[]
   products: ProductPick[]
-  /** One line to the shopper. Empty in keyword mode. */
+  /** One line to the shopper. */
   line: string
   /** Short answers the shopper can tap to the line's question. */
   followUps: string[]

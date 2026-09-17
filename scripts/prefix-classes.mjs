@@ -1,8 +1,5 @@
-// One-off codemod: adds the embed's Tailwind prefix to every class string in
-// the given files, so `flex gap-2` becomes `ma:flex ma:gap-2`. Walks the
-// TypeScript AST rather than grepping, so only strings in class position are
-// touched: `className` props, `cn()` / `cva()` arguments (and the tables
-// they read from), never prose, `data-*` values or variant names.
+// One-off codemod: prefixes every class string (className, cn()/cva() args)
+// with the embed's Tailwind prefix, e.g. `flex` becomes `ma:flex`.
 //
 //   node scripts/prefix-classes.mjs embed/**/*.tsx
 import fs from "node:fs"
@@ -19,9 +16,8 @@ function prefixToken(token) {
 }
 
 /**
- * Prefixes each whitespace-separated token. A token at the very start of a
- * template-literal continuation (`${x}-foo`) is the tail of something
- * interpolated, so it is left alone unless `wholeStart` says it stands alone.
+ * A token at the start of a template-literal continuation (`${x}-foo`) is
+ * interpolated, so it's left alone unless `wholeStart` says it stands alone.
  */
 function prefixList(text, wholeStart) {
   return text.replace(/\S+/g, (token, offset) =>

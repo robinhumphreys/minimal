@@ -28,21 +28,8 @@ const MAX_RESULTS = 8
 const MIN_QUERY = 2
 
 /**
- * Full-screen search: a heading, one input, and a list of names.
- *
- * Suggestions are text only — no thumbnail, no price, no category. A shopper
- * mid-keystroke is scanning for a word, and a column of 64px photographs slows
- * that scan down rather than speeding it up. Matching runs over a pre-lowercased
- * haystack built on the server, so the catalog filters synchronously on every
- * keystroke without a debounce.
- *
- * Submitting hands the search to the agent: the query goes onto the mount
- * below, the agent answers under it, and this sheet's own input and list —
- * everything marked `data-native-search` — step aside for the answer, so the
- * words the shopper typed become the first bubble and the agent's composer is
- * the one input on screen. Back or close resets it.
- *
- * The sheet has a URL, `/noord/search?q=…`; see `useSearchUrl`.
+ * Matching runs over a pre-lowercased haystack built server-side, so results
+ * filter synchronously on every keystroke without a debounce.
  */
 export function SearchOverlay({ index }: { index: SearchEntry[] }) {
   const open = useOverlays((state) => state.open) === "search"
@@ -171,8 +158,7 @@ export function SearchOverlay({ index }: { index: SearchEntry[] }) {
             </form>
 
             {/* The agent's reading of the search, when the embed is on the
-                page. Empty until a search is submitted, and the list below
-                carries on. */}
+                page. Empty until submitted; the list below keeps working. */}
             <minimal-agent-search data-query={submitted} />
 
             <div data-native-search className="contents">

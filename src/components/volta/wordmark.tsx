@@ -1,10 +1,6 @@
 import { cn } from "@/lib/utils"
 
-/**
- * Set as text rather than drawn, so it inherits the brand grotesque and stays
- * crisp at any size. The mark is the width axis: Archivo pushed wide and heavy,
- * tracked tight, with the bolt as the only drawn element.
- */
+/** Set as text, not drawn, so it inherits the brand grotesque and stays crisp at any size. */
 export function Wordmark({ className }: { className?: string }) {
   return (
     <span

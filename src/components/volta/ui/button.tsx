@@ -48,9 +48,8 @@ function Button({
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       render={render}
-      // Base UI assumes a native <button> and warns when `render` supplies
-      // anything else. Most of Volta's `render` uses are `next/link`, which is
-      // an <a>; callers passing a real <button> can still say so explicitly.
+      // Base UI assumes a native <button> and warns otherwise; most of
+      // Volta's `render` uses are `next/link`, so default it off.
       nativeButton={nativeButton ?? render === undefined}
       {...props}
     />

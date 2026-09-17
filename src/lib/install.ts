@@ -58,10 +58,7 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
   return snippets
 }
 
-/**
- * The same install, written for a coding agent to carry out. Everything it
- * needs to know is in one block, including how to check its own work.
- */
+/** The same install, written for a coding agent: everything it needs, including how to verify its own work. */
 export function agentInstructionsFor(config: AgentConfig): string {
   const lines = [
     `Install the Minimal AI storefront agent for ${config.name}.`,

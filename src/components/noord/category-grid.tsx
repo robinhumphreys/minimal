@@ -44,12 +44,8 @@ function valueOf(product: SearchEntry, facet: FacetKey) {
 }
 
 /**
- * The category heading and its product grid.
- *
- * Filtering and sorting are client-side over the category's products: the
- * whole category arrives in one payload anyway, so a round trip per facet
- * would only add latency. Sort lives inside the filter sheet rather than in a
- * bar of its own — one control above the grid, not three.
+ * Filters and sorts client-side: the whole category already arrived in one
+ * payload, so a round trip per facet would only add latency.
  */
 export function CategoryGrid({
   products,
@@ -75,9 +71,8 @@ export function CategoryGrid({
   const [overrides, setOverrides] = React.useState<Selection | null>(null)
   const [lastFromUrl, setLastFromUrl] = React.useState(fromUrl)
 
-  // A new set of URL params is a new starting point, so local edits go. Reset
-  // during render rather than in an effect: an effect would paint one frame of
-  // the old selection against the new URL first.
+  // A new set of URL params invalidates local overrides. Reset during render,
+  // not in an effect, to avoid painting one frame of the stale selection.
   if (lastFromUrl !== fromUrl) {
     setLastFromUrl(fromUrl)
     setOverrides(null)
@@ -140,8 +135,6 @@ export function CategoryGrid({
         >
           <SlidersHorizontalIcon strokeWidth={1.5} />
           Filter
-          {/* A dot, not a count — Noord shows no tallies. The active filters
-              are spelled out in the chip row below anyway. */}
           {active.length > 0 && (
             <>
               <span aria-hidden className="size-1 bg-noord-ink" />
@@ -188,10 +181,8 @@ export function CategoryGrid({
           </Button>
         </div>
       ) : (
-        // One full-bleed column on a phone: a suit is judged on the cut, and
-        // half a phone width is not enough to see it. From `sm` the gutter
-        // comes back so the grid lines up with the heading. The paddings
-        // mirror `.noord-gutter`, which cannot be written as a `sm:` variant.
+        // Full-bleed on a phone; sm+ paddings mirror `.noord-gutter`, which
+        // can't be written as a `sm:` variant here.
         <div className="grid grid-cols-1 gap-y-10 pb-8 sm:grid-cols-2 sm:gap-x-3 sm:px-4 md:grid-cols-3 md:gap-x-6 md:px-8 xl:grid-cols-4 xl:px-12">
           {visible.map((product, index) => (
             <ProductCard

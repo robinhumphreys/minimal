@@ -3,18 +3,13 @@ import type { CSSProperties } from "react"
 import { readableOn } from "@/lib/config/contrast"
 import type { Theme } from "@/lib/config/schema"
 
-/** Corner radius per roundness step. Everything rounded scales off this. */
 const RADIUS: Record<Theme["roundness"], string> = {
   square: "0px",
   soft: "0.5rem",
   round: "1rem",
 }
 
-/**
- * The curated faces a merchant can choose instead of their site's own. The
- * variables are what this app's root layout loads; each falls back to the
- * face by name so the choice still means something on a page without them.
- */
+/** Falls back to the named face if the root layout's font variables are absent. */
 const FONTS: Record<Exclude<Theme["font"], "site">, string> = {
   inter:
     'var(--font-noord-sans), Inter, "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -28,14 +23,7 @@ export function radiusOf(theme: Theme): string {
   return RADIUS[theme.roundness]
 }
 
-/**
- * The merchant's choices, spent as a whole palette.
- *
- * Everything between the surface and the ink is mixed from the two rather than
- * fixed: a white panel and a charcoal one need different greys for a muted
- * bubble or a hairline, and the merchant should not have to know that. The
- * accent is only ever used at full strength, with its own readable foreground.
- */
+/** Everything between surface and ink is mixed from the two, not fixed, since a light and a dark surface need different greys. */
 export function themeStyle(theme: Theme): CSSProperties {
   const dark = readableOn(theme.surface) === "#ffffff"
   const ink = dark ? "#ffffff" : "#131313"
@@ -65,7 +53,6 @@ export function themeStyle(theme: Theme): CSSProperties {
     "--radius": radiusOf(theme),
     "--font-sans": body,
     "--font-display": display,
-    // Compact pulls every gap and inset in by a quarter.
     "--minimal-gap": theme.density === "compact" ? "0.75rem" : "1rem",
     "--card-spacing": theme.density === "compact" ? "0.625rem" : "0.875rem",
   } as CSSProperties

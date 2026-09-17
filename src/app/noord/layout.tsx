@@ -11,8 +11,7 @@ export default function NoordLayout({ children }: LayoutProps<"/noord">) {
       <NoordShell nav={navModel()} searchIndex={searchIndex()}>
         {children}
       </NoordShell>
-      {/* The agent. The same tag a merchant pastes into their own site, and
-          the only line of it the storefront knows about. */}
+      {/* The same tag a merchant pastes into their own site. */}
       <Script src="/embed.js" data-agent="noord" strategy="afterInteractive" />
     </>
   )

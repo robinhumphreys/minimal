@@ -5,9 +5,8 @@ import { pageLine } from "./page"
 import { voiceLines } from "./voice"
 
 /**
- * The merchant's prompt sets the voice; this sets the job. Kept out of the
- * config so a merchant editing their opening line cannot accidentally switch
- * off the behaviour that makes the agent an agent.
+ * The merchant's prompt sets the voice; this sets the job, kept out of the
+ * config so editing the opening line can't switch off core agent behaviour.
  */
 const job = (picks: number) =>
   `

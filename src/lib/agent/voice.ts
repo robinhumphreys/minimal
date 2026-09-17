@@ -9,9 +9,8 @@ const VOICES: Record<Behaviour["voice"], string> = {
 }
 
 /**
- * The lines every prompt shares about how to sound: voice, spelling and
- * language are merchant settings, so they are written once and read by both
- * the chat and the search.
+ * Voice, spelling and language are merchant settings shared by chat and
+ * search, so the lines describing them are written once, here.
  */
 export function voiceLines(behaviour: Behaviour): string {
   return [

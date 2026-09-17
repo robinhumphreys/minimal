@@ -10,11 +10,8 @@ function subscribe(onStoreChange: () => void) {
 }
 
 /**
- * The media query is an external store, so it is read with
- * `useSyncExternalStore` rather than mirrored into state from an effect — the
- * effect version renders once at the wrong width before correcting itself.
- * The server snapshot is `false`: there is no viewport to measure, and desktop
- * is what the shell renders into on first paint.
+ * Read via `useSyncExternalStore`, not mirrored into state from an effect:
+ * the effect version renders once at the wrong width before correcting.
  */
 export function useIsMobile() {
   return React.useSyncExternalStore(

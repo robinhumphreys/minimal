@@ -11,12 +11,7 @@ import {
 import { useBag, type BagLine } from "@/lib/noord/bag"
 import { useOverlays } from "@/lib/noord/overlays"
 
-/**
- * Size picker and the add-to-bag button.
- *
- * `line` is the product snapshot the bag will store — assembled on the server,
- * because the client cannot read the catalog.
- */
+/** `line` is assembled server-side since the client can't read the catalog. */
 export function AddToBag({
   line,
   sizes,

@@ -14,11 +14,7 @@ import {
 export type NavItem = {
   title: string
   icon: React.ReactNode
-  /**
-   * Omitted while the screen does not exist yet. Placeholders still render and
-   * still show their tooltip on the collapsed rail — the rhythm of the rail is
-   * the point — they just go nowhere.
-   */
+  /** Omitted while the screen doesn't exist yet; placeholders still render and tooltip, they just go nowhere. */
   href?: string
 }
 
@@ -27,11 +23,7 @@ export type NavGroup = {
   items: NavItem[]
 }
 
-/**
- * The icon rail's nav. Groups are separated by nothing but their own padding:
- * when the sidebar is collapsed the labels fade out and the gaps are what
- * remain, which is what gives the rail its grouping.
- */
+/** Groups are separated only by padding, so when the sidebar collapses and labels fade, the gaps still read as grouping. */
 export function NavMain({ groups }: { groups: NavGroup[] }) {
   const pathname = usePathname()
 

@@ -14,12 +14,8 @@ import { useOverlays } from "@/lib/noord/overlays"
 import type { NavModel } from "@/lib/noord/types"
 
 /**
- * Site navigation for phones and tablets.
- *
- * Deliberately spare: a list of names in large type, no rules, no chevrons, no
- * section headings and no merchandising. The categories are the content, and
- * anything drawn between them competes with them. The desktop bar covers `lg`
- * and up, so this never opens there.
+ * Site navigation for phones and tablets. The desktop bar covers `lg` and
+ * up, so this never opens there.
  */
 export function NavOverlay({ nav }: { nav: NavModel }) {
   const open = useOverlays((state) => state.open) === "nav"

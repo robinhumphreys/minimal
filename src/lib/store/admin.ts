@@ -13,16 +13,14 @@ type AdminState = {
   active: BrandId
   drafts: Drafts
   /**
-   * Whether the merchant has been offered the surfaces yet this session. The
-   * defaults ship with every surface on, which is right for a storefront and
-   * wrong for a choice: the first visit to that step starts from nothing.
+   * Whether the merchant has been offered the surfaces yet: defaults ship
+   * with every surface on, but the first visit to that step starts from nothing.
    */
   surfacesOffered: Record<BrandId, boolean>
   markSurfacesOffered: (id: BrandId) => void
   /**
-   * Whether step two has run to the end for this organisation. The pager
-   * cannot go past a step that has not finished, and this is the one step
-   * whose finishing is a matter of time rather than of a choice.
+   * Whether step two has finished: the pager can't advance past a step that
+   * hasn't, and this step finishes with time rather than a choice.
    */
   matched: Record<BrandId, boolean>
   markMatched: (id: BrandId) => void

@@ -30,30 +30,17 @@ const SURFACES = [
 
 type SurfaceId = (typeof SURFACES)[number]["value"]
 
-/**
- * Step four: the merchant meets what was built for them and adjusts it.
- * Only what step three switched on is previewed.
- *
- * The screen is one idea repeated per surface — the thing on the left, the way
- * to change it on the right — so the tabs swap only the left half's subject.
- */
-export function SurfaceStudio({
-  next,
-}: {
-  /** Where Next goes. */
-  next: string
-}) {
+/** Only what step three switched on is previewed. */
+export function SurfaceStudio({ next }: { next: string }) {
   const org = useOrg()
   const config = useAdminStore((state) => state.drafts[org])
 
-  // Whatever was last published is where the merchant left off.
   React.useEffect(() => {
     useAdminStore.getState().hydrate()
   }, [])
 
   return (
-    // Keyed on the brand: switching accounts mid-flow should start the surface
-    // over from that merchant's own draft, not carry the last one's.
+    // Keyed on the brand so switching accounts mid-flow starts from that merchant's own draft, not the last one's.
     <Studio key={config.id} config={config} next={next} />
   )
 }
@@ -69,25 +56,18 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
   const [surface, setSurface] = React.useState<SurfaceId>(
     () => tabs[0]?.value ?? "site-chat",
   )
-  // Shared across surfaces: a merchant checking their phone wants to see
-  // every surface on it, not re-choose it per tab.
+  // Shared across surfaces so switching tabs doesn't reset the chosen device.
   const [device, setDevice] = React.useState<Device>("desktop")
-  // Two halves side by side need a width a phone has not got, so there the
-  // preview goes above the chat instead. The group is keyed on it so a
-  // change of orientation starts the panels afresh rather than carrying
-  // sizes measured along the other axis.
   const isMobile = useIsMobile()
   const orientation = isMobile ? "vertical" : "horizontal"
 
-  // The settings are a view of the draft, not a copy of it: every change goes
-  // straight into the store, so the install step publishes exactly this.
+  // A view of the draft, not a copy: every change goes straight into the store, so install publishes exactly this.
   const settings = settingsFrom(config)
   const onChange = (next: SiteChatSettings) =>
     editDraft(config.id, (current) => applySettings(current, next))
 
   return (
     <div className="flex h-full flex-col gap-4 p-4 md:p-6">
-      {/* Wraps on a phone: the tabs on one line, Next under them. */}
       <div className="flex flex-wrap items-center gap-3 md:gap-4">
         {/* One surface is a title, not a menu of one. */}
         {tabs.length > 1 ? (
@@ -109,17 +89,15 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
           </h2>
         )}
 
-        {/* On the tabs' own line because it acts on the whole screen, not on
-            either half of it. */}
+        {/* On the tabs' own line since it acts on the whole screen, not either half. */}
         <div className="ml-auto flex items-center gap-1">
           <NextButton href={next}>Next</NextButton>
         </div>
       </div>
 
-      {/* `min-h-0` so the panels take the height that is left rather than the
-          height of whatever ends up inside them, and `overflow-hidden` so the
-          message list's own intrinsic sizing cannot push past that. */}
+      {/* `min-h-0` and `overflow-hidden` stop the message list's intrinsic sizing from pushing past the space left for it. */}
       <div className="min-h-0 flex-1 overflow-hidden">
+        {/* Keyed on orientation so a change starts panels afresh, not carrying sizes measured along the other axis. */}
         <ResizablePanelGroup key={orientation} orientation={orientation}>
           <ResizablePanel
             defaultSize="62"
@@ -147,9 +125,7 @@ function Studio({ config, next }: { config: AgentConfig; next: string }) {
             )}
           </ResizablePanel>
 
-          {/* Grip only. The full-height rule the handle draws by default was
-              a second border between two panes that already read as separate,
-              so the bar is made transparent and the grip left to stand for it. */}
+          {/* Bar made transparent: the handle's default full-height rule doubled as a second border between the panes. */}
           <ResizableHandle withHandle className="bg-transparent" />
 
           <ResizablePanel

@@ -2,15 +2,7 @@
 
 import { DotGrid } from "@paper-design/shaders-react"
 
-/**
- * The dot field the onboarding flow uses wherever it needs a surface that
- * reads as somewhere rather than as nothing.
- *
- * Hex rather than the theme's CSS variables because the shader parses colours
- * into WebGL floats and cannot read `var()` — the defaults are `--muted` and
- * a step down from it, written out. A preview standing in for a merchant's
- * own screen passes their surface instead.
- */
+// Hex, not CSS variables: the shader parses colours into WebGL floats and cannot read `var()`.
 const BACK = "#f7f7f7"
 const FILL = "#dedede"
 
@@ -66,12 +58,7 @@ export function mixHex(hex: string, into: string, amount: number): string {
   )
 }
 
-/**
- * The studio's ground for a brand's surface: the same soft grey field the
- * previews stand on, a hair off the surface itself so a white site gets the
- * studio's usual grey and a charcoal one gets charcoal. A surface put on this
- * ground should take `back` as its surface, so what it mixes from it reads.
- */
+/** Mixed a hair off the surface color so a white site gets studio grey and a charcoal one gets charcoal. */
 export function groundFor(surface: string, ink: string) {
   return {
     back: mixHex(surface, ink, 0.035),
