@@ -2,8 +2,8 @@ import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
-// Noord buttons are rectangles with uppercase labels. Nothing here reads a
-// shadcn semantic token, so restyling Volta can never move these.
+// Nothing here reads a shadcn semantic token, so restyling Volta can never
+// move these.
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-noord border font-noord text-noord-micro whitespace-nowrap uppercase transition-colors outline-none select-none focus-visible:ring-1 focus-visible:ring-noord-ink focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -22,7 +22,6 @@ const buttonVariants = cva(
       size: {
         sm: "h-9 px-4",
         default: "h-12 px-6",
-        // Full-bleed call to action — the add-to-bag and checkout buttons.
         block: "h-13 w-full px-6",
         icon: "size-10 px-0",
       },
@@ -47,9 +46,8 @@ function Button({
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       render={render}
-      // Base UI assumes a native <button> and warns when `render` supplies
-      // anything else. Most of Noord's `render` uses are `next/link`, which is
-      // an <a>; callers passing a real <button> can still say so explicitly.
+      // Base UI assumes a native <button> and warns otherwise. Most `render`
+      // uses here are `next/link`; callers can still opt back in explicitly.
       nativeButton={nativeButton ?? render === undefined}
       {...props}
     />

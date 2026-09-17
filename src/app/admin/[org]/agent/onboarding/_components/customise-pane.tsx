@@ -35,18 +35,10 @@ import type { SiteChatSettings } from "./site-chat"
 
 type Turn = { id: string; from: "agent" | "merchant"; text: string }
 
-/**
- * What the agent is doing while the merchant waits. Two lines rather than one
- * spinner: the first covers the round trip to the model, the second the
- * moment its tool call lands and the preview redraws.
- */
+/** Two lines, not one spinner: the first covers the model round trip, the second the tool call landing. */
 const WORKING = ["Reading the settings", "Updating the preview"]
 
-/**
- * The right half: the merchant changes the surface by asking, and the preview
- * on the left answers. The chat is the only way in — the agent is the one
- * that edits the settings, so there is no form beside it.
- */
+/** The chat is the only way in; the agent edits the settings, so there is no form beside it. */
 export function CustomisePane({
   brand,
   surface,
@@ -54,17 +46,12 @@ export function CustomisePane({
   onChange,
 }: {
   brand: BrandId
-  /**
-   * Which surface the merchant is looking at. Each has a conversation of its
-   * own, briefed on that surface and allowed to change only its settings.
-   */
+  /** Each surface has its own conversation, briefed on it and allowed to change only its settings. */
   surface: ChatSurface
   settings: SiteChatSettings
   onChange: (next: SiteChatSettings) => void
 }) {
-  // The conversation lives outside React, so swapping the chat out for
-  // another tab's and back — or leaving the step and returning — picks it up
-  // where it was, opener and all.
+  // The conversation lives outside React, so switching tabs or steps and back picks it up where it was.
   const entry = customiseChatFor(brand, surface)
 
   return (
@@ -79,11 +66,7 @@ export function CustomisePane({
   )
 }
 
-/**
- * The model does the editing through a tool call. The settings live in this
- * browser, not on the server, so the call comes back here to be applied and
- * its result is posted back so the model can say how it looks.
- */
+/** The settings live in this browser, not the server, so the tool call comes back here to be applied. */
 function CustomiseChat({
   entry,
   settings,
@@ -95,29 +78,19 @@ function CustomiseChat({
 }) {
   const SCRIPT = OPENERS[entry.surface]
   const [draft, setDraft] = React.useState("")
-  /**
-   * How many of the scripted opener's lines have landed. A conversation that
-   * has already opened once shows all of them at once: the merchant has seen
-   * it play, and a replay on every return would be a tic.
-   */
+  // Already-opened conversations show all opener lines at once; replaying them on every return would be a tic.
   const [revealed, setRevealed] = React.useState(() =>
     entry.opened ? SCRIPT.length : 0,
   )
 
-  // The tool call reads whatever the settings are when it lands, not what
-  // they were when the chat was made: the draft may have been re-read from
-  // what was published in between. Bound in an effect rather than in render
-  // so a render that is thrown away cannot leave the entry pointing at stale
-  // callbacks.
+  // Bound in an effect, not render, so a discarded render can't leave the entry pointing at stale callbacks.
   React.useEffect(() => {
     entry.bind({ settings, onChange })
   }, [entry, settings, onChange])
 
   const { messages, status, error, sendMessage } = useChat({ chat: entry.chat })
 
-  // Bubbles that were already there when this pane mounted — a conversation
-  // picked up again after a tab switch or a step back — land at once. Only
-  // what arrives from now on fades in.
+  // Bubbles already present on mount land at once; only what arrives from now on fades in.
   const [restored] = React.useState(
     () => new Set(entry.opened ? messages.map((message) => message.id) : []),
   )
@@ -140,8 +113,7 @@ function CustomiseChat({
 
   const busy = status === "submitted" || status === "streaming"
 
-  // One bubble per message with something to say. A step that was only a
-  // tool call has no text and draws nothing; the shimmer stands in for it.
+  // A step that was only a tool call has no text and draws nothing; the shimmer stands in for it.
   const turns: Turn[] = []
   messages.forEach((message, index) => {
     if (index < SCRIPT.length && index >= revealed) return
@@ -177,9 +149,6 @@ function CustomiseChat({
     <MessageScrollerProvider>
       <MessageScroller className="flex-1">
         <MessageScrollerViewport>
-          {/* No gutter of its own either: the bubbles run to the same edges
-              as the composer below them, and the first one starts level with
-              the top of the preview across the divide. */}
           <MessageScrollerContent className="gap-5">
             {turns.map((turn) => (
               <MessageScrollerItem
@@ -243,10 +212,6 @@ function CustomiseChat({
         <MessageScrollerButton />
       </MessageScroller>
 
-      {/* Flush to the pane on all four sides. The composer is part of the
-          column, not a field parked at the bottom of it, so its own border is
-          the only edge — and its foot lines up with the foot of the preview
-          across the divide. */}
       <form
         className="shrink-0"
         onSubmit={(event) => {
@@ -260,17 +225,13 @@ function CustomiseChat({
             rows={1}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            // Enter sends; the composer is one sentence at a time, and a
-            // newline is the rarer thing to want here.
+            // Enter sends; a newline is the rarer thing to want here.
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault()
                 send()
               }
             }}
-            // Its own block above the control row, the way the native
-            // composer is laid out — not a single line with buttons
-            // crammed onto it.
             className="max-h-28 min-h-14 px-3 py-2.5"
           />
           <InputGroupAddon align="block-end" className="px-2 pb-2">

@@ -6,10 +6,6 @@ import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
 
-/**
- * The way forward on every admin screen, in Minimal's own blue: the one
- * button on a screen that is the product speaking rather than the merchant.
- */
 export function NextButton({
   href,
   onClick,

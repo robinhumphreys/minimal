@@ -1,13 +1,9 @@
 /**
- * Crops and compresses the Volta editorial photography into
- * `public/volta/editorial`.
- *
- * Run once, from the repo root, with the source shots in `SRC`:
+ * Crops and compresses Volta's editorial photography into
+ * `public/volta/editorial`. Output is committed; originals are Unsplash
+ * shots not kept in the repo.
  *
  *   node scripts/volta-imagery.mjs
- *
- * The output is committed, so this only needs running when the source set or
- * the crops change. Originals are Unsplash shots and are not in the repo.
  */
 import sharp from "sharp"
 import path from "node:path"

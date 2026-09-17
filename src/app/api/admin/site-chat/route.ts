@@ -13,11 +13,7 @@ import { toolsFor } from "./tools"
 
 export const maxDuration = 30
 
-/**
- * What the model is told about the surface the merchant is looking at, and
- * the settings that belong to it. The shared ones — voice, colour, cards —
- * are repeated in each because the model only ever sees one of these.
- */
+// Shared settings are repeated in each brief because the model only ever sees one surface at a time.
 const SHARED_SETTINGS =
   "Shared with the other surfaces, so a change here shows up everywhere: voice (warm, direct, playful); spelling (british, american); language; accent (hex); roundness (square, soft, round); font (site, inter, geist, system, serif); ratio (portrait, square); price and rating (booleans, on product cards); picks (2 to 4, how many products a recommendation shows)."
 
@@ -45,14 +41,7 @@ const SURFACE_BRIEF: Record<
   },
 }
 
-/**
- * The customise chat in the studio: the merchant describes a change to one
- * surface in words, the model turns it into a patch via the `updateSiteChat`
- * tool, and the browser applies it to the preview.
- *
- * One conversation per surface. The request names which, and the model is
- * briefed on — and given the keys for — that surface only.
- */
+/** One conversation per surface: the request names which, and the model is briefed on and given keys for that one only. */
 export async function POST(req: Request) {
   const body: unknown = await req.json()
   const {

@@ -4,11 +4,8 @@ import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 /**
- * A bag line carries everything needed to render itself.
- *
- * The obvious alternative — storing a slug and joining against the catalog —
- * is not available on the client: `@/lib/catalog` imports `node:fs`. A snapshot
- * is also how real bags behave, holding the price the shopper was shown.
+ * Snapshot rather than a slug lookup: `@/lib/catalog` imports `node:fs`, so
+ * the client can't join against it at render time.
  */
 export type BagLine = {
   /** `Product.slug` in the Noord catalog. Identity, with `size`. */
@@ -28,9 +25,8 @@ export type BagLine = {
 type BagState = {
   lines: BagLine[]
   /**
-   * False until `persist` has read localStorage. The header count and the bag
-   * overlay gate on this so the server-rendered empty bag and the first client
-   * render agree, then fill in once the stored lines arrive.
+   * False until `persist` reads localStorage, gating the header count and
+   * bag overlay so server and first client render agree.
    */
   hydrated: boolean
   add: (line: BagLine) => void

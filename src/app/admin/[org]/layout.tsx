@@ -12,11 +12,7 @@ export const metadata: Metadata = {
   title: "Minimal AI",
 }
 
-/**
- * Every admin screen lives under its organisation's slug: `/admin/noord/…`,
- * `/admin/volta/…`. The slug is the one source of truth for which merchant
- * is being edited; the store follows it, not the other way round.
- */
+/** The org slug is the one source of truth for which merchant is being edited; the store follows it. */
 export default async function OrgLayout({
   children,
   params,
@@ -26,23 +22,15 @@ export default async function OrgLayout({
 
   return (
     <OrgSync org={org}>
-      {/* The onboarding previews render the embed's own components, whose
-          utilities carry the embed's prefix and so live in its stylesheet. */}
+      {/* The embed's utility classes live in its own stylesheet; React 19 hoists this `precedence` link into <head>. */}
+      {/* eslint-disable-next-line @next/next/no-css-tags */}
       <link rel="stylesheet" href="/embed.css" precedence="default" />
-      {/* The rail starts collapsed: the admin is a handful of screens, and
-          the icons plus their tooltips carry it. There is no top bar — the
-          mark, the account switcher and the operator all live on the rail,
-          so the content column starts at the top of the viewport. */}
       <TooltipProvider>
-        {/* The shell is pinned to the viewport and each screen scrolls
-            inside its own card. `min-h-svh` alone only sets a floor, so a
-            long screen would stretch the whole admin — rail included — and
-            take the page scrollbar with it. */}
+        {/* `h-svh overflow-hidden` pins the shell to the viewport; `min-h-svh` alone would let a long screen stretch the whole admin. */}
         <SidebarProvider defaultOpen={false} className="h-svh overflow-hidden">
           <AppSidebar org={org} />
           <SidebarInset className="min-h-0 bg-muted/40">
-            {/* Each screen brings its own pane — see `Pane` — so a flow can
-                put something above the pane without losing its corners. */}
+            {/* See `Pane`: each screen brings its own, so a flow can put something above it without losing its corners. */}
             <div className="flex min-h-0 flex-1 flex-col p-2 md:p-4">
               {children}
             </div>

@@ -40,17 +40,9 @@ const MAX_RESULTS = 8
 const MIN_QUERY = 2
 
 /**
- * Full-screen search. Matching runs over a pre-lowercased haystack built on the
- * server, so a 50-product catalog filters synchronously on every keystroke
- * without a debounce.
- *
- * Submitting hands the search to the agent: the query goes onto the mount
- * below, the agent answers under it, and this sheet's own input and results —
- * everything marked `data-native-search` — step aside for the answer, so the
- * words the shopper typed become the first bubble and the agent's composer is
- * the one input on screen. "New search" brings the box back.
- *
- * The sheet has a URL, `/volta/search?q=…`; see `useSearchUrl`.
+ * Matching runs over a pre-lowercased haystack, so it filters synchronously
+ * without a debounce. Submitting hands off to the agent; `data-native-search`
+ * elements step aside for its answer.
  */
 export function SearchOverlay({
   index,
@@ -195,9 +187,7 @@ export function SearchOverlay({
               )}
             </form>
 
-            {/* The agent's reading of the search, when the embed is on the
-                page. Empty until a search is submitted, and the sections
-                below carry on. */}
+            {/* Empty until a search is submitted; picked up by the embed's agent. */}
             <minimal-agent-search
               data-query={submitted}
               style={

@@ -1,13 +1,6 @@
 import { z } from "zod"
 
-/**
- * The three things the studio previews. Each has a customise chat of its
- * own: the merchant is looking at one surface at a time, and a conversation
- * about the chat button has nothing to say about the search box.
- *
- * Shared by the route, the tools and the studio, so kept free of anything
- * that only runs on one side.
- */
+// Shared by the route, the tools and the studio, so kept free of anything that only runs on one side.
 export const CHAT_SURFACES = [
   "site-chat",
   "search-assist",

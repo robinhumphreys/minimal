@@ -23,7 +23,7 @@ export function Stars({
 }: {
   rating: number
   size?: keyof typeof SIZE_CLASS
-  /** Which background the row sits on — the unfilled stars invert with it. */
+  /** Which background the row sits on; the unfilled stars invert with it. */
   surface?: "dark" | "light"
   className?: string
 }) {

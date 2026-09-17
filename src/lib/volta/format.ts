@@ -1,10 +1,5 @@
-/**
- * Client-safe formatting helpers.
- *
- * `@/lib/catalog` imports `node:fs` to validate image paths, so it can only be
- * reached from server components. Anything a Volta client component needs to
- * format lives here instead.
- */
+// `@/lib/catalog` imports `node:fs`, so it's server-only; client formatting
+// helpers live here instead.
 
 export function formatPrice(cents: number): string {
   return new Intl.NumberFormat("en-IE", {
@@ -13,18 +8,18 @@ export function formatPrice(cents: number): string {
   }).format(cents / 100)
 }
 
-/** "4.8" — always one decimal, so star rows do not jitter in width. */
+/** Always one decimal, so star rows do not jitter in width. */
 export function formatRating(rating: number): string {
   return rating.toFixed(1)
 }
 
-/** "3.4k" past a thousand: the exact count stops mattering at that size. */
+/** Abbreviated past a thousand, since the exact count stops mattering. */
 export function formatCount(count: number): string {
   if (count < 1000) return String(count)
   return `${(count / 1000).toFixed(1).replace(/\.0$/, "")}k`
 }
 
-/** "August 2026" — reviews are dated to the month, not the day. */
+/** Reviews are dated to the month, not the day. */
 export function formatReviewDate(iso: string): string {
   const [year, month] = iso.split("-")
   return new Intl.DateTimeFormat("en-GB", {

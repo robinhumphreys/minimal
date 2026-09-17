@@ -3,7 +3,6 @@ import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
-// Overlays on product imagery: "New", "Sale", "Final pieces".
 const badgeVariants = cva(
   "inline-flex w-fit shrink-0 items-center gap-1 rounded-noord px-2 py-1 font-noord text-noord-micro uppercase",
   {

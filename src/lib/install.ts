@@ -50,17 +50,15 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
     snippets.push({
       key: "guide",
       title: "Category or product page",
-      where: "Wherever the button should go. Set data-topic to the page's subject.",
+      where:
+        "Wherever the button should go. Set data-topic to the page's subject.",
       code: guideMount(),
     })
   }
   return snippets
 }
 
-/**
- * The same install, written for a coding agent to carry out. Everything it
- * needs to know is in one block, including how to check its own work.
- */
+/** The same install, written for a coding agent: everything it needs, including how to verify its own work. */
 export function agentInstructionsFor(config: AgentConfig): string {
   const lines = [
     `Install the Minimal AI storefront agent for ${config.name}.`,

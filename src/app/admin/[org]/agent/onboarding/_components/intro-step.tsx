@@ -5,17 +5,9 @@ import { motion } from "motion/react"
 import { MinimalLogo } from "@/app/admin/_components/minimal-logo"
 import { NextButton } from "@/app/admin/_components/next-button"
 
-/**
- * The flow's front door: one sentence and one button. Everything the merchant
- * needs to decide here is whether to begin, so there is nothing else on screen
- * to decide about.
- */
 export function IntroStep({ next }: { next: string }) {
   return (
     <motion.div
-      // Arrives rather than appears: the mark, then the sentence, then the
-      // button, each a beat behind the last, which is also the order they are
-      // meant to be read in.
       initial="hidden"
       animate="shown"
       transition={{ staggerChildren: 0.09, delayChildren: 0.05 }}
@@ -38,7 +30,6 @@ export function IntroStep({ next }: { next: string }) {
   )
 }
 
-/** One child of the stagger: up a few pixels as it fades in. */
 function Fade({ children }: { children: React.ReactNode }) {
   return (
     <motion.div

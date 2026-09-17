@@ -1,10 +1,6 @@
 /**
- * Picks black or white for text sitting on `background`.
- *
- * A merchant's accent is whatever their brand is — Noord's near-black and
- * Volta's highlighter yellow both end up behind a label, and one of them
- * cannot carry white. Relative luminance per WCAG, thresholded where the two
- * contrast ratios cross.
+ * Picks black or white for text on `background`: a merchant's accent can be
+ * any brand colour, and only one of the two can carry it.
  */
 export function readableOn(background: string): "#ffffff" | "#131313" {
   const hex = background.trim().replace("#", "")

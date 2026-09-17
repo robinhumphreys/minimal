@@ -37,8 +37,8 @@ export async function CategoryPage({
   const filters = Object.fromEntries(
     FACET_KEYS.map((key) => [
       key,
-      // Repeated params (`?form=a&form=b`) collapse to the first: the chips are
-      // single-select, so a second value could only come from a hand-typed URL.
+      // Repeated params collapse to the first: the chips are single-select,
+      // so a second value could only come from a hand-typed URL.
       typeof query[key] === "string" ? query[key] : undefined,
     ]),
   ) as Partial<Record<FacetKey, string>>
@@ -54,11 +54,7 @@ export async function CategoryPage({
         description={category.description}
       />
 
-      {/*
-        Product help: the storefront's band, the embed's button in it. Full
-        bleed and flush to the banner above and the shelf below — a boxed card
-        floating in a strip of black read as an ad slot.
-      */}
+      {/* Full bleed: a boxed card here read as an ad slot. */}
       <ProductHelpBand brand="volta">
         <div className="bg-volta-carbon">
           <div className="volta-gutter mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-4 py-10 sm:flex-row sm:items-center">
@@ -75,18 +71,10 @@ export async function CategoryPage({
         </div>
       </ProductHelpBand>
 
-      {/*
-        The grid and the rail below it are one shelf: everything on this page
-        that is product sits on the same slab of white. The filters share it,
-        in a column down the left from `lg` up and stacked over the grid below.
-      */}
       <Shelf>
         <div className="volta-gutter mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-14">
-          {/*
-            `useSearchParams` in the filters suspends on the server, and the
-            fallback holds the column's width so the grid does not shift when
-            it resolves.
-          */}
+          {/* `useSearchParams` suspends on the server; the fallback holds the
+              column's width so the grid does not shift when it resolves. */}
           <React.Suspense fallback={<div className="hidden lg:block" />}>
             <CategoryFilters groups={groups} />
           </React.Suspense>

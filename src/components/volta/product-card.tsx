@@ -8,12 +8,8 @@ import { Price } from "./price"
 import { RatingRow } from "./rating"
 
 /**
- * The product tile, used on the homepage rails, category grid and nav promos.
- *
- * Always drawn for a white surface — see `Shelf`, which is what it sits on
- * everywhere except the nav drawer, where it gets its own white panel. The
- * card therefore takes no `surface` prop: a dark variant would only exist to
- * be used by mistake.
+ * Always drawn for a white surface, so it takes no `surface` prop; a dark
+ * variant would only exist to be used by mistake.
  */
 export function ProductCard({
   product,

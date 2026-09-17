@@ -43,7 +43,6 @@ export function HomePage() {
 
       <Testimonials reviews={testimonials(3)} />
 
-      {/* Two rails, one shelf: the page closes on a single slab of product. */}
       <Shelf>
         <ProductRail
           eyebrow="Rated 4.7 and up"
@@ -64,14 +63,8 @@ export function HomePage() {
 }
 
 /**
- * The hero. Two crops of the same shot, because the wide one loses the lifter
- * entirely on a phone and no amount of `object-position` gets him back.
- *
- * A raw `<picture>` rather than `next/image`: art direction — a different
- * *file* per breakpoint, not a different size of one file — is the one thing
- * `next/image` cannot express. Rendering both and hiding one with CSS would
- * download both. The two crops are already sized and compressed by
- * `scripts/volta-imagery.mjs`, so the optimiser has little left to do here.
+ * A raw `<picture>`, not `next/image`: swapping a different file per
+ * breakpoint is art direction that `next/image` cannot express.
  */
 function Hero() {
   return (
@@ -88,19 +81,12 @@ function Hero() {
           className="absolute inset-0 size-full object-cover object-center"
         />
       </picture>
-      {/*
-        The scrim follows the type, not the frame. On a phone the headline sits
-        at the bottom, so the wash rises from there; from `md` up the headline
-        is on the left and the lifter is centre-right, so a bottom wash would
-        black him out — the gradient turns to run left-to-right instead.
-      */}
+      {/* From `md` up the lifter is centre-right, so a bottom wash would
+          black him out; the gradient runs left-to-right instead. */}
       <div className="absolute inset-0 bg-gradient-to-t from-volta-void via-volta-void/55 to-transparent md:bg-gradient-to-r md:from-volta-void md:via-volta-void/60 md:to-transparent" />
 
       <div className="volta-gutter relative mx-auto flex w-full max-w-7xl flex-col gap-6 pb-14 md:pb-20">
-        {/*
-          Three lines of eight or nine characters, so the block stays square at
-          every width and nothing hyphenates on a phone.
-        */}
+        {/* Kept short so nothing hyphenates on a phone. */}
         <h1 className="volta-display text-volta-display text-volta-chalk">
           Fuel that
           <br />
@@ -136,7 +122,7 @@ function Hero() {
   )
 }
 
-/** "Shop by goal" — how a nutrition shopper actually thinks about the catalog. */
+/** "Shop by goal", how a nutrition shopper actually thinks about the catalog. */
 function GoalStrip() {
   return (
     <section className="volta-gutter mx-auto w-full max-w-7xl">

@@ -1,73 +1,95 @@
 # Minimal
 
-An AI storefront agent: one admin per organisation (`/admin/noord`, `/admin/volta`), two storefronts (`/noord`, `/volta`),
-and a script-tag embed that mounts the agent into either storefront.
+An AI storefront agent a merchant sets up once and installs with one script
+tag. Two demo storefronts, Noord Suits and Volta, prove the same embed looks
+right under two brands.
 
-## Development
+## Stack
+
+- Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, shadcn
+- Vercel AI SDK v7 over the [AI Gateway](https://vercel.com/ai-gateway); Zod for every schema
+- Zustand for the admin's draft config; `localStorage` for the published one
+- esbuild + Tailwind CLI build the embed into `public/embed.js` and `public/embed.css`
+- No database, no auth. Catalogs are flat TypeScript files.
+
+## Run
 
 ```bash
 bun install
-bun run placeholders   # generate the catalog placeholder images (once)
-bun run dev            # builds the embed once, then starts Next
-bun run dev:embed      # optional, in a second terminal: rebuild the embed on change
+bun run placeholders   # once: catalog placeholder images
+bun run dev            # builds the embed, then starts Next on :3000
+bun run dev:embed      # optional second terminal: rebuild the embed on change
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The embed bundle is gitignored;
-`dev` builds it before starting so the storefronts can load `/embed.js`. Run
-`dev:embed` alongside it if you are editing `embed/`; without it the bundle is
-the one built when `dev` started.
-
-The chat route talks to the [Vercel AI Gateway](https://vercel.com/ai-gateway).
-Put a key in `.env.local` before sending a message:
+Chat needs a gateway key in `.env.local`:
 
 ```env
 AI_GATEWAY_API_KEY=vck_...
 ```
 
+## Flows
+
+**Merchant.** `/admin/{noord|volta}/agent/onboarding` runs five steps: intro,
+match the site's colours and fonts, choose surfaces, customise each surface
+in a live preview (by hand or by chatting to an agent that edits the config),
+then install. Install publishes the draft to `localStorage` under
+`published:{id}` and shows the snippets to paste.
+
+**Storefront.** Each storefront's layout carries one line of agent:
+`<script src="/embed.js" data-agent="noord">`. That is the same tag a merchant
+gets. The embed reads the published config, or the brand default, and mounts
+itself; a `storage` event re-renders it when another tab publishes.
+
+**Shopper.** Three surfaces, all one React tree in `embed/`:
+
+- Site chat: launcher plus window. Streams from `/api/agents/{id}/chat`;
+  the model calls `showProducts` with slugs and the server fills in the cards
+  from the catalog, so it cannot invent a price. `viewCart` is answered by the
+  host page. The transcript lives in `sessionStorage` so it survives clicking
+  a product card.
+- Search assist: mounts under the site's search box. `/api/agents/{id}/search`
+  answers twice, keyword first and the model's reading second.
+- Product help: a `<minimal-agent-guide data-topic>` mount; opens a guided
+  choice that asks one tappable question at a time.
+
+**Preview.** The admin renders the storefront in an iframe with
+`?minimal-agent=off` and posts the draft config over `postMessage`; the embed
+renders the draft in place of the published one.
+
 ## Layout
 
-| Path                                                            | What it is                                                                                                                            |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/admin`                                                 | Admin, one organisation per slug: the onboarding flow at `/admin/{org}/agent/onboarding`, which publishes on install                  |
-| `src/app/admin/_components`                                     | The admin's own components, colocated with the route                                                                                  |
-| `src/app/noord`, `src/app/volta`                                | Storefronts: home, category, product                                                                                                  |
-| `src/app/admin/[org]/agent/onboarding`                          | Merchant onboarding, five steps: start, sync styles, choose surfaces, preview and tweak, embed and check                              |
-| `src/app/api/agents/[id]/chat`                                  | Streaming chat route: catalog in the prompt, `showProducts` as a tool, `viewCart` answered by the page                                |
-| `src/lib/agent`                                                 | The agent's tool, its job description, and the message types it emits                                                                 |
-| `src/components/volta`, `src/lib/volta`, `src/styles/volta.css` | The Volta storefront: components, view models, `volta-*` design tokens                                                                |
-| `src/components/volta/ui`                                       | Volta's own shadcn primitives, spending `volta-*` tokens only                                                                         |
-| `src/lib/catalog`                                               | Flat TypeScript catalog per brand, validated at import                                                                                |
-| `src/lib/config`                                                | Zod config schema, per-brand defaults, `published:{id}` storage                                                                       |
-| `embed/`                                                        | Standalone embed bundle (never imported by the storefronts)                                                                           |
-| `embed/product-help`                                            | Product help: a trigger the page places and the guided choice it opens, one tappable question at a time to a product                  |
-| `embed/site-chat`                                               | The Site chat surface: launcher, window, product cards. Aliased as `@embed/*` so the admin's preview renders the very same components |
+| Path                                   | What                                                               |
+| -------------------------------------- | ------------------------------------------------------------------ |
+| `embed/`                               | The embed bundle. Own shadcn copies under `ui/`, prefixed `ma:`    |
+| `src/app/admin/[org]/agent/onboarding` | The five-step flow and its components                              |
+| `src/app/api/agents/[id]`              | `chat` and `search` routes for the shopper                         |
+| `src/app/api/admin/site-chat`          | The config-editing agent behind the customise step                 |
+| `src/lib/agent`                        | Tools, prompt, cart and page context, message types                |
+| `src/lib/config`                       | Zod config schema, per-brand defaults, storage                     |
+| `src/lib/catalog`                      | Flat catalogs per brand, validated at import                       |
+| `src/app/{noord,volta}`                | Storefront routes: home, category, product, search                 |
+| `src/components/{noord,volta}`         | Each storefront's components and its own shadcn primitives         |
+| `src/lib/{noord,volta}`                | View models, bag, overlays per storefront                          |
+| `src/styles/{noord,volta}.css`         | Each brand's tokens. Nothing crosses between brands or into shadcn |
 
-Each brand owns its own tokens, primitives and components. Nothing under
-`src/components/volta` reads a shadcn semantic token, and nothing outside it
-reads a `volta-*` one — restyling one storefront cannot move the other.
-
-Draft config lives in memory (Zustand, no `persist`); published config lives in
-`localStorage` under `published:{id}`. There is no database and no config API.
-
-The embed is built from the shared shadcn primitives in `src/components/ui`,
-themed entirely from the merchant's four values (accent, surface, radius,
-fonts): every grey in the window is mixed from the surface and its ink, which
-is how one build lands on Noord's white and Volta's charcoal alike. The
-conversation is kept in `sessionStorage`, so it survives the full page load a
-product card link causes.
+Every config knob is a choice (`square | soft | round`), never a raw CSS
+value, so any setting can be made to look right on any brand. The embed's
+greys are mixed from the merchant's surface colour, which is how one build
+lands on Noord's white and Volta's charcoal alike.
 
 ## Scripts
 
-| Command                | Description                                 |
+| Command                | What                                        |
 | ---------------------- | ------------------------------------------- |
-| `bun run dev`          | Start the dev server                        |
-| `bun run dev:embed`    | Rebuild the embed bundle on change          |
-| `bun run build`        | Build the embed, then the Next.js app       |
-| `bun start`            | Serve the production build                  |
-| `bun run lint`         | Run ESLint                                  |
-| `bun run typecheck`    | Run `tsc --noEmit`                          |
+| `bun run dev`          | Build the embed once, start Next            |
+| `bun run dev:embed`    | Rebuild the embed on change                 |
+| `bun run build`        | Build the embed, then the app               |
+| `bun run lint`         | ESLint                                      |
+| `bun run typecheck`    | `next typegen` then `tsc --noEmit`          |
+| `bun run format`       | Prettier                                    |
 | `bun run placeholders` | Generate missing catalog placeholder images |
 
-`node scripts/volta-imagery.mjs` re-crops the Volta editorial photography into
-`public/volta/editorial`. The output is committed; the script only needs running
-when the source shots or the crops change.
+One-off scripts under `scripts/`, output committed: `volta-imagery.mjs`
+re-crops Volta's editorial photography, `volta-reviews.ts` regenerates Volta's
+reviews via the gateway, `prefix-classes.mjs` adds the `ma:` prefix to a
+shadcn primitive copied into `embed/ui`.

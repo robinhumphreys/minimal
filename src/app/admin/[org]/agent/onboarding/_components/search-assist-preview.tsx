@@ -12,10 +12,7 @@ import type { AgentConfig } from "@/lib/config/schema"
 import { DeviceStage, DeviceToggle, type Device } from "./device-toggle"
 import { DotField, groundFor } from "./dot-field"
 
-/**
- * Things a shopper might type, offered when the box is focused and empty.
- * Each is one the shop can answer, so trying one lands on a result.
- */
+/** Each prompt is one the shop can answer, so trying one lands on a result. */
 const PROMPTS: Record<BrandId, string[]> = {
   noord: [
     "navy suit for a wedding",
@@ -29,18 +26,7 @@ const PROMPTS: Record<BrandId, string[]> = {
   ],
 }
 
-/**
- * The left half for Search assist.
- *
- * On both storefronts search is a full-screen sheet in the brand's own
- * surface colour, so that is what the whole box becomes: the dot field in
- * the merchant's surface, a stand-in for their search box at the top, and
- * the embed's own panel under it, answering from their real catalogue. No
- * card, no frame — the surface is the screen, the way the site chat's is.
- *
- * The box is deliberately generic: it is the merchant's, and every shop's is
- * different. What is theirs to approve is everything underneath it.
- */
+/** The search box itself is deliberately generic; it's the merchant's, and every shop's is different. */
 export function SearchAssistPreview({
   config,
   device,
@@ -50,18 +36,14 @@ export function SearchAssistPreview({
   device: Device
   onDeviceChange: (device: Device) => void
 }) {
-  // Empty until the merchant types: the preview is their search box as a
-  // shopper meets it, and a search box does not search by itself. Nothing is
-  // read until it is submitted, as on the site.
+  // Nothing is read until submitted, as on the site.
   const [query, setQuery] = React.useState("")
   const [submitted, setSubmitted] = React.useState("")
   const [focused, setFocused] = React.useState(false)
   const prompts = focused && query.trim().length === 0 ? PROMPTS[config.id] : []
   const ink = readableOn(config.theme.surface)
   const ground = groundFor(config.theme.surface, ink)
-  // On the studio's ground rather than on a sheet of its own: the panel
-  // takes the ground as its surface, so its greys are mixed from what is
-  // actually behind them.
+  // The panel takes the studio's ground as its surface, so its greys are mixed from what is actually behind them.
   const grounded = React.useMemo(
     () => ({ ...config, theme: { ...config.theme, surface: ground.back } }),
     [config, ground.back],
@@ -83,9 +65,7 @@ export function SearchAssistPreview({
     </p>
   )
 
-  // The box carries `data-native-search`, so once the panel has a search it
-  // steps aside exactly as the site's would: the words become the first
-  // bubble and the panel's composer is the one input.
+  // `data-native-search` lets the panel step aside exactly as the site's would once it has a search.
   const box = (
     <form
       data-native-search
@@ -101,8 +81,7 @@ export function SearchAssistPreview({
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           onFocus={() => setFocused(true)}
-          // A tap on a prompt below blurs the box first; give it the beat it
-          // needs to land before the prompts go.
+          // Delayed so a tap on a prompt below can land before the prompts disappear on blur.
           onBlur={() => window.setTimeout(() => setFocused(false), 150)}
           placeholder="Search"
           aria-label="Search"
@@ -128,7 +107,6 @@ export function SearchAssistPreview({
     </form>
   )
 
-  // The way back to the box once it has stepped aside.
   const fresh = submitted ? (
     <button
       type="button"
@@ -150,8 +128,7 @@ export function SearchAssistPreview({
         fill={ground.fill}
       />
 
-      {/* The sheet's scrolling column: the page's width on desktop, a phone's
-          on mobile. The panel measures this column to reach the foot of it. */}
+      {/* The panel measures this column to reach the foot of it. */}
       <DeviceStage device={device} align="start">
         <div
           className={cn(

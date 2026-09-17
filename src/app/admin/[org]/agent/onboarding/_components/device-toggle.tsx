@@ -5,11 +5,7 @@ import { cn } from "cn"
 
 export type Device = "desktop" | "mobile"
 
-/**
- * Which of the shopper's screens the preview stands in for. Sits in the
- * preview's own corner rather than the tray: it changes what the left half
- * shows, and nothing else.
- */
+/** Sits in the preview's own corner rather than the tray, since it only changes what the left half shows. */
 export function DeviceToggle({
   value,
   onChange,
@@ -54,24 +50,13 @@ export function DeviceToggle({
   )
 }
 
-/**
- * Where the preview's surface stands: the whole box on desktop, a phone's
- * worth of screen on mobile. On mobile only the bounds are drawn — a soft
- * hairline, no fill, no shadow — so the surface is judged on the same ground
- * as desktop.
- *
- * The same two elements on either device, with the phone drawn by class
- * alone. Wrapping the surface in a frame on mobile and not on desktop would
- * move it to a different place in the tree, and React would mount it afresh
- * each time the toggle flipped — taking the conversation with it.
- */
+/** The phone frame is drawn by class alone, not a wrapper, so toggling device never remounts children and loses their state. */
 export function DeviceStage({
   device,
   align = "center",
   children,
 }: {
   device: Device
-  /** Where the phone sits in the box, top to bottom. */
   align?: "start" | "center"
   children: React.ReactNode
 }) {

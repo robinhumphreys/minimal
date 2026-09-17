@@ -5,11 +5,7 @@ import type { AgentConfig } from "@/lib/config/schema"
 
 import { themeStyle } from "../theme"
 
-/**
- * The button that opens the guide, drawn into wherever the merchant put a
- * `minimal-agent-guide`. In the merchant's accent and corners, so it reads
- * as one of the page's own buttons rather than a badge on it.
- */
+/** Drawn into wherever the merchant put a `minimal-agent-guide` element. */
 export function GuideTrigger({
   config,
   label,
@@ -17,7 +13,6 @@ export function GuideTrigger({
   className,
 }: {
   config: AgentConfig
-  /** Text the merchant wrote inside the mount, if any. */
   label?: string
   onOpen: () => void
   className?: string

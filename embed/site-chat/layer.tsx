@@ -16,26 +16,20 @@ import { Launcher } from "./launcher"
 import type { ChatDriver } from "./types"
 import { ChatWindow } from "./window"
 
-/** Which corner the column of launcher-plus-window grows out of. */
 const ANCHORS: Record<Position, string> = {
   "bottom-right": "ma:items-end",
   "bottom-center": "ma:items-center",
   "bottom-left": "ma:items-start",
 }
 
-/** Under this many pixels across, the window fills the layer. Matches `@max-md`. */
+/** Must match the `@max-md` container query breakpoint below. */
 const PHONE_MAX_PX = 448
 /** The same line as a media query, for when the layer is the viewport. */
 const PHONE_QUERY = "(width < 28rem)"
 
 /**
- * The Site chat surface: a launcher, and the window it opens.
- *
- * Laid over the whole host (`fixed` on a storefront, `absolute` inside the
- * admin's preview) rather than pinned to a corner, so it can be its own
- * container query context: below a phone's width the window takes the entire
- * layer and the launcher steps aside, and that decision is made on the size
- * of whatever the surface is in, not on the size of the screen.
+ * Laid over the whole host rather than pinned to a corner so it forms its own
+ * container-query context, sized to the surface it's in, not the screen.
  */
 export function SiteChatLayer({
   config,
@@ -51,14 +45,9 @@ export function SiteChatLayer({
   open: boolean
   onOpenChange: (open: boolean) => void
   mode: "fixed" | "absolute"
-  /** The host has a modal of its own open; step out of its way. */
+  /** True when the host has a modal of its own open. */
   hidden?: boolean
-  /**
-   * The shopper followed a link out of the window while it filled the
-   * screen. Called before the browser leaves, so whatever remembers the
-   * window as open can forget it: on a phone the window is the whole page,
-   * and a product page that loads under it is a product page nobody sees.
-   */
+  /** Called before navigation so the open state isn't persisted for the page underneath. */
   onLeave?: () => void
 }) {
   const position = config.surface.position ?? "bottom-right"
@@ -154,10 +143,8 @@ export function SiteChatLayer({
 }
 
 /**
- * The greeting, offered beside a closed launcher once the shopper has been on
- * the page a while. Once dismissed it stays dismissed for the visit: on a
- * storefront that is the tab's session, in the admin's preview it is the
- * preview's own lifetime, so the merchant can watch it happen again.
+ * Once dismissed it stays dismissed for the tab's session on a storefront,
+ * but only for the preview's own lifetime in the admin, so it replays there.
  */
 function useNudge(
   config: AgentConfig,
@@ -188,7 +175,7 @@ function useNudge(
     try {
       window.sessionStorage.setItem(key, "1")
     } catch {
-      // Then it comes back next page; no worse than a site without storage.
+      // Falls back to reappearing next page; no worse than no storage.
     }
   }, [key, mode])
 

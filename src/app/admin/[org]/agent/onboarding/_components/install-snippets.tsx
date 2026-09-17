@@ -12,12 +12,7 @@ import { snippetsFor, type SnippetKey } from "@/lib/install"
 /** What the site said about each snippet, once asked. */
 export type SnippetState = "idle" | "checking" | "pass" | "fail"
 
-/**
- * What to paste, one row per surface that is on, and — once the site has
- * been asked — whether each is in place. The row is the checklist: the same
- * thing the merchant pasted from, ticked, rather than a second screen that
- * says it again.
- */
+/** The pasted row is itself the checklist, rather than a second screen that repeats it. */
 export function InstallSnippets({
   config,
   status,
@@ -60,7 +55,6 @@ export function InstallSnippets({
   )
 }
 
-/** Empty, spinning, ticked, or not yet found. */
 function Status({ state }: { state: SnippetState }) {
   if (state === "pass") {
     return (

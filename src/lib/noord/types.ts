@@ -1,9 +1,6 @@
 /**
- * The shapes Noord's client components receive as props.
- *
- * Server components map `@/lib/catalog` into these and pass them down; nothing
- * on the client reads the catalog directly, because `@/lib/catalog` imports
- * `node:fs`.
+ * Server components map `@/lib/catalog` into these and pass them down; the
+ * client never reads the catalog directly since it imports `node:fs`.
  */
 
 /** Everything a product tile needs. */
@@ -45,7 +42,7 @@ export type NavModel = {
   categories: NavCategory[]
   /** The large type in the mobile menu: new arrivals, then the categories. */
   menu: NavLink[]
-  /** The smaller group below it — service, not merchandise. */
+  /** The smaller group below it: service, not merchandise. */
   secondary: NavLink[]
   /** Compact links in the top-left of the desktop header. */
   utility: NavLink[]

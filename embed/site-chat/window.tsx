@@ -37,15 +37,7 @@ import { ProductCards } from "./products"
 import { Working } from "./thinking"
 import type { ChatDriver } from "./types"
 
-/**
- * The panel the launcher opens.
- *
- * A `Card` rather than a hand-rolled box: the header/content/footer split, the
- * spacing scale and the footer's own surface all come from the design system,
- * which is the difference between a chat window and a div with a border on it.
- * The merchant's accent is spent on the header and the send button only; the
- * rest is mixed from their surface.
- */
+/** Built on `Card` rather than a hand-rolled box to inherit the design system's spacing and surfaces. */
 export function ChatWindow({
   config,
   chat,
@@ -69,8 +61,6 @@ export function ChatWindow({
         size="sm"
         role="dialog"
         aria-label={`${config.name} chat`}
-        // Corners follow the merchant's own radius token, the same as every
-        // other rounded thing the agent draws on their site.
         style={
           {
             "--window-radius": `calc(var(--radius) + 0.5rem)`,
@@ -81,9 +71,8 @@ export function ChatWindow({
           className,
         )}
       >
-        {/* A flex row rather than `CardHeader`'s own grid: that grid
-            re-columns itself when a `CardAction` is present, which strands
-            the name from its avatar. */}
+        {/* Flex row, not CardHeader's own grid: that grid re-columns when a
+            CardAction is present, stranding the name from its avatar. */}
         <CardHeader
           className={cn(
             "ma:flex ma:items-center ma:gap-3 ma:rounded-t-[inherit] ma:py-3",
@@ -139,8 +128,6 @@ export function ChatWindow({
                 {chat.messages.length === 0 &&
                 config.behaviour.starterPrompts.length > 0 ? (
                   <MessageScrollerItem>
-                    {/* Aligned to the shopper's side: these are things they
-                        would say, not things the agent has said. */}
                     <Message align="end">
                       <MessageContent>
                         <BubbleGroup>
@@ -164,18 +151,15 @@ export function ChatWindow({
                   </MessageScrollerItem>
                 ) : null}
 
-                {/* No scroll anchors: pinning the shopper's question to the
-                    top and leaving a gap for the answer is a full-page
-                    pattern, and in a window this size it scrolls the
-                    greeting out of view. The list just follows the end. */}
+                {/* No scroll anchors: in a window this size, pinning the
+                    question to the top would scroll the greeting out of view. */}
                 {chat.messages.map((message) => (
                   <MessageScrollerItem key={message.id}>
                     <MessageItem message={message} config={config} />
                   </MessageScrollerItem>
                 ))}
 
-                {/* One waiting state from the send to the first visible
-                    part: the reply exists, empty, before anything arrives. */}
+                {/* Covers the gap between send and the reply's first visible part. */}
                 {chat.status === "submitted" ||
                 (chat.status === "streaming" &&
                   chat.messages.at(-1)?.role === "assistant" &&
@@ -190,8 +174,7 @@ export function ChatWindow({
                     <Message>
                       <MessageContent>
                         <Bubble variant="muted">
-                          {/* Demo app: the gateway's own message is more use
-                              than a blank apology. */}
+                          {/* Demo app: the gateway's own error is more use than a blank apology. */}
                           <BubbleContent className="ma:text-muted-foreground">
                             {chat.error?.message?.trim() ||
                               "That didn\u2019t go through."}
@@ -268,8 +251,7 @@ export function Composer({
           rows={1}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          // Enter sends; the composer is one sentence at a time, and a newline
-          // is the rarer thing to want here.
+          // Enter sends; shift-Enter is the rarer newline case.
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault()
@@ -310,7 +292,6 @@ export function Composer({
   )
 }
 
-/** Whether a reply has anything on screen yet. */
 function hasVisibleParts(message: AgentUIMessage | undefined): boolean {
   return (
     message?.parts.some(
@@ -321,7 +302,6 @@ function hasVisibleParts(message: AgentUIMessage | undefined): boolean {
   )
 }
 
-/** One message, part by part: text as bubbles, product picks as cards. */
 function MessageItem({
   message,
   config,
@@ -391,12 +371,6 @@ function MessageItem({
   )
 }
 
-/**
- * Keeps the newest part of the answer in view as it arrives. In a window this
- * short there is no reading-behind to protect: whatever the agent is saying
- * now is the thing to look at, and a shopper who has scrolled up to re-read
- * has the scroller's own button to come back down.
- */
 function FollowEnd({ chat }: { chat: ChatDriver }) {
   const { scrollToEnd } = useMessageScroller()
   const last = chat.messages.at(-1)
@@ -439,7 +413,6 @@ function AgentLine({ children }: { children: React.ReactNode }) {
   )
 }
 
-/** The agent, working, until the first token lands. */
 function Thinking({ style }: { style: AgentConfig["theme"]["thinking"] }) {
   return (
     <Message>

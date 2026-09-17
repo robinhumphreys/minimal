@@ -18,10 +18,8 @@ declare module "react" {
       /** Filled by the embed on product pages. */
       "minimal-agent-recommendations": CustomElement<{ "data-product": string }>
       /**
-       * Filled by the embed with its reading of the site's own search box.
-       * The storefront puts the search the shopper submitted on `data-query`,
-       * and marks its own input and results `data-native-search` so the
-       * embed can stand them down while it answers.
+       * Filled by the embed with its reading of the site's search box. The
+       * storefront sets `data-query` and flags its own UI `data-native-search`.
        */
       "minimal-agent-search": CustomElement<{ "data-query": string }>
       /**

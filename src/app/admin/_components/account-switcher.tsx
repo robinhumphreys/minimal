@@ -21,21 +21,13 @@ import {
 import { BRAND_IDS, type BrandId } from "@/lib/catalog/types"
 import { defaults } from "@/lib/config/defaults"
 
-/**
- * The merchant accounts this admin can configure. There is no accounts API, so
- * the list is the set of brands the catalog ships with, named from their
- * default config.
- */
+/** There is no accounts API, so the list is the brands the catalog ships with, named from their default config. */
 const ACCOUNTS: { id: BrandId; name: string }[] = BRAND_IDS.map((id) => ({
   id,
   name: defaults[id].name,
 }))
 
-/**
- * Switches which merchant the whole admin is editing. The organisation is
- * the first segment of the address, so switching is a navigation to the same
- * screen under the other slug; the store follows the address from there.
- */
+/** Switching is a navigation to the same screen under the other org slug; the store follows the address from there. */
 export function AccountSwitcher({ org }: { org: BrandId }) {
   const { isMobile } = useSidebar()
   const router = useRouter()
@@ -56,10 +48,7 @@ export function AccountSwitcher({ org }: { org: BrandId }) {
               />
             }
           >
-            {/* Forced: `SidebarMenuButton` sizes every descendant `svg` to
-                `size-4`, which is right for an icon and wrong for a logo — and at
-                that size `rounded-lg` is half the width, so the square field
-                came out a circle. */}
+            {/* size-8! forced: SidebarMenuButton sizes descendant svgs to size-4, at which rounded-lg turned the square into a circle. */}
             <BrandMark brand={account.id} className="size-8! rounded-lg" />
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{account.name}</span>

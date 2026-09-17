@@ -36,21 +36,15 @@ import { Working } from "../site-chat/thinking"
 import { Composer } from "../site-chat/window"
 import { themeStyle } from "../theme"
 
-/** What the guide opens with. Never shown; it only gets the first question asked. */
+/** Never shown; only triggers the first question. */
 const KICKOFF = "Begin."
 
-/** A side panel on a wide screen, the whole screen on a phone. */
 export type GuidePlacement = "side" | "sheet"
 
 /**
- * Product help: the guide itself, in a drawer over the page.
- *
- * Not the site chat in a different place. There is no launcher, no small
- * talk and no open question: the agent asks, the shopper taps, and the guide
- * ends on a product. The drawer is the shadcn one on Base UI: it slides in
- * from the side on a wide screen and up from the bottom on a phone, where it
- * takes the whole screen like the site chat does, and can be swiped away
- * either way. Start over clears it and asks again.
+ * Unlike the site chat, there is no launcher or small talk: the agent asks,
+ * the shopper taps, and the guide ends on a product. On a phone it takes the
+ * whole screen, like the site chat does.
  */
 export function GuideOverlay({
   config,
@@ -65,7 +59,6 @@ export function GuideOverlay({
   open: boolean
   onClose: () => void
   placement: GuidePlacement
-  /** Where the drawer mounts: the document on a site, the preview in the admin. */
   container?: HTMLElement | React.RefObject<HTMLElement | null> | null
 }) {
   const transport = React.useMemo(
@@ -74,7 +67,6 @@ export function GuideOverlay({
   )
   const behaviour = config.behaviour
   const productHelp = config.surface.productHelp
-  // The page is the one the guide opened on; a guide does not outlive it.
   const body = React.useMemo(
     () => ({
       behaviour,
@@ -85,8 +77,7 @@ export function GuideOverlay({
     }),
     [behaviour, topic, productHelp],
   )
-  // Read when the cart tool answers, which is after the render the latest
-  // body arrived in, so an effect is early enough.
+  // Read when the cart tool answers, after the render body arrived in.
   const bodyRef = React.useRef(body)
   React.useEffect(() => {
     bodyRef.current = body
@@ -103,7 +94,6 @@ export function GuideOverlay({
     regenerate,
   } = useChat<AgentUIMessage>({
     transport,
-    // The cart is read from the page, then the guide carries on by itself.
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
       answerViewCart(toolCall, addToolOutput, bodyRef.current)
@@ -118,7 +108,6 @@ export function GuideOverlay({
     [sendMessage, body],
   )
 
-  // The first question is asked the moment the guide opens.
   const kicked = React.useRef(false)
   React.useEffect(() => {
     if (!open || kicked.current || messages.length > 0) return
@@ -156,11 +145,9 @@ export function GuideOverlay({
         container={container}
         data-slot="product-help"
         aria-label={`${name} guide`}
-        // The drawer mounts outside the embed's own root, so the theme has to
-        // travel with it: this is the root for everything inside.
         className={cn(
-          // The primitive paints a "bleed" past its leading edge for overscroll;
-          // inset from the edge, that bleed would show in the margin.
+          // The primitive's "bleed" past its leading edge, for overscroll,
+          // would show in the margin once inset from the edge; hide it.
           "minimal-agent-root ma:font-sans ma:text-foreground ma:shadow-2xl ma:after:hidden!",
           placement === "side"
             ? // Floating, not flush: a margin all round and every corner
@@ -222,9 +209,7 @@ export function GuideOverlay({
                   </MessageScrollerItem>
                 ))}
 
-                {/* Waiting is one state from the send to the first thing
-                    worth showing. The reply exists, empty, before its first
-                    part has arrived; the dots stay until it has. */}
+                {/* Covers the gap between send and the reply's first visible part. */}
                 {status === "submitted" ||
                 (status === "streaming" &&
                   last?.role === "assistant" &&
@@ -290,7 +275,6 @@ export function GuideOverlay({
   )
 }
 
-/** Whether a reply has anything on screen yet. */
 function hasVisibleParts(message: AgentUIMessage): boolean {
   return message.parts.some(
     (part) =>
@@ -302,7 +286,6 @@ function hasVisibleParts(message: AgentUIMessage): boolean {
   )
 }
 
-/** One message of the guide, with its question's answers if it is the live one. */
 function Turn({
   message,
   config,
@@ -311,7 +294,7 @@ function Turn({
 }: {
   message: AgentUIMessage
   config: AgentConfig
-  /** The latest message: its answers can still be tapped. */
+  /** True for the latest message, whose answers can still be tapped. */
   current: boolean
   onChoose: (option: string) => void
 }) {

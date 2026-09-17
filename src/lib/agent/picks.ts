@@ -17,7 +17,7 @@ export function pickFrom(
         ? formatPrice(product.compareAt)
         : undefined,
     image: product.images[0],
-    url: `/${brand}/p/${product.slug}`,
+    url: `/${brand}/product/${product.slug}`,
     rating: product.rating,
     reviewCount: product.reviewCount,
     why,

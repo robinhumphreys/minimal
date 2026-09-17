@@ -16,11 +16,8 @@ import {
 const MAX_QUANTITY = 10
 
 /**
- * Flavour, quantity and the add-to-bag button.
- *
- * Adding opens the bag rather than showing a toast: the bag *is* the
- * confirmation, and it puts the free-delivery meter in front of the shopper at
- * the moment their subtotal just moved.
+ * Adding opens the bag rather than showing a toast: the bag is the
+ * confirmation, and it surfaces the free-delivery meter right away.
  */
 export function AddToBag({
   line,
@@ -31,7 +28,7 @@ export function AddToBag({
   line: Omit<BagLine, "flavour" | "quantity">
   /** `attributes.form`, which decides what flavours are on offer. */
   form?: string
-  /** `attributes.flavour` — the real one, always first and selected. */
+  /** `attributes.flavour`, the real one, always first and selected. */
   flavour?: string
 }) {
   const add = useBag((state) => state.add)
@@ -49,20 +46,15 @@ export function AddToBag({
     <div className="flex flex-col gap-5">
       {options.length > 1 && (
         <div className="flex flex-col gap-2.5">
-          {/*
-            No readout of the current flavour beside the heading: the selected
-            chip is already lit volt, and naming it again says the same thing
-            twice in the same glance.
-          */}
+          {/* No readout beside the heading: the selected chip is already lit. */}
           <h2 className="volta-wide text-volta-micro text-volta-smoke">
             Flavour
           </h2>
           <ToggleGroup
             value={[flavour]}
             onValueChange={(next) => {
-              // Base UI hands back an array; an empty one means the shopper
-              // untoggled the current choice, which is not a state a flavour
-              // picker should have.
+              // An empty array means the shopper untoggled the current
+              // choice, not a state a flavour picker should have.
               if (next.length > 0) setFlavour(String(next[0]))
             }}
             multiple={false}
@@ -100,8 +92,7 @@ export function AddToBag({
         <Button
           variant="volt"
           size="block"
-          // `block` is full-width by default; beside the stepper it has to
-          // share the row instead of claiming all of it.
+          // `block` is full-width by default; here it shares the row instead.
           className="w-auto flex-1"
           onClick={() => {
             add({ ...line, flavour, quantity })

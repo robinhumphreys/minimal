@@ -1,14 +1,6 @@
 /**
- * The shopper's cart, as the agent sees it.
- *
- * The cart lives in the shopper's browser, in the storefront's own store,
- * and the agent runs on the server. So `viewCart` is a client-side tool: the
- * model asks, the embed answers from the page, and the model carries on with
- * the result. The page hands its cart over through one global the embed
- * reads at call time, so it does not matter which of the two loaded first.
- *
- * Free of anything server-only: the embed, the storefront shells and the
- * route all import from here.
+ * The cart lives in the browser and the agent runs on the server, so
+ * `viewCart` is a client-side tool answered from a page-set global.
  */
 
 export type CartLine = {
@@ -52,10 +44,7 @@ declare global {
   }
 }
 
-/**
- * Called by the storefront's shell once its cart store is on the client.
- * Returns the matching unregister, for the effect cleanup.
- */
+/** Called by the storefront's shell once its cart store is on the client; returns the unregister for effect cleanup. */
 export function provideCart(read: () => Omit<CartView, "available">) {
   const host = (window.MinimalAgentHost ??= {})
   host.cart = read
@@ -77,9 +66,8 @@ export function readHostCart(): CartView {
 }
 
 /**
- * The `onToolCall` half of the client-side tool, shared by every `useChat`
- * that talks to the agent route: a call the client never answers would leave
- * the conversation hanging on a tool result that is not coming.
+ * The client-side half of the `viewCart` tool, shared by every `useChat`:
+ * an unanswered call would leave the conversation hanging forever.
  */
 export function answerViewCart(
   toolCall: { toolName: string; toolCallId: string; dynamic?: boolean },

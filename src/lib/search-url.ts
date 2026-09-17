@@ -10,21 +10,8 @@ export function searchPath(brand: BrandId) {
 }
 
 /**
- * Gives the search overlay a URL, `/<brand>/search?q=…`, without moving the
- * page underneath it.
- *
- * The overlay is a sheet over whatever the shopper was looking at, so a real
- * navigation would swap that page out. Instead the URL is written with the
- * native history API, which Next folds into `usePathname` without fetching
- * the route. Opening pushes an entry, so the browser's back button closes
- * the sheet; submitting rewrites that entry with the query, so a reload or a
- * shared link lands on the same answer. The `/search` route itself exists for
- * those landings and renders the home page as the backdrop.
- *
- * Two kinds of change meet here. A change to `open` came from the interface
- * (a button, Escape) and is mirrored to the URL. A change to the pathname
- * with `open` untouched came from the browser (back, a link in the results, a
- * direct landing) and is mirrored to the overlay.
+ * Gives the search overlay a URL without navigating: a real route change
+ * would swap out the page the overlay sits over, so history is written directly.
  */
 export function useSearchUrl({
   brand,
@@ -77,8 +64,7 @@ export function useSearchUrl({
       onLanding(new URLSearchParams(window.location.search).get("q") ?? "")
       show()
     }
-    // `show`, `close` and `onLanding` are stable or read fresh; only the
-    // open/route pair should re-run this.
+    // Only the open/route pair should re-run this; other deps are stable or read fresh.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onRoute])
 

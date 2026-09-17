@@ -1,12 +1,5 @@
 /*
- * Volta design tokens.
- *
- * Every token is namespaced `volta-*` so the other storefront (Noord) can keep
- * its own `noord-*` set without either brand inheriting the other's look.
- * Nothing here touches the shadcn semantic tokens in `globals.css` — the Volta
- * primitives under `src/components/volta/ui` spend these tokens directly.
- *
- * Namespacing rather than a `.volta` cascade scope is deliberate: dialogs
+ * Namespaced `volta-*` rather than scoped to a `.volta` wrapper: dialogs
  * portal to `document.body`, outside any wrapper element, so scope-based
  * theming would silently drop out inside the nav, search and bag overlays.
  */
@@ -14,16 +7,9 @@
 @theme {
   /* --- Type ------------------------------------------------------------- */
   /*
-   * Two families, split by job.
-   *
-   * Archivo is the headline voice: a variable grotesque with a width axis, and
-   * pushing it wide is the loudest gesture the brand has. It earns that on
-   * titles only. Set at label and prose sizes it turns every nav item and spec
-   * row into a headline, and when everything shouts nothing is emphasis.
-   *
-   * IBM Plex Sans carries what is actually read — prose, buttons, nav, meta
-   * rows, form fields. Plex rather than Inter because Noord already owns Inter,
-   * and two storefronts in one repo should not share a body face.
+   * Archivo (display) is reserved for titles; set at label or prose sizes it
+   * turns every nav item into a headline. Plex, not Inter, since Noord already
+   * owns Inter.
    */
   --font-volta:
     var(--font-volta-text-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -32,14 +18,8 @@
     sans-serif;
 
   /*
-   * Violator stripe, badges, meta rows. Sentence case, like everything below
-   * title level — the tracking is the small positive amount that keeps small
-   * text from setting tight, not the wide letterspacing an all-caps run needs.
-   *
-   * The scale below title level runs a step larger than it did under the
-   * all-caps setting. Caps fill their line: every letter stands at cap height,
-   * so 10px of uppercase reads about as large as 12px of sentence case. Drop
-   * the caps and keep the size and the whole interface shrinks.
+   * Sizes below title level were bumped a step when caps were dropped: caps
+   * fill their line, so 10px of uppercase reads as large as 12px sentence case.
    */
   --text-volta-micro: 0.75rem;
   --text-volta-micro--line-height: 1.35;
@@ -79,11 +59,8 @@
 
   /* --- Colour ----------------------------------------------------------- */
   /*
-   * A charcoal ground rather than a black one: the base sits at 13% lightness
-   * and everything above it steps up from there, so the volt still reads as
-   * light while the surfaces keep enough separation to layer. Written as `hsl`
-   * because the ramp is a lightness scale and nothing else — same hue, same
-   * (zero) saturation, one number moving.
+   * Charcoal, not black: base at 13% lightness so surfaces keep separation to
+   * layer. Written as `hsl` since the ramp only moves lightness.
    */
   --color-volta-void: hsl(0 0% 13%);
   --color-volta-carbon: hsl(0 0% 16%);
@@ -95,11 +72,7 @@
   --color-volta-ash: #a3a3a3;
   --color-volta-smoke: #6b6b6b;
 
-  /*
-   * On the white product shelves the dark-surface greys invert. `slate` is the
-   * secondary text there and `mist` the hairline — both chosen to clear 4.5:1
-   * on white, which `ash` and `line` do not.
-   */
+  /* `slate` and `mist` clear 4.5:1 contrast on white shelves; `ash` and `line` do not. */
   --color-volta-slate: #525252;
   --color-volta-mist: #d4d4d4;
 
@@ -109,7 +82,7 @@
   /* The volt is invisible on white; this is the brand green for light shelves. */
   --color-volta-volt-deep: #3d4a00;
 
-  /* Destructive affordances only — removing a bag line. */
+  /* Destructive affordances only, removing a bag line. */
   --color-volta-heat: #ff3b1f;
 
   /* --- Shape ------------------------------------------------------------ */
@@ -139,10 +112,7 @@
 }
 
 @layer components {
-  /*
-   * Root wrapper for every Volta route. Sets the brand's baseline typography
-   * so individual components only declare what differs from it.
-   */
+  /* Sets baseline typography so components only declare what differs. */
   .volta {
     font-family: var(--font-volta);
     font-size: var(--text-volta-body);
@@ -170,18 +140,13 @@
   }
 
   /*
-   * The three voices. Family lives here rather than in the `--text-volta-*`
-   * tokens because Tailwind's font-size tokens carry neither `font-family` nor
-   * `font-stretch`, and the width axis is half of what makes the display face
-   * look like Volta.
+   * Family lives here, not in the `--text-volta-*` tokens, since Tailwind's
+   * font-size tokens carry neither `font-family` nor `font-stretch`.
    *
-   * Uppercase stops at title level. Caps are the loudest setting there is and
-   * the storefront was spending them on nav items, spec keys and every button
-   * label — which both flattens the hierarchy and costs real reading speed,
-   * since a word in caps has no ascender-descender shape left to recognise.
+   * Uppercase stops at title level: spending caps on nav items and spec keys
+   * flattened the hierarchy and cost reading speed.
    */
 
-  /* Headlines, hero statements, section titles. The display face, full width. */
   .volta-display {
     font-family: var(--font-volta-display);
     font-stretch: 125%;
@@ -189,10 +154,7 @@
     text-transform: uppercase;
   }
 
-  /*
-   * Product names and prices: the same face at reading scale, pulled back off
-   * full width because 125% at 16px is a poster in a list row.
-   */
+  /* Pulled back off full width: 125% at 16px is a poster in a list row. */
   .volta-title {
     font-family: var(--font-volta-display);
     font-stretch: 112%;
@@ -200,27 +162,16 @@
     text-transform: uppercase;
   }
 
-  /*
-   * Nav items, button labels, eyebrows, breadcrumbs, spec keys — the label
-   * voice, and the one place the brand does not shout. Sentence case on the
-   * text face, leaning on weight rather than caps to separate a label from the
-   * prose around it. The `--text-volta-*` tokens carry their own weight; the
-   * one here is for the sizes that do not.
-   */
+  /* The `--text-volta-*` tokens carry their own weight; this is for sizes that don't. */
   .volta-wide {
     font-family: var(--font-volta);
     font-weight: 600;
   }
 
   /*
-   * The tab underline, in plain CSS rather than a `border-transparent` utility
-   * with a `data-[active]:` override.
-   *
-   * `public/embed.css` is a second, unscoped Tailwind build that loads after
-   * the app stylesheet, and it ships its own `.border-transparent` — which then
-   * outranks any variant of ours the checked-in copy does not also happen to
-   * carry. Owning the property here keeps the rule out of that fight: nothing
-   * in embed.css matches `.volta-tab`.
+   * Plain CSS, not a `border-transparent` utility: `public/embed.css` loads
+   * after the app stylesheet and ships its own `.border-transparent` that
+   * would outrank ours. Nothing in embed.css matches `.volta-tab`.
    */
   .volta-tab {
     border-bottom: 2px solid transparent;
@@ -230,10 +181,7 @@
     border-bottom-color: var(--color-volta-volt);
   }
 
-  /*
-   * Diagonal volt hatching. Backs the violator stripe and empty states so a
-   * flat black band still has some texture to it.
-   */
+  /* Backs the violator stripe and empty states so a flat black band has texture. */
   .volta-hatch {
     background-image: repeating-linear-gradient(
       -45deg,
@@ -242,7 +190,7 @@
     );
   }
 
-  /* Bottom-up fill on hover — used on text links in the footer and nav. */
+  /* Bottom-up fill on hover, used on text links in the footer and nav. */
   .volta-underline {
     background-image: linear-gradient(
       var(--color-volta-volt),
@@ -270,4 +218,3 @@
     }
   }
 }
-

@@ -73,9 +73,8 @@ export const defaults: Record<BrandId, AgentConfig> = {
     id: "volta",
     name: "Volta",
     theme: {
-      // Volta's own volt — see `--color-volta-volt` in `src/styles/volta.css`.
-      // Bright enough that anything on it has to be black, which is what the
-      // storefront does with it too.
+      // Volta's volt (see `--color-volta-volt`); bright enough that anything
+      // on it must be black, matching the storefront.
       accent: "#d7ff00",
       // Volta's ground is charcoal (`--color-volta-void`), so the window is
       // dark too; a white panel on that storefront would be the bolted-on look.

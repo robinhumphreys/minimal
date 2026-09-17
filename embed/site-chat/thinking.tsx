@@ -3,17 +3,14 @@ import { cn } from "../cn"
 
 import type { ThinkingStyle } from "@/lib/config/schema"
 
-/**
- * What working looks like, in the merchant's chosen style. Shared by the chat
- * window and the search panel so the agent waits the same way everywhere.
- */
+/** Shared by the chat window and the search panel so the agent waits the same way everywhere. */
 export function Working({
   style,
   label,
   className,
 }: {
   style: ThinkingStyle
-  /** Shown by the `text` style, and read out by every style. */
+  /** Shown by the `text` style; read out (aria-label) by every style. */
   label: string
   className?: string
 }) {

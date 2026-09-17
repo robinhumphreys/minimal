@@ -15,17 +15,7 @@ import type { BrandId } from "@/lib/catalog/types"
 
 import type { SiteChatSettings } from "./site-chat"
 
-/**
- * What each surface's agent opens with: one message that says what was set
- * up and hands over. It lands after a beat rather than sitting there on
- * mount, which says the agent has been working on this where a finished
- * transcript just looks like placeholder copy.
- *
- * The line is the agent's — putting words in the merchant's mouth before
- * they have said anything is a transcript pretending to be a conversation.
- *
- * `after` is the pause before the line lands.
- */
+/** `after` is the pause, in ms, before the line lands; a beat delay reads as the agent working, not a static transcript. */
 export type ScriptLine = { text: string; after: number }
 
 export const OPENERS: Record<ChatSurface, ScriptLine[]> = {
@@ -49,11 +39,7 @@ export const OPENERS: Record<ChatSurface, ScriptLine[]> = {
   ],
 }
 
-/**
- * How a tool call reaches the settings. Read when the call lands, not when
- * the chat was made: the draft may have been re-read from what was
- * published since.
- */
+/** Read when the tool call lands, not when the chat was made, since the draft may have been re-read since. */
 export type Latest = {
   settings: SiteChatSettings
   onChange: (next: SiteChatSettings) => void
@@ -69,18 +55,8 @@ export type CustomiseChatEntry = {
   bind: (latest: Latest) => void
 }
 
-/**
- * One conversation per brand per surface, held outside React.
- *
- * The studio comes and goes — tabs swap, the merchant pages back a step and
- * forward again, the management screen opens later — and each time the chat
- * should be where they left it. A `Chat` keeps its messages and its status,
- * and carries on streaming while nothing is mounted to show it; the pane
- * subscribes to whichever entry is current and lets go of it on unmount.
- *
- * Memory-only, like the drafts: a hard refresh starts the conversations over
- * from whatever was published.
- */
+// Held outside React so each `Chat` keeps streaming and its messages while nothing is mounted to show it.
+// Memory-only: a hard refresh starts conversations over from whatever was published.
 const entries = new Map<string, CustomiseChatEntry>()
 
 function keyFor(brand: BrandId, surface: ChatSurface) {
@@ -88,8 +64,7 @@ function keyFor(brand: BrandId, surface: ChatSurface) {
 }
 
 function opener(surface: ChatSurface): SiteChatUIMessage[] {
-  // Seeding the conversation with it means the model knows what it has
-  // already told the merchant, so "change that" has something to refer to.
+  // Seeded so the model knows what it already told the merchant and "change that" has something to refer to.
   return OPENERS[surface].map((line, index) => ({
     id: `script-${index}`,
     role: "assistant",
@@ -111,8 +86,7 @@ export function customiseChatFor(
     id: key,
     transport: new DefaultChatTransport({
       api: "/api/admin/site-chat",
-      // The surface rides on every request; the settings are added per send
-      // so they are whatever the draft is at that moment.
+      // Settings are added per send so they reflect whatever the draft is at that moment.
       body: { surface },
     }),
     messages: opener(surface),

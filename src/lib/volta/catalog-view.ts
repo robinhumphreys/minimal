@@ -22,22 +22,19 @@ import type {
 const BRAND = "volta" as const
 
 export function productHref(slug: string) {
-  return `/${BRAND}/p/${slug}`
+  return `/${BRAND}/product/${slug}`
 }
 
 export function categoryHref(slug: string) {
   return `/${BRAND}/${slug}`
 }
 
-/** A category page pre-filtered to one facet value — what the nav links to. */
+/** A category page pre-filtered to one facet value, the target of nav links. */
 export function facetHref(category: string, facet: FacetKey, value: string) {
   return `${categoryHref(category)}?${facet}=${encodeURIComponent(value)}`
 }
 
-/**
- * "Shop by goal" — the entry point a nutrition shopper actually uses. Goals cut
- * across categories, so each one is a tag query rather than a category page.
- */
+// Goals cut across categories, so each is a tag query, not a category page.
 export const GOALS: { label: string; tag: string }[] = [
   { label: "Build muscle", tag: "protein" },
   { label: "Train harder", tag: "pre-workout" },
@@ -90,8 +87,6 @@ export function searchIndex(): SearchEntry[] {
   return getCatalog(BRAND).products.map(toSearchEntry)
 }
 
-// ---------------------------------------------------------------- facets
-
 const FACET_LABELS: Record<FacetKey, string> = {
   form: "Form",
   flavour: "Flavour",
@@ -136,7 +131,6 @@ export function facetGroups(categorySlug: string): FacetGroup[] {
   )
 }
 
-/** Applies the `?form=`/`?goal=`/`?flavour=` query to a category's products. */
 export function filterProducts(
   categorySlug: string,
   filters: Partial<Record<FacetKey, string>>,
@@ -150,12 +144,8 @@ export function filterProducts(
     .map(toCard)
 }
 
-// ------------------------------------------------------------------- nav
-
-/**
- * Editorial links the catalog does not model. They point at real category
- * pages so nothing in the demo dead-ends.
- */
+// Editorial links the catalog does not model; they point at real category
+// pages so nothing in the demo dead-ends.
 const SERVICE = [
   { label: "Track your order", href: `/${BRAND}` },
   { label: "Delivery & returns", href: `/${BRAND}` },
@@ -183,8 +173,6 @@ export function navModel(): NavModel {
   }
 }
 
-// -------------------------------------------------------------- selections
-
 /** Highest rated first, ties broken by review count. The homepage rails use this. */
 export function topRated(count: number, categorySlug?: string) {
   const products = categorySlug
@@ -201,7 +189,7 @@ export function topRated(count: number, categorySlug?: string) {
     .map(toCard)
 }
 
-/** Most reviewed first — "what everyone is buying", not "what scores best". */
+/** Most reviewed first, "what everyone is buying" rather than "what scores best". */
 export function bestSellers(count: number) {
   return [...getCatalog(BRAND).products]
     .sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0))
@@ -225,10 +213,8 @@ export function relatedProducts(product: Product, count: number) {
     .map(toCard)
 }
 
-/**
- * "Often bought together": the best-selling product of every *other* category.
- * A protein shopper is cross-sold a shaker-adjacent SKU, not another whey.
- */
+// The best-selling product of every other category, so a protein shopper is
+// cross-sold a shaker-adjacent SKU, not another whey.
 export function crossSell(product: Product, count: number) {
   return getCatalog(BRAND)
     .categories.filter((category) => category.slug !== product.category)
@@ -236,8 +222,6 @@ export function crossSell(product: Product, count: number) {
     .filter((card): card is ProductCardModel => card !== undefined)
     .slice(0, count)
 }
-
-// ---------------------------------------------------------------- reviews
 
 function toReviewModel(review: Review, withProduct: boolean): ReviewModel {
   const product = withProduct ? getProduct(BRAND, review.product) : undefined
@@ -264,10 +248,8 @@ export function productReviews(slug: string, count?: number): ReviewModel[] {
 }
 
 /**
- * Five-star reviews for the homepage testimonial band, spread across products.
- *
- * One per product: three glowing reviews of the same whey is a weaker proof
- * than three of three different things.
+ * One five-star review per product; repeating the same whey proves less than
+ * showing different products.
  */
 export function testimonials(count: number): ReviewModel[] {
   const seen = new Set<string>()
@@ -284,12 +266,8 @@ export function testimonials(count: number): ReviewModel[] {
 }
 
 /**
- * The star histogram on a PDP.
- *
- * The catalog stores a mean and a total, not per-star counts, so the shape is
- * reconstructed from them: a beta-ish spread centred on the mean, adjusted so
- * the counts sum back to the stated total. It is a drawing of the rating, not
- * a second source of truth about it.
+ * The catalog stores only a mean and total, not per-star counts, so this
+ * reconstructs an approximate spread that sums back to the total.
  */
 export function ratingBreakdown(
   rating: number,

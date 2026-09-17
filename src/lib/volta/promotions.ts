@@ -1,11 +1,5 @@
-/**
- * The promotional furniture: violator stripe, delivery thresholds, service
- * promises.
- *
- * Client-safe on purpose — the stripe scrolls above the header on every route
- * and the bag reads the threshold to price delivery, so this cannot live
- * behind the server-only catalog module.
- */
+// Client-safe on purpose: the stripe and the bag both need this, so it
+// cannot live behind the server-only catalog module.
 
 /** Spend at or above this and delivery is free. Cents, EUR. */
 export const FREE_DELIVERY_THRESHOLD = 4000
@@ -17,13 +11,8 @@ export const DELIVERY_FEE = 495
 export const CUTOFF = "22:00"
 
 /**
- * The scrolling stripe above the header. Two or three words each: the band is
- * 2rem tall and moves, so a phrase that needs reading twice never gets read.
- * The long form of each promise lives in `PROMISES` and on the product page.
- *
- * Four, deliberately: the stripe lays them out evenly across the desktop header
- * and the footer repeats them as a four-column grid, so an odd count leaves a
- * hole in both. Anything added here has to displace one of these.
+ * Four, deliberately: the desktop header and the footer both lay these out
+ * as an even grid, so an odd count leaves a hole in both.
  */
 export type ViolatorId = "delivery" | "dispatch" | "returns" | "testing"
 

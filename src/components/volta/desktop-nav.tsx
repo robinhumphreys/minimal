@@ -3,11 +3,8 @@ import Link from "next/link"
 import type { NavModel } from "@/lib/volta/types"
 
 /**
- * The `lg`-and-up categories, sitting inline in the header bar itself rather
- * than on a second row. Plain links: each category page carries its own
- * filters, so a dropdown here would only repeat them a click early. Hidden
- * entirely below `lg`, where the nav overlay takes over — the phone menu is
- * never shown on a desktop layout.
+ * Plain links: each category page carries its own filters, so a dropdown
+ * here would only repeat them a click early.
  */
 export function DesktopNav({ nav }: { nav: NavModel }) {
   return (

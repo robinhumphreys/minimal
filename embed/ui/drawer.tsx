@@ -102,7 +102,6 @@ function DrawerContent({
   container,
   ...props
 }: DrawerPrimitive.Popup.Props & {
-  /** Where the drawer mounts; the document by default. */
   container?: DrawerPrimitive.Portal.Props["container"]
 }) {
   const { hasSnapPoints, modal, showSwipeHandle, swipeDirection } = useDrawer()
@@ -124,29 +123,17 @@ function DrawerContent({
           data-swipe-axis={swipeAxis}
           data-snap-points={hasSnapPoints ? "" : undefined}
           className={cn(
-            // Base.
             "ma:group/drawer-popup ma:pointer-events-auto ma:fixed ma:z-50 ma:m-(--drawer-inset,0px) ma:flex ma:h-(--drawer-content-height) ma:max-h-(--drawer-content-max-height,none) ma:min-h-0 ma:w-(--drawer-content-width,auto) ma:transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] ma:flex-col ma:bg-popover ma:text-sm ma:text-popover-foreground ma:transition-[transform,height,opacity,filter] ma:duration-450 ma:ease-[cubic-bezier(0.22,1,0.36,1)] ma:will-change-transform ma:outline-none ma:select-none ma:[interpolate-size:allow-keywords] ma:data-[swipe-direction=down]:rounded-t-xl ma:data-[swipe-direction=down]:border-t ma:data-[swipe-direction=left]:rounded-r-xl ma:data-[swipe-direction=left]:border-r ma:data-[swipe-direction=right]:rounded-l-xl ma:data-[swipe-direction=right]:border-l ma:data-[swipe-direction=up]:rounded-b-xl ma:data-[swipe-direction=up]:border-b",
-            // Nested.
             "ma:data-nested-drawer-open:overflow-hidden ma:data-nested-drawer-open:brightness-95",
-            // Bleed.
             "ma:after:pointer-events-none ma:after:absolute ma:after:bg-(--drawer-bleed-background,var(--color-popover)) ma:data-[swipe-axis=x]:after:inset-y-0 ma:data-[swipe-axis=x]:after:w-(--bleed) ma:data-[swipe-axis=y]:after:inset-x-0 ma:data-[swipe-axis=y]:after:h-(--bleed) ma:data-[swipe-direction=down]:after:top-full ma:data-[swipe-direction=left]:after:right-full ma:data-[swipe-direction=right]:after:left-full ma:data-[swipe-direction=up]:after:bottom-full",
-            // Sizing.
             "ma:[--drawer-content-height:var(--drawer-height,auto)] ma:data-[swipe-axis=x]:[--drawer-content-width:75%] ma:data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-6rem)] ma:data-[swipe-axis=y]:data-snap-points:[--drawer-content-height:100dvh] ma:data-[swipe-axis=x]:sm:[--drawer-content-width:24rem]",
-            // Stack.
             "ma:[--bleed:3rem] ma:[--peek:1rem] ma:[--stack-height:var(--drawer-frontmost-height,var(--drawer-height,0px))] ma:[--stack-peek-offset:max(0px,calc((var(--nested-drawers)-var(--stack-progress))*var(--peek)))] ma:[--stack-progress:clamp(0,var(--drawer-swipe-progress),1)] ma:[--stack-scale-base:max(0,calc(1-(var(--nested-drawers)*var(--stack-step))))] ma:[--stack-scale:clamp(0,calc(var(--stack-scale-base)+(var(--stack-step)*var(--stack-progress))),1)] ma:[--stack-shrink:calc(1-var(--stack-scale))] ma:[--stack-step:0.05]",
-            // Transitions.
             "ma:data-ending-style:transform-(--closed-transform) ma:data-ending-style:opacity-[0.9999] ma:data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] ma:data-nested-drawer-swiping:duration-0 ma:data-ending-style:data-nested-drawer-swiping:duration-[calc(var(--drawer-swipe-strength)*400ms)] ma:data-starting-style:transform-(--closed-transform) ma:data-swiping:duration-0 ma:data-ending-style:data-swiping:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
-            // Axis: y.
             "ma:data-[swipe-axis=y]:inset-x-0 ma:data-[swipe-axis=y]:data-nested-drawer-open:h-(--stack-height)",
-            // Axis: x.
             "ma:data-[swipe-axis=x]:inset-y-0 ma:data-[swipe-axis=x]:flex-row",
-            // Direction: down.
             "ma:data-[swipe-direction=down]:bottom-0 ma:data-[swipe-direction=down]:origin-bottom ma:data-[swipe-direction=down]:[--closed-transform:translate3d(0,calc(100%+var(--drawer-inset,0px)+2px),0)] ma:data-[swipe-direction=down]:[--translate-y:calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--stack-shrink)*var(--stack-height)))]",
-            // Direction: up.
             "ma:data-[swipe-direction=up]:top-0 ma:data-[swipe-direction=up]:origin-top ma:data-[swipe-direction=up]:[--closed-transform:translate3d(0,calc(-100%-var(--drawer-inset,0px)-2px),0)] ma:data-[swipe-direction=up]:[--translate-y:calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)+var(--stack-peek-offset)+(var(--stack-shrink)*var(--stack-height)))]",
-            // Direction: left.
             "ma:data-[swipe-direction=left]:left-0 ma:data-[swipe-direction=left]:origin-left ma:data-[swipe-direction=left]:[--closed-transform:translate3d(calc(-100%-var(--drawer-inset,0px)-2px),0,0)] ma:data-[swipe-direction=left]:[--translate-x:calc(var(--drawer-swipe-movement-x)+var(--stack-peek-offset)+(var(--stack-shrink)*100%))]",
-            // Direction: right.
             "ma:data-[swipe-direction=right]:right-0 ma:data-[swipe-direction=right]:origin-right ma:data-[swipe-direction=right]:[--closed-transform:translate3d(calc(100%+var(--drawer-inset,0px)+2px),0,0)] ma:data-[swipe-direction=right]:[--translate-x:calc(var(--drawer-swipe-movement-x)-var(--stack-peek-offset)-(var(--stack-shrink)*100%))]",
             className,
           )}
@@ -184,7 +171,10 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn("ma:mt-auto ma:flex ma:shrink-0 ma:flex-col ma:gap-2 ma:p-4 ma:pt-0", className)}
+      className={cn(
+        "ma:mt-auto ma:flex ma:shrink-0 ma:flex-col ma:gap-2 ma:p-4 ma:pt-0",
+        className,
+      )}
       {...props}
     />
   )
@@ -210,7 +200,10 @@ function DrawerDescription({
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"
-      className={cn("ma:text-sm ma:text-balance ma:text-muted-foreground", className)}
+      className={cn(
+        "ma:text-sm ma:text-balance ma:text-muted-foreground",
+        className,
+      )}
       {...props}
     />
   )
