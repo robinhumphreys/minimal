@@ -7,6 +7,7 @@ import { ArrowUpIcon } from "lucide-react"
 import { motion } from "motion/react"
 
 import { Bubble, BubbleContent } from "@/components/ui/bubble"
+import { Button } from "@/components/ui/button"
 import {
   InputGroup,
   InputGroupAddon,
@@ -28,6 +29,7 @@ import type { BrandId } from "@/lib/catalog/types"
 
 import {
   OPENERS,
+  SUGGESTIONS,
   customiseChatFor,
   type CustomiseChatEntry,
 } from "./customise-chats"
@@ -138,12 +140,24 @@ function CustomiseChat({
     last.parts.some((part) => part.type === "tool-updateSiteChat")
   const working = busy && !lastHasText ? (lastHasTool ? 1 : 0) : -1
 
-  const send = () => {
-    const text = draft.trim()
+  const send = (message = draft) => {
+    const text = message.trim()
     if (!text || busy) return
     setDraft("")
     void sendMessage({ text }, { body: { settings, surface: entry.surface } })
   }
+
+  // Shown while the agent is waiting on the merchant, less whatever has been asked for already.
+  const asked = new Set(
+    turns.filter((turn) => turn.from === "merchant").map((turn) => turn.text),
+  )
+  const suggestions =
+    !busy &&
+    !error &&
+    revealed === SCRIPT.length &&
+    turns.at(-1)?.from === "agent"
+      ? SUGGESTIONS[entry.surface].filter((text) => !asked.has(text))
+      : []
 
   return (
     <MessageScrollerProvider>
@@ -179,6 +193,29 @@ function CustomiseChat({
                 </motion.div>
               </MessageScrollerItem>
             ))}
+
+            {suggestions.length > 0 ? (
+              <MessageScrollerItem>
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="-mt-2 flex flex-wrap gap-1.5"
+                >
+                  {suggestions.map((text) => (
+                    <Button
+                      key={text}
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => send(text)}
+                    >
+                      {text}
+                    </Button>
+                  ))}
+                </motion.div>
+              </MessageScrollerItem>
+            ) : null}
 
             {working >= 0 ? (
               <MessageScrollerItem>

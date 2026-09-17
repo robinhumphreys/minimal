@@ -19,7 +19,6 @@ import {
   UsersIcon,
 } from "lucide-react"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   Sidebar,
   SidebarContent,
@@ -38,9 +37,6 @@ import { useAdminStore } from "@/lib/store/admin"
 import { AccountSwitcher } from "./account-switcher"
 import { MinimalLogo } from "./minimal-logo"
 import { NavMain, type NavGroup } from "./nav-main"
-
-// There is no auth, so the signed-in operator is a placeholder.
-const USER = { name: "Merchant admin", initials: "MA" }
 
 // Only "Agent" is wired up. The rest name the screens this admin is meant to
 // grow into, so the rail has the shape it will eventually need.
@@ -112,16 +108,6 @@ export function AppSidebar({
             </SidebarMenuButton>
           </SidebarMenuItem>
           <CollapseToggle />
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip={USER.name} render={<a href="#" />}>
-              <Avatar size="sm" className="size-4 shrink-0">
-                <AvatarFallback className="text-[0.5rem]">
-                  {USER.initials}
-                </AvatarFallback>
-              </Avatar>
-              <span>{USER.name}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

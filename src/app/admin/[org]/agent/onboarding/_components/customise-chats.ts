@@ -39,6 +39,34 @@ export const OPENERS: Record<ChatSurface, ScriptLine[]> = {
   ],
 }
 
+/**
+ * Offered as chips under the agent's last line. Each is a complete request the
+ * agent can act on at once, so a click changes something rather than starting
+ * a question; a merchant who wants a specific value types it instead.
+ */
+export const SUGGESTIONS: Record<ChatSurface, string[]> = {
+  "site-chat": [
+    "Try a different button colour",
+    "Move the button to the bottom left",
+    "Make it a pill with a label",
+    "Use an outline icon",
+    "Rewrite the greeting",
+    "Make the corners rounder",
+  ],
+  "search-assist": [
+    "Shorten the refine box placeholder",
+    "Show fewer products",
+    "Make the voice more direct",
+    "Use square product images",
+  ],
+  "product-help": [
+    "Make the button text shorter",
+    "Open the panel from the left",
+    "Rewrite the first line",
+    "Make the voice warmer",
+  ],
+}
+
 /** Read when the tool call lands, not when the chat was made, since the draft may have been re-read since. */
 export type Latest = {
   settings: SiteChatSettings

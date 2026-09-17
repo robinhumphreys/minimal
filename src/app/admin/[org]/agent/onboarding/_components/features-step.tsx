@@ -39,7 +39,7 @@ const FEATURES: {
   {
     key: "productHelp",
     title: "Product help",
-    description: "A guided choice, from a button on the page.",
+    description: "Asks a few questions, then picks a product.",
     thumb: <ProductHelpThumb />,
   },
 ]

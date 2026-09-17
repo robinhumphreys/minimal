@@ -12,6 +12,8 @@ declare global {
     MinimalAgent?: {
       open: (options?: OpenOptions) => void
       guide: (topic: string) => void
+      /** Unmounts the agent and removes everything it added to the page. */
+      destroy: () => void
     }
   }
 }
@@ -45,6 +47,10 @@ function start() {
     return
   }
 
+  // Idempotent: a second tag, or the same one re-run by a client-side router,
+  // replaces the first agent rather than stacking a second launcher on it.
+  window.MinimalAgent?.destroy()
+
   const script = resolveScript()
   const id = script?.dataset.agent
   if (!id || !isBrandId(id)) {
@@ -71,23 +77,25 @@ function start() {
   render(readPublishedOrDefault(agentId))
 
   // Another tab published a change.
-  window.addEventListener("storage", (event) => {
+  const onStorage = (event: StorageEvent) => {
     if (event.key !== publishedKey(agentId)) return
     render(readPublishedOrDefault(agentId))
-  })
+  }
+  window.addEventListener("storage", onStorage)
 
   // The admin is previewing an unpublished draft in an iframe.
-  window.addEventListener("message", (event: MessageEvent) => {
+  const onPreview = (event: MessageEvent) => {
     const data = event.data as { type?: string; config?: unknown } | null
     if (!data || data.type !== "minimal:preview") return
 
     const parsed = agentConfigSchema.safeParse(data.config)
     if (!parsed.success || parsed.data.id !== agentId) return
     render(parsed.data)
-  })
+  }
+  window.addEventListener("message", onPreview)
 
   // Answered from the DOM, not config, so it reports what a shopper would see.
-  window.addEventListener("message", (event: MessageEvent) => {
+  const onPing = (event: MessageEvent) => {
     const data = event.data as { type?: string } | null
     if (!data || data.type !== "minimal:ping" || !event.source) return
     const reply = {
@@ -99,11 +107,22 @@ function start() {
       published: window.localStorage.getItem(publishedKey(agentId)) !== null,
     }
     ;(event.source as Window).postMessage(reply, event.origin)
-  })
+  }
+  window.addEventListener("message", onPing)
 
   window.MinimalAgent = {
     open: (options) => bus.open(options),
     guide: (topic) => bus.guide(topic),
+    destroy: () => {
+      window.removeEventListener("storage", onStorage)
+      window.removeEventListener("message", onPreview)
+      window.removeEventListener("message", onPing)
+      // Unmounting runs the effects' cleanups, so the scroll lock, the
+      // search-assist attribute and the bus are all put back as they were.
+      root.unmount()
+      host.remove()
+      delete window.MinimalAgent
+    },
   }
 }
 

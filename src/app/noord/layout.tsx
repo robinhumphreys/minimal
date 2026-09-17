@@ -1,7 +1,6 @@
-import Script from "next/script"
-
 import { NoordShell } from "@/components/noord/noord-shell"
 import { navModel, searchIndex } from "@/lib/noord/catalog-view"
+import { AgentEmbed } from "@/components/embed/agent-embed"
 
 export default function NoordLayout({ children }: LayoutProps<"/noord">) {
   // Built here rather than in the shell: the catalog reads `node:fs`, so it can
@@ -11,8 +10,7 @@ export default function NoordLayout({ children }: LayoutProps<"/noord">) {
       <NoordShell nav={navModel()} searchIndex={searchIndex()}>
         {children}
       </NoordShell>
-      {/* The same tag a merchant pastes into their own site. */}
-      <Script src="/embed.js" data-agent="noord" strategy="afterInteractive" />
+      <AgentEmbed brand="noord" />
     </>
   )
 }
