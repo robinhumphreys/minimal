@@ -318,7 +318,7 @@ function Turn({
   return (
     <Message>
       <MessageContent>
-        {message.parts.map((part, index) => {
+        {withoutRepeatedQuestion(message.parts).map((part, index) => {
           if (part.type === "text") {
             if (part.text.trim().length === 0) return null
             return (
@@ -390,6 +390,36 @@ function Turn({
       </MessageContent>
     </Message>
   )
+}
+
+/**
+ * The model sometimes writes its question as text and then passes the same
+ * question to askChoice. Only the askChoice copy gets the answer buttons, so
+ * strip the question from any text that precedes it.
+ */
+function withoutRepeatedQuestion(
+  parts: AgentUIMessage["parts"],
+): AgentUIMessage["parts"] {
+  const questions = parts.flatMap((part) =>
+    part.type === "tool-askChoice" &&
+    (part.state === "input-available" || part.state === "output-available")
+      ? [part.input.question.trim()]
+      : [],
+  )
+  if (questions.length === 0) return parts
+
+  return parts.flatMap((part): AgentUIMessage["parts"] => {
+    if (part.type !== "text") return [part]
+    const text = part.text.trim()
+    const lower = text.toLowerCase()
+    const repeated = questions.find(
+      (question) =>
+        question.length > 0 && lower.endsWith(question.toLowerCase()),
+    )
+    if (!repeated) return [part]
+    const kept = text.slice(0, text.length - repeated.length).trim()
+    return kept.length > 0 ? [{ ...part, text: kept }] : []
+  })
 }
 
 function AgentBubble({ children }: { children: React.ReactNode }) {
