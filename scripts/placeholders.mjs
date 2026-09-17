@@ -1,4 +1,4 @@
-// Generates a flat grey placeholder JPEG for every image path referenced by the
+// Generates a flat grey placeholder WebP for every image path referenced by the
 // catalog files. Real photography replaces these later; the catalog shape does
 // not change.
 import { mkdir, readFile, writeFile } from "node:fs/promises"
@@ -15,7 +15,7 @@ const SIZE = 1200
 const imagePaths = new Set()
 for (const brand of brands) {
   const source = await readFile(path.join(catalogDir, `${brand}.ts`), "utf8")
-  for (const match of source.matchAll(/"(\/catalog\/[^"]+\.jpg)"/g)) {
+  for (const match of source.matchAll(/"(\/catalog\/[^"]+\.webp)"/g)) {
     imagePaths.add(match[1])
   }
 }
@@ -43,7 +43,7 @@ for (const imagePath of [...imagePaths].sort()) {
       background: { r: value, g: value, b: value },
     },
   })
-    .jpeg({ quality: 70 })
+    .webp({ quality: 70 })
     .toBuffer()
 
   await writeFile(target, buffer)

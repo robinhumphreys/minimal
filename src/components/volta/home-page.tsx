@@ -72,10 +72,10 @@ function Hero() {
       <picture>
         <source
           media="(min-width: 48rem)"
-          srcSet="/volta/editorial/hero-wide.jpg"
+          srcSet="/volta/editorial/hero-wide.webp"
         />
         <img
-          src="/volta/editorial/hero-tall.jpg"
+          src="/volta/editorial/hero-tall.webp"
           alt=""
           fetchPriority="high"
           className="absolute inset-0 size-full object-cover object-center"
@@ -195,7 +195,7 @@ function FeatureBand() {
   return (
     <section className="relative isolate overflow-hidden">
       <Image
-        src="/volta/editorial/deadlift-legs.jpg"
+        src="/volta/editorial/deadlift-legs.webp"
         alt=""
         fill
         sizes="100vw"

@@ -50,8 +50,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 44900,
     images: [
-      "/catalog/noord/navy-checked-tailored-fit-havana-blazer-1.jpg",
-      "/catalog/noord/navy-checked-tailored-fit-havana-blazer-2.jpg",
+      "/catalog/noord/navy-checked-tailored-fit-havana-blazer-1.webp",
+      "/catalog/noord/navy-checked-tailored-fit-havana-blazer-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -70,8 +70,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 24900,
     images: [
-      "/catalog/noord/black-relaxed-fit-shirt-jacket-1.jpg",
-      "/catalog/noord/black-relaxed-fit-shirt-jacket-2.jpg",
+      "/catalog/noord/black-relaxed-fit-shirt-jacket-1.webp",
+      "/catalog/noord/black-relaxed-fit-shirt-jacket-2.webp",
     ],
     attributes: {
       fit: "Relaxed Fit Shirt-Jacket",
@@ -90,8 +90,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 42900,
     images: [
-      "/catalog/noord/navy-relaxed-fit-roma-suit-jacket-1.jpg",
-      "/catalog/noord/navy-relaxed-fit-roma-suit-jacket-2.jpg",
+      "/catalog/noord/navy-relaxed-fit-roma-suit-jacket-1.webp",
+      "/catalog/noord/navy-relaxed-fit-roma-suit-jacket-2.webp",
     ],
     attributes: {
       fit: "Relaxed Fit Roma",
@@ -110,8 +110,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 42900,
     images: [
-      "/catalog/noord/black-tailored-fit-havana-dinner-jacket-1.jpg",
-      "/catalog/noord/black-tailored-fit-havana-dinner-jacket-2.jpg",
+      "/catalog/noord/black-tailored-fit-havana-dinner-jacket-1.webp",
+      "/catalog/noord/black-tailored-fit-havana-dinner-jacket-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -130,8 +130,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 29900,
     images: [
-      "/catalog/noord/navy-tailored-fit-havana-blazer-1.jpg",
-      "/catalog/noord/navy-tailored-fit-havana-blazer-2.jpg",
+      "/catalog/noord/navy-tailored-fit-havana-blazer-1.webp",
+      "/catalog/noord/navy-tailored-fit-havana-blazer-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -150,8 +150,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 11900,
     images: [
-      "/catalog/noord/white-point-collar-shirt-1.jpg",
-      "/catalog/noord/white-point-collar-shirt-2.jpg",
+      "/catalog/noord/white-point-collar-shirt-1.webp",
+      "/catalog/noord/white-point-collar-shirt-2.webp",
     ],
     attributes: {
       fabric: "Egyptian Cotton",
@@ -171,8 +171,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 14900,
     images: [
-      "/catalog/noord/white-twill-tuxedo-shirt-1.jpg",
-      "/catalog/noord/white-twill-tuxedo-shirt-2.jpg",
+      "/catalog/noord/white-twill-tuxedo-shirt-1.webp",
+      "/catalog/noord/white-twill-tuxedo-shirt-2.webp",
     ],
     attributes: {
       fabric: "Egyptian Cotton",
@@ -192,8 +192,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 12900,
     images: [
-      "/catalog/noord/light-brown-corduroy-shirt-1.jpg",
-      "/catalog/noord/light-brown-corduroy-shirt-2.jpg",
+      "/catalog/noord/light-brown-corduroy-shirt-1.webp",
+      "/catalog/noord/light-brown-corduroy-shirt-2.webp",
     ],
     attributes: {
       fabric: "Pure Cotton Corduroy",
@@ -213,8 +213,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 17900,
     images: [
-      "/catalog/noord/black-wool-mohair-zip-overshirt-1.jpg",
-      "/catalog/noord/black-wool-mohair-zip-overshirt-2.jpg",
+      "/catalog/noord/black-wool-mohair-zip-overshirt-1.webp",
+      "/catalog/noord/black-wool-mohair-zip-overshirt-2.webp",
     ],
     attributes: {
       fabric: "Wool Mohair",
@@ -234,8 +234,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 8900,
     images: [
-      "/catalog/noord/white-classic-collar-shirt-1.jpg",
-      "/catalog/noord/white-classic-collar-shirt-2.jpg",
+      "/catalog/noord/white-classic-collar-shirt-1.webp",
+      "/catalog/noord/white-classic-collar-shirt-2.webp",
     ],
     attributes: {
       fabric: "Pure Cotton",
@@ -255,8 +255,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 14900,
     images: [
-      "/catalog/noord/white-pique-tuxedo-shirt-1.jpg",
-      "/catalog/noord/white-pique-tuxedo-shirt-2.jpg",
+      "/catalog/noord/white-pique-tuxedo-shirt-1.webp",
+      "/catalog/noord/white-pique-tuxedo-shirt-2.webp",
     ],
     attributes: {
       fabric: "Egyptian Cotton",
@@ -276,8 +276,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 12900,
     images: [
-      "/catalog/noord/light-blue-cotton-flannel-shirt-1.jpg",
-      "/catalog/noord/light-blue-cotton-flannel-shirt-2.jpg",
+      "/catalog/noord/light-blue-cotton-flannel-shirt-1.webp",
+      "/catalog/noord/light-blue-cotton-flannel-shirt-2.webp",
     ],
     attributes: {
       fabric: "Egyptian Cotton Flannel",
@@ -297,8 +297,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 17900,
     images: [
-      "/catalog/noord/light-brown-straight-leg-suit-trousers-1.jpg",
-      "/catalog/noord/light-brown-straight-leg-suit-trousers-2.jpg",
+      "/catalog/noord/light-brown-straight-leg-suit-trousers-1.webp",
+      "/catalog/noord/light-brown-straight-leg-suit-trousers-2.webp",
     ],
     attributes: {
       fit: "Straight Leg Milano",
@@ -317,8 +317,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 16900,
     images: [
-      "/catalog/noord/mid-taupe-wide-leg-trousers-1.jpg",
-      "/catalog/noord/mid-taupe-wide-leg-trousers-2.jpg",
+      "/catalog/noord/mid-taupe-wide-leg-trousers-1.webp",
+      "/catalog/noord/mid-taupe-wide-leg-trousers-2.webp",
     ],
     attributes: {
       fit: "Wide Leg Straight Duca",
@@ -337,8 +337,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 11900,
     images: [
-      "/catalog/noord/navy-wide-leg-tapered-chinos-1.jpg",
-      "/catalog/noord/navy-wide-leg-tapered-chinos-2.jpg",
+      "/catalog/noord/navy-wide-leg-tapered-chinos-1.webp",
+      "/catalog/noord/navy-wide-leg-tapered-chinos-2.webp",
     ],
     attributes: {
       fit: "Wide Leg Tapered Chinos",
@@ -357,8 +357,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 14900,
     images: [
-      "/catalog/noord/navy-straight-leg-jeans-1.jpg",
-      "/catalog/noord/navy-straight-leg-jeans-2.jpg",
+      "/catalog/noord/navy-straight-leg-jeans-1.webp",
+      "/catalog/noord/navy-straight-leg-jeans-2.webp",
     ],
     attributes: {
       fabric: "Pure Cotton",
@@ -376,8 +376,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 16900,
     images: [
-      "/catalog/noord/dark-grey-wide-leg-tapered-suit-trousers-1.jpg",
-      "/catalog/noord/dark-grey-wide-leg-tapered-suit-trousers-2.jpg",
+      "/catalog/noord/dark-grey-wide-leg-tapered-suit-trousers-1.webp",
+      "/catalog/noord/dark-grey-wide-leg-tapered-suit-trousers-2.webp",
     ],
     attributes: {
       fit: "Wide Leg Tapered Firenze",
@@ -396,8 +396,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 16900,
     images: [
-      "/catalog/noord/dark-grey-wide-leg-trousers-1.jpg",
-      "/catalog/noord/dark-grey-wide-leg-trousers-2.jpg",
+      "/catalog/noord/dark-grey-wide-leg-trousers-1.webp",
+      "/catalog/noord/dark-grey-wide-leg-trousers-2.webp",
     ],
     attributes: {
       fit: "Wide Leg Straight Duca",
@@ -416,8 +416,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 11900,
     images: [
-      "/catalog/noord/navy-slim-leg-chinos-1.jpg",
-      "/catalog/noord/navy-slim-leg-chinos-2.jpg",
+      "/catalog/noord/navy-slim-leg-chinos-1.webp",
+      "/catalog/noord/navy-slim-leg-chinos-2.webp",
     ],
     attributes: {
       fabric: "Stretch Cotton",
@@ -435,8 +435,8 @@ export const products: Product[] = [
     category: "trousers",
     price: 14900,
     images: [
-      "/catalog/noord/mid-blue-straight-leg-jeans-1.jpg",
-      "/catalog/noord/mid-blue-straight-leg-jeans-2.jpg",
+      "/catalog/noord/mid-blue-straight-leg-jeans-1.webp",
+      "/catalog/noord/mid-blue-straight-leg-jeans-2.webp",
     ],
     attributes: {
       fabric: "Selvedge Denim",
@@ -454,8 +454,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 23900,
     images: [
-      "/catalog/noord/off-white-long-sleeve-polo-1.jpg",
-      "/catalog/noord/off-white-long-sleeve-polo-2.jpg",
+      "/catalog/noord/off-white-long-sleeve-polo-1.webp",
+      "/catalog/noord/off-white-long-sleeve-polo-2.webp",
     ],
     attributes: {
       fabric: "Pure Cashmere",
@@ -471,8 +471,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 18900,
     images: [
-      "/catalog/noord/navy-ribbed-long-sleeve-funnel-neck-1.jpg",
-      "/catalog/noord/navy-ribbed-long-sleeve-funnel-neck-2.jpg",
+      "/catalog/noord/navy-ribbed-long-sleeve-funnel-neck-1.webp",
+      "/catalog/noord/navy-ribbed-long-sleeve-funnel-neck-2.webp",
     ],
     attributes: {
       fabric: "Wool Cashmere",
@@ -488,8 +488,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 17900,
     images: [
-      "/catalog/noord/navy-merino-zip-cardigan-1.jpg",
-      "/catalog/noord/navy-merino-zip-cardigan-2.jpg",
+      "/catalog/noord/navy-merino-zip-cardigan-1.webp",
+      "/catalog/noord/navy-merino-zip-cardigan-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -505,8 +505,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 9900,
     images: [
-      "/catalog/noord/off-white-short-sleeve-crewneck-1.jpg",
-      "/catalog/noord/off-white-short-sleeve-crewneck-2.jpg",
+      "/catalog/noord/off-white-short-sleeve-crewneck-1.webp",
+      "/catalog/noord/off-white-short-sleeve-crewneck-2.webp",
     ],
     attributes: {
       fabric: "Cotton Silk",
@@ -522,8 +522,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 13900,
     images: [
-      "/catalog/noord/navy-long-sleeve-polo-cardigan-1.jpg",
-      "/catalog/noord/navy-long-sleeve-polo-cardigan-2.jpg",
+      "/catalog/noord/navy-long-sleeve-polo-cardigan-1.webp",
+      "/catalog/noord/navy-long-sleeve-polo-cardigan-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -539,8 +539,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 10900,
     images: [
-      "/catalog/noord/navy-merino-long-sleeve-polo-1.jpg",
-      "/catalog/noord/navy-merino-long-sleeve-polo-2.jpg",
+      "/catalog/noord/navy-merino-long-sleeve-polo-1.webp",
+      "/catalog/noord/navy-merino-long-sleeve-polo-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -556,8 +556,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 12900,
     images: [
-      "/catalog/noord/light-brown-ribbed-henley-1.jpg",
-      "/catalog/noord/light-brown-ribbed-henley-2.jpg",
+      "/catalog/noord/light-brown-ribbed-henley-1.webp",
+      "/catalog/noord/light-brown-ribbed-henley-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -573,8 +573,8 @@ export const products: Product[] = [
     category: "knitwear",
     price: 18900,
     images: [
-      "/catalog/noord/mid-brown-ribbed-mouline-zip-cardigan-1.jpg",
-      "/catalog/noord/mid-brown-ribbed-mouline-zip-cardigan-2.jpg",
+      "/catalog/noord/mid-brown-ribbed-mouline-zip-cardigan-1.webp",
+      "/catalog/noord/mid-brown-ribbed-mouline-zip-cardigan-2.webp",
     ],
     attributes: {
       fabric: "Wool Cotton",
@@ -590,8 +590,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 39900,
     images: [
-      "/catalog/noord/black-bomber-jacket-oco10022999-1.jpg",
-      "/catalog/noord/black-bomber-jacket-oco10022999-2.jpg",
+      "/catalog/noord/black-bomber-jacket-oco10022999-1.webp",
+      "/catalog/noord/black-bomber-jacket-oco10022999-2.webp",
     ],
     attributes: {
       fabric: "Wool Blend",
@@ -608,8 +608,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 44900,
     images: [
-      "/catalog/noord/navy-overcoat-1.jpg",
-      "/catalog/noord/navy-overcoat-2.jpg",
+      "/catalog/noord/navy-overcoat-1.webp",
+      "/catalog/noord/navy-overcoat-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -626,8 +626,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 34900,
     images: [
-      "/catalog/noord/navy-padded-zip-vest-1.jpg",
-      "/catalog/noord/navy-padded-zip-vest-2.jpg",
+      "/catalog/noord/navy-padded-zip-vest-1.webp",
+      "/catalog/noord/navy-padded-zip-vest-2.webp",
     ],
     attributes: {
       fabric: "Pure Cashmere",
@@ -644,8 +644,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 29900,
     images: [
-      "/catalog/noord/taupe-field-jacket-1.jpg",
-      "/catalog/noord/taupe-field-jacket-2.jpg",
+      "/catalog/noord/taupe-field-jacket-1.webp",
+      "/catalog/noord/taupe-field-jacket-2.webp",
     ],
     attributes: {
       fabric: "Technical Fabric",
@@ -663,8 +663,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 34900,
     images: [
-      "/catalog/noord/navy-raincoat-1.jpg",
-      "/catalog/noord/navy-raincoat-2.jpg",
+      "/catalog/noord/navy-raincoat-1.webp",
+      "/catalog/noord/navy-raincoat-2.webp",
     ],
     attributes: {
       fabric: "Water-Repellent Wool Polyurethane",
@@ -682,8 +682,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 27900,
     images: [
-      "/catalog/noord/black-shirt-jacket-1.jpg",
-      "/catalog/noord/black-shirt-jacket-2.jpg",
+      "/catalog/noord/black-shirt-jacket-1.webp",
+      "/catalog/noord/black-shirt-jacket-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -701,8 +701,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 39900,
     images: [
-      "/catalog/noord/black-peacoat-1.jpg",
-      "/catalog/noord/black-peacoat-2.jpg",
+      "/catalog/noord/black-peacoat-1.webp",
+      "/catalog/noord/black-peacoat-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -719,8 +719,8 @@ export const products: Product[] = [
     category: "outerwear",
     price: 37900,
     images: [
-      "/catalog/noord/black-bomber-jacket-j1061-1.jpg",
-      "/catalog/noord/black-bomber-jacket-j1061-2.jpg",
+      "/catalog/noord/black-bomber-jacket-j1061-1.webp",
+      "/catalog/noord/black-bomber-jacket-j1061-2.webp",
     ],
     attributes: {
       fabric: "Pure Wool",
@@ -738,8 +738,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 22900,
     images: [
-      "/catalog/noord/black-penny-loafer-1.jpg",
-      "/catalog/noord/black-penny-loafer-2.jpg",
+      "/catalog/noord/black-penny-loafer-1.webp",
+      "/catalog/noord/black-penny-loafer-2.webp",
     ],
     attributes: {
       fabric: "Leather",
@@ -757,8 +757,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 22900,
     images: [
-      "/catalog/noord/dark-brown-oxford-1.jpg",
-      "/catalog/noord/dark-brown-oxford-2.jpg",
+      "/catalog/noord/dark-brown-oxford-1.webp",
+      "/catalog/noord/dark-brown-oxford-2.webp",
     ],
     attributes: {
       fabric: "Leather",
@@ -776,8 +776,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 14900,
     images: [
-      "/catalog/noord/black-sneaker-1.jpg",
-      "/catalog/noord/black-sneaker-2.jpg",
+      "/catalog/noord/black-sneaker-1.webp",
+      "/catalog/noord/black-sneaker-2.webp",
     ],
     attributes: {
       fabric: "Suede & Technical Fabric",
@@ -796,8 +796,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 29900,
     images: [
-      "/catalog/noord/black-boot-1.jpg",
-      "/catalog/noord/black-boot-2.jpg",
+      "/catalog/noord/black-boot-1.webp",
+      "/catalog/noord/black-boot-2.webp",
     ],
     attributes: {
       fabric: "Leather",
@@ -816,8 +816,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 24900,
     images: [
-      "/catalog/noord/black-tuxedo-slip-on-1.jpg",
-      "/catalog/noord/black-tuxedo-slip-on-2.jpg",
+      "/catalog/noord/black-tuxedo-slip-on-1.webp",
+      "/catalog/noord/black-tuxedo-slip-on-2.webp",
     ],
     attributes: {
       fabric: "Cotton Velvet",
@@ -835,8 +835,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 27900,
     images: [
-      "/catalog/noord/brown-derby-1.jpg",
-      "/catalog/noord/brown-derby-2.jpg",
+      "/catalog/noord/brown-derby-1.webp",
+      "/catalog/noord/brown-derby-2.webp",
     ],
     attributes: {
       fabric: "Italian Calf Leather",
@@ -855,8 +855,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 19900,
     images: [
-      "/catalog/noord/off-white-slide-1.jpg",
-      "/catalog/noord/off-white-slide-2.jpg",
+      "/catalog/noord/off-white-slide-1.webp",
+      "/catalog/noord/off-white-slide-2.webp",
     ],
     attributes: {
       fabric: "Suede",
@@ -874,8 +874,8 @@ export const products: Product[] = [
     category: "shoes",
     price: 22900,
     images: [
-      "/catalog/noord/black-tassel-loafer-1.jpg",
-      "/catalog/noord/black-tassel-loafer-2.jpg",
+      "/catalog/noord/black-tassel-loafer-1.webp",
+      "/catalog/noord/black-tassel-loafer-2.webp",
     ],
     attributes: {
       fabric: "Italian Calf Leather",
@@ -894,8 +894,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 9900,
     images: [
-      "/catalog/noord/dark-brown-gloves-1.jpg",
-      "/catalog/noord/dark-brown-gloves-2.jpg",
+      "/catalog/noord/dark-brown-gloves-1.webp",
+      "/catalog/noord/dark-brown-gloves-2.webp",
     ],
     attributes: {
       fabric: "Leather",
@@ -911,8 +911,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 15900,
     images: [
-      "/catalog/noord/black-scarf-1.jpg",
-      "/catalog/noord/black-scarf-2.jpg",
+      "/catalog/noord/black-scarf-1.webp",
+      "/catalog/noord/black-scarf-2.webp",
     ],
     attributes: {
       fabric: "Pure Cashmere",
@@ -928,8 +928,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 7900,
     images: [
-      "/catalog/noord/black-belt-1.jpg",
-      "/catalog/noord/black-belt-2.jpg",
+      "/catalog/noord/black-belt-1.webp",
+      "/catalog/noord/black-belt-2.webp",
     ],
     attributes: {
       fabric: "Italian Cow Leather",
@@ -945,8 +945,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 7900,
     images: [
-      "/catalog/noord/light-blue-beanie-1.jpg",
-      "/catalog/noord/light-blue-beanie-2.jpg",
+      "/catalog/noord/light-blue-beanie-1.webp",
+      "/catalog/noord/light-blue-beanie-2.webp",
     ],
     attributes: {
       fabric: "Wool Cashmere",
@@ -962,8 +962,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 5900,
     images: [
-      "/catalog/noord/black-suspenders-1.jpg",
-      "/catalog/noord/black-suspenders-2.jpg",
+      "/catalog/noord/black-suspenders-1.webp",
+      "/catalog/noord/black-suspenders-2.webp",
     ],
     attributes: {
       fabric: "Polyester Blend & Leather",
@@ -981,8 +981,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 2900,
     images: [
-      "/catalog/noord/black-self-tie-bow-tie-1.jpg",
-      "/catalog/noord/black-self-tie-bow-tie-2.jpg",
+      "/catalog/noord/black-self-tie-bow-tie-1.webp",
+      "/catalog/noord/black-self-tie-bow-tie-2.webp",
     ],
     attributes: {
       fabric: "Pure Silk",
@@ -998,8 +998,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 1200,
     images: [
-      "/catalog/noord/black-regular-socks-1.jpg",
-      "/catalog/noord/black-regular-socks-2.jpg",
+      "/catalog/noord/black-regular-socks-1.webp",
+      "/catalog/noord/black-regular-socks-2.webp",
     ],
     attributes: {
       fabric: "Pure Cotton",
@@ -1015,8 +1015,8 @@ export const products: Product[] = [
     category: "accessories",
     price: 2900,
     images: [
-      "/catalog/noord/white-pocket-square-1.jpg",
-      "/catalog/noord/white-pocket-square-2.jpg",
+      "/catalog/noord/white-pocket-square-1.webp",
+      "/catalog/noord/white-pocket-square-2.webp",
     ],
     attributes: {
       fabric: "Pure Silk",
@@ -1032,8 +1032,8 @@ export const products: Product[] = [
     category: "suits",
     price: 54800,
     images: [
-      "/catalog/noord/navy-tailored-fit-havana-suit-c5778-s4-1.jpg",
-      "/catalog/noord/navy-tailored-fit-havana-suit-c5778-s4-2.jpg",
+      "/catalog/noord/navy-tailored-fit-havana-suit-c5778-s4-1.webp",
+      "/catalog/noord/navy-tailored-fit-havana-suit-c5778-s4-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1053,8 +1053,8 @@ export const products: Product[] = [
     category: "suits",
     price: 54800,
     images: [
-      "/catalog/noord/navy-tailored-fit-havana-suit-c6634-s2-1.jpg",
-      "/catalog/noord/navy-tailored-fit-havana-suit-c6634-s2-2.jpg",
+      "/catalog/noord/navy-tailored-fit-havana-suit-c6634-s2-1.webp",
+      "/catalog/noord/navy-tailored-fit-havana-suit-c6634-s2-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1074,8 +1074,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 44900,
     images: [
-      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6860-1.jpg",
-      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6860-2.jpg",
+      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6860-1.webp",
+      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6860-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1094,8 +1094,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 44900,
     images: [
-      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6861-1.jpg",
-      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6861-2.jpg",
+      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6861-1.webp",
+      "/catalog/noord/navy-tailored-fit-havana-suit-jacket-c6861-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1114,8 +1114,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 26900,
     images: [
-      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-jacket-1.jpg",
-      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-jacket-2.jpg",
+      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-jacket-1.webp",
+      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-jacket-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1134,8 +1134,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39800,
     images: [
-      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-1.jpg",
-      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-2.jpg",
+      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-1.webp",
+      "/catalog/noord/dark-grey-perennial-tailored-fit-havana-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1155,8 +1155,8 @@ export const products: Product[] = [
     category: "jackets",
     price: 26900,
     images: [
-      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-jacket-1.jpg",
-      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-jacket-2.jpg",
+      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-jacket-1.webp",
+      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-jacket-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1175,8 +1175,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39800,
     images: [
-      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-c9669-s-1.jpg",
-      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-c9669-s-2.jpg",
+      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-c9669-s-1.webp",
+      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-c9669-s-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1196,8 +1196,8 @@ export const products: Product[] = [
     category: "suits",
     price: 89900,
     images: [
-      "/catalog/noord/navy-tailored-fit-havana-suit-p6948-1.jpg",
-      "/catalog/noord/navy-tailored-fit-havana-suit-p6948-2.jpg",
+      "/catalog/noord/navy-tailored-fit-havana-suit-p6948-1.webp",
+      "/catalog/noord/navy-tailored-fit-havana-suit-p6948-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1217,8 +1217,8 @@ export const products: Product[] = [
     category: "suits",
     price: 62900,
     images: [
-      "/catalog/noord/dark-brown-tailored-fit-milano-suit-p6952-1.jpg",
-      "/catalog/noord/dark-brown-tailored-fit-milano-suit-p6952-2.jpg",
+      "/catalog/noord/dark-brown-tailored-fit-milano-suit-p6952-1.webp",
+      "/catalog/noord/dark-brown-tailored-fit-milano-suit-p6952-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1238,8 +1238,8 @@ export const products: Product[] = [
     category: "suits",
     price: 62900,
     images: [
-      "/catalog/noord/black-tailored-fit-milano-suit-1.jpg",
-      "/catalog/noord/black-tailored-fit-milano-suit-2.jpg",
+      "/catalog/noord/black-tailored-fit-milano-suit-1.webp",
+      "/catalog/noord/black-tailored-fit-milano-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1259,8 +1259,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39900,
     images: [
-      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-p7272-1.jpg",
-      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-p7272-2.jpg",
+      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-p7272-1.webp",
+      "/catalog/noord/navy-perennial-tailored-fit-havana-suit-p7272-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1280,8 +1280,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39900,
     images: [
-      "/catalog/noord/dark-green-perennial-tailored-fit-havana-suit-1.jpg",
-      "/catalog/noord/dark-green-perennial-tailored-fit-havana-suit-2.jpg",
+      "/catalog/noord/dark-green-perennial-tailored-fit-havana-suit-1.webp",
+      "/catalog/noord/dark-green-perennial-tailored-fit-havana-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1301,8 +1301,8 @@ export const products: Product[] = [
     category: "suits",
     price: 62800,
     images: [
-      "/catalog/noord/dark-brown-tailored-fit-milano-suit-smm10005b01-1.jpg",
-      "/catalog/noord/dark-brown-tailored-fit-milano-suit-smm10005b01-2.jpg",
+      "/catalog/noord/dark-brown-tailored-fit-milano-suit-smm10005b01-1.webp",
+      "/catalog/noord/dark-brown-tailored-fit-milano-suit-smm10005b01-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1322,8 +1322,8 @@ export const products: Product[] = [
     category: "suits",
     price: 64900,
     images: [
-      "/catalog/noord/mid-blue-tailored-fit-milano-suit-1.jpg",
-      "/catalog/noord/mid-blue-tailored-fit-milano-suit-2.jpg",
+      "/catalog/noord/mid-blue-tailored-fit-milano-suit-1.webp",
+      "/catalog/noord/mid-blue-tailored-fit-milano-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1343,8 +1343,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39900,
     images: [
-      "/catalog/noord/mid-blue-checked-perennial-tailored-fit-havana-suit-1.jpg",
-      "/catalog/noord/mid-blue-checked-perennial-tailored-fit-havana-suit-2.jpg",
+      "/catalog/noord/mid-blue-checked-perennial-tailored-fit-havana-suit-1.webp",
+      "/catalog/noord/mid-blue-checked-perennial-tailored-fit-havana-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1364,8 +1364,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39900,
     images: [
-      "/catalog/noord/mid-grey-checked-perennial-tailored-fit-havana-suit-1.jpg",
-      "/catalog/noord/mid-grey-checked-perennial-tailored-fit-havana-suit-2.jpg",
+      "/catalog/noord/mid-grey-checked-perennial-tailored-fit-havana-suit-1.webp",
+      "/catalog/noord/mid-grey-checked-perennial-tailored-fit-havana-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1385,8 +1385,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39900,
     images: [
-      "/catalog/noord/navy-houndstooth-perennial-tailored-fit-havana-suit-1.jpg",
-      "/catalog/noord/navy-houndstooth-perennial-tailored-fit-havana-suit-2.jpg",
+      "/catalog/noord/navy-houndstooth-perennial-tailored-fit-havana-suit-1.webp",
+      "/catalog/noord/navy-houndstooth-perennial-tailored-fit-havana-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1406,8 +1406,8 @@ export const products: Product[] = [
     category: "suits",
     price: 39900,
     images: [
-      "/catalog/noord/light-brown-perennial-tailored-fit-havana-suit-1.jpg",
-      "/catalog/noord/light-brown-perennial-tailored-fit-havana-suit-2.jpg",
+      "/catalog/noord/light-brown-perennial-tailored-fit-havana-suit-1.webp",
+      "/catalog/noord/light-brown-perennial-tailored-fit-havana-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Havana",
@@ -1427,8 +1427,8 @@ export const products: Product[] = [
     category: "suits",
     price: 64900,
     images: [
-      "/catalog/noord/dark-green-tailored-fit-milano-suit-1.jpg",
-      "/catalog/noord/dark-green-tailored-fit-milano-suit-2.jpg",
+      "/catalog/noord/dark-green-tailored-fit-milano-suit-1.webp",
+      "/catalog/noord/dark-green-tailored-fit-milano-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1448,8 +1448,8 @@ export const products: Product[] = [
     category: "suits",
     price: 64900,
     images: [
-      "/catalog/noord/dark-red-relaxed-fit-roma-suit-1.jpg",
-      "/catalog/noord/dark-red-relaxed-fit-roma-suit-2.jpg",
+      "/catalog/noord/dark-red-relaxed-fit-roma-suit-1.webp",
+      "/catalog/noord/dark-red-relaxed-fit-roma-suit-2.webp",
     ],
     attributes: {
       fit: "Relaxed Fit Roma",
@@ -1469,8 +1469,8 @@ export const products: Product[] = [
     category: "suits",
     price: 64900,
     images: [
-      "/catalog/noord/mid-brown-tailored-fit-milano-suit-1.jpg",
-      "/catalog/noord/mid-brown-tailored-fit-milano-suit-2.jpg",
+      "/catalog/noord/mid-brown-tailored-fit-milano-suit-1.webp",
+      "/catalog/noord/mid-brown-tailored-fit-milano-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1490,8 +1490,8 @@ export const products: Product[] = [
     category: "suits",
     price: 64900,
     images: [
-      "/catalog/noord/navy-striped-tailored-fit-milano-suit-1.jpg",
-      "/catalog/noord/navy-striped-tailored-fit-milano-suit-2.jpg",
+      "/catalog/noord/navy-striped-tailored-fit-milano-suit-1.webp",
+      "/catalog/noord/navy-striped-tailored-fit-milano-suit-2.webp",
     ],
     attributes: {
       fit: "Tailored Fit Milano",
@@ -1511,8 +1511,8 @@ export const products: Product[] = [
     category: "suits",
     price: 64900,
     images: [
-      "/catalog/noord/navy-herringbone-relaxed-fit-roma-suit-1.jpg",
-      "/catalog/noord/navy-herringbone-relaxed-fit-roma-suit-2.jpg",
+      "/catalog/noord/navy-herringbone-relaxed-fit-roma-suit-1.webp",
+      "/catalog/noord/navy-herringbone-relaxed-fit-roma-suit-2.webp",
     ],
     attributes: {
       fit: "Relaxed Fit Roma",
@@ -1532,8 +1532,8 @@ export const products: Product[] = [
     category: "shirts",
     price: 11900,
     images: [
-      "/catalog/noord/light-blue-striped-shirt-1.jpg",
-      "/catalog/noord/light-blue-striped-shirt-2.jpg",
+      "/catalog/noord/light-blue-striped-shirt-1.webp",
+      "/catalog/noord/light-blue-striped-shirt-2.webp",
     ],
     attributes: {
       fabric: "Egyptian cotton",

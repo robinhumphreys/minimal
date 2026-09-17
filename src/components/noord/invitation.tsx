@@ -9,7 +9,7 @@ import { Button } from "@/components/noord/ui/button"
  */
 const INVITATIONS = [
   {
-    image: "/noord/editorial/shopfront.jpg",
+    image: "/noord/editorial/shopfront.webp",
     position: "object-[50%_40%]",
     eyebrow: "Amsterdam · Antwerp · Copenhagen",
     title: "Come in and be measured",
@@ -17,7 +17,7 @@ const INVITATIONS = [
     href: "/noord",
   },
   {
-    image: "/noord/editorial/store-interior.jpg",
+    image: "/noord/editorial/store-interior.webp",
     position: "object-[50%_45%]",
     eyebrow: "Made to measure",
     title: "Cut from your own pattern",
@@ -25,7 +25,7 @@ const INVITATIONS = [
     href: "/noord",
   },
   {
-    image: "/noord/editorial/detail-cuff.jpg",
+    image: "/noord/editorial/detail-cuff.webp",
     position: "object-[50%_50%]",
     eyebrow: "The alterations room",
     title: "Nothing leaves until it fits",
@@ -33,7 +33,7 @@ const INVITATIONS = [
     href: "/noord",
   },
   {
-    image: "/noord/editorial/street-brown.jpg",
+    image: "/noord/editorial/street-brown.webp",
     position: "object-[50%_35%]",
     eyebrow: "The cloth book",
     title: "Woven in Biella, finished by hand",
