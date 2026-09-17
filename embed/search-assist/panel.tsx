@@ -90,10 +90,7 @@ export function SearchPanel({
   const turns = thread.query === trimmed ? thread.turns : EMPTY
   const [draft, setDraft] = React.useState("")
   const nextId = React.useRef(0)
-  const endRef = React.useRef<HTMLDivElement>(null)
   const composerRef = React.useRef<HTMLFormElement>(null)
-  const composerHeight = useHeight(composerRef)
-  const keyboard = useKeyboardInset()
 
   const behaviour = config.behaviour
   const searchFn = React.useMemo(
@@ -195,11 +192,13 @@ export function SearchPanel({
     void run(id, refinements, controller.signal)
   }
 
-  // Each new turn lands in view, even inside the host's own scrolling sheet.
+  // Each new turn lands in view, even inside the host's own scrolling sheet:
+  // the composer is the foot of the thread, so bringing it to the bottom of
+  // the screen brings the turn above it into view.
   const turnCount = turns.length
   React.useEffect(() => {
     if (turnCount > 1) {
-      endRef.current?.scrollIntoView({ block: "end", behavior: "smooth" })
+      composerRef.current?.scrollIntoView({ block: "end", behavior: "smooth" })
     }
   }, [turnCount])
 
@@ -210,13 +209,8 @@ export function SearchPanel({
   return (
     <div
       data-slot="search-assist"
-      className="minimal-agent-root ma:@container ma:flex ma:flex-col ma:gap-4 ma:pt-4 ma:font-sans ma:text-foreground"
-      style={
-        {
-          ...themeStyle(config.theme),
-          "--composer-height": `${composerHeight}px`,
-        } as React.CSSProperties
-      }
+      className="minimal-agent-root ma:@container ma:flex ma:flex-1 ma:flex-col ma:gap-4 ma:pt-4 ma:font-sans ma:text-foreground"
+      style={themeStyle(config.theme)}
     >
       {turns.map((turn, index) => (
         <TurnView
@@ -229,33 +223,29 @@ export function SearchPanel({
         />
       ))}
 
-      {/* On a phone the composer is out of the flow, so this holds its place
-          at the foot of the thread: the last answer can scroll clear of it,
-          and a new turn scrolling into view lands above it, not under it. */}
-      <div
-        ref={endRef}
-        aria-hidden="true"
-        className="ma:h-(--composer-height) ma:shrink-0 ma:@md:h-0"
-      />
-
       {/* The one input from here on: the site's box has become the first
           bubble, and this is where the shopper carries on, in their own
           words, without leaving the search. Focused as it arrives, so the
-          typing they were doing continues here. On a phone the composer is
-          pinned to the foot of the screen — it is the one thing the shopper
-          should never have to scroll to — and that means the visible screen:
-          when the keyboard is up it sits on the keyboard, not under it. */}
+          typing they were doing continues here.
+
+          The foot of the thread, in the flow: it sits under a short thread
+          and sticks to the bottom of the sheet's scroller over a long one.
+          Never `fixed` — that pins it to the layout viewport, which on a
+          phone is under the keyboard; the sheet itself follows the visual
+          viewport, so the bottom of its scroller is the top of the
+          keyboard. The band bleeds across the host's gutter, which the host
+          passes down as `--minimal-search-gutter`, so nothing scrolls past
+          beside it. */}
       <form
         ref={composerRef}
-        className="ma:sticky ma:bottom-0 ma:flex ma:items-center ma:gap-2 ma:rounded-[calc(var(--radius)+0.25rem)] ma:bg-muted ma:pr-1.5 ma:pl-3 ma:@max-md:fixed ma:@max-md:inset-x-0 ma:@max-md:z-10 ma:@max-md:rounded-none ma:@max-md:border-t ma:@max-md:border-border ma:@max-md:bg-background ma:@max-md:px-4 ma:@max-md:pt-3 ma:@max-md:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
-        style={{ bottom: keyboard }}
+        className="ma:sticky ma:bottom-0 ma:z-10 ma:mt-auto ma:-mx-(--minimal-search-gutter,0px) ma:flex ma:items-center ma:gap-2 ma:bg-background ma:px-(--minimal-search-gutter,0px) ma:pt-3 ma:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         onSubmit={(event) => {
           event.preventDefault()
           refine(draft)
           setDraft("")
         }}
       >
-        <div className="ma:flex ma:min-w-0 ma:flex-1 ma:items-center ma:gap-2 ma:@max-md:rounded-[calc(var(--radius)+0.25rem)] ma:@max-md:bg-muted ma:@max-md:pr-1.5 ma:@max-md:pl-3">
+        <div className="ma:flex ma:min-w-0 ma:flex-1 ma:items-center ma:gap-2 ma:rounded-[calc(var(--radius)+0.25rem)] ma:bg-muted ma:pr-1.5 ma:pl-3">
           <input
             autoFocus
             value={draft}
@@ -279,60 +269,6 @@ export function SearchPanel({
 }
 
 const EMPTY: Turn[] = []
-
-/** The rendered height of an element, kept current as it changes. */
-function useHeight(ref: React.RefObject<HTMLElement | null>) {
-  const [height, setHeight] = React.useState(0)
-
-  React.useLayoutEffect(() => {
-    const element = ref.current
-    if (!element) return
-    const measure = () => setHeight(element.offsetHeight)
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [ref])
-
-  return height
-}
-
-/**
- * How far the visible bottom of the screen sits above the layout viewport's.
- *
- * A fixed element is placed against the layout viewport, and on a phone the
- * on-screen keyboard does not shrink that: it covers it, and the browser
- * pans the visual viewport instead. So `bottom: 0` is under the keyboard.
- * The visual viewport says where the screen really ends; this is the
- * offset that puts a fixed element on the keyboard rather than behind it.
- * Zero anywhere the two viewports agree, which is every desktop.
- */
-function useKeyboardInset() {
-  const [inset, setInset] = React.useState(0)
-
-  React.useEffect(() => {
-    const viewport = window.visualViewport
-    if (!viewport) return
-    const measure = () =>
-      setInset(
-        Math.max(
-          0,
-          Math.round(
-            window.innerHeight - (viewport.offsetTop + viewport.height),
-          ),
-        ),
-      )
-    measure()
-    viewport.addEventListener("resize", measure)
-    viewport.addEventListener("scroll", measure)
-    return () => {
-      viewport.removeEventListener("resize", measure)
-      viewport.removeEventListener("scroll", measure)
-    }
-  }, [])
-
-  return inset
-}
 
 /** How many cards a turn shows before the shopper asks for the rest. */
 const SHOWN = 4

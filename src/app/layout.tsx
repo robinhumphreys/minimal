@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Archivo, Geist_Mono, IBM_Plex_Sans, Inter } from "next/font/google"
 import "./globals.css"
 
@@ -45,6 +45,15 @@ const noordSans = Inter({
 export const metadata: Metadata = {
   title: "new-york-v3",
   description: "",
+}
+
+// The on-screen keyboard shrinks the layout viewport, so `fixed` and `dvh`
+// surfaces sit on it rather than under it. Chrome and Firefox honour this
+// today; Safari does not yet, and `useVisualViewport` covers it there.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-content",
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

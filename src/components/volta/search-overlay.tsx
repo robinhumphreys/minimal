@@ -4,6 +4,7 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
+  ArrowRightIcon,
   ArrowUpRightIcon,
   MagnifyingGlassIcon,
   XIcon,
@@ -154,7 +155,9 @@ export function SearchOverlay({
         </SheetHeader>
 
         <SheetBody>
-          <div className="volta-gutter mx-auto w-full max-w-3xl pb-16">
+          {/* A column that fills the scroller, so the agent's composer can
+              sit at its foot; see the embed's `minimal-agent-search` rule. */}
+          <div className="volta-gutter mx-auto flex min-h-full w-full max-w-3xl flex-col">
             <form
               data-native-search
               role="search"
@@ -195,10 +198,20 @@ export function SearchOverlay({
             {/* The agent's reading of the search, when the embed is on the
                 page. Empty until a search is submitted, and the sections
                 below carry on. */}
-            <minimal-agent-search data-query={submitted} />
+            <minimal-agent-search
+              data-query={submitted}
+              style={
+                {
+                  "--minimal-search-gutter": "var(--spacing-volta-gutter)",
+                } as React.CSSProperties
+              }
+            />
 
             {!searching && (
-              <div data-native-search className="flex flex-col gap-8 pt-10">
+              <div
+                data-native-search
+                className="flex flex-col gap-8 pt-10 pb-16"
+              >
                 <Section title="Popular searches">
                   <ul className="flex flex-wrap gap-2">
                     {POPULAR.map((term) => (
@@ -213,6 +226,12 @@ export function SearchOverlay({
                       </li>
                     ))}
                   </ul>
+                  <p
+                    data-search-assist-only
+                    className="text-volta-body text-volta-ash"
+                  >
+                    Or describe what you’re training for, in your own words.
+                  </p>
                 </Section>
 
                 <Section title="Browse">
@@ -234,7 +253,23 @@ export function SearchOverlay({
             )}
 
             {searching && (
-              <div data-native-search className="flex flex-col gap-8 pt-8">
+              <div
+                data-native-search
+                className="flex flex-col gap-8 pt-8 pb-16"
+              >
+                {/* The way in: submitting hands the words to the agent, and
+                    the return key does not say so. First, whatever the
+                    sections below say. */}
+                <button
+                  type="button"
+                  data-search-assist-only
+                  onClick={() => submit(query)}
+                  className="volta-title flex w-full items-center justify-between gap-4 rounded-volta border-2 border-volta-volt px-4 py-3 text-left text-volta-body text-volta-chalk transition-colors hover:bg-volta-volt hover:text-volta-void"
+                >
+                  <span>Ask about “{query.trim()}”</span>
+                  <ArrowRightIcon className="size-5 shrink-0" weight="bold" />
+                </button>
+
                 {categoryHits.length > 0 && (
                   <Section title="Categories">
                     <ul className="flex flex-wrap gap-2">
@@ -255,14 +290,14 @@ export function SearchOverlay({
                 <Section
                   title={
                     results.length === 0
-                      ? "No products"
+                      ? "No exact matches"
                       : `${results.length} product${results.length === 1 ? "" : "s"}`
                   }
                 >
                   {results.length === 0 ? (
                     <p className="text-volta-body text-volta-ash">
-                      Nothing matches “{query.trim()}”. Try a goal — protein,
-                      hydration, recovery — or browse a category.
+                      Try a goal — protein, hydration, recovery — or browse a
+                      category.
                     </p>
                   ) : (
                     <ul className="flex flex-col">

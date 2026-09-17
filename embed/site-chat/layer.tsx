@@ -4,6 +4,12 @@ import { cn } from "../cn"
 import { XIcon } from "lucide-react"
 
 import type { AgentConfig, Position } from "@/lib/config/schema"
+import {
+  useMediaQuery,
+  usePageScrollLock,
+  useVisualViewport,
+  visualViewportStyle,
+} from "@/lib/visual-viewport"
 
 import { themeStyle } from "../theme"
 import { Launcher } from "./launcher"
@@ -19,6 +25,8 @@ const ANCHORS: Record<Position, string> = {
 
 /** Under this many pixels across, the window fills the layer. Matches `@max-md`. */
 const PHONE_MAX_PX = 448
+/** The same line as a media query, for when the layer is the viewport. */
+const PHONE_QUERY = "(width < 28rem)"
 
 /**
  * The Site chat surface: a launcher, and the window it opens.
@@ -56,6 +64,15 @@ export function SiteChatLayer({
   const position = config.surface.position ?? "bottom-right"
   const nudge = useNudge(config, open, mode)
 
+  // While the window is the whole screen it is the screen: it follows the
+  // visual viewport so the keyboard shortens it rather than covering its
+  // foot, and the page under it is held still so nothing of it shows
+  // through. Only on a storefront; the admin's preview is its own box.
+  const phone = useMediaQuery(PHONE_QUERY, mode === "fixed")
+  const fullScreen = mode === "fixed" && open && !hidden && phone
+  const screen = useVisualViewport(fullScreen)
+  usePageScrollLock(fullScreen)
+
   return (
     <div
       data-slot="site-chat"
@@ -64,7 +81,7 @@ export function SiteChatLayer({
         mode === "fixed" ? "ma:fixed ma:z-[2147483000]" : "ma:absolute",
         hidden && "ma:hidden",
       )}
-      style={themeStyle(config.theme)}
+      style={{ ...themeStyle(config.theme), ...visualViewportStyle(screen) }}
       onClick={(event) => {
         if (!open || !onLeave) return
         const link = (event.target as HTMLElement | null)?.closest("a[href]")

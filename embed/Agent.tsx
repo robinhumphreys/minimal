@@ -96,6 +96,13 @@ function writeSession(id: string, session: Session) {
   }
 }
 
+/**
+ * Set on <html> while Search assist is on. The site marks anything that only
+ * makes sense with an agent behind the search box, such as an "Ask about …"
+ * row, with `data-search-assist-only`; the stylesheet hides it otherwise.
+ */
+const SEARCH_ASSIST_ATTR = "data-minimal-search-assist"
+
 /** Re-queries the host page's DOM whenever it changes. */
 function useHostDom() {
   const [host, setHost] = React.useState<{
@@ -214,6 +221,15 @@ export function Agent({ config }: { config: AgentConfig }) {
         onProductPage()),
   )
   const host = useHostDom()
+
+  // The site's search sheet offers "Ask about …" only when there is an agent
+  // here to answer it; see SEARCH_ASSIST_ATTR.
+  const searchAssist = config.surface.searchAssist
+  React.useLayoutEffect(() => {
+    if (!searchAssist) return
+    document.documentElement.setAttribute(SEARCH_ASSIST_ATTR, "")
+    return () => document.documentElement.removeAttribute(SEARCH_ASSIST_ATTR)
+  }, [searchAssist])
 
   const transport = React.useMemo(
     () => new DefaultChatTransport({ api: `/api/agents/${config.id}/chat` }),
