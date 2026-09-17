@@ -27,7 +27,9 @@ export default async function OrgLayout({
   return (
     <OrgSync org={org}>
       {/* The onboarding previews render the embed's own components, whose
-          utilities carry the embed's prefix and so live in its stylesheet. */}
+          utilities carry the embed's prefix and so live in its stylesheet.
+          React 19 hoists a `precedence` link into <head>; the rule predates it. */}
+      {/* eslint-disable-next-line @next/next/no-css-tags */}
       <link rel="stylesheet" href="/embed.css" precedence="default" />
       {/* The rail starts collapsed: the admin is a handful of screens, and
           the icons plus their tooltips carry it. There is no top bar — the

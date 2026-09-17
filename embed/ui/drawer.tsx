@@ -184,7 +184,10 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn("ma:mt-auto ma:flex ma:shrink-0 ma:flex-col ma:gap-2 ma:p-4 ma:pt-0", className)}
+      className={cn(
+        "ma:mt-auto ma:flex ma:shrink-0 ma:flex-col ma:gap-2 ma:p-4 ma:pt-0",
+        className,
+      )}
       {...props}
     />
   )
@@ -210,7 +213,10 @@ function DrawerDescription({
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"
-      className={cn("ma:text-sm ma:text-balance ma:text-muted-foreground", className)}
+      className={cn(
+        "ma:text-sm ma:text-balance ma:text-muted-foreground",
+        className,
+      )}
       {...props}
     />
   )

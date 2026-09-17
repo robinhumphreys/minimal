@@ -66,7 +66,9 @@ export function Launcher({
       aria-label={open ? "Close chat" : label || "Open chat"}
       className={cn(
         "ma:flex ma:cursor-pointer ma:items-center ma:gap-2 ma:bg-primary ma:text-sm ma:font-medium ma:text-primary-foreground ma:shadow-lg ma:outline-none ma:hover:scale-105 ma:focus-visible:ring-3 ma:focus-visible:ring-ring/50 ma:focus-visible:ring-offset-2 ma:focus-visible:ring-offset-background ma:active:scale-100",
-        surface.shape === "square" ? "ma:rounded-(--radius)" : "ma:rounded-full",
+        surface.shape === "square"
+          ? "ma:rounded-(--radius)"
+          : "ma:rounded-full",
         label ? size.labelled : cn(size.bare, "ma:justify-center"),
         className,
       )}

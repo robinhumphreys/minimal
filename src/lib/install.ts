@@ -50,7 +50,8 @@ export function snippetsFor(config: AgentConfig): Snippet[] {
     snippets.push({
       key: "guide",
       title: "Category or product page",
-      where: "Wherever the button should go. Set data-topic to the page's subject.",
+      where:
+        "Wherever the button should go. Set data-topic to the page's subject.",
       code: guideMount(),
     })
   }
