@@ -35,8 +35,9 @@ const noordSans = Inter({
 
 // Declared on <html>, not in each brand's own layout, so the variables still resolve inside dialogs portaled to document.body.
 export const metadata: Metadata = {
-  title: "new-york-v3",
-  description: "",
+  title: "Minimal AI",
+  description:
+    "An AI storefront agent a merchant sets up once and installs with one script tag.",
 }
 
 // The on-screen keyboard shrinks the layout viewport, so `fixed` and `dvh`
