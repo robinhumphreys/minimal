@@ -194,13 +194,14 @@ function CustomiseChat({
               </MessageScrollerItem>
             ))}
 
+            {/* Margin lives on the item: its paint containment clips a child pulled above it. */}
             {suggestions.length > 0 ? (
-              <MessageScrollerItem>
+              <MessageScrollerItem className="-mt-2">
                 <motion.div
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="-mt-2 flex flex-wrap gap-1.5"
+                  className="flex flex-wrap gap-1.5"
                 >
                   {suggestions.map((text) => (
                     <Button
