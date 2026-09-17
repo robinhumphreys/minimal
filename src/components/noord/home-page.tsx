@@ -8,11 +8,11 @@ import { getCatalog, getProductsInCategory } from "@/lib/catalog"
 
 /** Editorial shots, kept together so a swap is one edit. See CREDITS.md. */
 const IMAGERY = {
-  hero: "/noord/editorial/hero-portrait.jpg",
-  fits: "/noord/editorial/fit-hands.jpg",
-  rail: "/noord/editorial/rail-glass.jpg",
-  store: "/noord/editorial/store-interior.jpg",
-  appointment: "/noord/editorial/shopfront.jpg",
+  hero: "/noord/editorial/hero-portrait.webp",
+  fits: "/noord/editorial/fit-hands.webp",
+  rail: "/noord/editorial/rail-glass.webp",
+  store: "/noord/editorial/store-interior.webp",
+  appointment: "/noord/editorial/shopfront.webp",
 }
 
 /** The Noord Suits homepage. */

@@ -40,7 +40,7 @@ export const products: Product[] = [
     name: "Whey Delicious",
     category: "protein",
     price: 1999,
-    images: ["/catalog/volta/whey-delicious-1.jpg"],
+    images: ["/catalog/volta/whey-delicious-1.webp"],
     attributes: {
       form: "Powder",
       source: "Whey Concentrate & Isolate",
@@ -58,7 +58,7 @@ export const products: Product[] = [
     name: "Perfect Whey Protein",
     category: "protein",
     price: 2799,
-    images: ["/catalog/volta/perfect-whey-protein-1.jpg"],
+    images: ["/catalog/volta/perfect-whey-protein-1.webp"],
     attributes: {
       form: "Powder",
       source: "Whey Concentrate",
@@ -76,7 +76,7 @@ export const products: Product[] = [
     name: "Whey Isolate",
     category: "protein",
     price: 2599,
-    images: ["/catalog/volta/whey-isolate-1.jpg"],
+    images: ["/catalog/volta/whey-isolate-1.webp"],
     attributes: {
       form: "Powder",
       source: "Whey Isolate",
@@ -95,7 +95,7 @@ export const products: Product[] = [
     name: "Whey Isolate Zero",
     category: "protein",
     price: 2999,
-    images: ["/catalog/volta/whey-isolate-zero-1.jpg"],
+    images: ["/catalog/volta/whey-isolate-zero-1.webp"],
     attributes: {
       form: "Powder",
       source: "Whey Isolate",
@@ -115,7 +115,7 @@ export const products: Product[] = [
     name: "Clear Whey Isolate",
     category: "protein",
     price: 2999,
-    images: ["/catalog/volta/clear-whey-isolate-1.jpg"],
+    images: ["/catalog/volta/clear-whey-isolate-1.webp"],
     attributes: {
       form: "Powder",
       source: "Whey Isolate",
@@ -134,7 +134,7 @@ export const products: Product[] = [
     name: "Protein Iced Coffee",
     category: "protein",
     price: 2499,
-    images: ["/catalog/volta/protein-iced-coffee-1.jpg"],
+    images: ["/catalog/volta/protein-iced-coffee-1.webp"],
     attributes: {
       form: "Powder",
       source: "Whey Protein",
@@ -154,7 +154,7 @@ export const products: Product[] = [
     name: "Protein & Oats Drink",
     category: "protein",
     price: 1699,
-    images: ["/catalog/volta/protein-oats-drink-1.jpg"],
+    images: ["/catalog/volta/protein-oats-drink-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       protein: "30 g",
@@ -173,7 +173,7 @@ export const products: Product[] = [
     name: "Liquid Egg Whites",
     category: "protein",
     price: 2799,
-    images: ["/catalog/volta/liquid-egg-whites-1.jpg"],
+    images: ["/catalog/volta/liquid-egg-whites-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       source: "Egg White",
@@ -193,7 +193,7 @@ export const products: Product[] = [
     name: "Blast! Pre-Workout",
     category: "pre-workout",
     price: 2799,
-    images: ["/catalog/volta/blast-pre-workout-1.jpg"],
+    images: ["/catalog/volta/blast-pre-workout-1.webp"],
     attributes: {
       form: "Powder",
       servings: "30",
@@ -211,7 +211,7 @@ export const products: Product[] = [
     name: "Black Label Pre-Workout",
     category: "pre-workout",
     price: 3499,
-    images: ["/catalog/volta/black-label-pre-workout-1.jpg"],
+    images: ["/catalog/volta/black-label-pre-workout-1.webp"],
     attributes: {
       form: "Powder",
       caffeine: "330 mg",
@@ -230,7 +230,7 @@ export const products: Product[] = [
     name: "Quake Pre-Workout",
     category: "pre-workout",
     price: 3999,
-    images: ["/catalog/volta/quake-pre-workout-1.jpg"],
+    images: ["/catalog/volta/quake-pre-workout-1.webp"],
     attributes: {
       form: "Powder",
       caffeine: "350 mg",
@@ -249,7 +249,7 @@ export const products: Product[] = [
     name: "ABE Ultimate Pre-Workout",
     category: "pre-workout",
     price: 2799,
-    images: ["/catalog/volta/abe-ultimate-pre-workout-1.jpg"],
+    images: ["/catalog/volta/abe-ultimate-pre-workout-1.webp"],
     attributes: {
       form: "Powder",
       servings: "30",
@@ -267,7 +267,7 @@ export const products: Product[] = [
     name: "Venom Pre-Workout Drink",
     category: "pre-workout",
     price: 4699,
-    images: ["/catalog/volta/venom-pre-workout-drink-1.jpg"],
+    images: ["/catalog/volta/venom-pre-workout-drink-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       flavour: "Berry",
@@ -284,7 +284,7 @@ export const products: Product[] = [
     name: "Energize Energy Drink",
     category: "pre-workout",
     price: 699,
-    images: ["/catalog/volta/energize-energy-drink-1.jpg"],
+    images: ["/catalog/volta/energize-energy-drink-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       flavour: "Ginger Lemon",
@@ -302,7 +302,7 @@ export const products: Product[] = [
     name: "Citrulline Malate",
     category: "pre-workout",
     price: 1699,
-    images: ["/catalog/volta/citrulline-malate-1.jpg"],
+    images: ["/catalog/volta/citrulline-malate-1.webp"],
     attributes: {
       form: "Powder",
       actives: "L-Citrulline Malate",
@@ -320,7 +320,7 @@ export const products: Product[] = [
     name: "Caffeine Booster",
     category: "pre-workout",
     price: 1099,
-    images: ["/catalog/volta/caffeine-booster-1.jpg"],
+    images: ["/catalog/volta/caffeine-booster-1.webp"],
     attributes: { form: "Capsules", caffeine: "250 mg", size: "180 capsules" },
     description:
       "250 mg of pure caffeine anhydrous a capsule, about three cups of coffee. The most direct form there is.",
@@ -335,7 +335,7 @@ export const products: Product[] = [
     name: "Muscle Grow",
     category: "recovery",
     price: 2899,
-    images: ["/catalog/volta/muscle-grow-1.jpg"],
+    images: ["/catalog/volta/muscle-grow-1.webp"],
     attributes: {
       form: "Powder",
       actives: "Creatine, BCAA & Protein",
@@ -353,7 +353,7 @@ export const products: Product[] = [
     name: "Advanced Post Workout",
     category: "recovery",
     price: 3499,
-    images: ["/catalog/volta/advanced-post-workout-1.jpg"],
+    images: ["/catalog/volta/advanced-post-workout-1.webp"],
     attributes: {
       form: "Powder",
       actives: "PeptoPro & Waxy Maize",
@@ -371,7 +371,7 @@ export const products: Product[] = [
     name: "BCAA Powder",
     category: "recovery",
     price: 2499,
-    images: ["/catalog/volta/bcaa-powder-1.jpg"],
+    images: ["/catalog/volta/bcaa-powder-1.webp"],
     attributes: {
       form: "Powder",
       actives: "BCAA 2:1:1",
@@ -390,7 +390,7 @@ export const products: Product[] = [
     name: "BCAA Recovery",
     category: "recovery",
     price: 3299,
-    images: ["/catalog/volta/bcaa-recovery-1.jpg"],
+    images: ["/catalog/volta/bcaa-recovery-1.webp"],
     attributes: {
       form: "Powder",
       actives: "BCAA & Glutamine",
@@ -409,7 +409,7 @@ export const products: Product[] = [
     name: "Glutamine",
     category: "recovery",
     price: 2199,
-    images: ["/catalog/volta/glutamine-1.jpg"],
+    images: ["/catalog/volta/glutamine-1.webp"],
     attributes: {
       form: "Powder",
       actives: "L-Glutamine",
@@ -427,7 +427,7 @@ export const products: Product[] = [
     name: "HMB 750 mg",
     category: "recovery",
     price: 1699,
-    images: ["/catalog/volta/hmb-capsules-1.jpg"],
+    images: ["/catalog/volta/hmb-capsules-1.webp"],
     attributes: {
       form: "Capsules",
       actives: "HMB 750 mg",
@@ -444,7 +444,7 @@ export const products: Product[] = [
     name: "Acetyl L-Carnitine",
     category: "recovery",
     price: 1699,
-    images: ["/catalog/volta/acetyl-l-carnitine-1.jpg"],
+    images: ["/catalog/volta/acetyl-l-carnitine-1.webp"],
     attributes: {
       form: "Capsules",
       actives: "Acetyl L-Carnitine 500 mg",
@@ -462,7 +462,7 @@ export const products: Product[] = [
     name: "Booty Builder",
     category: "recovery",
     price: 3999,
-    images: ["/catalog/volta/booty-builder-1.jpg"],
+    images: ["/catalog/volta/booty-builder-1.webp"],
     attributes: {
       form: "Powder",
       actives: "Whey, Creatine & Collagen",
@@ -483,7 +483,7 @@ export const products: Product[] = [
     name: "Electrolytes",
     category: "hydration",
     price: 1999,
-    images: ["/catalog/volta/electrolytes-1.jpg"],
+    images: ["/catalog/volta/electrolytes-1.webp"],
     attributes: {
       form: "Powder",
       actives: "Magnesium, Calcium & Sea Salt",
@@ -502,7 +502,7 @@ export const products: Product[] = [
     name: "Hydrate Effervescent Tablets",
     category: "hydration",
     price: 499,
-    images: ["/catalog/volta/hydrate-tablets-1.jpg"],
+    images: ["/catalog/volta/hydrate-tablets-1.webp"],
     attributes: {
       form: "Effervescent Tablets",
       actives: "Magnesium & Sodium",
@@ -521,7 +521,7 @@ export const products: Product[] = [
     name: "Isotonic Pro",
     category: "hydration",
     price: 1799,
-    images: ["/catalog/volta/isotonic-pro-1.jpg"],
+    images: ["/catalog/volta/isotonic-pro-1.webp"],
     attributes: {
       form: "Powder",
       carbs: "32.5 g",
@@ -540,7 +540,7 @@ export const products: Product[] = [
     name: "Oral Rehydration Salts",
     category: "hydration",
     price: 1899,
-    images: ["/catalog/volta/oral-rehydration-salts-1.jpg"],
+    images: ["/catalog/volta/oral-rehydration-salts-1.webp"],
     attributes: {
       form: "Powder",
       servings: "40",
@@ -558,7 +558,7 @@ export const products: Product[] = [
     name: "Protein Lemonade",
     category: "hydration",
     price: 1199,
-    images: ["/catalog/volta/protein-lemonade-1.jpg"],
+    images: ["/catalog/volta/protein-lemonade-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       protein: "10 g",
@@ -577,7 +577,7 @@ export const products: Product[] = [
     name: "N'Joy Protein Drink",
     category: "hydration",
     price: 1499,
-    images: ["/catalog/volta/njoy-protein-drink-1.jpg"],
+    images: ["/catalog/volta/njoy-protein-drink-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       protein: "32 g",
@@ -595,7 +595,7 @@ export const products: Product[] = [
     name: "Protein Water",
     category: "hydration",
     price: 1399,
-    images: ["/catalog/volta/protein-water-1.jpg"],
+    images: ["/catalog/volta/protein-water-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       source: "Whey Isolate",
@@ -615,7 +615,7 @@ export const products: Product[] = [
     name: "Burner Drink",
     category: "hydration",
     price: 1099,
-    images: ["/catalog/volta/burner-drink-1.jpg"],
+    images: ["/catalog/volta/burner-drink-1.webp"],
     attributes: {
       form: "Ready-to-Drink",
       caffeine: "50 mg",
@@ -636,7 +636,7 @@ export const products: Product[] = [
     name: "Women's Multivit",
     category: "vitamins",
     price: 1799,
-    images: ["/catalog/volta/womens-multivit-1.jpg"],
+    images: ["/catalog/volta/womens-multivit-1.webp"],
     attributes: {
       form: "Tablets",
       dose: "One a Day",
@@ -654,7 +654,7 @@ export const products: Product[] = [
     name: "Vitamin D3 3000 IU",
     category: "vitamins",
     price: 449,
-    images: ["/catalog/volta/vitamin-d3-3000-1.jpg"],
+    images: ["/catalog/volta/vitamin-d3-3000-1.webp"],
     attributes: { form: "Softgels", dose: "3000 IU", size: "60 softgels" },
     description:
       "Softgels supporting normal immune function and the upkeep of normal bones. Made for the winter months.",
@@ -667,7 +667,7 @@ export const products: Product[] = [
     name: "Vitamin D3 Chewable",
     category: "vitamins",
     price: 799,
-    images: ["/catalog/volta/vitamin-d3-chewable-1.jpg"],
+    images: ["/catalog/volta/vitamin-d3-chewable-1.webp"],
     attributes: {
       form: "Chewable Tablets",
       dose: "1000 IU",
@@ -685,7 +685,7 @@ export const products: Product[] = [
     name: "Vitamin D3 + K2",
     category: "vitamins",
     price: 1299,
-    images: ["/catalog/volta/vitamin-d3-k2-1.jpg"],
+    images: ["/catalog/volta/vitamin-d3-k2-1.webp"],
     attributes: {
       form: "Tablets",
       dose: "25 mcg D3 & 45 mcg K2",
@@ -702,7 +702,7 @@ export const products: Product[] = [
     name: "Vitamin C 1000 mg",
     category: "vitamins",
     price: 1049,
-    images: ["/catalog/volta/vitamin-c-1000-1.jpg"],
+    images: ["/catalog/volta/vitamin-c-1000-1.webp"],
     attributes: {
       form: "Tablets",
       dose: "1000 mg",
@@ -720,7 +720,7 @@ export const products: Product[] = [
     name: "Vitamin B Complex",
     category: "vitamins",
     price: 999,
-    images: ["/catalog/volta/vitamin-b-complex-1.jpg"],
+    images: ["/catalog/volta/vitamin-b-complex-1.webp"],
     attributes: {
       form: "Tablets",
       actives: "B Complex, Choline & Calcium",
@@ -737,7 +737,7 @@ export const products: Product[] = [
     name: "Fruits, Veggies & Greens",
     category: "vitamins",
     price: 3199,
-    images: ["/catalog/volta/fruits-veggies-greens-1.jpg"],
+    images: ["/catalog/volta/fruits-veggies-greens-1.webp"],
     attributes: {
       form: "Powder",
       actives: "31 Fruits, Vegetables & Superfoods",
@@ -755,7 +755,7 @@ export const products: Product[] = [
     name: "Men's Performance Vitamin Pack",
     category: "vitamins",
     price: 2899,
-    images: ["/catalog/volta/mens-performance-pack-1.jpg"],
+    images: ["/catalog/volta/mens-performance-pack-1.webp"],
     attributes: {
       form: "Sachets",
       servings: "30",
@@ -776,7 +776,7 @@ export const products: Product[] = [
     category: "bars",
     price: 3199,
     compareAt: 3854,
-    images: ["/catalog/volta/njoy-protein-bar-1.jpg"],
+    images: ["/catalog/volta/njoy-protein-bar-1.webp"],
     attributes: {
       form: "Bar",
       protein: "36%",
@@ -794,7 +794,7 @@ export const products: Product[] = [
     name: "High Protein Bar",
     category: "bars",
     price: 3899,
-    images: ["/catalog/volta/high-protein-bar-1.jpg"],
+    images: ["/catalog/volta/high-protein-bar-1.webp"],
     attributes: {
       form: "Bar",
       protein: "25 g",
@@ -813,7 +813,7 @@ export const products: Product[] = [
     category: "bars",
     price: 2699,
     compareAt: 2999,
-    images: ["/catalog/volta/crunchy-protein-bar-1.jpg"],
+    images: ["/catalog/volta/crunchy-protein-bar-1.webp"],
     attributes: {
       form: "Bar",
       protein: "22 g",
@@ -831,7 +831,7 @@ export const products: Product[] = [
     name: "Clean Protein Bar",
     category: "bars",
     price: 3299,
-    images: ["/catalog/volta/clean-protein-bar-1.jpg"],
+    images: ["/catalog/volta/clean-protein-bar-1.webp"],
     attributes: {
       form: "Bar",
       protein: "12 g",
@@ -850,7 +850,7 @@ export const products: Product[] = [
     category: "bars",
     price: 2199,
     compareAt: 2932,
-    images: ["/catalog/volta/delicious-oat-bar-1.jpg"],
+    images: ["/catalog/volta/delicious-oat-bar-1.webp"],
     attributes: {
       form: "Bar",
       energy: "460 kcal",
@@ -869,7 +869,7 @@ export const products: Product[] = [
     category: "bars",
     price: 1999,
     compareAt: 2272,
-    images: ["/catalog/volta/delicious-protein-wafer-1.jpg"],
+    images: ["/catalog/volta/delicious-protein-wafer-1.webp"],
     attributes: {
       form: "Wafer",
       protein: "30%",
@@ -888,7 +888,7 @@ export const products: Product[] = [
     category: "bars",
     price: 2499,
     compareAt: 4235,
-    images: ["/catalog/volta/njoy-nuts-bar-1.jpg"],
+    images: ["/catalog/volta/njoy-nuts-bar-1.webp"],
     attributes: {
       form: "Bar",
       protein: "9%",
@@ -909,7 +909,7 @@ export const products: Product[] = [
     category: "bars",
     price: 2699,
     compareAt: 4028,
-    images: ["/catalog/volta/protein-nut-bar-1.jpg"],
+    images: ["/catalog/volta/protein-nut-bar-1.webp"],
     attributes: {
       form: "Bar",
       protein: "25%",
@@ -928,7 +928,7 @@ export const products: Product[] = [
     name: "Energy Nougat",
     category: "bars",
     price: 2599,
-    images: ["/catalog/volta/energy-nougat-1.jpg"],
+    images: ["/catalog/volta/energy-nougat-1.webp"],
     attributes: {
       form: "Bar",
       carbs: "2:1 Glucose to Fructose",
@@ -946,7 +946,7 @@ export const products: Product[] = [
     name: "Protein Chocolate",
     category: "bars",
     price: 599,
-    images: ["/catalog/volta/protein-chocolate-1.jpg"],
+    images: ["/catalog/volta/protein-chocolate-1.webp"],
     attributes: {
       form: "Chocolate",
       protein: "23%",

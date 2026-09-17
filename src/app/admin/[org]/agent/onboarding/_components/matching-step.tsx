@@ -13,7 +13,7 @@ function tasksFor(
 ): { label: string; detail?: string; ms: number }[] {
   return [
     { label: "Fetch website", detail: domain, ms: 500 },
-    { label: "Extracting color and typography", ms: 5500 },
+    { label: "Extracting color, typography, voice", ms: 5500 },
     { label: "Building custom widgets", ms: 5000 },
   ]
 }

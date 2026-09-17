@@ -25,6 +25,7 @@ Design still requires a lot of iteration, even with the best model. What it come
 ## What I cut for time
 
 Previews that show the actual sites in the admin would have been very nice. But during onboarding we wouldn't have those controls available, so I decided to focus on the onboarding without on-site previews.
+You also can't really edit after deploying because there's no management pages; just onboarding ones.
 
 ## The weakest part of what I shipped
 
@@ -35,3 +36,4 @@ Some of the technical aspects around how you'd actually connect features like AI
 - A lot of clean up and polish!
 - Better product previews and bespoke UI in the chats.
 - Previews that show the actual sites in the admin.
+- Management pages.
