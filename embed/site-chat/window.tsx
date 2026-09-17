@@ -229,7 +229,8 @@ export function ChatWindow({
   )
 }
 
-function Composer({
+/** The one-row composer, shared with Product help so both chats type the same. */
+export function Composer({
   busy,
   placeholder,
   onSend,
