@@ -9,8 +9,8 @@
     "build": "node scripts/build-embed.mjs && next build",
     "start": "next start",
     "lint": "eslint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write . --ignore-unknown",
+    "format:check": "prettier --check . --ignore-unknown",
     "typecheck": "next typegen && tsc --noEmit",
     "placeholders": "node scripts/placeholders.mjs"
   },
